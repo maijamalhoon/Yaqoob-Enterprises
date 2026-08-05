@@ -1,0 +1,39 @@
+name: Install full-stack rebuild
+
+on:
+  push:
+    branches:
+      - agent/fullstack-admin-rebuild
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  install-source:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: agent/fullstack-admin-rebuild
+      - name: Preserve storefront asset
+        run: cp .bootstrap/storefront-concept.webp /tmp/storefront-concept.webp
+      - name: Reconstruct source archive
+        run: |
+          mkdir -p /tmp/yaqoob-source
+          cat .bootstrap/source.part-* | base64 --decode > /tmp/yaqoob-source.tar.xz
+          tar -xJf /tmp/yaqoob-source.tar.xz -C /tmp/yaqoob-source
+          rsync -a --delete --exclude='.git' /tmp/yaqoob-source/ ./
+          mkdir -p public/images
+          cp /tmp/storefront-concept.webp public/images/storefront-concept.webp
+      - name: Commit rebuilt application
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Rebuild website and admin center"
+          git push
