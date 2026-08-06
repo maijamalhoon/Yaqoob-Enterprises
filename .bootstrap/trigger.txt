@@ -1,2 +1,0 @@
-Install the complete Yaqoob Enterprises Next.js rebuild.
-Triggered: 2026-08-06T10:41:00+05:00
