@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { TrackedLink } from "@/components/tracked-link";
@@ -14,7 +14,10 @@ export function SiteHeader({ settings }: { settings: BusinessSettings }) {
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <header className="site-header">
         <div className="container site-header__inner">
-          <Logo />
+          <div className="header-brand-cluster">
+            <Logo />
+            <span className="header-location"><MapPin size={13} /> Akhtar Colony</span>
+          </div>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <Link href="/">Home</Link>
             <Link href="/#services">Services</Link>
@@ -23,19 +26,19 @@ export function SiteHeader({ settings }: { settings: BusinessSettings }) {
           </nav>
           <div className="header-actions">
             <TrackedLink className="button button--ghost button--small desktop-only" href={`tel:${settings.phone_e164}`} eventName="call_click">
-              <Phone size={17} aria-hidden="true" /> Call
+              <Phone size={16} aria-hidden="true" /> Call
             </TrackedLink>
-            <TrackedLink className="button button--primary button--small desktop-only" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-              WhatsApp
+            <TrackedLink className="button button--primary button--small desktop-only header-whatsapp" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
+              <MessageCircle size={16} /> WhatsApp
             </TrackedLink>
             <MobileNavigation mapUrl={settings.map_url} />
           </div>
         </div>
       </header>
       <div className="mobile-action-bar" aria-label="Quick actions">
-        <TrackedLink href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">WhatsApp</TrackedLink>
-        <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">Call</TrackedLink>
-        <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">Directions</TrackedLink>
+        <TrackedLink href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> WhatsApp</TrackedLink>
+        <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> Call</TrackedLink>
+        <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={17} /> Directions</TrackedLink>
       </div>
     </>
   );
