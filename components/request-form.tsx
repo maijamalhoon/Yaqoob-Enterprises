@@ -60,7 +60,7 @@ export function RequestForm({
     <form className="request-form" onSubmit={submit}>
       <label>
         Your name
-        <input name="name" autoComplete="name" required />
+        <input name="name" autoComplete="name" enterKeyHint="next" required />
       </label>
       <label>
         Service category
@@ -106,19 +106,26 @@ export function RequestForm({
         Your area{locationRequired ? " (required)" : ""}
         <input
           name="location"
+          autoComplete="address-level2"
+          enterKeyHint="next"
           placeholder="DHA, PECHS, Dhoraji…"
           required={locationRequired}
           aria-describedby={locationRequired ? "location-requirement" : undefined}
         />
       </label>
       {locationRequired && (
-        <p className="field-help" id="location-requirement" role="status">
+        <p className="field-help" id="location-requirement" role="status" aria-live="polite">
           Your area is required so delivery or doorstep availability can be checked.
         </p>
       )}
       <label>
         Requirement
-        <textarea name="details" placeholder="Tell us what you need, quantity and preferred timing." required />
+        <textarea
+          name="details"
+          enterKeyHint="send"
+          placeholder="Tell us what you need, quantity and preferred timing."
+          required
+        />
       </label>
       {selectedService?.important_note && <p className="form-note"><strong>Important:</strong> {selectedService.important_note}</p>}
       <button className="button button--primary" type="submit">Prepare WhatsApp request</button>
