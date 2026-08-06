@@ -1,0 +1,24 @@
+.brand-logo__image {
+  display: block;
+  width: 11.75rem;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.brand-logo--compact .brand-logo__image {
+  width: 3.2rem;
+}
+
+.brand-logo--inverse:not(.brand-logo--compact) .brand-logo__image {
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 42rem) {
+  .brand-logo__image {
+    width: 10.25rem;
+  }
+
+  .brand-logo--compact .brand-logo__image {
+    width: 2.8rem;
+  }
+}
