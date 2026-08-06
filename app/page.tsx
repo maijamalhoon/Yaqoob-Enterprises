@@ -17,7 +17,7 @@ import { ServiceIcon } from "@/components/service-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
-import { formatTime, getSiteData, whatsappUrl } from "@/lib/data";
+import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
 
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery, announcements } = await getSiteData();
@@ -26,13 +26,7 @@ export default async function HomePage() {
   const imageUrl = featuredImage
     ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
     : "/images/storefront-concept.svg";
-  const today = new Date().getDay();
-  const todayHours = hours.find((item) => item.weekday === today);
-  const hoursText = todayHours
-    ? todayHours.is_closed
-      ? "Closed today"
-      : `Open today ${formatTime(todayHours.opens_at)}–${formatTime(todayHours.closes_at)}`
-    : "Open daily 7:00 AM–10:00 PM";
+  const hoursText = getCurrentBusinessStatus(hours);
 
   return (
     <>
