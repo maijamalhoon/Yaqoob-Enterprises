@@ -14,7 +14,7 @@ const links = [
 export function AdminNav() {
   return (
     <aside className="admin-nav">
-      <Logo compact href="/admin" />
+      <Logo compact inverse href="/admin" />
       <nav>
         {links.map(([label, href, Icon]) => (
           <Link key={href} href={href}><Icon size={18} />{label}</Link>
