@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./brand.css";
+import "./phase-one.css";
+import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
 
@@ -26,6 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <PageTracker />
+        <DestructiveActionGuard />
         {children}
       </body>
     </html>
