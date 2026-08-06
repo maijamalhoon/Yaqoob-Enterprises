@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 const allowedEvents = new Set(["page_view", "whatsapp_click", "call_click", "directions_click", "service_view"]);
+const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|uptimerobot/i;
 
 function deviceType(userAgent: string) {
   if (/tablet|ipad/i.test(userAgent)) return "tablet";
@@ -11,11 +12,50 @@ function deviceType(userAgent: string) {
   return "desktop";
 }
 
+function safeDecode(value: string | null) {
+  if (!value) return null;
+  try {
+    return decodeURIComponent(value.replace(/\+/g, " "));
+  } catch {
+    return value;
+  }
+}
+
+function safeReferrerHost(value: string | null) {
+  if (!value) return null;
+  try {
+    return new URL(value).hostname;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as { eventName?: string; pagePath?: string };
     if (!body.eventName || !allowedEvents.has(body.eventName)) {
       return NextResponse.json({ ok: false }, { status: 400 });
+    }
+
+    const pagePath = String(body.pagePath || "/").slice(0, 240);
+    if (!pagePath.startsWith("/") || pagePath === "/admin" || pagePath.startsWith("/admin/")) {
+      return NextResponse.json({ ok: true, ignored: true });
+    }
+
+    const requestHeaders = await headers();
+    const userAgent = requestHeaders.get("user-agent") || "";
+    if (
+      botPattern.test(userAgent) ||
+      requestHeaders.get("dnt") === "1" ||
+      requestHeaders.get("sec-gpc") === "1"
+    ) {
+      return NextResponse.json({ ok: true, ignored: true });
+    }
+
+    const supabase = await createServerSupabaseClient();
+    const { data: authData } = await supabase.auth.getUser();
+    if (authData.user) {
+      return NextResponse.json({ ok: true, ignored: true });
     }
 
     const cookieStore = await cookies();
@@ -31,19 +71,13 @@ export async function POST(request: Request) {
       });
     }
 
-    const requestHeaders = await headers();
-    const referrer = requestHeaders.get("referer");
-    const referrerHost = referrer ? new URL(referrer).hostname : null;
-    const userAgent = requestHeaders.get("user-agent") || "";
     const sessionHash = createHash("sha256").update(sessionId).digest("hex");
-    const supabase = await createServerSupabaseClient();
-
     await supabase.from("analytics_events").insert({
       event_name: body.eventName,
-      page_path: String(body.pagePath || "/").slice(0, 240),
-      referrer_host: referrerHost,
+      page_path: pagePath,
+      referrer_host: safeReferrerHost(requestHeaders.get("referer")),
       country_code: requestHeaders.get("x-vercel-ip-country"),
-      city_name: requestHeaders.get("x-vercel-ip-city"),
+      city_name: safeDecode(requestHeaders.get("x-vercel-ip-city")),
       device_type: deviceType(userAgent),
       session_hash: sessionHash,
     });
