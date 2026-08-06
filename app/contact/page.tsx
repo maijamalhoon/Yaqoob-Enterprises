@@ -4,7 +4,7 @@ import { RequestForm } from "@/components/request-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
-import { formatTime, getSiteData } from "@/lib/data";
+import { formatBusinessHours, getSiteData } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Contact & Service Request",
@@ -31,7 +31,7 @@ export default async function ContactPage() {
               <h2>Business details</h2>
               <div className="contact-detail"><Phone /><div><strong>Phone & WhatsApp</strong><TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">{settings.phone_display}</TrackedLink></div></div>
               <div className="contact-detail"><MapPin /><div><strong>Address</strong><TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">{settings.address}</TrackedLink></div></div>
-              <div className="contact-detail"><Clock3 /><div><strong>Opening hours</strong>{hours.map((hour) => <span key={hour.id}>{hour.label}: {hour.is_closed ? "Closed" : `${formatTime(hour.opens_at)}–${formatTime(hour.closes_at)}`}</span>)}</div></div>
+              <div className="contact-detail"><Clock3 /><div><strong>Opening hours</strong>{hours.map((hour) => <span key={hour.id}>{hour.label}: {formatBusinessHours(hour)}</span>)}</div></div>
               <div className="contact-detail"><ShieldCheck /><div><strong>Before work starts</strong><span>Requirements, availability and charges are confirmed first.</span></div></div>
             </div>
             <div className="form-card">
