@@ -1,37 +1,46 @@
-# Yaqoob Enterprises Website
+# Yaqoob Enterprises
 
-Static, responsive local-business website for Yaqoob Enterprises in Akhtar Colony, Karachi.
+Production-oriented Next.js website and Supabase-backed admin centre for Yaqoob Enterprises in Akhtar Colony, Karachi.
 
 ## Included
 
-- English-first responsive website
-- Seven SEO-focused service pages
-- WhatsApp, call and directions actions
-- WhatsApp request form with no database
-- LocalBusiness structured data
-- Sitemap, robots.txt and web manifest
-- Accessibility and reduced-motion support
-- Security headers for Vercel
+- Responsive customer-facing website
+- Eight service-category pages with service modes and requirements
+- WhatsApp request builder with service-aware delivery options
+- Coverage, pricing, hours and contact content from Supabase
+- Passwordless admin authentication restricted by an email allowlist
+- Service, category, coverage, gallery, settings, announcements and analytics management
+- Privacy-conscious page-view and contact-action analytics
+- Supabase Storage gallery with image focal-point controls
+- Temporary storefront concept image clearly labelled until real photos are uploaded
 
-## Business details used
+## Environment
 
-- Phone/WhatsApp: +92 349 2568864
-- Address: Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi 75500, Pakistan
-- Hours: Daily 7:00 AM–10:00 PM
-- Opening date: 10 August 2026
-
-## Preview locally
+Public Supabase values have safe defaults in `lib/env.ts`, and may be overridden using `.env.local`:
 
 ```bash
-npx http-server . -p 8080
+cp .env.example .env.local
 ```
 
-Open `http://localhost:8080`.
+## Development
 
-## Before production launch
+```bash
+npm install
+npm run dev
+```
 
-1. Replace the temporary site URL `https://yaqoob-enterprises.vercel.app` in `build_site.py` with the final domain.
-2. Run `python build_site.py` again.
-3. Add real shop photos after the shop is ready.
-4. Confirm every listed service is active and officially available.
-5. Connect the final domain to Google Search Console and the Google Business Profile.
+## Validation
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
+## Admin access
+
+The owner email is allowlisted in Supabase. The login page sends a passwordless email link. Configure Supabase Auth redirect URLs for the production domain and Vercel previews before final launch.
+
+## Preview deployment
+
+Preview deployments are verified before this branch is merged into production. A fresh commit may be used to refresh Vercel preview routing without changing application behaviour.

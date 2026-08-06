@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">Yaqoob Enterprises storefront concept</title><desc id="desc">A clean navy and teal concept illustration using the approved Yaqoob Enterprises logo.</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071a32"/><stop offset="1" stop-color="#0b4775"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#eaf3f2"/><stop offset="1" stop-color="#cddcde"/></linearGradient></defs>
+<rect width="1200" height="900" rx="48" fill="url(#bg)"/>
+<rect x="95" y="130" width="1010" height="650" rx="22" fill="#f7f8f8"/>
+<rect x="95" y="130" width="1010" height="210" rx="22" fill="#fff"/>
+<g transform="translate(138 154) scale(1.12)">
+  <polygon points="14,14 80,91 80,157 169,48 206,48 229,13 149,13 110,58 70,13" fill="#001f56"/>
+  <polygon points="248,64 176,64 100,158 246,158 225,124 163,124 162,101 225,100" fill="#016773"/>
+</g>
+<text x="495" y="245" fill="#001f56" font-family="Trebuchet MS, Arial, sans-serif" font-weight="700" font-size="78">Yaqoob</text>
+<text x="495" y="314" fill="#016773" font-family="Trebuchet MS, Arial, sans-serif" font-weight="600" font-size="56">Enterprises</text>
+<rect x="135" y="380" width="930" height="360" rx="12" fill="url(#glass)"/>
+<rect x="165" y="410" width="280" height="300" rx="8" fill="#fff"/><rect x="460" y="410" width="280" height="300" rx="8" fill="#fff"/><rect x="755" y="410" width="280" height="300" rx="8" fill="#fff"/>
+<g fill="#001f56" font-family="Arial, sans-serif"><text x="205" y="475" font-size="30" font-weight="700">PRINTING</text><text x="505" y="475" font-size="30" font-weight="700">SERVICES</text><text x="800" y="475" font-size="30" font-weight="700">SUPPLIES</text></g>
+<g fill="#526276" font-family="Arial, sans-serif" font-size="23"><text x="205" y="530">Photocopy &amp; photos</text><text x="205" y="570">Documents ready first</text><text x="505" y="530">Biometric &amp; forms</text><text x="505" y="570">Payments &amp; tickets</text><text x="800" y="530">Stationery</text><text x="800" y="570">Mobile accessories</text></g>
+<rect x="455" y="645" width="290" height="65" rx="32" fill="#016773"/><text x="600" y="687" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="24" font-weight="700">Concept preview</text>
+</svg>
