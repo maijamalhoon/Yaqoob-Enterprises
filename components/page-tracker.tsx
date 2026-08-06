@@ -7,6 +7,8 @@ export function PageTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (!pathname || pathname === "/admin" || pathname.startsWith("/admin/")) return;
+
     void fetch("/api/analytics", {
       method: "POST",
       headers: { "content-type": "application/json" },
