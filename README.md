@@ -40,3 +40,7 @@ npm run build
 ## Admin access
 
 The owner email is allowlisted in Supabase. The login page sends a passwordless email link. Configure Supabase Auth redirect URLs for the production domain and Vercel previews before final launch.
+
+## Preview deployment
+
+Preview deployments are verified before this branch is merged into production. A fresh commit may be used to refresh Vercel preview routing without changing application behaviour.
