@@ -7,12 +7,20 @@ type LogoProps = {
 };
 
 export function Logo({ compact = false, inverse = false, href = "/" }: LogoProps) {
+  const navy = inverse ? "#ffffff" : "#001f56";
+  const teal = inverse ? "#ffffff" : "#016773";
+
   return (
     <Link className={`brand-logo ${compact ? "brand-logo--compact" : ""}`} href={href} aria-label="Yaqoob Enterprises home">
-      <svg className="brand-logo__mark" viewBox="0 0 120 92" role="img" aria-label="YE monogram">
-        <path d="M6 6h25l24 28L79 6h35L67 59v27H43V59L6 6Z" fill={inverse ? "#fff" : "#082a5e"} />
-        <path d="M64 38h49L101 55H78l-7 8h36L96 82H51l13-15 14-17-14-12Z" fill={inverse ? "#fff" : "#08766f"} />
-        <path d="M57 83 87 47" stroke={inverse ? "#082a5e" : "#fff"} strokeWidth="7" strokeLinecap="square" />
+      <svg className="brand-logo__mark" viewBox="0 0 262 171" role="img" aria-label="Yaqoob Enterprises YE monogram">
+        <polygon
+          points="14,14 80,91 80,157 169,48 206,48 229,13 149,13 110,58 70,13"
+          fill={navy}
+        />
+        <polygon
+          points="248,64 176,64 100,158 246,158 225,124 163,124 162,101 225,100"
+          fill={teal}
+        />
       </svg>
       {!compact && (
         <span className="brand-logo__text">
