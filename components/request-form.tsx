@@ -12,6 +12,7 @@ export function RequestForm({
 }) {
   const [categorySlug, setCategorySlug] = useState("");
   const [serviceSlug, setServiceSlug] = useState("");
+  const [mode, setMode] = useState("");
   const selectedCategory = useMemo(
     () => categories.find((category) => category.slug === categorySlug),
     [categories, categorySlug],
@@ -33,7 +34,17 @@ export function RequestForm({
       "Please confirm availability, requirements and exact charges before starting.",
     ];
     const number = whatsappNumber.replace(/[^0-9]/g, "");
-    window.open(`https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener,noreferrer");
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`;
+
+    void fetch("/api/analytics", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ eventName: "whatsapp_click", pagePath: window.location.pathname }),
+      keepalive: true,
+    }).catch(() => undefined);
+
+    const opened = window.open(url, "_blank", "noopener,noreferrer");
+    if (!opened) window.location.assign(url);
   }
 
   const availableModes = [
@@ -42,7 +53,8 @@ export function RequestForm({
     { value: "Delivery", show: !!selectedService?.delivery_available },
     { value: "Doorstep appointment", show: !!selectedService?.doorstep_available },
     { value: "Not sure", show: true },
-  ].filter((mode) => mode.show);
+  ].filter((option) => option.show);
+  const locationRequired = mode === "Delivery" || mode === "Doorstep appointment";
 
   return (
     <form className="request-form" onSubmit={submit}>
@@ -58,6 +70,7 @@ export function RequestForm({
           onChange={(event) => {
             setCategorySlug(event.target.value);
             setServiceSlug("");
+            setMode("");
           }}
           required
         >
@@ -68,7 +81,15 @@ export function RequestForm({
       {selectedCategory && (
         <label>
           Specific service
-          <select name="service" value={serviceSlug} onChange={(event) => setServiceSlug(event.target.value)} required>
+          <select
+            name="service"
+            value={serviceSlug}
+            onChange={(event) => {
+              setServiceSlug(event.target.value);
+              setMode("");
+            }}
+            required
+          >
             <option value="">Select a service</option>
             {selectedCategory.services?.map((service) => <option key={service.id} value={service.slug}>{service.title}</option>)}
           </select>
@@ -76,14 +97,25 @@ export function RequestForm({
       )}
       <label>
         Preferred option
-        <select name="mode" required>
-          {availableModes.map((mode) => <option key={mode.value}>{mode.value}</option>)}
+        <select name="mode" value={mode} onChange={(event) => setMode(event.target.value)} required>
+          <option value="">Select an option</option>
+          {availableModes.map((option) => <option key={option.value} value={option.value}>{option.value}</option>)}
         </select>
       </label>
       <label>
-        Your area
-        <input name="location" placeholder="DHA, PECHS, Dhoraji…" />
+        Your area{locationRequired ? " (required)" : ""}
+        <input
+          name="location"
+          placeholder="DHA, PECHS, Dhoraji…"
+          required={locationRequired}
+          aria-describedby={locationRequired ? "location-requirement" : undefined}
+        />
       </label>
+      {locationRequired && (
+        <p className="field-help" id="location-requirement" role="status">
+          Your area is required so delivery or doorstep availability can be checked.
+        </p>
+      )}
       <label>
         Requirement
         <textarea name="details" placeholder="Tell us what you need, quantity and preferred timing." required />
