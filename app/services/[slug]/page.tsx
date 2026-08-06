@@ -59,6 +59,24 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
         </section>
         <section className="section">
           <div className="container service-detail-grid">
+            <details className="mobile-category-switcher">
+              <summary>
+                <span>Browse service categories</span>
+                <strong>{category.title}</strong>
+              </summary>
+              <nav aria-label="Service categories">
+                {site.categories.map((item) => (
+                  <Link
+                    className={item.slug === slug ? "active" : ""}
+                    aria-current={item.slug === slug ? "page" : undefined}
+                    key={item.id}
+                    href={`/services/${item.slug}`}
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+              </nav>
+            </details>
             <div className="service-list">
               {category.services?.map((service) => {
                 const action = serviceAction(service.status, service.title);
