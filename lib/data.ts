@@ -1,5 +1,5 @@
-import { cache } from "react";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { unstable_cache } from "next/cache";
+import { createPublicSupabaseClient } from "@/lib/supabase/public";
 import type {
   Announcement,
   BusinessHour,
@@ -24,8 +24,8 @@ const fallbackSettings: BusinessSettings = {
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",
 };
 
-export const getSiteData = cache(async () => {
-  const supabase = await createServerSupabaseClient();
+async function loadSiteData() {
+  const supabase = createPublicSupabaseClient();
 
   const [settingsResult, hoursResult, categoriesResult, servicesResult, coverageResult, galleryResult, announcementsResult] =
     await Promise.all([
@@ -55,6 +55,11 @@ export const getSiteData = cache(async () => {
     gallery: (galleryResult.data || []) as GalleryImage[],
     announcements: (announcementsResult.data || []) as Announcement[],
   };
+}
+
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v2"], {
+  revalidate: 300,
+  tags: ["site-data"],
 });
 
 export async function getCategoryBySlug(slug: string) {
