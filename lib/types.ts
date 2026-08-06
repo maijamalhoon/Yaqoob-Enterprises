@@ -17,12 +17,19 @@ export type BusinessSettings = {
   concept_image_notice: string;
 };
 
+export type BusinessHourPeriod = {
+  opens_at: string;
+  closes_at: string;
+  closes_next_day?: boolean;
+};
+
 export type BusinessHour = {
   id: string;
   weekday: number;
   label: string;
   opens_at: string | null;
   closes_at: string | null;
+  periods: BusinessHourPeriod[];
   is_closed: boolean;
   display_order: number;
 };
