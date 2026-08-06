@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./brand.css";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
 
