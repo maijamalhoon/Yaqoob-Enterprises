@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import { LocalBusinessSchema } from "@/components/local-business-schema";
 import { ServiceIcon } from "@/components/service-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -26,24 +27,26 @@ export default async function HomePage() {
   const imageUrl = featuredImage
     ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
     : "/images/storefront-concept.svg";
+  const schemaImageUrl = featuredImage?.media_kind === "real" ? imageUrl : "/brand/logo-horizontal.svg";
   const hoursText = getCurrentBusinessStatus(hours);
 
   return (
     <>
+      <LocalBusinessSchema settings={settings} hours={hours} coverage={coverage} imageUrl={schemaImageUrl} />
       {announcements[0] && (
         <div className="announcement-bar">
           <div className="container"><strong>{announcements[0].title}</strong><span>{announcements[0].message}</span></div>
         </div>
       )}
       <SiteHeader settings={settings} />
-      <main>
+      <main id="main-content">
         <section className="hero">
           <div className="container hero-grid">
             <div className="hero-copy">
               <span className="eyebrow"><MapPin size={15} /> Akhtar Colony, Karachi</span>
-              <h1>Everyday services, handled with less waiting.</h1>
+              <h1>Printing, documents, biometric and online services—in one place.</h1>
               <p className="hero-lead">
-                Send documents, service details or product requirements on WhatsApp. We prepare what we can before your visit and confirm pickup, delivery or doorstep options clearly.
+                Send your files or requirements on WhatsApp. We confirm what to bring, exact charges, and whether a shop visit, pickup, delivery or doorstep appointment applies.
               </p>
               <div className="hero-actions">
                 <TrackedLink className="button button--primary" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><Send size={18} /> Start on WhatsApp</TrackedLink>
@@ -73,9 +76,9 @@ export default async function HomePage() {
 
         <section className="quick-strip">
           <div className="container quick-grid">
-            <article><Send /><div><strong>Send first</strong><span>Files and requirements on WhatsApp</span></div></article>
-            <article><FileCheck2 /><div><strong>Confirm clearly</strong><span>Requirements, availability and charges</span></div></article>
-            <article><PackageCheck /><div><strong>Choose delivery mode</strong><span>Shop, pickup, delivery or appointment</span></div></article>
+            <article><Send /><div><strong>Send the requirement</strong><span>Files, service details or product reference</span></div></article>
+            <article><FileCheck2 /><div><strong>Receive confirmation</strong><span>Documents, availability and exact charges</span></div></article>
+            <article><PackageCheck /><div><strong>Choose the practical option</strong><span>Shop, pickup, delivery or appointment</span></div></article>
           </div>
         </section>
 

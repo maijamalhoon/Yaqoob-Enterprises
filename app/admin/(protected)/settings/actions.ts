@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
 
 function text(formData: FormData, key: string) {
@@ -27,8 +27,8 @@ function displayPhone(e164: string) {
 }
 
 function refreshSettings() {
-  revalidatePath("/");
-  revalidatePath("/contact");
+  updateTag("site-data");
+  revalidatePath("/", "layout");
   revalidatePath("/admin/settings");
 }
 

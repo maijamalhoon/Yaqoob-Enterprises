@@ -17,7 +17,7 @@ export default async function ContactPage() {
   return (
     <>
       <SiteHeader settings={settings} />
-      <main>
+      <main id="main-content">
         <section className="page-hero">
           <div className="container">
             <span className="eyebrow">Contact</span>

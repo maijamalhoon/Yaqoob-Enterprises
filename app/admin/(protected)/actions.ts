@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
 
@@ -13,8 +13,8 @@ function text(formData: FormData, key: string) {
 }
 
 function refreshAll() {
-  revalidatePath("/");
-  revalidatePath("/contact");
+  updateTag("site-data");
+  revalidatePath("/", "layout");
   revalidatePath("/admin", "layout");
 }
 

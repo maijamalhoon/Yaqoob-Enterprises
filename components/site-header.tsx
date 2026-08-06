@@ -10,6 +10,7 @@ export function SiteHeader({ settings }: { settings: BusinessSettings }) {
 
   return (
     <>
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       <header className="site-header">
         <div className="container site-header__inner">
           <Logo />
