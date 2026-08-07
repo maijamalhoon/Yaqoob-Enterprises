@@ -7,7 +7,7 @@ on:
     branches: [main, "agent/**"]
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -37,13 +37,15 @@ jobs:
             echo "generated=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Upload generated dependency lock
-        if: steps.dependency-lock.outputs.generated == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-package-lock
-          path: package-lock.json
-          retention-days: 1
+      - name: Commit generated dependency lock to working branch
+        if: steps.dependency-lock.outputs.generated == 'true' && github.event_name == 'push' && startsWith(github.ref, 'refs/heads/agent/')
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "Lock dependency graph"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
