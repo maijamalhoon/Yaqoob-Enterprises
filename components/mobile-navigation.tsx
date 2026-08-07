@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Clock3, Home, MapPin, Menu, MessageCircle, Phone, Send, Store, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TrackedLink } from "@/components/tracked-link";
@@ -16,9 +17,23 @@ export function MobileNavigation({
   whatsappUrl: string;
   statusText?: string;
 }) {
+  const pathname = usePathname();
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
+  const [hash, setHash] = useState("");
+
+  const active = pathname.startsWith("/services")
+    ? "services"
+    : pathname === "/contact"
+      ? "contact"
+      : pathname === "/" && hash === "#services"
+        ? "services"
+        : pathname === "/" && hash === "#coverage"
+          ? "coverage"
+          : pathname === "/"
+            ? "home"
+            : "";
 
   const closeMenu = useCallback(({ restoreFocus = false }: { restoreFocus?: boolean } = {}) => {
     if (detailsRef.current) detailsRef.current.open = false;
@@ -30,6 +45,13 @@ export function MobileNavigation({
     document.documentElement.classList.toggle("mobile-menu-open", open);
     return () => document.documentElement.classList.remove("mobile-menu-open");
   }, [open]);
+
+  useEffect(() => {
+    const syncHash = () => setHash(window.location.hash);
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, [pathname]);
 
   useEffect(() => {
     function handlePointerDown(event: PointerEvent) {
@@ -80,10 +102,10 @@ export function MobileNavigation({
         </div>
 
         <nav id="mobile-primary-navigation" aria-label="Mobile navigation">
-          <Link href="/"><Home size={19} /> <span><strong>Home</strong><small>Start here</small></span></Link>
-          <Link href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Find the right category</small></span></Link>
-          <Link href="/#coverage"><MapPin size={19} /> <span><strong>Coverage</strong><small>Delivery &amp; home visits</small></span></Link>
-          <Link href="/contact"><Send size={19} /> <span><strong>Send a request</strong><small>Build a clear WhatsApp message</small></span></Link>
+          <Link className={active === "home" ? "is-active" : undefined} aria-current={active === "home" ? "page" : undefined} href="/"><Home size={19} /> <span><strong>Home</strong><small>Start here</small></span></Link>
+          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Find the right category</small></span></Link>
+          <Link className={active === "coverage" ? "is-active" : undefined} aria-current={active === "coverage" ? "location" : undefined} href="/#coverage"><MapPin size={19} /> <span><strong>Coverage</strong><small>Delivery &amp; home visits</small></span></Link>
+          <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? "page" : undefined} href="/contact"><Send size={19} /> <span><strong>Send a request</strong><small>Build a clear WhatsApp message</small></span></Link>
         </nav>
 
         <div className="mobile-menu-actions">
