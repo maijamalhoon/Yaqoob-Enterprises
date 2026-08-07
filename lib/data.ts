@@ -24,6 +24,16 @@ const fallbackSettings: BusinessSettings = {
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",
 };
 
+function logOptionalDataError(dataset: string, error: { message?: string } | null) {
+  if (!error) return;
+  console.error(`[site-data] Failed to load optional ${dataset}: ${error.message || "Unknown Supabase error"}`);
+}
+
+function requireCoreData(dataset: string, error: { message?: string } | null) {
+  if (!error) return;
+  throw new Error(`[site-data] Failed to load required ${dataset}: ${error.message || "Unknown Supabase error"}`);
+}
+
 async function loadSiteData() {
   const supabase = createPublicSupabaseClient();
 
@@ -38,8 +48,17 @@ async function loadSiteData() {
       supabase.from("announcements").select("*").eq("is_active", true).order("display_order"),
     ]);
 
+  requireCoreData("business settings", settingsResult.error);
+  requireCoreData("service categories", categoriesResult.error);
+  requireCoreData("services", servicesResult.error);
+
+  logOptionalDataError("business hours", hoursResult.error);
+  logOptionalDataError("coverage areas", coverageResult.error);
+  logOptionalDataError("gallery images", galleryResult.error);
+  logOptionalDataError("announcements", announcementsResult.error);
+
   const settings = (settingsResult.data as BusinessSettings | null) || fallbackSettings;
-  const hours = (hoursResult.data || []) as BusinessHour[];
+  const hours = hoursResult.error ? [] : ((hoursResult.data || []) as BusinessHour[]);
   const services = (servicesResult.data || []) as Service[];
   const categories = ((categoriesResult.data || []) as ServiceCategory[]).map((category) => ({
     ...category,
@@ -51,13 +70,13 @@ async function loadSiteData() {
     hours,
     categories,
     services,
-    coverage: (coverageResult.data || []) as CoverageArea[],
-    gallery: (galleryResult.data || []) as GalleryImage[],
-    announcements: (announcementsResult.data || []) as Announcement[],
+    coverage: coverageResult.error ? [] : ((coverageResult.data || []) as CoverageArea[]),
+    gallery: galleryResult.error ? [] : ((galleryResult.data || []) as GalleryImage[]),
+    announcements: announcementsResult.error ? [] : ((announcementsResult.data || []) as Announcement[]),
   };
 }
 
-export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v2"], {
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v3"], {
   revalidate: 300,
   tags: ["site-data"],
 });
