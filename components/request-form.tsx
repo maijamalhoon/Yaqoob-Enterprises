@@ -94,9 +94,11 @@ export function RequestForm({
   const detailsStep = locationRequired ? locationStep + 1 : modeStep + 1;
   const dynamicUpdate = locationRequired
     ? "Area or location is now required for this service option."
-    : selectedCategory
+    : selectedCategory && !serviceSlug
       ? "Exact service options are now available."
-      : "";
+      : availabilityOnly
+        ? "This service needs an availability check before fulfilment can be confirmed."
+        : "";
 
   return (
     <form className="request-form request-form--guided" onSubmit={submit}>
