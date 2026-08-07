@@ -1,0 +1,392 @@
+/*
+ * Viewport-aware public layout foundation.
+ *
+ * Goals:
+ * - use stable/dynamic viewport units instead of forcing sections to 100vh
+ * - keep readable content sizes while decorative space compresses first
+ * - reserve for the mobile quick-action bar without making pages feel padded
+ * - reduce empty side gutters on wide displays without allowing unreadably wide copy
+ * - adapt the featured-service stage to viewport height as well as width
+ *
+ * This file is imported last so it can act as a small, explicit responsive safety layer.
+ */
+
+:root {
+  --viewport-stable: 100vh;
+  --viewport-dynamic: 100vh;
+  --public-header-height: 5.2rem;
+  --mobile-action-clearance: 0rem;
+  --public-gutter: clamp(0.85rem, 2.5vw, 2.5rem);
+  --service-stage-max: 96rem;
+  --container: 86rem;
+}
+
+@supports (height: 100svh) {
+  :root { --viewport-stable: 100svh; }
+}
+
+@supports (height: 100dvh) {
+  :root { --viewport-dynamic: 100dvh; }
+}
+
+html {
+  scroll-padding-top: calc(var(--public-header-height) + 1rem);
+  scroll-padding-bottom: var(--mobile-action-clearance);
+}
+
+body {
+  overflow-x: clip;
+}
+
+main#main-content,
+main#main-content > section {
+  min-width: 0;
+}
+
+/* A fluid public content rail: tighter on phones, wider on large displays, still capped for readability. */
+main#main-content .container {
+  width: min(calc(100% - (2 * var(--public-gutter))), var(--container));
+}
+
+/* Vertical rhythm responds to available screen height instead of viewport width alone. */
+main#main-content .section {
+  padding-block: clamp(3.25rem, 7svh, 6.25rem);
+}
+
+main#main-content .services-showcase--interactive {
+  padding-top: clamp(3.4rem, 6.8svh, 5.4rem) !important;
+  padding-bottom: clamp(3.6rem, 7svh, 5.8rem) !important;
+}
+
+main#main-content .experience-section {
+  padding-top: clamp(3.1rem, 6.3svh, 4.8rem) !important;
+  padding-bottom: clamp(3.5rem, 7svh, 5.3rem) !important;
+}
+
+main#main-content .coverage-section {
+  padding-block: clamp(3.5rem, 7.5svh, 6rem) !important;
+}
+
+main#main-content .closing-section--final {
+  padding-block: clamp(3.2rem, 6.5svh, 4.8rem) !important;
+}
+
+main#main-content .page-hero {
+  padding-block: clamp(3rem, 6.5svh, 5.5rem);
+}
+
+/* Keep the animated service stage visually generous without creating excessive side blank space. */
+.service-stage {
+  width: min(calc(100vw - (2 * var(--public-gutter))), var(--service-stage-max));
+}
+
+/* Wide monitors/projectors get a larger rail, but content never stretches edge-to-edge. */
+@media (min-width: 90rem) {
+  :root {
+    --container: 92rem;
+    --service-stage-max: 100rem;
+    --public-gutter: clamp(1.6rem, 2.8vw, 3.5rem);
+  }
+}
+
+@media (min-width: 120rem) {
+  :root {
+    --container: 96rem;
+    --service-stage-max: 108rem;
+    --public-gutter: clamp(2rem, 3vw, 4.5rem);
+  }
+}
+
+/* Phones and narrow tablets: size the feature card from real usable screen height. */
+@media (max-width: 50rem) {
+  :root {
+    --public-header-height: 4.7rem;
+    --public-gutter: clamp(0.72rem, 3vw, 1rem);
+  }
+
+  main#main-content .services-showcase--interactive {
+    padding-top: clamp(2.7rem, 5.8svh, 3.35rem) !important;
+    padding-bottom: clamp(2.9rem, 6svh, 3.6rem) !important;
+  }
+
+  .service-showcase-heading {
+    margin-bottom: clamp(1rem, 2.8svh, 1.35rem) !important;
+  }
+
+  .service-showcase-heading__side {
+    margin-top: clamp(0.65rem, 1.8svh, 0.9rem);
+  }
+
+  .service-stage {
+    width: min(calc(100vw - (2 * var(--public-gutter))), 44rem);
+  }
+
+  .service-stage__viewport {
+    height: clamp(
+      28rem,
+      calc(var(--viewport-stable) - var(--public-header-height) - var(--mobile-action-clearance) - 3.6rem),
+      31.5rem
+    );
+  }
+
+  .service-feature-card {
+    grid-template-rows: minmax(0, 58%) minmax(0, 42%);
+  }
+
+  .service-feature-card__copy {
+    padding: clamp(1.05rem, 3.2vw, 1.35rem) clamp(1.05rem, 3.3vw, 1.3rem);
+  }
+
+  .service-feature-card h3 {
+    font-size: clamp(1.95rem, 8.5vw, 2.55rem);
+  }
+
+  .service-feature-card__copy > p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .service-motion {
+    inset: clamp(0.55rem, 2vw, 0.72rem);
+  }
+
+  .service-motion__icon {
+    width: clamp(5.6rem, 18vw, 6.35rem);
+  }
+
+  .service-motion__ring {
+    width: clamp(8.7rem, 28vw, 9.5rem);
+  }
+
+  .service-motion__ring--two {
+    width: clamp(11rem, 37vw, 12.5rem);
+  }
+}
+
+/* The fixed mobile action bar gets an explicit viewport budget and a slightly more compact footprint. */
+@media (max-width: 42rem) {
+  :root {
+    --mobile-action-clearance: calc(4.45rem + env(safe-area-inset-bottom));
+  }
+
+  .mobile-action-bar {
+    bottom: calc(0.45rem + env(safe-area-inset-bottom));
+    width: min(calc(100% - 0.8rem), 31rem);
+    padding: 0.38rem;
+  }
+
+  .mobile-action-bar a {
+    min-height: 2.7rem;
+  }
+
+  .site-footer {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Short phones: shrink decoration and spacing before shrinking readable content. */
+@media (max-width: 50rem) and (max-height: 44rem) {
+  main#main-content .section {
+    padding-block: 2.8rem;
+  }
+
+  main#main-content .services-showcase--interactive {
+    padding-top: 2.35rem !important;
+    padding-bottom: 2.7rem !important;
+  }
+
+  .service-showcase-heading {
+    margin-bottom: 0.9rem !important;
+  }
+
+  .service-showcase-heading__side {
+    gap: 0.58rem;
+    margin-top: 0.55rem;
+  }
+
+  .service-showcase-heading__side p {
+    font-size: 0.85rem;
+    line-height: 1.48;
+  }
+
+  .service-stage__viewport {
+    height: clamp(
+      27.5rem,
+      calc(var(--viewport-stable) - var(--public-header-height) - var(--mobile-action-clearance) - 2.75rem),
+      29.5rem
+    );
+  }
+
+  .service-feature-card {
+    grid-template-rows: minmax(0, 58%) minmax(0, 42%);
+  }
+
+  .service-feature-card__meta {
+    margin-bottom: 0.5rem;
+  }
+
+  .service-feature-card__copy > p {
+    margin-top: 0.52rem;
+  }
+
+  .service-feature-card__chips {
+    margin-top: 0.62rem;
+  }
+
+  .service-feature-card__action {
+    padding-top: 0.52rem;
+  }
+
+  .service-motion small {
+    display: none;
+  }
+
+  .info-panel--premium {
+    gap: 0.88rem;
+    padding: 1.35rem !important;
+  }
+
+  .promise-list {
+    gap: 0.5rem;
+  }
+
+  .promise-list span {
+    min-height: 2rem;
+  }
+}
+
+/* Tall phones can use the extra height for the visual instead of leaving a large dead band below the section. */
+@media (max-width: 50rem) and (min-height: 52rem) {
+  .service-stage__viewport {
+    height: clamp(30.5rem, calc(var(--viewport-stable) - 18rem), 32.5rem);
+  }
+
+  .service-feature-card {
+    grid-template-rows: minmax(0, 56%) minmax(0, 44%);
+  }
+}
+
+/* Landscape phones/narrow tablets: change composition when height, not width, is the limiting factor. */
+@media (orientation: landscape) and (min-width: 40rem) and (max-width: 62rem) and (max-height: 32rem) {
+  main#main-content .services-showcase--interactive {
+    padding-top: 2.2rem !important;
+    padding-bottom: 2.4rem !important;
+  }
+
+  .service-showcase-heading {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.8fr) !important;
+    align-items: end !important;
+    gap: 1.2rem !important;
+  }
+
+  .service-showcase-heading__side {
+    margin-top: 0;
+  }
+
+  .service-stage__viewport {
+    height: clamp(22.5rem, calc(var(--viewport-stable) - 5.2rem), 25.5rem);
+  }
+
+  .service-feature-card {
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.92fr);
+    grid-template-rows: 1fr;
+  }
+
+  .service-feature-card__copy {
+    grid-row: auto;
+    padding: 1.35rem 1.5rem;
+  }
+
+  .service-feature-card h3 {
+    font-size: clamp(2rem, 4.6vw, 2.85rem);
+  }
+
+  .service-feature-card__visual {
+    grid-row: auto;
+    border-top: 0;
+    border-left: 1px solid rgba(7, 26, 50, 0.07);
+  }
+
+  .service-motion {
+    inset: 0.75rem;
+  }
+}
+
+/* Short laptops/desktops: compress vertical whitespace and artwork, never body-copy legibility. */
+@media (min-width: 62.01rem) and (max-height: 48rem) {
+  main#main-content .hero--final {
+    padding-top: 2.7rem !important;
+    padding-bottom: 2.9rem !important;
+  }
+
+  main#main-content .section,
+  main#main-content .experience-section,
+  main#main-content .coverage-section,
+  main#main-content .closing-section--final {
+    padding-block: 3rem !important;
+  }
+
+  main#main-content .services-showcase--interactive {
+    padding-top: 3rem !important;
+    padding-bottom: 3.2rem !important;
+  }
+
+  .service-showcase-heading {
+    margin-bottom: 1.35rem !important;
+  }
+
+  .service-stage__viewport {
+    height: clamp(25.5rem, calc(var(--viewport-stable) - 14rem), 29rem);
+  }
+
+  .service-feature-card h3 {
+    font-size: clamp(2.45rem, 3.55vw, 3.65rem);
+  }
+
+  .service-feature-card__copy {
+    padding-block: clamp(1.7rem, 4svh, 2.5rem);
+  }
+
+  .service-motion__icon {
+    width: 7.5rem;
+  }
+
+  .service-motion__ring {
+    width: 11.5rem;
+  }
+
+  .service-motion__ring--two {
+    width: 16rem;
+  }
+
+  .info-panel--premium {
+    padding: clamp(1.45rem, 3.5svh, 2rem) !important;
+  }
+}
+
+/* Medium-height tablets get a proportional stage instead of a fixed desktop-like block. */
+@media (min-width: 50.01rem) and (max-width: 62rem) and (max-height: 52rem) {
+  .service-stage__viewport {
+    height: clamp(26rem, calc(var(--viewport-stable) - 15rem), 29.5rem);
+  }
+
+  main#main-content .section {
+    padding-block: clamp(3rem, 6svh, 4.5rem);
+  }
+}
+
+/* Anchor targets should land above the fixed actions and sticky header. */
+main#main-content section[id] {
+  scroll-margin-top: calc(var(--public-header-height) + 1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the viewport adaptation; only motion remains governed by the existing reduced-motion rules. */
+  .service-stage__viewport,
+  main#main-content .section {
+    transition: none !important;
+  }
+}
