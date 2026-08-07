@@ -208,7 +208,10 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
 
   const activeCategory = categories[currentIndex];
   const outgoingCategory = outgoingIndex === null ? null : categories[outgoingIndex];
-  const carouselStyle = { "--service-rotation-ms": `${ROTATION_MS}ms` } as CSSProperties;
+  const carouselStyle = {
+    "--service-rotation-ms": `${ROTATION_MS}ms`,
+    "--service-count": String(categories.length),
+  } as CSSProperties;
 
   return (
     <section
