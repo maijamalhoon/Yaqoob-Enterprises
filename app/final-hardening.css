@@ -1,5 +1,22 @@
 /* Final production hardening. Keep this file limited to verified accessibility and cross-device corrections. */
 
+.desktop-nav a.is-active {
+  color: var(--ink);
+  background: rgba(8, 118, 111, 0.09);
+  box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.mobile-nav nav a.is-active {
+  color: var(--navy);
+  background: var(--surface-soft);
+  box-shadow: inset 3px 0 0 var(--teal);
+}
+
+/* The compact journey strip already explains the process. Keep the later trust section focused on its promise instead of repeating the same four steps. */
+.experience-section .feature-list--timeline {
+  display: none;
+}
+
 @media (max-width: 62rem) {
   .mobile-switcher-copy small {
     font-size: 0.7rem !important;
