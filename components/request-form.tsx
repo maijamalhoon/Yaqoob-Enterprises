@@ -19,6 +19,10 @@ export function RequestForm({
     [categories, categorySlug],
   );
   const selectedService = selectedCategory?.services?.find((service) => service.slug === serviceSlug);
+  const hasExactServiceStep = Boolean(selectedCategory);
+  const modeStep = hasExactServiceStep ? 4 : 3;
+  const locationStep = modeStep + 1;
+  const detailsStep = locationStep + 1;
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -64,7 +68,7 @@ export function RequestForm({
         <input name="name" autoComplete="name" enterKeyHint="next" placeholder="e.g. Jamal Arain" required />
       </label>
       <label>
-        <span className="field-label"><small>02</small>What kind of service?</span>
+        <span className="field-label"><small>02</small>Service category</span>
         <select
           name="category"
           value={categorySlug}
@@ -81,7 +85,7 @@ export function RequestForm({
       </label>
       {selectedCategory && (
         <label>
-          <span className="field-label"><small>03</small>Which exact service?</span>
+          <span className="field-label"><small>03</small>Exact service</span>
           <select
             name="service"
             value={serviceSlug}
@@ -97,14 +101,14 @@ export function RequestForm({
         </label>
       )}
       <label>
-        <span className="field-label"><small>04</small>How would you prefer it?</span>
+        <span className="field-label"><small>{String(modeStep).padStart(2, "0")}</small>How do you want it?</span>
         <select name="mode" value={mode} onChange={(event) => setMode(event.target.value)} required>
           <option value="">Choose an option</option>
           {availableModes.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
       </label>
       <label>
-        <span className="field-label"><small>05</small>Your area{locationRequired ? " — required" : ""}</span>
+        <span className="field-label"><small>{String(locationStep).padStart(2, "0")}</small>Area / location{locationRequired ? " — required" : ""}</span>
         <input
           name="location"
           autoComplete="address-level2"
@@ -120,17 +124,17 @@ export function RequestForm({
         </p>
       )}
       <label>
-        <span className="field-label"><small>06</small>Describe the task</span>
+        <span className="field-label"><small>{String(detailsStep).padStart(2, "0")}</small>What do you need?</span>
         <textarea
           name="details"
           enterKeyHint="send"
-          placeholder="What do you need? Add quantity, deadline or preferred time."
+          placeholder="Add quantity, deadline, preferred time or any useful detail."
           required
         />
       </label>
       {selectedService?.important_note && <p className="form-note"><strong>Please note:</strong> {selectedService.important_note}</p>}
       <button className="button button--primary request-submit" type="submit">
-        <MessageCircle size={18} /> Open request in WhatsApp <ArrowRight size={17} />
+        <MessageCircle size={18} /> Open in WhatsApp <ArrowRight size={17} />
       </button>
       <p className="field-help field-help--privacy">Nothing is sent yet. WhatsApp opens first so you can review and edit the message.</p>
     </form>

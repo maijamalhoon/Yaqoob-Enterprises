@@ -163,17 +163,30 @@ export function getCurrentBusinessStatus(hours: BusinessHour[], now = new Date()
   }
 
   const todayPeriods = today ? getHourPeriods(today) : [];
-  const active = todayPeriods.find((period) => {
+  const activeIndex = todayPeriods.findIndex((period) => {
     const opens = timeToMinutes(period.opens_at);
     const closes = timeToMinutes(period.closes_at);
     return period.closes_next_day ? minute >= opens : minute >= opens && minute < closes;
   });
-  if (active) return `Open now · until ${formatTime(active.closes_at)}`;
+
+  if (activeIndex >= 0) {
+    const active = todayPeriods[activeIndex];
+    const laterPeriod = todayPeriods
+      .slice(activeIndex + 1)
+      .find((period) => timeToMinutes(period.opens_at) > minute);
+
+    if (laterPeriod && !active.closes_next_day) {
+      return `Open now · closes ${formatTime(active.closes_at)} · reopens ${formatTime(laterPeriod.opens_at)}`;
+    }
+    return `Open now · until ${formatTime(active.closes_at)}`;
+  }
 
   const nextToday = todayPeriods.find((period) => timeToMinutes(period.opens_at) > minute);
   if (nextToday) {
-    const hadEarlierPeriod = todayPeriods.some((period) => timeToMinutes(period.opens_at) <= minute);
-    return `${hadEarlierPeriod ? "Reopens" : "Opens"} today at ${formatTime(nextToday.opens_at)}`;
+    const hadEarlierPeriod = todayPeriods.some((period) => timeToMinutes(period.closes_at) <= minute);
+    return hadEarlierPeriod
+      ? `Break now · reopens ${formatTime(nextToday.opens_at)}`
+      : `Opens today at ${formatTime(nextToday.opens_at)}`;
   }
 
   for (let offset = 1; offset <= 7; offset += 1) {

@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { getSiteData } from "@/lib/data";
+import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Privacy" };
 
 export default async function PrivacyPage() {
-  const { settings, categories } = await getSiteData();
+  const { settings, categories, hours } = await getSiteData();
   return (
     <>
-      <SiteHeader settings={settings} />
+      <SiteHeader settings={settings} statusText={getCurrentBusinessStatus(hours)} />
       <main id="main-content">
         <section className="page-hero"><div className="container"><span className="eyebrow">Privacy</span><h1>Plain-language privacy information.</h1><p>What the website stores, what it does not store and how third-party services are used.</p></div></section>
         <section className="section"><article className="container prose-page">
