@@ -7,7 +7,7 @@ on:
     branches: [main, "agent/**"]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -25,27 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-
-      - name: Prepare dependency lock
-        id: dependency-lock
-        shell: bash
-        run: |
-          if [ -f package-lock.json ]; then
-            echo "generated=false" >> "$GITHUB_OUTPUT"
-          else
-            npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-            echo "generated=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Commit generated dependency lock to working branch
-        if: steps.dependency-lock.outputs.generated == 'true' && github.event_name == 'push' && startsWith(github.ref, 'refs/heads/agent/')
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          git commit -m "Lock dependency graph"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          cache: npm
 
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
