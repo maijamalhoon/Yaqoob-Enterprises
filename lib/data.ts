@@ -20,7 +20,7 @@ const fallbackSettings: BusinessSettings = {
   address: "Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi, Pakistan",
   map_url: "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A",
   pricing_message:
-    "Hamari service charges kaam ki type, quantity, urgency, delivery location aur applicable official fees ke mutabiq vary karti hain. Exact quotation kaam shuru hone se pehle WhatsApp ya shop par confirm ki jati hai.",
+    "Service charges vary by work type, quantity, urgency, delivery location and any applicable official fees. We confirm the exact quotation before work begins, either on WhatsApp or at the shop.",
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",
 };
 
