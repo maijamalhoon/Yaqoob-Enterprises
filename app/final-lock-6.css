@@ -20,3 +20,32 @@
   from { opacity: 0; transform: translateY(-8px) scale(0.99); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* Mobile layout hotfix: close cascade gaps left by earlier responsive layers. */
+@media (max-width: 42rem) {
+  .feature-list--timeline > div {
+    grid-template-columns: 2.2rem minmax(0, 1fr) !important;
+    gap: 0.7rem !important;
+  }
+
+  .feature-list--timeline > div > svg {
+    display: none !important;
+  }
+
+  .feature-list--timeline > div > span:last-child {
+    min-width: 0;
+  }
+
+  .mobile-action-bar {
+    left: 0.6rem !important;
+    right: 0.6rem !important;
+    width: auto !important;
+    transform: none !important;
+    grid-template-columns: 1.25fr 0.75fr 1fr !important;
+  }
+
+  .mobile-action-bar a {
+    min-width: 0;
+    white-space: nowrap;
+  }
+}
