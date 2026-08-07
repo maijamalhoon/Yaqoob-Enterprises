@@ -36,16 +36,89 @@ const shortCategoryTitles: Record<string, string> = {
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery, announcements } = await getSiteData();
   const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help with: ");
-  const featuredImage = gallery.find((image) => image.is_featured);
+  const featuredImage = gallery.find((image) => image.is_featured && image.media_kind === "real");
   const imageUrl = featuredImage
     ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
-    : "/images/storefront-concept.svg";
-  const schemaImageUrl = featuredImage?.media_kind === "real" ? imageUrl : "/brand/logo-horizontal.svg";
+    : "/brand/logo-horizontal.svg";
+  const schemaImageUrl = featuredImage ? imageUrl : "/brand/logo-horizontal.svg";
   const hoursText = getCurrentBusinessStatus(hours);
 
   return (
     <>
       <LocalBusinessSchema settings={settings} hours={hours} coverage={coverage} imageUrl={schemaImageUrl} />
+      <style>{`
+        .hero--reliable .image-frame--hero {
+          position: relative;
+          overflow: hidden;
+          isolation: isolate;
+          background:
+            url("/brand/logo-horizontal.svg") center / 42% auto no-repeat,
+            linear-gradient(145deg, #eef8f6 0%, #dcefed 100%) !important;
+        }
+
+        .hero--reliable .image-frame--hero > img {
+          z-index: 0;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+        }
+
+        .hero--reliable .image-frame--hero::after {
+          z-index: 1;
+        }
+
+        .hero--reliable .hero-image-label,
+        .hero--reliable .hero-photo-meta {
+          z-index: 2;
+        }
+
+        @media (min-width: 62.01rem) {
+          .hero--reliable .hero-grid--experience {
+            grid-template-columns: minmax(0, 1.06fr) minmax(24rem, 0.94fr) !important;
+            gap: clamp(2.75rem, 4vw, 4.5rem) !important;
+          }
+
+          .hero--reliable .hero-copy--experience h1 {
+            max-width: 12.2ch !important;
+            font-size: clamp(3.2rem, 4.35vw, 4.85rem) !important;
+          }
+
+          .hero--reliable .hero-visual--experience {
+            width: 100%;
+            max-width: 41.5rem !important;
+            min-height: 32rem;
+            margin-left: auto;
+            padding: 1.4rem 1.4rem 2rem 1.6rem !important;
+          }
+
+          .hero--reliable .image-frame--hero {
+            aspect-ratio: 1.36 / 1 !important;
+            max-height: 30rem !important;
+          }
+
+          .hero--reliable .hero-image-card {
+            right: 1rem !important;
+            bottom: 1.05rem !important;
+            width: min(18rem, 72%) !important;
+            max-width: 18rem !important;
+          }
+
+          .hero--reliable .hero-orbit--1 {
+            top: 14% !important;
+            left: -4% !important;
+          }
+
+          .hero--reliable .hero-orbit--2 {
+            top: 3% !important;
+            right: -1% !important;
+          }
+
+          .hero--reliable .hero-orbit--3 {
+            bottom: 12% !important;
+            left: -2% !important;
+          }
+        }
+      `}</style>
       {announcements[0] && (
         <div className="announcement-bar">
           <div className="container">
@@ -56,7 +129,7 @@ export default async function HomePage() {
       )}
       <SiteHeader settings={settings} statusText={hoursText} />
       <main id="main-content">
-        <section className="hero hero--experience hero--final">
+        <section className="hero hero--experience hero--final hero--reliable">
           <div className="hero-grid-pattern" aria-hidden="true" />
           <div className="container hero-grid hero-grid--experience">
             <div className="hero-copy hero-copy--experience">
@@ -92,33 +165,41 @@ export default async function HomePage() {
             <div className="hero-visual hero-visual--experience">
               <div className="hero-visual__glow" aria-hidden="true" />
               <div className="image-frame image-frame--hero">
-                <Image
-                  src={imageUrl}
-                  alt={featuredImage?.alt_text || "Yaqoob Enterprises storefront"}
-                  fill
-                  priority
-                  sizes="(max-width: 900px) 100vw, 46vw"
-                  style={{ objectPosition: `${featuredImage?.focal_x || 50}% ${featuredImage?.focal_y || 50}%` }}
-                />
+                {featuredImage && (
+                  <Image
+                    src={imageUrl}
+                    alt={featuredImage.alt_text || "Yaqoob Enterprises storefront"}
+                    fill
+                    priority
+                    unoptimized
+                    sizes="(max-width: 900px) 100vw, 46vw"
+                    style={{ objectPosition: `${featuredImage.focal_x || 50}% ${featuredImage.focal_y || 50}%` }}
+                  />
+                )}
                 <span className="hero-image-label"><Store size={14} /> Yaqoob Enterprises</span>
-                <div className="hero-photo-meta">
-                  <span className="hero-photo-status"><span aria-hidden="true" /> {hoursText}</span>
-                  <span><MapPin size={14} /> Akhtar Colony</span>
-                </div>
+                {featuredImage && (
+                  <div className="hero-photo-meta">
+                    <span className="hero-photo-status"><span aria-hidden="true" /> {hoursText}</span>
+                    <span><MapPin size={14} /> Akhtar Colony</span>
+                  </div>
+                )}
               </div>
-              <div className="hero-image-card">
-                <span className="hero-image-card__icon"><MessageCircle size={22} /></span>
-                <span><strong>Your neighbourhood service desk</strong><small>One clear message can save an extra trip.</small></span>
-              </div>
-              <div className="hero-service-orbit" aria-label="Popular service categories">
-                {categories.slice(0, 3).map((category, index) => (
-                  <span className={`hero-orbit hero-orbit--${index + 1}`} key={category.id}>
-                    <ServiceIcon iconKey={category.icon_key} size={16} />
-                    {shortCategoryTitles[category.slug] || category.title}
-                  </span>
-                ))}
-              </div>
-              {featuredImage?.media_kind !== "real" && <p className="concept-label">{settings.concept_image_notice}</p>}
+              {featuredImage && (
+                <>
+                  <div className="hero-image-card">
+                    <span className="hero-image-card__icon"><MessageCircle size={22} /></span>
+                    <span><strong>Your neighbourhood service desk</strong><small>One clear message can save an extra trip.</small></span>
+                  </div>
+                  <div className="hero-service-orbit" aria-label="Popular service categories">
+                    {categories.slice(0, 3).map((category, index) => (
+                      <span className={`hero-orbit hero-orbit--${index + 1}`} key={category.id}>
+                        <ServiceIcon iconKey={category.icon_key} size={16} />
+                        {shortCategoryTitles[category.slug] || category.title}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <a className="hero-scroll-cue" href="#services"><ArrowDown size={16} /> Find your service</a>
