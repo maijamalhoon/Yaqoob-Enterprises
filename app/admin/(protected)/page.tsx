@@ -3,6 +3,8 @@ import { requireAdmin } from "@/lib/admin";
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireAdmin();
+  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day activity window.
+  // eslint-disable-next-line react-hooks/purity
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const [services, coverage, gallery, events, recent] = await Promise.all([
     supabase.from("services").select("id", { count: "exact", head: true }),
