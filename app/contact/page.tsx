@@ -66,11 +66,24 @@ export default async function ContactPage() {
                 <span className="contact-card-heading__icon"><Store size={21} /></span>
                 <div><span className="eyebrow eyebrow--light">Real local support</span><h2>Talk to a real shop.</h2></div>
               </div>
-              <div className="contact-detail"><Clock3 /><div><strong>Right now</strong><span>{statusText}</span></div></div>
-              <div className="contact-detail"><Phone /><div><strong>Call or WhatsApp</strong><TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">{settings.phone_display}</TrackedLink></div></div>
-              <div className="contact-detail"><MapPin /><div><strong>Visit the shop</strong><TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">{settings.address}</TrackedLink></div></div>
-              <div className="contact-detail"><Clock3 /><div><strong>Opening hours</strong>{hours.map((hour) => <span key={hour.id}>{hour.label}: {formatBusinessHours(hour)}</span>)}</div></div>
-              <div className="contact-detail"><ShieldCheck /><div><strong>Before work begins</strong><span>We confirm the requirement, expected time and total charges first.</span></div></div>
+              <div className="contact-detail contact-detail--status"><Clock3 /><div><strong>Right now</strong><span>{statusText}</span></div></div>
+              <div className="contact-detail contact-detail--phone"><Phone /><div><strong>Call or WhatsApp</strong><TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">{settings.phone_display}</TrackedLink></div></div>
+              <div className="contact-detail contact-detail--address"><MapPin /><div><strong>Visit the shop</strong><TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">{settings.address}</TrackedLink></div></div>
+              <div className="contact-detail contact-detail--hours">
+                <Clock3 />
+                <div>
+                  <strong>Opening hours</strong>
+                  <div className="contact-hours">
+                    {hours.map((hour) => (
+                      <div className="contact-hours__row" key={hour.id}>
+                        <span>{hour.label}</span>
+                        <span>{formatBusinessHours(hour)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="contact-detail contact-detail--promise"><ShieldCheck /><div><strong>Before work begins</strong><span>We confirm the requirement, expected time and total charges first.</span></div></div>
             </div>
 
             <div className="form-card form-card--premium">
@@ -82,7 +95,7 @@ export default async function ContactPage() {
               <div className="contact-flow" aria-label="Request process">
                 <span><small>01</small> Choose</span>
                 <span><small>02</small> Describe</span>
-                <span><small>03</small> Review &amp; send</span>
+                <span><small>03</small> Review</span>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
               <p className="contact-human-note"><MessageCircle size={16} /> Not sure of the exact service name? Choose “I’m not sure — please guide me” and describe what you need in your own words.</p>
