@@ -9,12 +9,34 @@ import {
   Pause,
   Play,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { ServiceIcon } from "@/components/service-icon";
 import type { ServiceCategory } from "@/lib/types";
 
-const ROTATION_MS = 5000;
-const TRANSITION_MS = 650;
+const ROTATION_MS = 6500;
+const TRANSITION_MS = 620;
+
+const displayTitles: Record<string, string> = {
+  "printing-photos": "Printing & Photos",
+  "typing-online": "Typing & Online Forms",
+  documents: "Documents & Agreements",
+  biometric: "Biometric & e-Sahulat",
+  payments: "Payments & Transfers",
+  tickets: "Tickets & Booking",
+  retail: "Stationery & Accessories",
+  laptop: "Laptop & Software Support",
+};
+
+const displayDescriptions: Record<string, string> = {
+  "printing-photos": "Printing, photocopying, scanning and passport-size photos.",
+  "typing-online": "Typing, CVs, online forms and application support.",
+  documents: "Document drafting, typing, formatting and printing support.",
+  biometric: "Supported biometric verification and e-Sahulat services.",
+  payments: "Supported cash deposits, withdrawals and domestic transfers.",
+  tickets: "Search and booking support for train, bus and airline tickets.",
+  retail: "Everyday stationery and selected mobile accessories.",
+  laptop: "Windows setup, drivers, software and basic troubleshooting.",
+};
 
 const shortCategoryTitles: Record<string, string> = {
   "printing-photos": "Print, Copy & Photos",
@@ -41,8 +63,8 @@ const motionCaptions: Record<string, string> = {
 function categoryHighlights(category: ServiceCategory) {
   const services = category.services || [];
   const options = [
-    ["At the shop", services.some((service) => service.available_at_shop)],
-    ["WhatsApp request", services.some((service) => service.whatsapp_request)],
+    ["At shop", services.some((service) => service.available_at_shop)],
+    ["WhatsApp", services.some((service) => service.whatsapp_request)],
     ["Pickup", services.some((service) => service.pickup_available)],
     ["Delivery", services.some((service) => service.delivery_available)],
     ["Home visit", services.some((service) => service.doorstep_available)],
@@ -50,7 +72,7 @@ function categoryHighlights(category: ServiceCategory) {
   ] as const;
 
   const active = options.filter(([, enabled]) => enabled).map(([label]) => label);
-  return active.length > 0 ? active.slice(0, 3) : ["Requirements confirmed", "Clear quotation"];
+  return active.length > 0 ? active : ["Requirements confirmed", "Clear quotation"];
 }
 
 function ServiceMotion({ category }: { category: ServiceCategory }) {
@@ -59,7 +81,7 @@ function ServiceMotion({ category }: { category: ServiceCategory }) {
       <span className="service-motion__halo" />
       <span className="service-motion__ring service-motion__ring--one" />
       <span className="service-motion__ring service-motion__ring--two" />
-      <span className="service-motion__icon"><ServiceIcon iconKey={category.icon_key} size={76} /></span>
+      <span className="service-motion__icon"><ServiceIcon iconKey={category.icon_key} size={88} /></span>
       <span className="service-motion__scan" />
       <span className="service-motion__line service-motion__line--one" />
       <span className="service-motion__line service-motion__line--two" />
@@ -83,6 +105,10 @@ function FeatureCard({
 }) {
   const count = category.services?.length || 0;
   const highlights = categoryHighlights(category);
+  const visibleHighlights = highlights.slice(0, 2);
+  const extraHighlights = Math.max(0, highlights.length - visibleHighlights.length);
+  const displayTitle = displayTitles[category.slug] || category.title;
+  const displayDescription = displayDescriptions[category.slug] || category.description;
 
   return (
     <Link
@@ -96,10 +122,11 @@ function FeatureCard({
           <span>Service {String(index + 1).padStart(2, "0")}</span>
           <span>{count} {count === 1 ? "option" : "options"}</span>
         </div>
-        <h3>{category.title}</h3>
-        <p>{category.description}</p>
+        <h3>{displayTitle}</h3>
+        <p>{displayDescription}</p>
         <div className="service-feature-card__chips" aria-label="Availability highlights">
-          {highlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
+          {visibleHighlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
+          {extraHighlights > 0 && <span className="service-feature-card__more">+{extraHighlights} more</span>}
         </div>
         <span className="service-feature-card__action">Explore this service <ArrowRight size={18} /></span>
       </div>
@@ -181,6 +208,10 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
 
   const activeCategory = categories[currentIndex];
   const outgoingCategory = outgoingIndex === null ? null : categories[outgoingIndex];
+  const carouselStyle = {
+    "--service-rotation-ms": `${ROTATION_MS}ms`,
+    "--service-count": String(categories.length),
+  } as CSSProperties;
 
   return (
     <section
@@ -195,7 +226,7 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
             <h2>Choose the service you need.</h2>
           </div>
           <div className="service-showcase-heading__side">
-            <p>Explore each category, or open the full list whenever you want to compare everything at once.</p>
+            <p>Explore one category at a time, or compare all {categories.length} services at once.</p>
             <button
               className="service-showcase-toggle"
               type="button"
@@ -203,7 +234,7 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
               aria-controls="all-service-categories"
               onClick={() => setShowAll((value) => !value)}
             >
-              {showAll ? "Show featured services" : "View all services"}
+              {showAll ? "Back to featured view" : `View all ${categories.length} services`}
               {showAll ? <ChevronUp size={17} /> : <ChevronDown size={17} />}
             </button>
           </div>
@@ -213,6 +244,10 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
       {!showAll && (
         <div
           className={`service-experience${paused ? " is-paused" : ""}`}
+          style={carouselStyle}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Featured service categories"
           onMouseEnter={() => setInteractionPaused(true)}
           onMouseLeave={() => setInteractionPaused(false)}
           onFocusCapture={() => setInteractionPaused(true)}
@@ -282,17 +317,18 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
                 ))}
               </div>
               <div className="service-stage__buttons">
-                <button type="button" onClick={goPrevious} aria-label="Previous service"><ArrowLeft size={18} /></button>
+                <button type="button" onClick={goPrevious} aria-label="Previous service" title="Previous service"><ArrowLeft size={19} /></button>
                 <button
                   type="button"
                   className="service-stage__pause"
                   onClick={() => setManualPaused((value) => !value)}
                   aria-label={manualPaused ? "Resume automatic service rotation" : "Pause automatic service rotation"}
                   aria-pressed={manualPaused}
+                  title={manualPaused ? "Resume autoplay" : "Pause autoplay"}
                 >
-                  {manualPaused ? <Play size={17} /> : <Pause size={17} />}
+                  {manualPaused ? <Play size={18} /> : <Pause size={18} />}
                 </button>
-                <button type="button" onClick={goNext} aria-label="Next service"><ArrowRight size={18} /></button>
+                <button type="button" onClick={goNext} aria-label="Next service" title="Next service"><ArrowRight size={19} /></button>
               </div>
             </div>
           </div>
