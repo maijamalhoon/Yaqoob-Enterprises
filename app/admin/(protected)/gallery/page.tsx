@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ImagePlus, Trash2 } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
+import { OptimizedImageInput } from "@/components/optimized-image-input";
 import { deleteGalleryImage, updateGalleryImage, uploadGalleryImage } from "../actions";
 
 export default async function AdminGalleryPage() {
@@ -13,7 +14,7 @@ export default async function AdminGalleryPage() {
       <section className="admin-panel">
         <h2>Upload image</h2>
         <form className="admin-form-grid" action={uploadGalleryImage}>
-          <label className="admin-span-2">Image file<input type="file" name="file" accept="image/*" required /></label>
+          <label className="admin-span-2">Image file<OptimizedImageInput /></label>
           <label>Image type<select name="media_kind"><option value="real">Real shop photo</option><option value="concept">Concept preview</option></select></label>
           <label>Display order<input type="number" name="display_order" defaultValue={images?.length || 0} /></label>
           <label className="admin-span-2">Alt text<input name="alt_text" required placeholder="Describe what is visible in the image" /></label>
