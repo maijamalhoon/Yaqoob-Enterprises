@@ -42,8 +42,8 @@ export default async function ContactPage() {
           <div className="container page-hero__grid page-hero__grid--contact">
             <div className="page-hero__content">
               <span className="eyebrow">Send a clear request</span>
-              <h1>Ek clear message. Behtar aur faster answer.</h1>
-              <p>Service choose karein aur useful details add karein. WhatsApp mein ready-to-read message khulega, phir aap review karke send karenge.</p>
+              <h1>One clear message. A faster, more useful answer.</h1>
+              <p>Choose a service and add the useful details. We’ll prepare a ready-to-read WhatsApp message for you to review before sending.</p>
               <div className="contact-assurance-pills">
                 <span><CheckCircle2 size={16} /> Faster reply</span>
                 <span><CheckCircle2 size={16} /> Correct requirements</span>
@@ -76,7 +76,7 @@ export default async function ContactPage() {
             <div className="form-card form-card--premium">
               <div className="form-card__heading">
                 <span className="eyebrow">Guided WhatsApp request</span>
-                <h2>Apna message about a minute mein ready karein.</h2>
+                <h2>Prepare your request in about a minute.</h2>
                 <p>The form creates a clear message on your device. It does not upload your details or send anything automatically.</p>
               </div>
               <div className="contact-flow" aria-label="Request process">
@@ -85,7 +85,7 @@ export default async function ContactPage() {
                 <span><small>03</small> Review &amp; send</span>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
-              <p className="contact-human-note"><MessageCircle size={16} /> Exact service ka naam nahi pata? “I’m not sure — please guide me” choose karein aur task apne words mein describe kar dein.</p>
+              <p className="contact-human-note"><MessageCircle size={16} /> Not sure of the exact service name? Choose “I’m not sure — please guide me” and describe what you need in your own words.</p>
             </div>
           </div>
         </section>
