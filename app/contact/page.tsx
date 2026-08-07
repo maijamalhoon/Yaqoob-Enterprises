@@ -41,9 +41,9 @@ export default async function ContactPage() {
           <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid page-hero__grid--contact">
             <div className="page-hero__content">
-              <span className="eyebrow">Send a clear request</span>
-              <h1>One clear message. A faster, more useful answer.</h1>
-              <p>Choose a service and add the useful details. We’ll prepare a ready-to-read WhatsApp message for you to review before sending.</p>
+              <span className="eyebrow">Send a request</span>
+              <h1>Tell us what you need.</h1>
+              <p>We’ll prepare a WhatsApp message for you to review before sending.</p>
               <div className="contact-assurance-pills">
                 <span><CheckCircle2 size={16} /> Faster reply</span>
                 <span><CheckCircle2 size={16} /> Correct requirements</span>
@@ -64,9 +64,22 @@ export default async function ContactPage() {
             <div className="contact-details-card contact-details-card--premium">
               <div className="contact-card-heading">
                 <span className="contact-card-heading__icon"><Store size={21} /></span>
-                <div><span className="eyebrow eyebrow--light">Real local support</span><h2>Talk to a real shop.</h2></div>
+                <div><span className="eyebrow eyebrow--light">Local support</span><h2>Shop details.</h2></div>
               </div>
               <div className="contact-detail contact-detail--status"><Clock3 /><div><strong>Right now</strong><span>{statusText}</span></div></div>
+
+              <details className="contact-hours-disclosure">
+                <summary>View opening hours</summary>
+                <div className="contact-hours">
+                  {hours.map((hour) => (
+                    <div className="contact-hours__row" key={hour.id}>
+                      <span>{hour.label}</span>
+                      <span>{formatBusinessHours(hour)}</span>
+                    </div>
+                  ))}
+                </div>
+              </details>
+
               <div className="contact-detail contact-detail--phone"><Phone /><div><strong>Call or WhatsApp</strong><TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">{settings.phone_display}</TrackedLink></div></div>
               <div className="contact-detail contact-detail--address"><MapPin /><div><strong>Visit the shop</strong><TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">{settings.address}</TrackedLink></div></div>
               <div className="contact-detail contact-detail--hours">
@@ -89,8 +102,8 @@ export default async function ContactPage() {
             <div className="form-card form-card--premium">
               <div className="form-card__heading">
                 <span className="eyebrow">Guided WhatsApp request</span>
-                <h2>Prepare your request in about a minute.</h2>
-                <p>The form creates a clear message on your device. It does not upload your details or send anything automatically.</p>
+                <h2>Build your request.</h2>
+                <p>Choose the service, add the useful details, then review the message in WhatsApp.</p>
               </div>
               <div className="contact-flow" aria-label="Request process">
                 <span><small>01</small> Choose</span>
@@ -98,7 +111,7 @@ export default async function ContactPage() {
                 <span><small>03</small> Review</span>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
-              <p className="contact-human-note"><MessageCircle size={16} /> Not sure of the exact service name? Choose “I’m not sure — please guide me” and describe what you need in your own words.</p>
+              <p className="contact-human-note"><MessageCircle size={16} /> Not sure which service fits? Choose “I’m not sure — please guide me”.</p>
             </div>
           </div>
         </section>

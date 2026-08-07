@@ -26,8 +26,6 @@ export function RequestForm({
     : selectedCategory?.services?.find((service) => service.slug === serviceSlug);
   const hasExactServiceStep = Boolean(selectedCategory);
   const modeStep = hasExactServiceStep ? 4 : 3;
-  const locationStep = modeStep + 1;
-  const detailsStep = locationStep + 1;
   const requestedService = isUnsureService && selectedCategory
     ? `${selectedCategory.title} — please guide me to the exact service`
     : selectedService?.title || selectedCategory?.title || "General enquiry";
@@ -68,6 +66,8 @@ export function RequestForm({
     { value: "Not sure", label: "Not sure — please guide me", show: true },
   ].filter((option) => option.show);
   const locationRequired = mode === "Delivery" || mode === "Doorstep appointment";
+  const locationStep = modeStep + 1;
+  const detailsStep = locationRequired ? locationStep + 1 : modeStep + 1;
 
   return (
     <form className="request-form request-form--guided" onSubmit={submit}>
@@ -116,28 +116,30 @@ export function RequestForm({
           {availableModes.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
       </label>
-      <label>
-        <span className="field-label"><small>{String(locationStep).padStart(2, "0")}</small>Area / location{locationRequired ? " — required" : ""}</span>
-        <input
-          name="location"
-          autoComplete="address-level2"
-          enterKeyHint="next"
-          placeholder="e.g. DHA, PECHS or Dhoraji"
-          required={locationRequired}
-          aria-describedby={locationRequired ? "location-requirement" : undefined}
-        />
-      </label>
       {locationRequired && (
-        <p className="field-help field-help--notice" id="location-requirement" role="status" aria-live="polite">
-          Add your area so we can check delivery or home-visit availability.
-        </p>
+        <>
+          <label>
+            <span className="field-label"><small>{String(locationStep).padStart(2, "0")}</small>Area / location — required</span>
+            <input
+              name="location"
+              autoComplete="address-level2"
+              enterKeyHint="next"
+              placeholder="e.g. DHA, PECHS or Dhoraji"
+              required
+              aria-describedby="location-requirement"
+            />
+          </label>
+          <p className="field-help field-help--notice" id="location-requirement" role="status" aria-live="polite">
+            Add your area so we can check delivery or home-visit availability.
+          </p>
+        </>
       )}
       <label>
         <span className="field-label"><small>{String(detailsStep).padStart(2, "0")}</small>What do you need?</span>
         <textarea
           name="details"
           enterKeyHint="send"
-          placeholder="Add quantity, deadline, preferred time or any useful detail."
+          placeholder="Quantity, deadline, preferred time or any useful detail."
           required
         />
       </label>
@@ -145,7 +147,7 @@ export function RequestForm({
       <button className="button button--primary request-submit" type="submit">
         <MessageCircle size={18} /> Open in WhatsApp <ArrowRight size={17} />
       </button>
-      <p className="field-help field-help--privacy">Nothing is sent yet. WhatsApp opens first so you can review and edit the message.</p>
+      <p className="field-help field-help--privacy">Review it in WhatsApp before sending.</p>
     </form>
   );
 }
