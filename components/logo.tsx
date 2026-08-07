@@ -19,6 +19,8 @@ export function Logo({ compact = false, inverse = false, href = "/" }: LogoProps
       href={href}
       aria-label="Yaqoob Enterprises home"
     >
+      {/* Direct SVG delivery is intentional here: it is tiny, reliable, and avoids unnecessary image-optimization usage. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="brand-logo__image"
         src={src}
