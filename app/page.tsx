@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
 import { ServiceIcon } from "@/components/service-icon";
+import { ServiceShowcase } from "@/components/service-showcase";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
@@ -225,39 +226,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="section services-showcase" id="services">
-          <div className="container">
-            <div className="section-heading section-heading--split">
-              <div>
-                <span className="eyebrow">Find a service</span>
-                <h2>Choose the service you need.</h2>
-              </div>
-              <p>Open a category to see available options, requirements and service methods before you decide.</p>
-            </div>
-            <div className="category-grid category-grid--bento category-grid--final">
-              {categories.map((category, index) => {
-                const count = category.services?.length || 0;
-                return (
-                  <Link className="category-card category-card--final" key={category.id} href={`/services/${category.slug}`}>
-                    <div className="category-card__topline">
-                      <span className="category-card__number">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="category-card__icon"><ServiceIcon iconKey={category.icon_key} /></span>
-                    </div>
-                    <h3>
-                      <span className="category-title-full">{category.title}</span>
-                      <span className="category-title-short">{shortCategoryTitles[category.slug] || category.title}</span>
-                    </h3>
-                    <p>{category.description}</p>
-                    <span className="category-card__link">
-                      <span className="category-card__count">{count} {count === 1 ? "option" : "options"}</span>
-                      <span className="category-card__action"><span>View services</span><ArrowRight size={17} /></span>
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <ServiceShowcase categories={categories} />
 
         <section className="section experience-section">
           <div className="container split-grid split-grid--experience">
