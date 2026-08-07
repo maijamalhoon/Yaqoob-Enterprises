@@ -9,8 +9,10 @@ import "./final-touch.css";
 import "./final-lock.css";
 import "./final-hardening.css";
 import "./service-showcase.css";
+import "./viewport-foundation.css";
 import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { PageTracker } from "@/components/page-tracker";
+import { ViewportLayoutMetrics } from "@/components/viewport-layout-metrics";
 import { SITE_URL } from "@/lib/env";
 
 const description =
@@ -44,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
+        <ViewportLayoutMetrics />
         <PageTracker />
         <DestructiveActionGuard />
         {children}

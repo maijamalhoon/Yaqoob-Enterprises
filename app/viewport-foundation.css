@@ -1,0 +1,342 @@
+/* Viewport-aware public layout foundation.
+   Uses measured visual viewport/header/action-bar metrics when available, with
+   dynamic viewport-unit fallbacks. Content always wins over forced fit. */
+
+:root {
+  --app-viewport-h: 100dvh;
+  --app-viewport-w: 100vw;
+  --site-header-h: 4.75rem;
+  --mobile-action-h: 0px;
+  --public-gutter: clamp(1rem, 3vw, 3rem);
+  --public-shell-max: 94rem;
+  --public-section-y: clamp(3.25rem, min(6vw, 7dvh), 5.6rem);
+  --public-section-y-compact: clamp(2.5rem, min(4.5vw, 5dvh), 4rem);
+}
+
+html {
+  scroll-padding-top: calc(var(--site-header-h) + 0.8rem);
+  scroll-padding-bottom: calc(var(--mobile-action-h) + env(safe-area-inset-bottom) + 0.8rem);
+}
+
+#main-content {
+  overflow-x: clip;
+}
+
+#main-content > :is(.hero, .journey-strip, .section),
+#main-content > :is(.hero, .journey-strip, .section) :is([id]) {
+  scroll-margin-top: calc(var(--site-header-h) + 0.8rem);
+}
+
+/* Keep public content fluid from small phones through large displays without
+   allowing line lengths or layouts to stretch indefinitely. */
+.site-header > .container,
+#main-content > .hero > .container,
+#main-content > .journey-strip > .container,
+#main-content > .section > .container,
+.site-footer > .container {
+  width: min(calc(100% - (2 * var(--public-gutter))), var(--public-shell-max));
+  max-width: none;
+  margin-inline: auto;
+}
+
+/* Base vertical rhythm reacts to viewport height as well as width. */
+#main-content > :is(.services-showcase, .experience-section, .coverage-section, .closing-section, .contact-section) {
+  padding-top: var(--public-section-y) !important;
+  padding-bottom: var(--public-section-y) !important;
+}
+
+#main-content > .journey-strip {
+  padding-top: clamp(1rem, 2.5dvh, 2rem) !important;
+  padding-bottom: clamp(1.8rem, 4dvh, 3rem) !important;
+}
+
+/* Service experience uses the actual usable screen height. The hard minimums
+   protect readability; the caps stop projector/tall-display overgrowth. */
+.service-stage {
+  width: min(calc(100vw - (2 * var(--public-gutter))), 100rem) !important;
+}
+
+.service-stage__viewport {
+  height: clamp(
+    26rem,
+    calc(var(--app-viewport-h) - var(--site-header-h) - 17.5rem),
+    33.5rem
+  ) !important;
+}
+
+/* Wide screens get more useful canvas instead of a narrow card surrounded by
+   empty gutters, while the content column itself remains line-length capped. */
+@media (min-width: 90rem) {
+  :root {
+    --public-shell-max: 100rem;
+    --public-gutter: clamp(1.5rem, 2.5vw, 3.5rem);
+  }
+
+  .service-stage {
+    width: min(calc(100vw - (2 * var(--public-gutter))), 104rem) !important;
+  }
+
+  .service-stage__viewport {
+    height: clamp(
+      28rem,
+      calc(var(--app-viewport-h) - var(--site-header-h) - 18rem),
+      35rem
+    ) !important;
+  }
+}
+
+/* Short desktop/laptop viewports reduce decoration and padding first, never
+   text below practical reading sizes. */
+@media (min-width: 50.01rem) and (max-height: 48rem) {
+  :root {
+    --public-section-y: clamp(2.6rem, 5dvh, 3.8rem);
+  }
+
+  .service-showcase-heading {
+    margin-bottom: 1.35rem !important;
+  }
+
+  .service-stage__viewport {
+    height: clamp(
+      25.5rem,
+      calc(var(--app-viewport-h) - var(--site-header-h) - 15.5rem),
+      29rem
+    ) !important;
+  }
+
+  .service-feature-card__copy {
+    padding-block: clamp(1.55rem, 3.2dvh, 2.4rem) !important;
+  }
+
+  .service-feature-card h3 {
+    font-size: clamp(2.25rem, 3.45vw, 3.65rem) !important;
+  }
+
+  .service-feature-card__copy > p {
+    margin-top: 0.75rem !important;
+  }
+
+  .service-feature-card__chips {
+    margin-top: 0.85rem !important;
+  }
+
+  .service-feature-card__action {
+    margin-top: 1rem !important;
+  }
+
+  .service-motion__icon {
+    width: 7.7rem !important;
+  }
+
+  .service-motion__ring {
+    width: 11.5rem !important;
+  }
+
+  .service-motion__ring--two {
+    width: 16rem !important;
+  }
+}
+
+@media (max-width: 62rem) {
+  :root {
+    --public-gutter: clamp(0.9rem, 3.4vw, 1.5rem);
+    --public-section-y: clamp(2.75rem, 5.6dvh, 4.2rem);
+  }
+
+  /* Fixed quick actions consume real viewport space. Give the document a true
+     bottom clearance so the final content can always scroll fully above them. */
+  .site-footer {
+    padding-bottom: calc(var(--mobile-action-h) + env(safe-area-inset-bottom) + 1rem) !important;
+  }
+
+  .service-stage {
+    width: min(calc(100vw - (2 * var(--public-gutter))), 46rem) !important;
+  }
+}
+
+/* Phones and narrow tablets: one featured card should feel substantial but
+   should not consume an arbitrary fixed 31-33rem on every device height. */
+@media (max-width: 50rem) {
+  :root {
+    --public-section-y: clamp(2.45rem, 5dvh, 3.55rem);
+  }
+
+  .services-showcase--interactive {
+    padding-top: var(--public-section-y) !important;
+    padding-bottom: var(--public-section-y) !important;
+  }
+
+  .service-showcase-heading {
+    margin-bottom: clamp(1rem, 2.4dvh, 1.35rem) !important;
+  }
+
+  .service-showcase-heading__side {
+    margin-top: clamp(0.65rem, 1.8dvh, 0.9rem) !important;
+  }
+
+  .service-stage__viewport {
+    height: clamp(
+      25.5rem,
+      calc(var(--app-viewport-h) - var(--site-header-h) - var(--mobile-action-h) - 17rem),
+      31rem
+    ) !important;
+  }
+
+  .service-feature-card {
+    grid-template-rows: minmax(0, 61%) minmax(0, 39%) !important;
+  }
+
+  .service-feature-card__copy {
+    padding: clamp(1rem, 2.7dvh, 1.3rem) clamp(1rem, 4vw, 1.3rem) 0.9rem !important;
+  }
+
+  .service-feature-card__meta {
+    margin-bottom: clamp(0.48rem, 1.25dvh, 0.68rem) !important;
+  }
+
+  .service-feature-card h3 {
+    max-width: 13ch !important;
+    font-size: clamp(1.95rem, 8.6vw, 2.55rem) !important;
+    line-height: 1 !important;
+  }
+
+  .service-feature-card__copy > p {
+    margin-top: clamp(0.48rem, 1.25dvh, 0.68rem) !important;
+    font-size: clamp(0.82rem, 3.2vw, 0.9rem) !important;
+    line-height: 1.48 !important;
+  }
+
+  .service-feature-card__chips {
+    margin-top: clamp(0.55rem, 1.35dvh, 0.8rem) !important;
+  }
+
+  .service-feature-card__action {
+    margin-top: auto !important;
+    padding-top: 0.48rem !important;
+  }
+
+  .service-motion {
+    inset: clamp(0.5rem, 1.35dvh, 0.68rem) !important;
+  }
+
+  .service-motion__icon {
+    width: clamp(5.4rem, 14dvh, 6.35rem) !important;
+    border-radius: clamp(1.35rem, 3vw, 1.55rem) !important;
+  }
+
+  .service-motion__icon svg {
+    width: clamp(48px, 7dvh, 58px) !important;
+    height: clamp(48px, 7dvh, 58px) !important;
+  }
+
+  .service-motion__halo {
+    width: clamp(8rem, 20dvh, 10rem) !important;
+  }
+
+  .service-motion__ring {
+    width: clamp(8rem, 19dvh, 9.5rem) !important;
+  }
+
+  .service-motion__ring--two {
+    width: clamp(10.5rem, 25dvh, 12.5rem) !important;
+  }
+
+  .service-stage__controls {
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: clamp(0.35rem, 1.8vw, 0.58rem) !important;
+    min-height: 3.75rem !important;
+    margin-top: clamp(0.5rem, 1.4dvh, 0.7rem) !important;
+    padding: 0.45rem 0.5rem !important;
+  }
+
+  .service-stage__counter {
+    min-width: 3.25rem !important;
+  }
+
+  .service-stage__dots {
+    gap: clamp(0.12rem, 0.8vw, 0.22rem) !important;
+  }
+
+  .service-stage__buttons {
+    grid-column: auto !important;
+    justify-content: flex-end !important;
+    gap: 0.2rem !important;
+    padding-top: 0 !important;
+  }
+
+  .service-stage__buttons button {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+  }
+}
+
+/* Very short phones/landscape phones: visual decoration compresses first.
+   The card is allowed to exceed one viewport only when the minimum readable
+   content budget cannot safely fit. */
+@media (max-width: 50rem) and (max-height: 44rem) {
+  :root {
+    --public-section-y: 2.25rem;
+  }
+
+  .service-showcase-heading__side p {
+    line-height: 1.45 !important;
+  }
+
+  .service-stage__viewport {
+    height: 25.5rem !important;
+  }
+
+  .service-feature-card {
+    grid-template-rows: minmax(0, 63%) minmax(0, 37%) !important;
+  }
+
+  .service-motion small {
+    display: none;
+  }
+}
+
+/* Tall phones can use the extra physical canvas, but never become oversized. */
+@media (max-width: 50rem) and (min-height: 56rem) {
+  .service-stage__viewport {
+    height: clamp(
+      27rem,
+      calc(var(--app-viewport-h) - var(--site-header-h) - var(--mobile-action-h) - 17rem),
+      31rem
+    ) !important;
+  }
+}
+
+/* Keep other customer-facing sections dense enough for short screens while
+   preserving their content-driven height. We intentionally do not force
+   long promise/forms/detail sections into 100vh. */
+@media (max-width: 50rem) {
+  .experience-section,
+  .coverage-section,
+  .closing-section,
+  .contact-section {
+    padding-top: var(--public-section-y) !important;
+    padding-bottom: var(--public-section-y) !important;
+  }
+
+  .experience-copy .section-lead,
+  .info-panel--premium p,
+  .coverage-grid--premium p,
+  .closing-cta p {
+    line-height: 1.55 !important;
+  }
+
+  .info-panel--premium {
+    padding: clamp(1.4rem, 5vw, 2rem) !important;
+  }
+
+  .info-panel--premium h3 {
+    font-size: clamp(2rem, 8vw, 2.65rem) !important;
+    line-height: 1.04 !important;
+  }
+}
+
+@supports not (height: 100dvh) {
+  :root {
+    --app-viewport-h: 100vh;
+  }
+}
