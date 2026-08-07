@@ -247,7 +247,7 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
             setInteractionPaused(false);
           }}
         >
-          <div className="service-stage" aria-live="polite" aria-atomic="true">
+          <div className="service-stage">
             <div className="service-stage__viewport">
               {outgoingCategory && outgoingIndex !== null && (
                 <FeatureCard
