@@ -9,6 +9,7 @@ import "./final-touch.css";
 import "./final-lock.css";
 import "./final-hardening.css";
 import "./service-showcase.css";
+import "./viewport-foundation.css";
 import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
