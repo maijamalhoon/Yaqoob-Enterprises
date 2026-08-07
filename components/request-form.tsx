@@ -12,6 +12,18 @@ const requestLimits = {
   details: 1600,
 };
 
+const visuallyHiddenStyle = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+} as const;
+
 export function RequestForm({
   categories,
   whatsappNumber,
@@ -88,7 +100,7 @@ export function RequestForm({
 
   return (
     <form className="request-form request-form--guided" onSubmit={submit}>
-      <p className="request-form__live-region" role="status" aria-live="polite" aria-atomic="true">{dynamicUpdate}</p>
+      <p style={visuallyHiddenStyle} role="status" aria-live="polite" aria-atomic="true">{dynamicUpdate}</p>
       <label>
         <span className="field-label"><small>01</small>Your name</span>
         <input
