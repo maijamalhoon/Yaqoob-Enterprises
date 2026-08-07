@@ -26,8 +26,27 @@ jobs:
         with:
           node-version: 24
 
+      - name: Prepare dependency lock
+        id: dependency-lock
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "generated=false" >> "$GITHUB_OUTPUT"
+          else
+            npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+            echo "generated=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload generated dependency lock
+        if: steps.dependency-lock.outputs.generated == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-package-lock
+          path: package-lock.json
+          retention-days: 1
+
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Typecheck
         run: npm run typecheck
