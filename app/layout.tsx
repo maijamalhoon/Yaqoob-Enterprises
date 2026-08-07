@@ -12,6 +12,7 @@ import "./service-showcase.css";
 import "./viewport-foundation.css";
 import "./mobile-balance.css";
 import "./closing-cta-polish.css";
+import "./contact-responsive-polish.css";
 import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { PageTracker } from "@/components/page-tracker";
 import { ViewportLayoutMetrics } from "@/components/viewport-layout-metrics";
