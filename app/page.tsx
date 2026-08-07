@@ -74,26 +74,26 @@ export default async function HomePage() {
 
         @media (min-width: 62.01rem) {
           .hero--reliable .hero-grid--experience {
-            grid-template-columns: minmax(0, 1.06fr) minmax(24rem, 0.94fr) !important;
+            grid-template-columns: minmax(0, 1.04fr) minmax(24rem, 0.96fr) !important;
             gap: clamp(2.75rem, 4vw, 4.5rem) !important;
           }
 
           .hero--reliable .hero-copy--experience h1 {
-            max-width: 12.2ch !important;
-            font-size: clamp(3.2rem, 4.35vw, 4.85rem) !important;
+            max-width: 13.8ch !important;
+            font-size: clamp(3.05rem, 3.9vw, 4.4rem) !important;
           }
 
           .hero--reliable .hero-visual--experience {
             width: 100%;
-            max-width: 41.5rem !important;
-            min-height: 32rem;
+            max-width: 41rem !important;
+            min-height: 31.5rem;
             margin-left: auto;
             padding: 1.4rem 1.4rem 2rem 1.6rem !important;
           }
 
           .hero--reliable .image-frame--hero {
             aspect-ratio: 1.36 / 1 !important;
-            max-height: 30rem !important;
+            max-height: 29.5rem !important;
           }
 
           .hero--reliable .hero-image-card {
@@ -139,22 +139,22 @@ export default async function HomePage() {
                 <span><MapPin size={15} /> Akhtar Colony, Karachi</span>
               </div>
               <h1>
-                Kaam bata dein.
-                <span>Hum next step simple kar denge.</span>
+                Tell us what you need.
+                <span>We’ll make the next step simple.</span>
               </h1>
               <p className="hero-lead">
-                Printing, documents, biometric, online forms aur everyday digital help — Akhtar Colony mein.
-                <span className="hero-local-line">File, photo ya requirement WhatsApp par bhejein. Hum documents, timing aur total charges pehle clear kar dete hain.</span>
+                Printing, documents, biometric services, online forms and everyday digital help in Akhtar Colony.
+                <span className="hero-local-line">Send the file, photo or requirement on WhatsApp. We’ll confirm what is needed, the expected time and the total charges before we begin.</span>
               </p>
               <div className="hero-actions hero-actions--premium">
                 <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                  <MessageCircle size={19} /> WhatsApp par kaam bhejein <ArrowRight size={17} />
+                  <MessageCircle size={19} /> Send your request on WhatsApp <ArrowRight size={17} />
                 </TrackedLink>
                 <Link className="button button--secondary button--hero" href="#services">
-                  Services dekhein <ArrowDown size={17} />
+                  Browse services <ArrowDown size={17} />
                 </Link>
               </div>
-              <p className="hero-cta-note"><CheckCircle2 size={16} /> Kaam shuru hone se pehle requirement aur charges confirm hote hain.</p>
+              <p className="hero-cta-note"><CheckCircle2 size={16} /> Requirements and charges are confirmed before work begins.</p>
               <div className="hero-trust hero-trust--cards">
                 <span><Store size={19} /><span><strong>Real local shop</strong><small>Akhtar Colony</small></span></span>
                 <span><Clock3 size={19} /><span><strong>Less waiting</strong><small>Send files first</small></span></span>
@@ -210,17 +210,17 @@ export default async function HomePage() {
             <article>
               <span className="journey-number">01</span>
               <Send />
-              <div><strong>Send it</strong><span>File, photo ya service name bhejein.</span></div>
+              <div><strong>Send it</strong><span>Send the file, photo or service name.</span></div>
             </article>
             <article>
               <span className="journey-number">02</span>
               <FileCheck2 />
-              <div><strong>We check it</strong><span>Requirements, timing aur charges clear hote hain.</span></div>
+              <div><strong>We check it</strong><span>We confirm the requirements, timing and charges.</span></div>
             </article>
             <article>
               <span className="journey-number">03</span>
               <PackageCheck />
-              <div><strong>You choose</strong><span>Visit, pickup, delivery ya appointment — where available.</span></div>
+              <div><strong>You choose</strong><span>Visit, pickup, delivery or an appointment — where available.</span></div>
             </article>
           </div>
         </section>
@@ -230,9 +230,9 @@ export default async function HomePage() {
             <div className="section-heading section-heading--split">
               <div>
                 <span className="eyebrow">Find a service</span>
-                <h2>Jo kaam chahiye, seedha choose karein.</h2>
+                <h2>Choose the service you need.</h2>
               </div>
-              <p>Category khol kar available options, requirements aur service method pehle dekh lein.</p>
+              <p>Open a category to see available options, requirements and service methods before you decide.</p>
             </div>
             <div className="category-grid category-grid--bento category-grid--final">
               {categories.map((category, index) => {
@@ -263,7 +263,7 @@ export default async function HomePage() {
           <div className="container split-grid split-grid--experience">
             <div className="experience-copy">
               <span className="eyebrow">Save an extra trip</span>
-              <h2>Start from home. Visit only when the work needs you there.</h2>
+              <h2>Start from home. Visit only when your service requires it.</h2>
               <p className="section-lead">A clear message first can save waiting, missing documents and a second visit.</p>
               <div className="feature-list feature-list--timeline">
                 <div><span className="feature-step">01</span><Send /><span><strong>Send files first</strong>Share the document, photo, service name or product reference.</span></div>
@@ -296,7 +296,7 @@ export default async function HomePage() {
             <div>
               <span className="eyebrow eyebrow--light">Delivery &amp; home visits</span>
               <h2>Need service at your location?</h2>
-              <p>Area ya location pin bhejein. Hum pehle confirm karenge ke selected service wahan available hai ya nahi.</p>
+              <p>Send your area or location pin. We’ll confirm whether the selected service is available there before you travel.</p>
               <TrackedLink className="button button--light" href={whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, please confirm coverage for my location: ")} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
                 <MapPin size={17} /> Check my location
               </TrackedLink>
@@ -311,11 +311,11 @@ export default async function HomePage() {
           <div className="container closing-cta">
             <div>
               <span className="eyebrow">Not sure what to choose?</span>
-              <h2>Photo, file ya short message bhej dein. Hum guide kar denge.</h2>
+              <h2>Send a photo, file or short message. We’ll guide you to the right service.</h2>
               <p>Real help from a local shop — no confusing automated process.</p>
             </div>
             <div className="closing-cta__actions">
-              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> WhatsApp par poochhein <ArrowRight size={16} /></TrackedLink>
+              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> Get help on WhatsApp <ArrowRight size={16} /></TrackedLink>
               <TrackedLink className="button button--secondary" href={`tel:${settings.phone_e164}`} eventName="call_click">Call the shop</TrackedLink>
               <Link className="text-link" href="/contact">Use guided request <ArrowRight size={16} /></Link>
             </div>
