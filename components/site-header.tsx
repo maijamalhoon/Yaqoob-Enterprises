@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { DesktopNavigation } from "@/components/desktop-navigation";
 import { Logo } from "@/components/logo";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { TrackedLink } from "@/components/tracked-link";
@@ -25,12 +25,7 @@ export function SiteHeader({ settings, statusText }: { settings: BusinessSetting
               </span>
             )}
           </div>
-          <nav className="desktop-nav" aria-label="Primary navigation">
-            <Link href="/">Home</Link>
-            <Link href="/#services">Services</Link>
-            <Link href="/#coverage">Coverage</Link>
-            <Link href="/contact">Send a request</Link>
-          </nav>
+          <DesktopNavigation />
           <div className="header-actions">
             <TrackedLink className="button button--ghost button--small desktop-only" href={`tel:${settings.phone_e164}`} eventName="call_click">
               <Phone size={16} aria-hidden="true" /> Call
