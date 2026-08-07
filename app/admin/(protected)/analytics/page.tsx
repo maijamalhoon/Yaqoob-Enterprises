@@ -12,6 +12,8 @@ function decodeLabel(value: string | null | undefined, fallback: string) {
 
 export default async function AdminAnalyticsPage() {
   const { supabase } = await requireAdmin();
+  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
+  // eslint-disable-next-line react-hooks/purity
   const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const { data: events } = await supabase
     .from("analytics_events")
