@@ -5,10 +5,11 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  ChevronDown,
   Clock3,
-  Layers3,
+  Grid2X2,
+  ListChecks,
   MapPin,
-  MessageCircle,
   Send,
   ShieldCheck,
   Store,
@@ -18,7 +19,7 @@ import { ServiceIcon } from "@/components/service-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
-import { getCategoryBySlug, getSiteData, whatsappUrl } from "@/lib/data";
+import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
 
 function serviceAction(status: string, title: string) {
   if (status === "active") {
@@ -81,36 +82,38 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   const [category, site] = await Promise.all([getCategoryBySlug(slug), getSiteData()]);
   if (!category) notFound();
   const serviceCount = category.services?.length || 0;
+  const statusText = getCurrentBusinessStatus(site.hours);
 
   return (
     <>
-      <SiteHeader settings={site.settings} />
+      <SiteHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">
         <section className="page-hero page-hero--service">
           <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid">
             <div className="page-hero__content">
-              <Link className="back-link" href="/#services"><ArrowLeft size={16} /> Browse all services</Link>
+              <Link className="back-link" href="/#services"><ArrowLeft size={16} /> All services</Link>
               <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={30} /></div>
               <span className="eyebrow">Service category</span>
               <h1>{category.title}</h1>
               <p>{category.description}</p>
             </div>
             <aside className="page-hero__summary" aria-label="Category summary">
-              <span className="page-hero__summary-icon"><Layers3 size={22} /></span>
+              <span className="page-hero__summary-icon"><Grid2X2 size={22} /></span>
               <strong>{serviceCount}</strong>
               <span>{serviceCount === 1 ? "available option" : "available options"}</span>
-              <small>Open a service to understand what to bring, where it can be done and what happens next.</small>
+              <small>Choose an option to see what to bring, where it is available and what to do next.</small>
             </aside>
           </div>
         </section>
 
         <section className="section section--service-list">
           <div className="container service-detail-grid service-detail-grid--premium">
-            <details className="mobile-category-switcher">
+            <details className="mobile-category-switcher mobile-category-switcher--final">
               <summary>
-                <span>Switch service category</span>
-                <strong>{category.title}</strong>
+                <span className="mobile-switcher-icon"><ServiceIcon iconKey={category.icon_key} size={19} /></span>
+                <span className="mobile-switcher-copy"><small>Current category</small><strong>{category.title}</strong></span>
+                <ChevronDown className="mobile-switcher-chevron" size={19} />
               </summary>
               <nav aria-label="Service categories">
                 {site.categories.map((item) => (
@@ -120,7 +123,9 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                     key={item.id}
                     href={`/services/${item.slug}`}
                   >
-                    {item.title}
+                    <ServiceIcon iconKey={item.icon_key} size={17} />
+                    <span>{item.title}</span>
+                    <ArrowRight size={15} />
                   </Link>
                 ))}
               </nav>
@@ -132,7 +137,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                   <span className="eyebrow">Choose your task</span>
                   <h2>Pick the option that matches what you need.</h2>
                 </div>
-                <p>Each card shows what to bring, where the work can be completed and the correct action to take.</p>
+                <p>Every card shows the requirement, service method and the correct next action.</p>
               </div>
 
               {category.services?.map((service, index) => {
@@ -151,15 +156,15 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
 
                     <div className="mode-pills mode-pills--premium" aria-label="Available service options">
                       {service.available_at_shop && <span><Store size={15} /> At the shop</span>}
-                      {service.pickup_available && <span><Check size={15} /> Pickup available</span>}
-                      {service.delivery_available && <span><Truck size={15} /> Delivery available</span>}
+                      {service.pickup_available && <span><Check size={15} /> Pickup</span>}
+                      {service.delivery_available && <span><Truck size={15} /> Delivery</span>}
                       {service.doorstep_available && <span><MapPin size={15} /> Home visit</span>}
                       {service.appointment_required && <span><Clock3 size={15} /> Book first</span>}
                     </div>
 
                     {service.requirements?.length > 0 && (
                       <div className="requirements requirements--premium">
-                        <h3><Layers3 size={18} /> What to bring or send</h3>
+                        <h3><ListChecks size={18} /> What to bring or send</h3>
                         <ul>{service.requirements.map((item) => <li key={item}><Check size={15} /> {item}</li>)}</ul>
                       </div>
                     )}
@@ -175,10 +180,10 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
               })}
             </div>
 
-            <aside className="category-sidebar category-sidebar--premium">
+            <aside className="category-sidebar category-sidebar--premium category-sidebar--final">
               <div className="category-sidebar__heading">
-                <MessageCircle size={20} />
-                <div><span>Need something else?</span><h2>Switch category</h2></div>
+                <Grid2X2 size={20} />
+                <div><span>Other services</span><h2>Switch category</h2></div>
               </div>
               <nav aria-label="Other service categories">
                 {site.categories.map((item, index) => (

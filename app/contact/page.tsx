@@ -4,7 +4,7 @@ import { RequestForm } from "@/components/request-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
-import { formatBusinessHours, getSiteData } from "@/lib/data";
+import { formatBusinessHours, getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Contact & Service Request",
@@ -13,18 +13,19 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const { settings, hours, categories } = await getSiteData();
+  const statusText = getCurrentBusinessStatus(hours);
 
   return (
     <>
-      <SiteHeader settings={settings} />
+      <SiteHeader settings={settings} statusText={statusText} />
       <main id="main-content">
         <section className="page-hero page-hero--contact">
           <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid page-hero__grid--contact">
             <div className="page-hero__content">
               <span className="eyebrow">Send a clear request</span>
-              <h1>One clear message gets you a better answer.</h1>
-              <p>Choose the service and add the useful details. We receive a ready-to-read WhatsApp request instead of asking the same questions again.</p>
+              <h1>Ek clear message. Behtar aur faster answer.</h1>
+              <p>Service choose karein aur useful details add karein. WhatsApp mein ready-to-read message khulega, phir aap review karke send karenge.</p>
               <div className="contact-assurance-pills">
                 <span><CheckCircle2 size={16} /> Faster reply</span>
                 <span><CheckCircle2 size={16} /> Correct requirements</span>
@@ -47,6 +48,7 @@ export default async function ContactPage() {
                 <span className="contact-card-heading__icon"><Store size={21} /></span>
                 <div><span className="eyebrow eyebrow--light">Real local support</span><h2>Talk to a real shop.</h2></div>
               </div>
+              <div className="contact-detail"><Clock3 /><div><strong>Right now</strong><span>{statusText}</span></div></div>
               <div className="contact-detail"><Phone /><div><strong>Call or WhatsApp</strong><TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">{settings.phone_display}</TrackedLink></div></div>
               <div className="contact-detail"><MapPin /><div><strong>Visit the shop</strong><TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">{settings.address}</TrackedLink></div></div>
               <div className="contact-detail"><Clock3 /><div><strong>Opening hours</strong>{hours.map((hour) => <span key={hour.id}>{hour.label}: {formatBusinessHours(hour)}</span>)}</div></div>
@@ -56,7 +58,7 @@ export default async function ContactPage() {
             <div className="form-card form-card--premium">
               <div className="form-card__heading">
                 <span className="eyebrow">Guided WhatsApp request</span>
-                <h2>Build your message in about a minute.</h2>
+                <h2>Apna message about a minute mein ready karein.</h2>
                 <p>The form creates a clear message on your device. It does not upload your details or send anything automatically.</p>
               </div>
               <div className="contact-flow" aria-label="Request process">

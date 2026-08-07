@@ -10,7 +10,6 @@ import {
   MapPin,
   MessageCircle,
   PackageCheck,
-  Phone,
   Send,
   ShieldCheck,
   Store,
@@ -22,6 +21,17 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
+
+const shortCategoryTitles: Record<string, string> = {
+  "printing-photos": "Print, Copy & Photos",
+  "typing-online": "Typing, CV & Online Forms",
+  documents: "Agreements & Documents",
+  biometric: "Biometric & e-Sahulat",
+  payments: "Payments & Transfer",
+  tickets: "Tickets & Booking",
+  retail: "Stationery & Accessories",
+  laptop: "Laptop & Software Help",
+};
 
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery, announcements } = await getSiteData();
@@ -44,9 +54,9 @@ export default async function HomePage() {
           </div>
         </div>
       )}
-      <SiteHeader settings={settings} />
+      <SiteHeader settings={settings} statusText={hoursText} />
       <main id="main-content">
-        <section className="hero hero--experience">
+        <section className="hero hero--experience hero--final">
           <div className="hero-grid-pattern" aria-hidden="true" />
           <div className="container hero-grid hero-grid--experience">
             <div className="hero-copy hero-copy--experience">
@@ -56,26 +66,26 @@ export default async function HomePage() {
                 <span><MapPin size={15} /> Akhtar Colony, Karachi</span>
               </div>
               <h1>
-                Tell us the task.
-                <span>We’ll make the next step simple.</span>
+                Kaam bata dein.
+                <span>Hum next step simple kar denge.</span>
               </h1>
               <p className="hero-lead">
-                Printing, documents, biometric, online applications and everyday digital services—from one trusted local shop.
-                <span className="hero-local-line">Aap requirement bhejein; hum documents, timing aur total charges pehle clear kar dete hain.</span>
+                Printing, documents, biometric, online forms aur everyday digital help — Akhtar Colony mein.
+                <span className="hero-local-line">File, photo ya requirement WhatsApp par bhejein. Hum documents, timing aur total charges pehle clear kar dete hain.</span>
               </p>
               <div className="hero-actions hero-actions--premium">
                 <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                  <MessageCircle size={19} /> Send requirement on WhatsApp <ArrowRight size={17} />
+                  <MessageCircle size={19} /> WhatsApp par kaam bhejein <ArrowRight size={17} />
                 </TrackedLink>
-                <TrackedLink className="button button--secondary button--hero" href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">
-                  <MapPin size={18} /> Visit the shop
-                </TrackedLink>
+                <Link className="button button--secondary button--hero" href="#services">
+                  Services dekhein <ArrowDown size={17} />
+                </Link>
               </div>
-              <p className="hero-cta-note"><CheckCircle2 size={16} /> Nothing starts until you approve the requirement and charges.</p>
+              <p className="hero-cta-note"><CheckCircle2 size={16} /> Kaam shuru hone se pehle requirement aur charges confirm hote hain.</p>
               <div className="hero-trust hero-trust--cards">
-                <span><Store size={19} /><span><strong>Real local shop</strong><small>Visit us in Akhtar Colony</small></span></span>
-                <span><Clock3 size={19} /><span><strong>Less waiting</strong><small>Send files before you come</small></span></span>
-                <span><BadgeCheck size={19} /><span><strong>No surprises</strong><small>Charges confirmed first</small></span></span>
+                <span><Store size={19} /><span><strong>Real local shop</strong><small>Akhtar Colony</small></span></span>
+                <span><Clock3 size={19} /><span><strong>Less waiting</strong><small>Send files first</small></span></span>
+                <span><BadgeCheck size={19} /><span><strong>Charges first</strong><small>No surprises</small></span></span>
               </div>
             </div>
 
@@ -84,23 +94,27 @@ export default async function HomePage() {
               <div className="image-frame image-frame--hero">
                 <Image
                   src={imageUrl}
-                  alt={featuredImage?.alt_text || "Concept preview of the Yaqoob Enterprises storefront"}
+                  alt={featuredImage?.alt_text || "Yaqoob Enterprises storefront"}
                   fill
                   priority
-                  sizes="(max-width: 900px) 100vw, 48vw"
+                  sizes="(max-width: 900px) 100vw, 46vw"
                   style={{ objectPosition: `${featuredImage?.focal_x || 50}% ${featuredImage?.focal_y || 50}%` }}
                 />
                 <span className="hero-image-label"><Store size={14} /> Yaqoob Enterprises</span>
+                <div className="hero-photo-meta">
+                  <span className="hero-photo-status"><span aria-hidden="true" /> {hoursText}</span>
+                  <span><MapPin size={14} /> Akhtar Colony</span>
+                </div>
               </div>
               <div className="hero-image-card">
                 <span className="hero-image-card__icon"><MessageCircle size={22} /></span>
-                <span><strong>Your neighbourhood service desk</strong><small>One message can save an extra trip.</small></span>
+                <span><strong>Your neighbourhood service desk</strong><small>One clear message can save an extra trip.</small></span>
               </div>
               <div className="hero-service-orbit" aria-label="Popular service categories">
                 {categories.slice(0, 3).map((category, index) => (
                   <span className={`hero-orbit hero-orbit--${index + 1}`} key={category.id}>
                     <ServiceIcon iconKey={category.icon_key} size={16} />
-                    {category.title}
+                    {shortCategoryTitles[category.slug] || category.title}
                   </span>
                 ))}
               </div>
@@ -110,22 +124,22 @@ export default async function HomePage() {
           <a className="hero-scroll-cue" href="#services"><ArrowDown size={16} /> Find your service</a>
         </section>
 
-        <section className="journey-strip" aria-label="How the service works">
+        <section className="journey-strip journey-strip--final" aria-label="How the service works">
           <div className="container journey-grid">
             <article>
               <span className="journey-number">01</span>
               <Send />
-              <div><strong>Share it</strong><span>Send the file, photo or service name.</span></div>
+              <div><strong>Send it</strong><span>File, photo ya service name bhejein.</span></div>
             </article>
             <article>
               <span className="journey-number">02</span>
               <FileCheck2 />
-              <div><strong>We check it</strong><span>Get requirements, timing and exact charges.</span></div>
+              <div><strong>We check it</strong><span>Requirements, timing aur charges clear hote hain.</span></div>
             </article>
             <article>
               <span className="journey-number">03</span>
               <PackageCheck />
-              <div><strong>You choose</strong><span>Visit, pickup, delivery or appointment—where available.</span></div>
+              <div><strong>You choose</strong><span>Visit, pickup, delivery ya appointment — where available.</span></div>
             </article>
           </div>
         </section>
@@ -135,24 +149,27 @@ export default async function HomePage() {
             <div className="section-heading section-heading--split">
               <div>
                 <span className="eyebrow">Find a service</span>
-                <h2>Understand your options in seconds.</h2>
+                <h2>Jo kaam chahiye, seedha choose karein.</h2>
               </div>
-              <p>Choose a category to see what is available, what to bring and how the work can be completed—before you travel.</p>
+              <p>Category khol kar available options, requirements aur service method pehle dekh lein.</p>
             </div>
-            <div className="category-grid category-grid--bento">
+            <div className="category-grid category-grid--bento category-grid--final">
               {categories.map((category, index) => {
                 const count = category.services?.length || 0;
                 return (
-                  <Link className={`category-card category-card--${index < 2 ? "wide" : "standard"}`} key={category.id} href={`/services/${category.slug}`}>
+                  <Link className="category-card category-card--final" key={category.id} href={`/services/${category.slug}`}>
                     <div className="category-card__topline">
                       <span className="category-card__number">{String(index + 1).padStart(2, "0")}</span>
                       <span className="category-card__icon"><ServiceIcon iconKey={category.icon_key} /></span>
                     </div>
-                    <h3>{category.title}</h3>
+                    <h3>
+                      <span className="category-title-full">{category.title}</span>
+                      <span className="category-title-short">{shortCategoryTitles[category.slug] || category.title}</span>
+                    </h3>
                     <p>{category.description}</p>
                     <span className="category-card__link">
                       <span className="category-card__count">{count} {count === 1 ? "option" : "options"}</span>
-                      <span className="category-card__action">View services <ArrowRight size={17} /></span>
+                      <span className="category-card__action"><span>View services</span><ArrowRight size={17} /></span>
                     </span>
                   </Link>
                 );
@@ -170,7 +187,7 @@ export default async function HomePage() {
               <div className="feature-list feature-list--timeline">
                 <div><span className="feature-step">01</span><Send /><span><strong>Send files first</strong>Share the document, photo, service name or product reference.</span></div>
                 <div><span className="feature-step">02</span><FileCheck2 /><span><strong>Get a clear checklist</strong>Know what to bring, expected timing and the exact charges.</span></div>
-                <div><span className="feature-step">03</span><Truck /><span><strong>Choose the right option</strong>Shop visit, pickup, delivery or home appointment—where applicable.</span></div>
+                <div><span className="feature-step">03</span><Truck /><span><strong>Choose the right option</strong>Shop visit, pickup, delivery or home appointment — where applicable.</span></div>
                 <div><span className="feature-step">04</span><ShieldCheck /><span><strong>Approve with confidence</strong>No work starts until the details and charges are agreed.</span></div>
               </div>
             </div>
@@ -198,9 +215,9 @@ export default async function HomePage() {
             <div>
               <span className="eyebrow eyebrow--light">Delivery &amp; home visits</span>
               <h2>Need service at your location?</h2>
-              <p>Share your area or location pin. We will confirm whether the selected service is available there before you depend on it.</p>
+              <p>Area ya location pin bhejein. Hum pehle confirm karenge ke selected service wahan available hai ya nahi.</p>
               <TrackedLink className="button button--light" href={whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, please confirm coverage for my location: ")} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                <MapPin size={17} /> Check my location on WhatsApp
+                <MapPin size={17} /> Check my location
               </TrackedLink>
             </div>
             <div className="area-cloud area-cloud--premium">
@@ -209,17 +226,17 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="section closing-section">
+        <section className="section closing-section closing-section--final">
           <div className="container closing-cta">
             <div>
               <span className="eyebrow">Not sure what to choose?</span>
-              <h2>Send a photo, file or short message. We’ll guide you.</h2>
-              <p>Real help from a local shop—not a confusing automated process.</p>
+              <h2>Photo, file ya short message bhej dein. Hum guide kar denge.</h2>
+              <p>Real help from a local shop — no confusing automated process.</p>
             </div>
             <div className="closing-cta__actions">
-              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> Ask on WhatsApp <ArrowRight size={16} /></TrackedLink>
-              <TrackedLink className="button button--secondary" href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={18} /> Call the shop</TrackedLink>
-              <Link className="text-link" href="/contact">Use the guided request form <ArrowRight size={16} /></Link>
+              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> WhatsApp par poochhein <ArrowRight size={16} /></TrackedLink>
+              <TrackedLink className="button button--secondary" href={`tel:${settings.phone_e164}`} eventName="call_click">Call the shop</TrackedLink>
+              <Link className="text-link" href="/contact">Use guided request <ArrowRight size={16} /></Link>
             </div>
           </div>
         </section>
