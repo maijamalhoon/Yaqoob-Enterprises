@@ -19,6 +19,7 @@ import "./final-lock-3.css";
 import "./final-lock-4.css";
 import "./final-lock-5.css";
 import "./final-lock-6.css";
+import "./final-hardening.css";
 import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
