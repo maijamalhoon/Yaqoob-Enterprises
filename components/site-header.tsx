@@ -27,11 +27,25 @@ export function SiteHeader({ settings, statusText }: { settings: BusinessSetting
           </div>
           <DesktopNavigation />
           <div className="header-actions">
-            <TrackedLink className="button button--ghost button--small desktop-only" href={`tel:${settings.phone_e164}`} eventName="call_click">
-              <Phone size={16} aria-hidden="true" /> Call
+            <TrackedLink
+              className="header-icon-action header-icon-action--phone desktop-only"
+              href={`tel:${settings.phone_e164}`}
+              eventName="call_click"
+              aria-label="Call Yaqoob Enterprises"
+              title="Call"
+            >
+              <Phone size={19} strokeWidth={1.9} aria-hidden="true" />
             </TrackedLink>
-            <TrackedLink className="button button--primary button--small desktop-only header-whatsapp" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-              <MessageCircle size={16} /> WhatsApp
+            <TrackedLink
+              className="header-icon-action header-icon-action--whatsapp desktop-only"
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              eventName="whatsapp_click"
+              aria-label="Message Yaqoob Enterprises on WhatsApp"
+              title="WhatsApp"
+            >
+              <MessageCircle size={20} strokeWidth={1.9} aria-hidden="true" />
             </TrackedLink>
             <MobileNavigation
               mapUrl={settings.map_url}
