@@ -3,7 +3,28 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
-export const metadata: Metadata = { title: "Privacy" };
+const description = "Plain-language privacy information for the Yaqoob Enterprises website and admin centre.";
+
+export const metadata: Metadata = {
+  title: "Privacy",
+  description,
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    type: "website",
+    locale: "en_PK",
+    siteName: "Yaqoob Enterprises",
+    url: "/privacy",
+    title: "Privacy | Yaqoob Enterprises",
+    description,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Yaqoob Enterprises privacy information" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy | Yaqoob Enterprises",
+    description,
+    images: ["/opengraph-image"],
+  },
+};
 
 export default async function PrivacyPage() {
   const { settings, categories, hours } = await getSiteData();
