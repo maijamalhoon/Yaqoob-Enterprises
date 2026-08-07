@@ -122,7 +122,7 @@ export function RequestForm({
           name="location"
           autoComplete="address-level2"
           enterKeyHint="next"
-          placeholder="e.g. DHA Phase 2, PECHS, Dhoraji"
+          placeholder="e.g. DHA, PECHS or Dhoraji"
           required={locationRequired}
           aria-describedby={locationRequired ? "location-requirement" : undefined}
         />
