@@ -7,14 +7,12 @@ import {
   CheckCircle2,
   Clock3,
   FileCheck2,
-  HomeIcon,
   MapPin,
   MessageCircle,
   PackageCheck,
   Phone,
   Send,
   ShieldCheck,
-  Sparkles,
   Store,
   Truck,
 } from "lucide-react";
@@ -58,25 +56,26 @@ export default async function HomePage() {
                 <span><MapPin size={15} /> Akhtar Colony, Karachi</span>
               </div>
               <h1>
-                Printing, documents, biometric &amp; online services—
-                <span>handled clearly.</span>
+                Tell us the task.
+                <span>We’ll make the next step simple.</span>
               </h1>
               <p className="hero-lead">
-                Send the requirement first. We confirm what to bring, exact charges and the most practical service mode before any work starts.
+                Printing, documents, biometric, online applications and everyday digital services—from one trusted local shop.
+                <span className="hero-local-line">Aap requirement bhejein; hum documents, timing aur total charges pehle clear kar dete hain.</span>
               </p>
               <div className="hero-actions hero-actions--premium">
                 <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                  <MessageCircle size={19} /> Start on WhatsApp <ArrowRight size={17} />
+                  <MessageCircle size={19} /> Send requirement on WhatsApp <ArrowRight size={17} />
                 </TrackedLink>
                 <TrackedLink className="button button--secondary button--hero" href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">
-                  <MapPin size={18} /> Get directions
+                  <MapPin size={18} /> Visit the shop
                 </TrackedLink>
               </div>
-              <p className="hero-cta-note"><CheckCircle2 size={16} /> Requirements and charges are confirmed before work begins.</p>
+              <p className="hero-cta-note"><CheckCircle2 size={16} /> Nothing starts until you approve the requirement and charges.</p>
               <div className="hero-trust hero-trust--cards">
-                <span><Store size={19} /><span><strong>Local service centre</strong><small>Real shop in Akhtar Colony</small></span></span>
-                <span><Truck size={19} /><span><strong>Flexible fulfilment</strong><small>Shop, pickup, delivery or visit</small></span></span>
-                <span><ShieldCheck size={19} /><span><strong>Clear confirmation</strong><small>No vague pricing or promises</small></span></span>
+                <span><Store size={19} /><span><strong>Real local shop</strong><small>Visit us in Akhtar Colony</small></span></span>
+                <span><Clock3 size={19} /><span><strong>Less waiting</strong><small>Send files before you come</small></span></span>
+                <span><BadgeCheck size={19} /><span><strong>No surprises</strong><small>Charges confirmed first</small></span></span>
               </div>
             </div>
 
@@ -91,11 +90,11 @@ export default async function HomePage() {
                   sizes="(max-width: 900px) 100vw, 48vw"
                   style={{ objectPosition: `${featuredImage?.focal_x || 50}% ${featuredImage?.focal_y || 50}%` }}
                 />
-                <span className="hero-image-label"><Sparkles size={14} /> Yaqoob Enterprises</span>
+                <span className="hero-image-label"><Store size={14} /> Yaqoob Enterprises</span>
               </div>
               <div className="hero-image-card">
-                <span className="hero-image-card__icon"><BadgeCheck size={22} /></span>
-                <span><strong>One reliable local centre</strong><small>Everyday services with a clear next step.</small></span>
+                <span className="hero-image-card__icon"><MessageCircle size={22} /></span>
+                <span><strong>Your neighbourhood service desk</strong><small>One message can save an extra trip.</small></span>
               </div>
               <div className="hero-service-orbit" aria-label="Popular service categories">
                 {categories.slice(0, 3).map((category, index) => (
@@ -108,7 +107,7 @@ export default async function HomePage() {
               {featuredImage?.media_kind !== "real" && <p className="concept-label">{settings.concept_image_notice}</p>}
             </div>
           </div>
-          <a className="hero-scroll-cue" href="#services"><ArrowDown size={16} /> Explore services</a>
+          <a className="hero-scroll-cue" href="#services"><ArrowDown size={16} /> Find your service</a>
         </section>
 
         <section className="journey-strip" aria-label="How the service works">
@@ -116,17 +115,17 @@ export default async function HomePage() {
             <article>
               <span className="journey-number">01</span>
               <Send />
-              <div><strong>Send the requirement</strong><span>Files, service details or a product reference.</span></div>
+              <div><strong>Share it</strong><span>Send the file, photo or service name.</span></div>
             </article>
             <article>
               <span className="journey-number">02</span>
               <FileCheck2 />
-              <div><strong>Receive a clear confirmation</strong><span>Documents, availability, timing and exact charges.</span></div>
+              <div><strong>We check it</strong><span>Get requirements, timing and exact charges.</span></div>
             </article>
             <article>
               <span className="journey-number">03</span>
               <PackageCheck />
-              <div><strong>Choose the practical option</strong><span>Shop visit, pickup, delivery or appointment.</span></div>
+              <div><strong>You choose</strong><span>Visit, pickup, delivery or appointment—where available.</span></div>
             </article>
           </div>
         </section>
@@ -135,26 +134,29 @@ export default async function HomePage() {
           <div className="container">
             <div className="section-heading section-heading--split">
               <div>
-                <span className="eyebrow">Services</span>
-                <h2>Eight useful categories. One clear experience.</h2>
+                <span className="eyebrow">Find a service</span>
+                <h2>Understand your options in seconds.</h2>
               </div>
-              <p>Open a category to see what is available, what to provide and which service modes apply—before you travel or send documents.</p>
+              <p>Choose a category to see what is available, what to bring and how the work can be completed—before you travel.</p>
             </div>
             <div className="category-grid category-grid--bento">
-              {categories.map((category, index) => (
-                <Link className={`category-card category-card--${index < 2 ? "wide" : "standard"}`} key={category.id} href={`/services/${category.slug}`}>
-                  <div className="category-card__topline">
-                    <span className="category-card__number">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="category-card__icon"><ServiceIcon iconKey={category.icon_key} /></span>
-                  </div>
-                  <h3>{category.title}</h3>
-                  <p>{category.description}</p>
-                  <span className="category-card__link">
-                    <span>{category.services?.length || 0} services</span>
-                    <span className="category-card__arrow"><ArrowRight size={17} /></span>
-                  </span>
-                </Link>
-              ))}
+              {categories.map((category, index) => {
+                const count = category.services?.length || 0;
+                return (
+                  <Link className={`category-card category-card--${index < 2 ? "wide" : "standard"}`} key={category.id} href={`/services/${category.slug}`}>
+                    <div className="category-card__topline">
+                      <span className="category-card__number">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="category-card__icon"><ServiceIcon iconKey={category.icon_key} /></span>
+                    </div>
+                    <h3>{category.title}</h3>
+                    <p>{category.description}</p>
+                    <span className="category-card__link">
+                      <span className="category-card__count">{count} {count === 1 ? "option" : "options"}</span>
+                      <span className="category-card__action">View services <ArrowRight size={17} /></span>
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -162,28 +164,28 @@ export default async function HomePage() {
         <section className="section experience-section">
           <div className="container split-grid split-grid--experience">
             <div className="experience-copy">
-              <span className="eyebrow">Built around convenience</span>
-              <h2>Start from home. Visit only when the work actually requires it.</h2>
-              <p className="section-lead">The service mode depends on the task—not on a vague promise that everything can be delivered.</p>
+              <span className="eyebrow">Save an extra trip</span>
+              <h2>Start from home. Visit only when the work needs you there.</h2>
+              <p className="section-lead">A clear message first can save waiting, missing documents and a second visit.</p>
               <div className="feature-list feature-list--timeline">
-                <div><span className="feature-step">01</span><Send /><span><strong>WhatsApp preparation</strong>Send print files, document content, travel details or product references.</span></div>
-                <div><span className="feature-step">02</span><HomeIcon /><span><strong>Doorstep appointment</strong>Available for eligible biometric services in covered areas.</span></div>
-                <div><span className="feature-step">03</span><Truck /><span><strong>Pickup or delivery</strong>Available for eligible printing, documents and in-stock products.</span></div>
-                <div><span className="feature-step">04</span><BadgeCheck /><span><strong>Customer approval</strong>No work starts until requirements and charges are confirmed.</span></div>
+                <div><span className="feature-step">01</span><Send /><span><strong>Send files first</strong>Share the document, photo, service name or product reference.</span></div>
+                <div><span className="feature-step">02</span><FileCheck2 /><span><strong>Get a clear checklist</strong>Know what to bring, expected timing and the exact charges.</span></div>
+                <div><span className="feature-step">03</span><Truck /><span><strong>Choose the right option</strong>Shop visit, pickup, delivery or home appointment—where applicable.</span></div>
+                <div><span className="feature-step">04</span><ShieldCheck /><span><strong>Approve with confidence</strong>No work starts until the details and charges are agreed.</span></div>
               </div>
             </div>
             <div className="info-panel info-panel--premium">
-              <span className="info-panel__spark" aria-hidden="true"><Sparkles size={24} /></span>
-              <span className="eyebrow">Our service promise</span>
-              <h3>Clear quotation before work begins.</h3>
+              <span className="info-panel__spark" aria-hidden="true"><BadgeCheck size={24} /></span>
+              <span className="eyebrow">Our promise</span>
+              <h3>Clear details before we begin.</h3>
               <p>{settings.pricing_message}</p>
               <div className="promise-list">
                 <span><CheckCircle2 size={17} /> Requirement checked first</span>
-                <span><CheckCircle2 size={17} /> Exact charges confirmed</span>
-                <span><CheckCircle2 size={17} /> Practical service mode suggested</span>
+                <span><CheckCircle2 size={17} /> Total charges confirmed</span>
+                <span><CheckCircle2 size={17} /> Best service option explained</span>
               </div>
               <TrackedLink className="button button--light" href={whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, please quote this requirement: ")} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                Request exact quotation <ArrowRight size={17} />
+                Get an exact quotation <ArrowRight size={17} />
               </TrackedLink>
             </div>
           </div>
@@ -194,11 +196,11 @@ export default async function HomePage() {
           <div className="coverage-orb coverage-orb--two" aria-hidden="true" />
           <div className="container coverage-grid coverage-grid--premium">
             <div>
-              <span className="eyebrow eyebrow--light">Coverage</span>
-              <h2>Serving selected Karachi South areas.</h2>
-              <p>Delivery and doorstep eligibility varies by service, timing and exact pin. Share your location before relying on coverage.</p>
-              <TrackedLink className="button button--light" href={whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, please confirm coverage for my location:")} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                <MapPin size={17} /> Confirm my location
+              <span className="eyebrow eyebrow--light">Delivery &amp; home visits</span>
+              <h2>Need service at your location?</h2>
+              <p>Share your area or location pin. We will confirm whether the selected service is available there before you depend on it.</p>
+              <TrackedLink className="button button--light" href={whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, please confirm coverage for my location: ")} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
+                <MapPin size={17} /> Check my location on WhatsApp
               </TrackedLink>
             </div>
             <div className="area-cloud area-cloud--premium">
@@ -210,14 +212,14 @@ export default async function HomePage() {
         <section className="section closing-section">
           <div className="container closing-cta">
             <div>
-              <span className="eyebrow">Ready when you are</span>
-              <h2>Tell us the task. We will tell you the clearest next step.</h2>
-              <p>{settings.address}</p>
+              <span className="eyebrow">Not sure what to choose?</span>
+              <h2>Send a photo, file or short message. We’ll guide you.</h2>
+              <p>Real help from a local shop—not a confusing automated process.</p>
             </div>
             <div className="closing-cta__actions">
-              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> WhatsApp us</TrackedLink>
-              <TrackedLink className="button button--secondary" href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={18} /> {settings.phone_display}</TrackedLink>
-              <Link className="text-link" href="/contact">Prepare a detailed request <ArrowRight size={16} /></Link>
+              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> Ask on WhatsApp <ArrowRight size={16} /></TrackedLink>
+              <TrackedLink className="button button--secondary" href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={18} /> Call the shop</TrackedLink>
+              <Link className="text-link" href="/contact">Use the guided request form <ArrowRight size={16} /></Link>
             </div>
           </div>
         </section>

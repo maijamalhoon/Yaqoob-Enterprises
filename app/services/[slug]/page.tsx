@@ -10,7 +10,7 @@ import {
   MapPin,
   MessageCircle,
   Send,
-  Sparkles,
+  ShieldCheck,
   Store,
   Truck,
 } from "lucide-react";
@@ -23,26 +23,50 @@ import { getCategoryBySlug, getSiteData, whatsappUrl } from "@/lib/data";
 function serviceAction(status: string, title: string) {
   if (status === "active") {
     return {
-      label: "Start this request",
-      message: `Hello Yaqoob Enterprises, I want to request ${title}. My requirement is: `,
+      label: "Send this requirement",
+      message: `Hello Yaqoob Enterprises, I want to ask about ${title}. My requirement is: `,
       note: null,
+      className: "button button--primary",
+    };
+  }
+  if (status === "appointment_only") {
+    return {
+      label: "Book or confirm first",
+      message: `Hello Yaqoob Enterprises, I want to book or confirm ${title}. `,
+      note: "This service needs confirmation or an appointment before you visit.",
       className: "button button--primary",
     };
   }
   if (status === "coming_soon") {
     return {
-      label: "Ask when available",
+      label: "Ask when it starts",
       message: `Hello Yaqoob Enterprises, please tell me when ${title} will be available. `,
-      note: "This service is not currently listed as active. Confirm the expected availability before visiting.",
+      note: "This service is coming soon. Ask for the expected start date before visiting.",
+      className: "button button--secondary",
+    };
+  }
+  if (status === "temporarily_unavailable") {
+    return {
+      label: "Ask when available",
+      message: `Hello Yaqoob Enterprises, please tell me when ${title} will be available again. `,
+      note: "This service is temporarily paused. Confirm before sending documents or travelling.",
       className: "button button--secondary",
     };
   }
   return {
-    label: "Confirm current availability",
+    label: "Check availability",
     message: `Hello Yaqoob Enterprises, please confirm the current availability of ${title}. `,
-    note: "Availability may be limited or temporarily paused. Confirm before sending documents or travelling.",
+    note: "Availability may be limited. Confirm the current status before visiting.",
     className: "button button--secondary",
   };
+}
+
+function statusLabel(status: string) {
+  if (status === "active") return "Available";
+  if (status === "appointment_only") return "Book first";
+  if (status === "coming_soon") return "Coming soon";
+  if (status === "temporarily_unavailable") return "Temporarily paused";
+  return "Check first";
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -66,17 +90,17 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
           <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid">
             <div className="page-hero__content">
-              <Link className="back-link" href="/#services"><ArrowLeft size={16} /> All services</Link>
+              <Link className="back-link" href="/#services"><ArrowLeft size={16} /> Browse all services</Link>
               <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={30} /></div>
               <span className="eyebrow">Service category</span>
               <h1>{category.title}</h1>
               <p>{category.description}</p>
             </div>
             <aside className="page-hero__summary" aria-label="Category summary">
-              <span className="page-hero__summary-icon"><Sparkles size={22} /></span>
+              <span className="page-hero__summary-icon"><Layers3 size={22} /></span>
               <strong>{serviceCount}</strong>
-              <span>{serviceCount === 1 ? "service" : "services"} in this category</span>
-              <small>Requirements, availability and charges are confirmed before work begins.</small>
+              <span>{serviceCount === 1 ? "available option" : "available options"}</span>
+              <small>Open a service to understand what to bring, where it can be done and what happens next.</small>
             </aside>
           </div>
         </section>
@@ -85,7 +109,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
           <div className="container service-detail-grid service-detail-grid--premium">
             <details className="mobile-category-switcher">
               <summary>
-                <span>Browse service categories</span>
+                <span>Switch service category</span>
                 <strong>{category.title}</strong>
               </summary>
               <nav aria-label="Service categories">
@@ -105,10 +129,10 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
             <div className="service-list service-list--premium">
               <div className="service-list__intro">
                 <div>
-                  <span className="eyebrow">Available options</span>
-                  <h2>Choose the exact service you need.</h2>
+                  <span className="eyebrow">Choose your task</span>
+                  <h2>Pick the option that matches what you need.</h2>
                 </div>
-                <p>Each card shows where the service can be completed, what to provide and the correct next action.</p>
+                <p>Each card shows what to bring, where the work can be completed and the correct action to take.</p>
               </div>
 
               {category.services?.map((service, index) => {
@@ -119,29 +143,29 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                     <div className="service-detail-card__head service-detail-card__head--premium">
                       <span className="service-number">{String(index + 1).padStart(2, "0")}</span>
                       <div>
-                        <span className={`status status--${service.status}`}>{service.status.replaceAll("_", " ")}</span>
+                        <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>
                         <h2>{service.title}</h2>
                         <p>{service.detailed_description || service.short_description}</p>
                       </div>
                     </div>
 
-                    <div className="mode-pills mode-pills--premium">
-                      {service.available_at_shop && <span><Store size={15} /> At shop</span>}
-                      {service.pickup_available && <span><Check size={15} /> Pickup</span>}
-                      {service.delivery_available && <span><Truck size={15} /> Delivery</span>}
-                      {service.doorstep_available && <span><MapPin size={15} /> Doorstep</span>}
-                      {service.appointment_required && <span><Clock3 size={15} /> Appointment</span>}
+                    <div className="mode-pills mode-pills--premium" aria-label="Available service options">
+                      {service.available_at_shop && <span><Store size={15} /> At the shop</span>}
+                      {service.pickup_available && <span><Check size={15} /> Pickup available</span>}
+                      {service.delivery_available && <span><Truck size={15} /> Delivery available</span>}
+                      {service.doorstep_available && <span><MapPin size={15} /> Home visit</span>}
+                      {service.appointment_required && <span><Clock3 size={15} /> Book first</span>}
                     </div>
 
                     {service.requirements?.length > 0 && (
                       <div className="requirements requirements--premium">
-                        <h3><Layers3 size={18} /> What to provide</h3>
+                        <h3><Layers3 size={18} /> What to bring or send</h3>
                         <ul>{service.requirements.map((item) => <li key={item}><Check size={15} /> {item}</li>)}</ul>
                       </div>
                     )}
 
-                    {service.important_note && <div className="important-note"><strong>Important:</strong> {service.important_note}</div>}
-                    {action.note && <p className="service-status-note">{action.note}</p>}
+                    {service.important_note && <div className="important-note"><strong>Please note:</strong> {service.important_note}</div>}
+                    {action.note && <p className="service-status-note"><ShieldCheck size={16} /> {action.note}</p>}
 
                     <TrackedLink className={`${action.className} service-card-action`} href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
                       <Send size={17} /> {action.label} <ArrowRight size={16} />
@@ -154,7 +178,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
             <aside className="category-sidebar category-sidebar--premium">
               <div className="category-sidebar__heading">
                 <MessageCircle size={20} />
-                <div><span>Explore</span><h2>Other categories</h2></div>
+                <div><span>Need something else?</span><h2>Switch category</h2></div>
               </div>
               <nav aria-label="Other service categories">
                 {site.categories.map((item, index) => (

@@ -20,25 +20,25 @@ export function SiteHeader({ settings }: { settings: BusinessSettings }) {
           </div>
           <nav className="desktop-nav" aria-label="Primary navigation">
             <Link href="/">Home</Link>
-            <Link href="/#services">Services</Link>
-            <Link href="/#coverage">Coverage</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/#services">All services</Link>
+            <Link href="/#coverage">Where we serve</Link>
+            <Link href="/contact">Send a request</Link>
           </nav>
           <div className="header-actions">
             <TrackedLink className="button button--ghost button--small desktop-only" href={`tel:${settings.phone_e164}`} eventName="call_click">
-              <Phone size={16} aria-hidden="true" /> Call
+              <Phone size={16} aria-hidden="true" /> Call the shop
             </TrackedLink>
             <TrackedLink className="button button--primary button--small desktop-only header-whatsapp" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-              <MessageCircle size={16} /> WhatsApp
+              <MessageCircle size={16} /> Ask on WhatsApp
             </TrackedLink>
             <MobileNavigation mapUrl={settings.map_url} />
           </div>
         </div>
       </header>
       <div className="mobile-action-bar" aria-label="Quick actions">
-        <TrackedLink href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> WhatsApp</TrackedLink>
+        <TrackedLink href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> Ask</TrackedLink>
         <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> Call</TrackedLink>
-        <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={17} /> Directions</TrackedLink>
+        <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={17} /> Find us</TrackedLink>
       </div>
     </>
   );
