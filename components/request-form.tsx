@@ -4,6 +4,8 @@ import { FormEvent, useMemo, useState } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import type { ServiceCategory } from "@/lib/types";
 
+const unsureServiceValue = "__unsure__";
+
 export function RequestForm({
   categories,
   whatsappNumber,
@@ -18,11 +20,17 @@ export function RequestForm({
     () => categories.find((category) => category.slug === categorySlug),
     [categories, categorySlug],
   );
-  const selectedService = selectedCategory?.services?.find((service) => service.slug === serviceSlug);
+  const isUnsureService = serviceSlug === unsureServiceValue;
+  const selectedService = isUnsureService
+    ? undefined
+    : selectedCategory?.services?.find((service) => service.slug === serviceSlug);
   const hasExactServiceStep = Boolean(selectedCategory);
   const modeStep = hasExactServiceStep ? 4 : 3;
   const locationStep = modeStep + 1;
   const detailsStep = locationStep + 1;
+  const requestedService = isUnsureService && selectedCategory
+    ? `${selectedCategory.title} — please guide me to the exact service`
+    : selectedService?.title || selectedCategory?.title || "General enquiry";
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,7 +39,7 @@ export function RequestForm({
       "Hello Yaqoob Enterprises,",
       "",
       `Customer name: ${String(data.get("name") || "")}`,
-      `Requested service: ${selectedService?.title || selectedCategory?.title || "General enquiry"}`,
+      `Requested service: ${requestedService}`,
       `Preferred service option: ${String(data.get("mode") || "Not sure")}`,
       `Area / location: ${String(data.get("location") || "") || "Not provided"}`,
       `Details: ${String(data.get("details") || "")}`,
@@ -53,10 +61,10 @@ export function RequestForm({
   }
 
   const availableModes = [
-    { value: "Visit the shop", label: "Visit the shop", show: !selectedService || selectedService.available_at_shop },
-    { value: "Shop pickup", label: "Collect from the shop", show: !!selectedService?.pickup_available },
-    { value: "Delivery", label: "Request delivery", show: !!selectedService?.delivery_available },
-    { value: "Doorstep appointment", label: "Request a home visit", show: !!selectedService?.doorstep_available },
+    { value: "Visit the shop", label: "Visit the shop", show: isUnsureService || !selectedService || selectedService.available_at_shop },
+    { value: "Shop pickup", label: "Collect from the shop", show: !isUnsureService && !!selectedService?.pickup_available },
+    { value: "Delivery", label: "Request delivery", show: !isUnsureService && !!selectedService?.delivery_available },
+    { value: "Doorstep appointment", label: "Request a home visit", show: !isUnsureService && !!selectedService?.doorstep_available },
     { value: "Not sure", label: "Not sure — please guide me", show: true },
   ].filter((option) => option.show);
   const locationRequired = mode === "Delivery" || mode === "Doorstep appointment";
@@ -96,6 +104,7 @@ export function RequestForm({
             required
           >
             <option value="">Choose the exact service</option>
+            <option value={unsureServiceValue}>I’m not sure — please guide me</option>
             {selectedCategory.services?.map((service) => <option key={service.id} value={service.slug}>{service.title}</option>)}
           </select>
         </label>
