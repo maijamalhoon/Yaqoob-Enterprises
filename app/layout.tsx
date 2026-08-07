@@ -12,6 +12,7 @@ import "./phase-four-min-5.css";
 import "./phase-four-min-6.css";
 import "./phase-four-min-7.css";
 import "./phase-four-min-8.css";
+import "./final-touch.css";
 import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
