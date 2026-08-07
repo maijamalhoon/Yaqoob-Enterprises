@@ -20,6 +20,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
+import { getCustomerServiceModes } from "@/lib/service-availability";
 
 function serviceAction(status: string, title: string) {
   if (status === "active") {
@@ -128,7 +129,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
             <aside className="page-hero__summary" aria-label="Category summary">
               <span className="page-hero__summary-icon"><Grid2X2 size={22} /></span>
               <strong>{serviceCount}</strong>
-              <span>{serviceCount === 1 ? "available option" : "available options"}</span>
+              <span>{serviceCount === 1 ? "service option" : "service options"}</span>
               <small>Choose an option to see what to bring, where it is available and what to do next.</small>
             </aside>
           </div>
@@ -169,6 +170,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
 
               {category.services?.map((service, index) => {
                 const action = serviceAction(service.status, service.title);
+                const customerModes = getCustomerServiceModes(service);
                 return (
                   <article className="service-detail-card service-detail-card--premium" key={service.id}>
                     <div className="service-card-accent" aria-hidden="true" />
@@ -181,13 +183,15 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                       </div>
                     </div>
 
-                    <div className="mode-pills mode-pills--premium" aria-label="Available service options">
-                      {service.available_at_shop && <span><Store size={15} /> At the shop</span>}
-                      {service.pickup_available && <span><Check size={15} /> Pickup</span>}
-                      {service.delivery_available && <span><Truck size={15} /> Delivery</span>}
-                      {service.doorstep_available && <span><MapPin size={15} /> Home visit</span>}
-                      {service.appointment_required && <span><Clock3 size={15} /> Book first</span>}
-                    </div>
+                    {customerModes.length > 0 && (
+                      <div className="mode-pills mode-pills--premium" aria-label="Available service options">
+                        {customerModes.includes("Visit the shop") && <span><Store size={15} /> At the shop</span>}
+                        {customerModes.includes("Shop pickup") && <span><Check size={15} /> Pickup</span>}
+                        {customerModes.includes("Delivery") && <span><Truck size={15} /> Delivery</span>}
+                        {customerModes.includes("Doorstep appointment") && <span><MapPin size={15} /> Home visit</span>}
+                        {service.appointment_required && <span><Clock3 size={15} /> Book first</span>}
+                      </div>
+                    )}
 
                     {service.requirements?.length > 0 && (
                       <div className="requirements requirements--premium">
