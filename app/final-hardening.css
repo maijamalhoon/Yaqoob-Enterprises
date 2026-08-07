@@ -1,0 +1,62 @@
+/* Final production hardening. Keep this file limited to verified accessibility and cross-device corrections. */
+
+@media (max-width: 62rem) {
+  .mobile-switcher-copy small {
+    font-size: 0.7rem !important;
+  }
+}
+
+@media (max-width: 42rem) {
+  .mobile-header-status {
+    font-size: 0.75rem !important;
+  }
+
+  .hero--final .hero-trust--cards strong {
+    font-size: 0.75rem !important;
+  }
+
+  .hero-photo-meta {
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-action-bar a {
+    font-size: clamp(0.75rem, 3.2vw, 0.8rem) !important;
+  }
+
+  .contact-flow span {
+    font-size: 0.75rem !important;
+  }
+
+  .site-footer--compact .footer-bottom {
+    font-size: 0.75rem !important;
+  }
+}
+
+@media (max-width: 30rem) {
+  .mobile-header-status {
+    max-width: 7rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .hero--final .hero-trust--cards strong,
+  .hero-photo-meta {
+    font-size: 0.75rem !important;
+  }
+}
+
+@media (max-width: 23rem) {
+  /* Preserve readable text by removing a secondary header cue instead of shrinking it below a practical reading size. */
+  .mobile-header-status {
+    display: none !important;
+  }
+
+  .hero--final .hero-trust--cards strong,
+  .hero-photo-meta,
+  .mobile-action-bar a {
+    font-size: 0.75rem !important;
+  }
+
+  .hero-photo-meta {
+    flex-wrap: wrap;
+  }
+}

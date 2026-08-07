@@ -6,9 +6,27 @@ import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
 import { formatBusinessHours, getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
+const description = "Contact Yaqoob Enterprises by WhatsApp, phone or in person in Akhtar Colony, Karachi.";
+
 export const metadata: Metadata = {
   title: "Contact & Service Request",
-  description: "Contact Yaqoob Enterprises by WhatsApp, phone or in person in Akhtar Colony, Karachi.",
+  description,
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    type: "website",
+    locale: "en_PK",
+    siteName: "Yaqoob Enterprises",
+    url: "/contact",
+    title: "Contact & Service Request | Yaqoob Enterprises",
+    description,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Contact Yaqoob Enterprises" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact & Service Request | Yaqoob Enterprises",
+    description,
+    images: ["/opengraph-image"],
+  },
 };
 
 export default async function ContactPage() {
@@ -67,7 +85,7 @@ export default async function ContactPage() {
                 <span><small>03</small> Review &amp; send</span>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
-              <p className="contact-human-note"><MessageCircle size={16} /> Not sure what to select? Choose “Not sure” and describe the task in your own words.</p>
+              <p className="contact-human-note"><MessageCircle size={16} /> Exact service ka naam nahi pata? “I’m not sure — please guide me” choose karein aur task apne words mein describe kar dein.</p>
             </div>
           </div>
         </section>
