@@ -172,7 +172,6 @@ export default async function HomePage() {
                     alt={featuredImage.alt_text || "Yaqoob Enterprises storefront"}
                     fill
                     priority
-                    unoptimized
                     sizes="(max-width: 900px) 100vw, 46vw"
                     style={{ objectPosition: `${featuredImage.focal_x || 50}% ${featuredImage.focal_y || 50}%` }}
                   />
