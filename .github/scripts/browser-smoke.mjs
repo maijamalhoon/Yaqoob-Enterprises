@@ -42,6 +42,8 @@ try {
   assert((await page.locator("#services .category-card").count()) === 8, "Homepage must show all 8 service categories at once.");
   assert((await page.locator('[aria-roledescription="carousel"]').count()) === 0, "Homepage services should not use an autoplay carousel.");
   assert((await page.locator('.service-stage__pause').count()) === 0, "Homepage services should not ship autoplay controls.");
+  assert((await page.locator('.feature-list--timeline').count()) === 0, "Homepage should not repeat the service process in a second timeline.");
+  assert((await page.locator('.experience-section .promise-list').count()) === 0, "Homepage quotation section should stay concise.");
 
   await openHealthy(page, "/contact");
   assert((await page.locator("h1").first().innerText()).includes("Tell us what you need"), "Contact heading changed unexpectedly.");

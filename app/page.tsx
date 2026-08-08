@@ -4,16 +4,13 @@ import {
   ArrowDown,
   ArrowRight,
   BadgeCheck,
-  CheckCircle2,
   Clock3,
   FileCheck2,
   MapPin,
   MessageCircle,
   PackageCheck,
   Send,
-  ShieldCheck,
   Store,
-  Truck,
 } from "lucide-react";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
 import { ServiceIcon } from "@/components/service-icon";
@@ -145,7 +142,7 @@ export default async function HomePage() {
               </h1>
               <p className="hero-lead">
                 Printing, documents, biometric services, online forms and everyday digital help in Akhtar Colony.
-                <span className="hero-local-line">Send the file, photo or requirement on WhatsApp. We’ll confirm what is needed, the expected time and the total charges before we begin.</span>
+                <span className="hero-local-line">Send your file, photo or requirement first. We’ll confirm the next step, timing and total charges before work begins.</span>
               </p>
               <div className="hero-actions hero-actions--premium">
                 <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
@@ -155,7 +152,6 @@ export default async function HomePage() {
                   Browse services <ArrowDown size={17} />
                 </Link>
               </div>
-              <p className="hero-cta-note"><CheckCircle2 size={16} /> Requirements and charges are confirmed before work begins.</p>
               <div className="hero-trust hero-trust--cards">
                 <span><Store size={19} /><span><strong>Real local shop</strong><small>Akhtar Colony</small></span></span>
                 <span><Clock3 size={19} /><span><strong>Less waiting</strong><small>Send files first</small></span></span>
@@ -188,7 +184,7 @@ export default async function HomePage() {
                 <>
                   <div className="hero-image-card">
                     <span className="hero-image-card__icon"><MessageCircle size={22} /></span>
-                    <span><strong>Your neighbourhood service desk</strong><small>One clear message can save an extra trip.</small></span>
+                    <span><strong>Your neighbourhood service desk</strong><small>Message first. Visit only when needed.</small></span>
                   </div>
                   <div className="hero-service-orbit" aria-label="Popular service categories">
                     {categories.slice(0, 3).map((category, index) => (
@@ -230,26 +226,15 @@ export default async function HomePage() {
         <section className="section experience-section">
           <div className="container split-grid split-grid--experience">
             <div className="experience-copy">
-              <span className="eyebrow">Save an extra trip</span>
-              <h2>Start from home. Visit only when your service requires it.</h2>
-              <p className="section-lead">A clear message first can save waiting, missing documents and a second visit.</p>
-              <div className="feature-list feature-list--timeline">
-                <div><span className="feature-step">01</span><Send /><span><strong>Send files first</strong>Share the document, photo, service name or product reference.</span></div>
-                <div><span className="feature-step">02</span><FileCheck2 /><span><strong>Get a clear checklist</strong>Know what to bring, expected timing and the exact charges.</span></div>
-                <div><span className="feature-step">03</span><Truck /><span><strong>Choose the right option</strong>Shop visit, pickup, delivery or home appointment — where applicable.</span></div>
-                <div><span className="feature-step">04</span><ShieldCheck /><span><strong>Approve with confidence</strong>No work starts until the details and charges are agreed.</span></div>
-              </div>
+              <span className="eyebrow">Before you travel</span>
+              <h2>Know what you need before you leave home.</h2>
+              <p className="section-lead">Send the service name, file or photo. We’ll tell you what to bring and whether a visit, pickup, delivery or appointment is the right option.</p>
             </div>
             <div className="info-panel info-panel--premium">
               <span className="info-panel__spark" aria-hidden="true"><BadgeCheck size={24} /></span>
-              <span className="eyebrow">Our promise</span>
-              <h3>Clear details before we begin.</h3>
+              <span className="eyebrow">Clear quotation</span>
+              <h3>Know the total before work begins.</h3>
               <p>{settings.pricing_message}</p>
-              <div className="promise-list">
-                <span><CheckCircle2 size={17} /> Requirement checked first</span>
-                <span><CheckCircle2 size={17} /> Total charges confirmed</span>
-                <span><CheckCircle2 size={17} /> Best service option explained</span>
-              </div>
               <TrackedLink className="button button--light" href={whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, please quote this requirement: ")} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
                 Get an exact quotation <ArrowRight size={17} />
               </TrackedLink>
