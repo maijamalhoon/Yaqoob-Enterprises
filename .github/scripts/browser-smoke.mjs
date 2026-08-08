@@ -36,7 +36,10 @@ try {
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
 
-  await openHealthy(page, "/");
+  const homepageResponse = await openHealthy(page, "/");
+  const contentSecurityPolicy = homepageResponse.headers()["content-security-policy"] || "";
+  assert(contentSecurityPolicy.includes("script-src"), "Homepage is missing its Content-Security-Policy script directive.");
+  assert(!contentSecurityPolicy.includes("'unsafe-eval'"), "Production CSP must not allow unsafe-eval.");
   assert((await page.locator("body").innerText()).includes("Yaqoob Enterprises"), "Homepage is missing the business identity.");
   assert(await page.locator('a[href="/contact"]').count(), "Homepage is missing the contact/request route.");
   assert((await page.locator("#services .category-card").count()) === 8, "Homepage must show all 8 service categories at once.");
