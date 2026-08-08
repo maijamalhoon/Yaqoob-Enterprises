@@ -66,6 +66,12 @@ try {
   assert((await page.locator('.feature-list--timeline').count()) === 0, "Homepage should not repeat the service process in a second timeline.");
   assert((await page.locator('.experience-section .promise-list').count()) === 0, "Homepage quotation section should stay concise.");
 
+  const sitemapResponse = await page.request.get(`${baseUrl}/sitemap.xml`);
+  assert(sitemapResponse.ok(), `Sitemap returned ${sitemapResponse.status()}.`);
+  const sitemapText = await sitemapResponse.text();
+  const serviceSitemapEntries = sitemapText.match(/<loc>[^<]*\/services\//g) || [];
+  assert(serviceSitemapEntries.length === 8, `Expected 8 active service URLs in sitemap; found ${serviceSitemapEntries.length}.`);
+
   await openHealthy(page, "/contact");
   assert((await page.locator("h1").first().innerText()).includes("Tell us what you need"), "Contact heading changed unexpectedly.");
   assert((await page.locator('input[name="name"]').getAttribute("maxlength")) === "100", "Name input boundary is missing.");
