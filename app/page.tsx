@@ -259,21 +259,6 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
-
-        <section className="section closing-section closing-section--final">
-          <div className="container closing-cta">
-            <div>
-              <span className="eyebrow">Not sure what to choose?</span>
-              <h2>Send a photo, file or short message. We’ll guide you to the right service.</h2>
-              <p>Real help from a local shop — no confusing automated process.</p>
-            </div>
-            <div className="closing-cta__actions">
-              <TrackedLink className="button button--primary button--hero" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={18} /> Get help on WhatsApp <ArrowRight size={16} /></TrackedLink>
-              <TrackedLink className="button button--secondary" href={`tel:${settings.phone_e164}`} eventName="call_click">Call the shop</TrackedLink>
-              <Link className="text-link" href="/contact">Use guided request <ArrowRight size={16} /></Link>
-            </div>
-          </div>
-        </section>
       </main>
       <SiteFooter settings={settings} categories={categories} />
     </>
