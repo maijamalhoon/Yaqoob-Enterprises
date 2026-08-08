@@ -29,11 +29,13 @@ export const metadata: Metadata = {
     template: "%s | Yaqoob Enterprises",
   },
   description,
+  alternates: { canonical: "/" },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   openGraph: {
     type: "website",
     locale: "en_PK",
     siteName: "Yaqoob Enterprises",
+    url: "/",
     title: "Yaqoob Enterprises | Everyday Services in Karachi",
     description,
   },
