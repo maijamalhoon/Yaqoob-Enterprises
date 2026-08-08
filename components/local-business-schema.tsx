@@ -4,6 +4,10 @@ import type { BusinessHour, BusinessSettings, CoverageArea } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+function jsonLd(value: unknown) {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
 export function LocalBusinessSchema({
   settings,
   hours,
@@ -24,11 +28,14 @@ export function LocalBusinessSchema({
     })),
   );
 
-  const data = {
+  const businessId = `${SITE_URL}/#business`;
+  const businessData = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "Store"],
+    "@id": businessId,
     name: settings.business_name,
     url: SITE_URL,
+    logo: `${SITE_URL}/brand/logo-horizontal.svg`,
     image: imageUrl.startsWith("http") ? imageUrl : `${SITE_URL}${imageUrl}`,
     telephone: settings.phone_e164,
     description:
@@ -53,10 +60,19 @@ export function LocalBusinessSchema({
     },
   };
 
+  const websiteData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    name: settings.business_name,
+    url: SITE_URL,
+    publisher: { "@id": businessId },
+  };
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
-    />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(businessData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(websiteData) }} />
+    </>
   );
 }
