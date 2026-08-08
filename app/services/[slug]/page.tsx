@@ -71,6 +71,11 @@ function statusLabel(status: string) {
   return "Check first";
 }
 
+export async function generateStaticParams() {
+  const { categories } = await getSiteData();
+  return categories.map((category) => ({ slug: category.slug }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const category = await getCategoryBySlug(slug);
