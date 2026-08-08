@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock3, Home, MapPin, Menu, MessageCircle, Phone, Send, Store, X } from "lucide-react";
+import { Clock3, Home, MapPin, Menu, MessageCircle, Phone, Store, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TrackedLink } from "@/components/tracked-link";
 
@@ -29,8 +29,8 @@ export function MobileNavigation({
       ? "contact"
       : pathname === "/" && hash === "#services"
         ? "services"
-        : pathname === "/" && hash === "#coverage"
-          ? "coverage"
+        : pathname === "/" && hash === "#get-in-touch"
+          ? "contact"
           : pathname === "/"
             ? "home"
             : "";
@@ -103,9 +103,8 @@ export function MobileNavigation({
 
         <nav id="mobile-primary-navigation" aria-label="Mobile navigation">
           <Link className={active === "home" ? "is-active" : undefined} aria-current={active === "home" ? "page" : undefined} href="/"><Home size={19} /> <span><strong>Home</strong><small>Start here</small></span></Link>
-          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Find the right category</small></span></Link>
-          <Link className={active === "coverage" ? "is-active" : undefined} aria-current={active === "coverage" ? "location" : undefined} href="/#coverage"><MapPin size={19} /> <span><strong>Coverage</strong><small>Delivery &amp; home visits</small></span></Link>
-          <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? "page" : undefined} href="/contact"><Send size={19} /> <span><strong>Send a request</strong><small>Build a clear WhatsApp message</small></span></Link>
+          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Browse all categories</small></span></Link>
+          <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? (pathname === "/contact" ? "page" : "location") : undefined} href="/#get-in-touch"><MessageCircle size={19} /> <span><strong>Get in touch</strong><small>Send a quick request</small></span></Link>
         </nav>
 
         <div className="mobile-menu-actions">

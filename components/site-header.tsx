@@ -6,7 +6,15 @@ import { TrackedLink } from "@/components/tracked-link";
 import type { BusinessSettings } from "@/lib/types";
 import { whatsappUrl } from "@/lib/data";
 
-export function SiteHeader({ settings, statusText }: { settings: BusinessSettings; statusText?: string }) {
+export function SiteHeader({
+  settings,
+  statusText,
+  showMobileQuickActions = true,
+}: {
+  settings: BusinessSettings;
+  statusText?: string;
+  showMobileQuickActions?: boolean;
+}) {
   const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help with a service.");
   const isOpen = statusText?.startsWith("Open now");
 
@@ -56,14 +64,16 @@ export function SiteHeader({ settings, statusText }: { settings: BusinessSetting
           </div>
         </div>
       </header>
-      <div
-        className="mobile-action-bar"
-        aria-label="Quick actions"
-        style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
-      >
-        <TrackedLink className="mobile-action-bar__primary" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> WhatsApp</TrackedLink>
-        <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> Call</TrackedLink>
-      </div>
+      {showMobileQuickActions && (
+        <div
+          className="mobile-action-bar"
+          aria-label="Quick actions"
+          style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+        >
+          <TrackedLink className="mobile-action-bar__primary" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> WhatsApp</TrackedLink>
+          <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> Call</TrackedLink>
+        </div>
+      )}
     </>
   );
 }
