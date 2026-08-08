@@ -56,10 +56,13 @@ export function SiteHeader({ settings, statusText }: { settings: BusinessSetting
           </div>
         </div>
       </header>
-      <div className="mobile-action-bar" aria-label="Quick actions">
+      <div
+        className="mobile-action-bar"
+        aria-label="Quick actions"
+        style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+      >
         <TrackedLink className="mobile-action-bar__primary" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> WhatsApp</TrackedLink>
         <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> Call</TrackedLink>
-        <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={17} /> Directions</TrackedLink>
       </div>
     </>
   );
