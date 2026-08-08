@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: browser-smoke-production
+  group: browser-smoke-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout tested revision
         uses: actions/checkout@v4
@@ -44,7 +44,33 @@ jobs:
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: Run production browser smoke
+      - name: Build pull request application
+        if: github.event_name == 'pull_request'
         env:
-          BASE_URL: https://yaqoob-enterprises.vercel.app
+          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+        run: npm run build
+
+      - name: Start pull request production server
+        if: github.event_name == 'pull_request'
+        env:
+          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+        run: |
+          nohup npm start > /tmp/yaqoob-next.log 2>&1 &
+          echo $! > /tmp/yaqoob-next.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/ > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/yaqoob-next.log
+          exit 1
+
+      - name: Run browser smoke
+        env:
+          BASE_URL: ${{ github.event_name == 'pull_request' && 'http://127.0.0.1:3000' || 'https://yaqoob-enterprises.vercel.app' }}
         run: node .github/scripts/browser-smoke.mjs
+
+      - name: Show pull request server log on failure
+        if: failure() && github.event_name == 'pull_request'
+        run: cat /tmp/yaqoob-next.log || true
