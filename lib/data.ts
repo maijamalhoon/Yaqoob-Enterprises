@@ -121,7 +121,7 @@ async function loadSiteData() {
     await Promise.all([
       supabase.from("business_settings").select(businessSettingsColumns).eq("id", true).maybeSingle(),
       supabase.from("business_hours").select(businessHoursColumns).order("display_order"),
-      supabase.from("service_categories").select(serviceCategoryColumns).order("display_order"),
+      supabase.from("service_categories").select(serviceCategoryColumns).eq("is_active", true).order("display_order"),
       supabase.from("services").select(serviceColumns).neq("status", "hidden").order("display_order"),
       supabase.from("coverage_areas").select(coverageColumns).eq("is_active", true).order("display_order"),
       supabase.from("gallery_images").select(galleryColumns).eq("is_active", true).order("display_order"),
@@ -139,8 +139,10 @@ async function loadSiteData() {
 
   const settings = (settingsResult.data as unknown as BusinessSettings | null) || fallbackSettings;
   const hours = hoursResult.error ? [] : ((hoursResult.data || []) as unknown as BusinessHour[]);
-  const services = (servicesResult.data || []) as unknown as Service[];
-  const categories = ((categoriesResult.data || []) as unknown as ServiceCategory[]).map((category) => ({
+  const rawCategories = (categoriesResult.data || []) as unknown as ServiceCategory[];
+  const activeCategoryIds = new Set(rawCategories.map((category) => category.id));
+  const services = ((servicesResult.data || []) as unknown as Service[]).filter((service) => activeCategoryIds.has(service.category_id));
+  const categories = rawCategories.map((category) => ({
     ...category,
     services: services.filter((service) => service.category_id === category.id),
   }));
@@ -156,7 +158,7 @@ async function loadSiteData() {
   };
 }
 
-export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v4"], {
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v5"], {
   revalidate: 300,
   tags: ["site-data"],
 });
