@@ -39,6 +39,9 @@ try {
   await openHealthy(page, "/");
   assert((await page.locator("body").innerText()).includes("Yaqoob Enterprises"), "Homepage is missing the business identity.");
   assert(await page.locator('a[href="/contact"]').count(), "Homepage is missing the contact/request route.");
+  assert((await page.locator("#services .category-card").count()) === 8, "Homepage must show all 8 service categories at once.");
+  assert((await page.locator('[aria-roledescription="carousel"]').count()) === 0, "Homepage services should not use an autoplay carousel.");
+  assert((await page.locator('.service-stage__pause').count()) === 0, "Homepage services should not ship autoplay controls.");
 
   await openHealthy(page, "/contact");
   assert((await page.locator("h1").first().innerText()).includes("Tell us what you need"), "Contact heading changed unexpectedly.");
@@ -68,6 +71,7 @@ try {
   const mobilePage = await mobile.newPage();
   await openHealthy(mobilePage, "/");
   await assertNoHorizontalOverflow(mobilePage, "Mobile homepage");
+  assert((await mobilePage.locator("#services .category-card").count()) === 8, "Mobile homepage must expose all 8 service categories.");
   const quickActions = mobilePage.locator(".mobile-action-bar a");
   assert((await quickActions.count()) === 2, "Persistent mobile action bar must contain exactly WhatsApp and Call.");
   const quickActionText = (await quickActions.allTextContents()).join(" ");
