@@ -21,8 +21,8 @@ export function DesktopNavigation() {
       ? "contact"
       : pathname === "/" && hash === "#services"
         ? "services"
-        : pathname === "/" && hash === "#coverage"
-          ? "coverage"
+        : pathname === "/" && hash === "#get-in-touch"
+          ? "contact"
           : pathname === "/"
             ? "home"
             : "";
@@ -31,8 +31,7 @@ export function DesktopNavigation() {
     <nav className="desktop-nav" aria-label="Primary navigation">
       <Link className={active === "home" ? "is-active" : undefined} aria-current={active === "home" ? "page" : undefined} href="/">Home</Link>
       <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services">Services</Link>
-      <Link className={active === "coverage" ? "is-active" : undefined} aria-current={active === "coverage" ? "location" : undefined} href="/#coverage">Coverage</Link>
-      <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? "page" : undefined} href="/contact">Send a request</Link>
+      <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? (pathname === "/contact" ? "page" : "location") : undefined} href="/#get-in-touch">Get in touch</Link>
     </nav>
   );
 }
