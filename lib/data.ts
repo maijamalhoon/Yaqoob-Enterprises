@@ -24,6 +24,86 @@ const fallbackSettings: BusinessSettings = {
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",
 };
 
+const businessSettingsColumns = [
+  "business_name",
+  "tagline",
+  "phone_display",
+  "phone_e164",
+  "whatsapp_e164",
+  "address",
+  "map_url",
+  "pricing_message",
+  "concept_image_notice",
+].join(",");
+
+const businessHoursColumns = [
+  "id",
+  "weekday",
+  "label",
+  "opens_at",
+  "closes_at",
+  "periods",
+  "is_closed",
+  "display_order",
+].join(",");
+
+const serviceCategoryColumns = [
+  "id",
+  "slug",
+  "title",
+  "description",
+  "icon_key",
+  "display_order",
+  "is_active",
+].join(",");
+
+const serviceColumns = [
+  "id",
+  "category_id",
+  "slug",
+  "title",
+  "short_description",
+  "detailed_description",
+  "status",
+  "available_at_shop",
+  "whatsapp_request",
+  "pickup_available",
+  "delivery_available",
+  "doorstep_available",
+  "appointment_required",
+  "requirements",
+  "important_note",
+  "display_order",
+  "is_featured",
+].join(",");
+
+const coverageColumns = [
+  "id",
+  "name",
+  "delivery_available",
+  "doorstep_biometric_available",
+  "pickup_available",
+  "extra_charge_may_apply",
+  "notes",
+  "display_order",
+  "is_active",
+].join(",");
+
+const galleryColumns = [
+  "id",
+  "storage_path",
+  "alt_text",
+  "caption",
+  "media_kind",
+  "is_featured",
+  "display_order",
+  "focal_x",
+  "focal_y",
+  "is_active",
+].join(",");
+
+const announcementColumns = ["id", "title", "message", "link_label", "link_url"].join(",");
+
 function logOptionalDataError(dataset: string, error: { message?: string } | null) {
   if (!error) return;
   console.error(`[site-data] Failed to load optional ${dataset}: ${error.message || "Unknown Supabase error"}`);
@@ -39,13 +119,13 @@ async function loadSiteData() {
 
   const [settingsResult, hoursResult, categoriesResult, servicesResult, coverageResult, galleryResult, announcementsResult] =
     await Promise.all([
-      supabase.from("business_settings").select("*").eq("id", true).maybeSingle(),
-      supabase.from("business_hours").select("*").order("display_order"),
-      supabase.from("service_categories").select("*").order("display_order"),
-      supabase.from("services").select("*").neq("status", "hidden").order("display_order"),
-      supabase.from("coverage_areas").select("*").eq("is_active", true).order("display_order"),
-      supabase.from("gallery_images").select("*").eq("is_active", true).order("display_order"),
-      supabase.from("announcements").select("*").eq("is_active", true).order("display_order"),
+      supabase.from("business_settings").select(businessSettingsColumns).eq("id", true).maybeSingle(),
+      supabase.from("business_hours").select(businessHoursColumns).order("display_order"),
+      supabase.from("service_categories").select(serviceCategoryColumns).order("display_order"),
+      supabase.from("services").select(serviceColumns).neq("status", "hidden").order("display_order"),
+      supabase.from("coverage_areas").select(coverageColumns).eq("is_active", true).order("display_order"),
+      supabase.from("gallery_images").select(galleryColumns).eq("is_active", true).order("display_order"),
+      supabase.from("announcements").select(announcementColumns).eq("is_active", true).order("display_order"),
     ]);
 
   requireCoreData("business settings", settingsResult.error);
@@ -57,10 +137,10 @@ async function loadSiteData() {
   logOptionalDataError("gallery images", galleryResult.error);
   logOptionalDataError("announcements", announcementsResult.error);
 
-  const settings = (settingsResult.data as BusinessSettings | null) || fallbackSettings;
-  const hours = hoursResult.error ? [] : ((hoursResult.data || []) as BusinessHour[]);
-  const services = (servicesResult.data || []) as Service[];
-  const categories = ((categoriesResult.data || []) as ServiceCategory[]).map((category) => ({
+  const settings = (settingsResult.data as unknown as BusinessSettings | null) || fallbackSettings;
+  const hours = hoursResult.error ? [] : ((hoursResult.data || []) as unknown as BusinessHour[]);
+  const services = (servicesResult.data || []) as unknown as Service[];
+  const categories = ((categoriesResult.data || []) as unknown as ServiceCategory[]).map((category) => ({
     ...category,
     services: services.filter((service) => service.category_id === category.id),
   }));
@@ -70,13 +150,13 @@ async function loadSiteData() {
     hours,
     categories,
     services,
-    coverage: coverageResult.error ? [] : ((coverageResult.data || []) as CoverageArea[]),
-    gallery: galleryResult.error ? [] : ((galleryResult.data || []) as GalleryImage[]),
-    announcements: announcementsResult.error ? [] : ((announcementsResult.data || []) as Announcement[]),
+    coverage: coverageResult.error ? [] : ((coverageResult.data || []) as unknown as CoverageArea[]),
+    gallery: galleryResult.error ? [] : ((galleryResult.data || []) as unknown as GalleryImage[]),
+    announcements: announcementsResult.error ? [] : ((announcementsResult.data || []) as unknown as Announcement[]),
   };
 }
 
-export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v3"], {
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v4"], {
   revalidate: 300,
   tags: ["site-data"],
 });
