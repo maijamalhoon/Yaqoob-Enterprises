@@ -20,12 +20,13 @@ import { SITE_URL } from "@/lib/env";
 
 const description =
   "Printing, biometric verification, online forms, documentation, payments, ticket booking, stationery and laptop support in Akhtar Colony, Karachi.";
+const homeTitle = "Yaqoob Enterprises | Printing & Digital Services in Akhtar Colony";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: "Yaqoob Enterprises",
   title: {
-    default: "Yaqoob Enterprises | Everyday Services in Karachi",
+    default: homeTitle,
     template: "%s | Yaqoob Enterprises",
   },
   description,
@@ -36,12 +37,12 @@ export const metadata: Metadata = {
     locale: "en_PK",
     siteName: "Yaqoob Enterprises",
     url: "/",
-    title: "Yaqoob Enterprises | Everyday Services in Karachi",
+    title: homeTitle,
     description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yaqoob Enterprises | Everyday Services in Karachi",
+    title: homeTitle,
     description,
   },
   icons: { icon: "/icon.svg" },
