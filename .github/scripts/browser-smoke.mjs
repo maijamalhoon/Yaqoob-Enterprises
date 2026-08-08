@@ -59,12 +59,16 @@ try {
     "Homepage is missing LocalBusiness structured data.",
   );
   assert((await page.locator("body").innerText()).includes("Yaqoob Enterprises"), "Homepage is missing the business identity.");
-  assert(await page.locator('a[href="/contact"]').count(), "Homepage is missing the contact/request route.");
   assert((await page.locator("#services .category-card").count()) === 8, "Homepage must show all 8 service categories at once.");
   assert((await page.locator('[aria-roledescription="carousel"]').count()) === 0, "Homepage services should not use an autoplay carousel.");
   assert((await page.locator('.service-stage__pause').count()) === 0, "Homepage services should not ship autoplay controls.");
-  assert((await page.locator('.feature-list--timeline').count()) === 0, "Homepage should not repeat the service process in a second timeline.");
-  assert((await page.locator('.experience-section .promise-list').count()) === 0, "Homepage quotation section should stay concise.");
+  assert((await page.locator('#get-in-touch form[data-home-contact-form]').count()) === 1, "Homepage must contain one premium get-in-touch form.");
+  assert((await page.locator('#get-in-touch select[name="service"] option').count()) === 10, "Homepage contact form must expose guidance plus all 8 service categories.");
+  assert((await page.locator('.announcement-bar').count()) === 0, "Homepage should not show an announcement strip.");
+  assert((await page.locator('.journey-strip').count()) === 0, "Homepage should not show the old process strip.");
+  assert((await page.locator('.experience-section').count()) === 0, "Homepage should not show the old quotation section.");
+  assert((await page.locator('#coverage').count()) === 0, "Homepage should not show a separate coverage section.");
+  assert((await page.locator('footer').count()) === 0, "Homepage should not render a footer.");
 
   const sitemapResponse = await page.request.get(`${baseUrl}/sitemap.xml`);
   assert(sitemapResponse.ok(), `Sitemap returned ${sitemapResponse.status()}.`);
@@ -101,11 +105,9 @@ try {
   await openHealthy(mobilePage, "/");
   await assertNoHorizontalOverflow(mobilePage, "Mobile homepage");
   assert((await mobilePage.locator("#services .category-card").count()) === 8, "Mobile homepage must expose all 8 service categories.");
-  const quickActions = mobilePage.locator(".mobile-action-bar a");
-  assert((await quickActions.count()) === 2, "Persistent mobile action bar must contain exactly WhatsApp and Call.");
-  const quickActionText = (await quickActions.allTextContents()).join(" ");
-  assert(quickActionText.includes("WhatsApp") && quickActionText.includes("Call"), "Persistent mobile actions are missing WhatsApp or Call.");
-  assert(!quickActionText.includes("Directions"), "Directions should not be duplicated in the persistent mobile action bar.");
+  assert((await mobilePage.locator("#get-in-touch form[data-home-contact-form]").count()) === 1, "Mobile homepage get-in-touch form is missing.");
+  assert((await mobilePage.locator(".mobile-action-bar").count()) === 0, "Simplified homepage should not use a persistent mobile action bar.");
+  assert((await mobilePage.locator("footer").count()) === 0, "Mobile homepage should not render a footer.");
 
   await openHealthy(mobilePage, "/contact");
   await assertNoHorizontalOverflow(mobilePage, "Mobile contact page");
