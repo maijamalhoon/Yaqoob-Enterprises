@@ -5,6 +5,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { getCustomerServiceModes, serviceNeedsAvailabilityConfirmation } from "@/lib/service-availability";
 import type { RequestFormCategory } from "@/lib/client-data";
 
+const unsureCategoryValue = "__unsure_category__";
 const unsureServiceValue = "__unsure__";
 const requestLimits = {
   name: 100,
@@ -34,6 +35,7 @@ export function RequestFormClient({
   const [categorySlug, setCategorySlug] = useState("");
   const [serviceSlug, setServiceSlug] = useState("");
   const [mode, setMode] = useState("");
+  const isUnsureCategory = categorySlug === unsureCategoryValue;
   const selectedCategory = useMemo(
     () => categories.find((category) => category.slug === categorySlug),
     [categories, categorySlug],
@@ -43,10 +45,12 @@ export function RequestFormClient({
     ? undefined
     : selectedCategory?.services?.find((service) => service.slug === serviceSlug);
   const hasExactServiceStep = Boolean(selectedCategory);
-  const modeStep = hasExactServiceStep ? 4 : 3;
-  const requestedService = isUnsureService && selectedCategory
-    ? `${selectedCategory.title} — please guide me to the exact service`
-    : selectedService?.title || selectedCategory?.title || "General enquiry";
+  const modeStep = hasExactServiceStep ? 3 : 2;
+  const requestedService = isUnsureCategory
+    ? "Please guide me to the right service"
+    : isUnsureService && selectedCategory
+      ? `${selectedCategory.title} — please guide me to the exact service`
+      : selectedService?.title || selectedCategory?.title || "General enquiry";
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -79,7 +83,7 @@ export function RequestFormClient({
   const selectedModes = selectedService ? getCustomerServiceModes(selectedService) : [];
   const availabilityOnly = Boolean(selectedService && serviceNeedsAvailabilityConfirmation(selectedService));
   const availableModes = [
-    { value: "Visit the shop", label: "Visit the shop", show: isUnsureService || !selectedService || selectedModes.includes("Visit the shop") },
+    { value: "Visit the shop", label: "Visit the shop", show: isUnsureCategory || isUnsureService || !selectedService || selectedModes.includes("Visit the shop") },
     { value: "Shop pickup", label: "Collect from the shop", show: selectedModes.includes("Shop pickup") },
     { value: "Delivery", label: "Request delivery", show: selectedModes.includes("Delivery") },
     { value: "Doorstep appointment", label: "Request a home visit", show: selectedModes.includes("Doorstep appointment") },
@@ -92,30 +96,22 @@ export function RequestFormClient({
   const locationRequired = mode === "Delivery" || mode === "Doorstep appointment";
   const locationStep = modeStep + 1;
   const detailsStep = locationRequired ? locationStep + 1 : modeStep + 1;
+  const nameStep = detailsStep + 1;
   const dynamicUpdate = locationRequired
     ? "Area or location is now required for this service option."
-    : selectedCategory && !serviceSlug
-      ? "Exact service options are now available."
-      : availabilityOnly
-        ? "This service needs an availability check before fulfilment can be confirmed."
-        : "";
+    : isUnsureCategory
+      ? "Describe what you need and we’ll guide you to the right service."
+      : selectedCategory && !serviceSlug
+        ? "Exact service options are now available."
+        : availabilityOnly
+          ? "This service needs an availability check before fulfilment can be confirmed."
+          : "";
 
   return (
     <form className="request-form request-form--guided" onSubmit={submit}>
       <p style={visuallyHiddenStyle} role="status" aria-live="polite" aria-atomic="true">{dynamicUpdate}</p>
       <label>
-        <span className="field-label"><small>01</small>Your name</span>
-        <input
-          name="name"
-          autoComplete="name"
-          enterKeyHint="next"
-          placeholder="e.g. Jamal Arain"
-          maxLength={requestLimits.name}
-          required
-        />
-      </label>
-      <label>
-        <span className="field-label"><small>02</small>Service category</span>
+        <span className="field-label"><small>01</small>What service do you need?</span>
         <select
           name="category"
           value={categorySlug}
@@ -127,12 +123,13 @@ export function RequestFormClient({
           required
         >
           <option value="">Choose a service category</option>
+          <option value={unsureCategoryValue}>I’m not sure which service I need</option>
           {categories.map((category) => <option key={category.id} value={category.slug}>{category.title}</option>)}
         </select>
       </label>
       {selectedCategory && (
         <label>
-          <span className="field-label"><small>03</small>Exact service</span>
+          <span className="field-label"><small>02</small>Choose the exact service</span>
           <select
             name="service"
             value={serviceSlug}
@@ -178,13 +175,24 @@ export function RequestFormClient({
         <span className="field-label"><small>{String(detailsStep).padStart(2, "0")}</small>What do you need?</span>
         <textarea
           name="details"
-          enterKeyHint="send"
+          enterKeyHint="next"
           placeholder="Quantity, deadline, preferred time or any useful detail."
           maxLength={requestLimits.details}
           required
         />
       </label>
       {selectedService?.important_note && <p className="form-note"><strong>Please note:</strong> {selectedService.important_note}</p>}
+      <label>
+        <span className="field-label"><small>{String(nameStep).padStart(2, "0")}</small>Your name</span>
+        <input
+          name="name"
+          autoComplete="name"
+          enterKeyHint="send"
+          placeholder="e.g. Jamal Arain"
+          maxLength={requestLimits.name}
+          required
+        />
+      </label>
       <button className="button button--primary request-submit" type="submit">
         <MessageCircle size={18} /> Open in WhatsApp <ArrowRight size={17} />
       </button>
