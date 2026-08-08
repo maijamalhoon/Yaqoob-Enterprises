@@ -6,11 +6,20 @@ export type CustomerServiceMode =
   | "Delivery"
   | "Doorstep appointment";
 
-export function canFulfillService(service: Service) {
+type ServiceAvailabilityInput = Pick<
+  Service,
+  | "status"
+  | "available_at_shop"
+  | "pickup_available"
+  | "delivery_available"
+  | "doorstep_available"
+>;
+
+export function canFulfillService(service: ServiceAvailabilityInput) {
   return service.status === "active" || service.status === "appointment_only";
 }
 
-export function getCustomerServiceModes(service: Service): CustomerServiceMode[] {
+export function getCustomerServiceModes(service: ServiceAvailabilityInput): CustomerServiceMode[] {
   if (!canFulfillService(service)) return [];
 
   const modes: CustomerServiceMode[] = [];
@@ -21,6 +30,6 @@ export function getCustomerServiceModes(service: Service): CustomerServiceMode[]
   return modes;
 }
 
-export function serviceNeedsAvailabilityConfirmation(service: Service) {
+export function serviceNeedsAvailabilityConfirmation(service: Pick<Service, "status">) {
   return service.status === "coming_soon" || service.status === "temporarily_unavailable";
 }
