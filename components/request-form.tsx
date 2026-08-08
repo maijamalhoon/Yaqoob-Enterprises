@@ -3,7 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { getCustomerServiceModes, serviceNeedsAvailabilityConfirmation } from "@/lib/service-availability";
-import type { ServiceCategory } from "@/lib/types";
+import type { RequestFormCategory } from "@/lib/client-data";
 
 const unsureServiceValue = "__unsure__";
 const requestLimits = {
@@ -28,7 +28,7 @@ export function RequestForm({
   categories,
   whatsappNumber,
 }: {
-  categories: ServiceCategory[];
+  categories: RequestFormCategory[];
   whatsappNumber: string;
 }) {
   const [categorySlug, setCategorySlug] = useState("");
