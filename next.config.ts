@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+const isDevelopment = process.env.NODE_ENV === "development";
+const scriptSources = ["'self'", "'unsafe-inline'", ...(isDevelopment ? ["'unsafe-eval'"] : [])].join(" ");
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -11,7 +14,7 @@ const contentSecurityPolicy = [
   "media-src 'self' https://kzikyufuyanfjlddyepo.supabase.co",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  `script-src ${scriptSources}`,
   "connect-src 'self' https://kzikyufuyanfjlddyepo.supabase.co wss://kzikyufuyanfjlddyepo.supabase.co",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
