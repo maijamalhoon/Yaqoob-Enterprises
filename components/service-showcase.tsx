@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { ServiceIcon } from "@/components/service-icon";
-import type { ServiceCategory } from "@/lib/types";
+import type { ServiceShowcaseCategory } from "@/lib/client-data";
 
 const ROTATION_MS = 6500;
 const TRANSITION_MS = 620;
@@ -60,7 +60,7 @@ const motionCaptions: Record<string, string> = {
   laptop: "Setup and troubleshooting support",
 };
 
-function categoryHighlights(category: ServiceCategory) {
+function categoryHighlights(category: ServiceShowcaseCategory) {
   const services = category.services || [];
   const options = [
     ["At shop", services.some((service) => service.available_at_shop)],
@@ -75,7 +75,7 @@ function categoryHighlights(category: ServiceCategory) {
   return active.length > 0 ? active : ["Requirements confirmed", "Clear quotation"];
 }
 
-function ServiceMotion({ category }: { category: ServiceCategory }) {
+function ServiceMotion({ category }: { category: ServiceShowcaseCategory }) {
   return (
     <div className={`service-motion service-motion--${category.slug}`} aria-hidden="true">
       <span className="service-motion__halo" />
@@ -99,7 +99,7 @@ function FeatureCard({
   index,
   className,
 }: {
-  category: ServiceCategory;
+  category: ServiceShowcaseCategory;
   index: number;
   className: string;
 }) {
@@ -137,7 +137,7 @@ function FeatureCard({
   );
 }
 
-export function ServiceShowcase({ categories }: { categories: ServiceCategory[] }) {
+export function ServiceShowcase({ categories }: { categories: ServiceShowcaseCategory[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [outgoingIndex, setOutgoingIndex] = useState<number | null>(null);
   const [direction, setDirection] = useState<1 | -1>(1);
