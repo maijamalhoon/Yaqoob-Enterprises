@@ -44,8 +44,12 @@ try {
   assert((await page.locator("h1").first().innerText()).includes("Tell us what you need"), "Contact heading changed unexpectedly.");
   assert((await page.locator('input[name="name"]').getAttribute("maxlength")) === "100", "Name input boundary is missing.");
   assert((await page.locator('textarea[name="details"]').getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
-  const categoryOptions = await page.locator('select[name="category"] option').count();
-  assert(categoryOptions >= 9, `Expected 8 service categories plus placeholder; found ${categoryOptions}.`);
+  const categoryLabels = await page.locator('select[name="category"] option').allTextContents();
+  assert(categoryLabels.length >= 10, `Expected placeholder, guidance option and 8 service categories; found ${categoryLabels.length}.`);
+  assert(
+    categoryLabels.some((label) => label.includes("not sure which service")),
+    "Guided request lost the top-level service guidance option.",
+  );
 
   await page.locator('select[name="category"]').selectOption("printing-photos");
   const modeLabels = await page.locator('select[name="mode"] option').allTextContents();
@@ -64,11 +68,16 @@ try {
   const mobilePage = await mobile.newPage();
   await openHealthy(mobilePage, "/");
   await assertNoHorizontalOverflow(mobilePage, "Mobile homepage");
-  assert(await mobilePage.locator(".mobile-action-bar").count(), "Mobile quick-action bar is missing.");
+  const quickActions = mobilePage.locator(".mobile-action-bar a");
+  assert((await quickActions.count()) === 2, "Persistent mobile action bar must contain exactly WhatsApp and Call.");
+  const quickActionText = (await quickActions.allTextContents()).join(" ");
+  assert(quickActionText.includes("WhatsApp") && quickActionText.includes("Call"), "Persistent mobile actions are missing WhatsApp or Call.");
+  assert(!quickActionText.includes("Directions"), "Directions should not be duplicated in the persistent mobile action bar.");
 
   await openHealthy(mobilePage, "/contact");
   await assertNoHorizontalOverflow(mobilePage, "Mobile contact page");
   assert(await mobilePage.locator('form.request-form').count(), "Mobile guided request form is missing.");
+  assert((await mobilePage.locator(".contact-hours__row").count()) === 7, "Opening hours should render one weekly schedule, not duplicate rows.");
   await mobile.close();
 
   console.log(`Browser smoke passed against ${baseUrl}`);
