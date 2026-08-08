@@ -20,6 +20,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
+import { getActiveServiceCategorySlugs } from "@/lib/public-category-slugs";
 import { getCustomerServiceModes } from "@/lib/service-availability";
 
 function serviceAction(status: string, title: string) {
@@ -72,8 +73,8 @@ function statusLabel(status: string) {
 }
 
 export async function generateStaticParams() {
-  const { categories } = await getSiteData();
-  return categories.map((category) => ({ slug: category.slug }));
+  const categorySlugs = await getActiveServiceCategorySlugs();
+  return categorySlugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
