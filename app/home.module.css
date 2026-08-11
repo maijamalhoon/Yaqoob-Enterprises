@@ -342,6 +342,83 @@
   background: #f5f7f8;
 }
 
+/* Polished minimal interaction layer */
+.primaryButton,
+.secondaryButton,
+.visitActions a {
+  border-radius: 12px;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.primaryButton {
+  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.18);
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(15, 118, 110, 0.24);
+}
+
+.secondaryButton {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.secondaryButton:hover {
+  transform: translateY(-2px);
+  border-color: rgba(15, 118, 110, 0.34);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+}
+
+.imageShell {
+  border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+}
+
+.trustGrid {
+  gap: 0.9rem;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+}
+
+.trustGrid > div {
+  border: 1px solid #e3e8e8;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.035);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.trustGrid > div:hover {
+  transform: translateY(-2px);
+  border-color: #d6e3df;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+}
+
+.trustGrid svg {
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0.45rem;
+  border-radius: 9px;
+  background: #eef7f5;
+}
+
+.formPanel {
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
+}
+
+.visitActions a {
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.visitActions a:hover {
+  transform: translateY(-2px);
+  border-color: #cbded9;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+}
+
 @media (max-width: 62rem) {
   .heroGrid,
   .contactShell {
@@ -396,7 +473,7 @@
 
   .imageShell {
     aspect-ratio: 1 / 0.86;
-    border-radius: 12px;
+    border-radius: 14px;
   }
 
   .imageCaption {
@@ -420,7 +497,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .primaryButton,
-  .secondaryButton {
+  .secondaryButton,
+  .trustGrid > div,
+  .visitActions a {
     transition: none;
   }
 }
