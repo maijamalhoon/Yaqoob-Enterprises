@@ -1,116 +1,151 @@
 .form {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .field {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 
 .field > span {
-  color: #10233f;
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  color: #303a48;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .field input,
 .field select,
 .field textarea {
   width: 100%;
-  border: 1px solid rgba(9, 36, 62, 0.14);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #0a1d36;
+  border: 1px solid #dfe4e8;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #172033;
   font: inherit;
   outline: none;
-  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .field input,
 .field select {
-  min-height: 3.55rem;
-  padding: 0 1rem;
+  min-height: 3.2rem;
+  padding: 0 0.9rem;
 }
 
 .field textarea {
-  min-height: 9.25rem;
+  min-height: 8rem;
   resize: vertical;
-  padding: 1rem;
+  padding: 0.9rem;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  border-color: rgba(10, 123, 119, 0.55);
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(10, 123, 119, 0.08);
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.08);
 }
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: #7d8998;
+  color: #8a939e;
 }
 
 .submitRow {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
   flex-wrap: wrap;
 }
 
 .submit {
-  min-height: 3.6rem;
+  min-height: 3.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
+  gap: 0.55rem;
   border: 0;
-  border-radius: 999px;
-  padding: 0 1.35rem;
-  background: #0a7777;
-  color: #fff;
+  border-radius: 9px;
+  padding: 0 1.1rem;
+  background: #0f766e;
+  color: #ffffff;
   font: inherit;
-  font-weight: 850;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 16px 34px rgba(10, 119, 119, 0.18);
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  box-shadow: 0 7px 18px rgba(15, 118, 110, 0.16);
 }
 
 .submit:hover {
-  background: #086a6a;
+  background: #0b665f;
   transform: translateY(-1px);
-  box-shadow: 0 18px 38px rgba(10, 119, 119, 0.23);
+  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.22);
 }
 
 .submit:focus-visible {
-  outline: 3px solid rgba(245, 142, 43, 0.55);
+  outline: 3px solid rgba(15, 118, 110, 0.22);
   outline-offset: 3px;
 }
 
 .submitRow p {
   margin: 0;
-  color: #6e7b8c;
-  font-size: 0.82rem;
+  color: #77818d;
+  font-size: 0.8rem;
 }
 
 @media (max-width: 44rem) {
+  .form {
+    gap: 0.85rem;
+  }
+
   .row {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .field {
+    gap: 0.38rem;
+  }
+
+  .field > span {
+    font-size: 0.76rem;
+  }
+
+  .field input,
+  .field select {
+    min-height: 2.85rem;
+    padding-inline: 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .field textarea {
+    min-height: 6.4rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .submitRow {
     display: grid;
+    gap: 0.5rem;
   }
 
   .submit {
     width: 100%;
+    min-height: 2.95rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+
+  .submitRow p {
+    font-size: 0.74rem;
   }
 }

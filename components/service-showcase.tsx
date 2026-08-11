@@ -18,48 +18,31 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
   if (categories.length === 0) return null;
 
   return (
-    <section className="section services-showcase services-showcase--interactive" id="services">
+    <section className="section services-showcase minimal-services" id="services">
       <div className="container">
-        <div className="section-heading section-heading--split service-showcase-heading">
+        <div className="minimal-services__heading">
           <div>
-            <span className="eyebrow">Find a service</span>
-            <h2>Choose the service you need.</h2>
+            <span className="eyebrow">Services</span>
+            <h2>What can we help with?</h2>
           </div>
-          <div className="service-showcase-heading__side">
-            <p>
-              Compare all {categories.length} service categories at a glance. Open any category to see requirements,
-              availability and the right next step.
-            </p>
-          </div>
+          <p>Open a category to check requirements, availability and the right next step before you visit.</p>
         </div>
 
-        <div className="service-all-services">
-          <div className="category-grid category-grid--bento category-grid--final service-all-grid">
-            {categories.map((category, index) => {
-              const count = category.services?.length || 0;
-              return (
-                <Link
-                  className="category-card category-card--final"
-                  key={category.id}
-                  href={`/services/${category.slug}`}
-                >
-                  <div className="category-card__topline">
-                    <span className="category-card__number">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="category-card__icon"><ServiceIcon iconKey={category.icon_key} /></span>
-                  </div>
-                  <h3>
-                    <span className="category-title-full">{category.title}</span>
-                    <span className="category-title-short">{shortCategoryTitles[category.slug] || category.title}</span>
-                  </h3>
-                  <p>{category.description}</p>
-                  <span className="category-card__link">
-                    <span className="category-card__count">{count} {count === 1 ? "option" : "options"}</span>
-                    <span className="category-card__action"><span>View services</span><ArrowRight size={17} /></span>
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
+        <div className="minimal-services__list">
+          {categories.map((category) => {
+            const count = category.services?.length || 0;
+            return (
+              <Link className="minimal-service-item" key={category.id} href={`/services/${category.slug}`}>
+                <span className="minimal-service-item__icon"><ServiceIcon iconKey={category.icon_key} size={20} /></span>
+                <span className="minimal-service-item__copy">
+                  <strong>{shortCategoryTitles[category.slug] || category.title}</strong>
+                  <small>{category.description}</small>
+                </span>
+                <span className="minimal-service-item__meta">{count} {count === 1 ? "option" : "options"}</span>
+                <ArrowRight className="minimal-service-item__arrow" size={18} />
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

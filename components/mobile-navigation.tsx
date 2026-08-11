@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock3, Home, MapPin, Menu, MessageCircle, Phone, Store, X } from "lucide-react";
+import { Clock3, MapPin, Menu, MessageCircle, Phone, Store, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TrackedLink } from "@/components/tracked-link";
 
@@ -29,8 +29,8 @@ export function MobileNavigation({
       ? "contact"
       : pathname === "/" && hash === "#services"
         ? "services"
-        : pathname === "/" && hash === "#get-in-touch"
-          ? "contact"
+        : pathname === "/" && hash === "#visit"
+          ? "visit"
           : pathname === "/"
             ? "home"
             : "";
@@ -55,9 +55,7 @@ export function MobileNavigation({
 
   useEffect(() => {
     function handlePointerDown(event: PointerEvent) {
-      if (open && detailsRef.current && !detailsRef.current.contains(event.target as Node)) {
-        closeMenu();
-      }
+      if (open && detailsRef.current && !detailsRef.current.contains(event.target as Node)) closeMenu();
     }
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -73,11 +71,7 @@ export function MobileNavigation({
   }, [closeMenu, open]);
 
   return (
-    <details
-      className="mobile-nav"
-      ref={detailsRef}
-      onToggle={(event) => setOpen(event.currentTarget.open)}
-    >
+    <details className="mobile-nav" ref={detailsRef} onToggle={(event) => setOpen(event.currentTarget.open)}>
       <summary
         ref={summaryRef}
         aria-label={open ? "Close navigation" : "Open navigation"}
@@ -97,14 +91,14 @@ export function MobileNavigation({
       >
         <div className="mobile-menu-head">
           <span className="mobile-menu-head__eyebrow">Yaqoob Enterprises</span>
-          <strong>What do you need today?</strong>
+          <strong>Services and contact</strong>
           {statusText && <span className="mobile-menu-status"><Clock3 size={15} /> {statusText}</span>}
         </div>
 
         <nav id="mobile-primary-navigation" aria-label="Mobile navigation">
-          <Link className={active === "home" ? "is-active" : undefined} aria-current={active === "home" ? "page" : undefined} href="/"><Home size={19} /> <span><strong>Home</strong><small>Start here</small></span></Link>
-          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Browse all categories</small></span></Link>
-          <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? (pathname === "/contact" ? "page" : "location") : undefined} href="/#get-in-touch"><MessageCircle size={19} /> <span><strong>Get in touch</strong><small>Send a quick request</small></span></Link>
+          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Browse categories</small></span></Link>
+          <Link className={active === "visit" ? "is-active" : undefined} aria-current={active === "visit" ? "location" : undefined} href="/#visit"><MapPin size={19} /> <span><strong>Visit us</strong><small>Address and directions</small></span></Link>
+          <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? "page" : undefined} href="/contact"><MessageCircle size={19} /> <span><strong>Guided request</strong><small>For more detailed help</small></span></Link>
         </nav>
 
         <div className="mobile-menu-actions">
