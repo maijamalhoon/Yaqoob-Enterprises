@@ -78,11 +78,14 @@
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition: background 150ms ease;
+  transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  box-shadow: 0 7px 18px rgba(15, 118, 110, 0.16);
 }
 
 .submit:hover {
   background: #0b665f;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.22);
 }
 
 .submit:focus-visible {
@@ -97,15 +100,52 @@
 }
 
 @media (max-width: 44rem) {
+  .form {
+    gap: 0.85rem;
+  }
+
   .row {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .field {
+    gap: 0.38rem;
+  }
+
+  .field > span {
+    font-size: 0.76rem;
+  }
+
+  .field input,
+  .field select {
+    min-height: 2.85rem;
+    padding-inline: 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .field textarea {
+    min-height: 6.4rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   .submitRow {
     display: grid;
+    gap: 0.5rem;
   }
 
   .submit {
     width: 100%;
+    min-height: 2.95rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+
+  .submitRow p {
+    font-size: 0.74rem;
   }
 }
