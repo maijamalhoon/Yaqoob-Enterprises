@@ -495,6 +495,154 @@
   }
 }
 
+/* Mobile density pass based on real-device screenshots */
+@media (max-width: 46rem) {
+  .hero {
+    padding: 1.9rem 0 2.5rem;
+  }
+
+  .heroGrid {
+    gap: 1.7rem;
+  }
+
+  .kicker {
+    gap: 0.4rem 0.7rem;
+    margin-bottom: 0.9rem;
+    font-size: 0.74rem;
+    line-height: 1.4;
+  }
+
+  .hero h1 {
+    max-width: 10.5ch;
+    font-size: clamp(2.45rem, 10.5vw, 3.25rem);
+    line-height: 0.98;
+  }
+
+  .lead {
+    margin-top: 1rem;
+    font-size: 0.96rem;
+    line-height: 1.62;
+  }
+
+  .actions {
+    gap: 0.55rem;
+    margin-top: 1.25rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    min-height: 3.05rem;
+    border-radius: 11px;
+    padding-inline: 1rem;
+    font-size: 0.94rem;
+  }
+
+  .heroNote {
+    gap: 0.25rem;
+    margin-top: 0.9rem;
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .imageShell {
+    aspect-ratio: 1.35 / 1;
+    border-radius: 13px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+  }
+
+  .imageCaption {
+    flex-direction: row;
+    align-items: center;
+    padding-top: 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .servicesWrap :global(.services-showcase),
+  .trustSection,
+  .contactSection,
+  .visitSection {
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
+  }
+
+  .sectionIntro h2,
+  .contactCopy h2,
+  .visitGrid h2 {
+    margin-top: 0.55rem;
+    font-size: clamp(2rem, 9vw, 2.45rem);
+    line-height: 1.02;
+  }
+
+  .trustGrid {
+    gap: 0.7rem;
+    margin-top: 1.45rem;
+  }
+
+  .trustGrid > div {
+    padding: 1.05rem;
+    border-radius: 12px;
+  }
+
+  .trustGrid svg {
+    width: 1.85rem;
+    height: 1.85rem;
+    padding: 0.38rem;
+    border-radius: 8px;
+  }
+
+  .trustGrid strong {
+    margin-top: 0.7rem;
+    font-size: 0.93rem;
+  }
+
+  .trustGrid p {
+    margin-top: 0.35rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .contactShell {
+    gap: 1.35rem;
+  }
+
+  .contactCopy p,
+  .visitGrid p {
+    margin-top: 0.7rem;
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+
+  .textLink {
+    margin-top: 0.9rem;
+    font-size: 0.84rem;
+    line-height: 1.4;
+  }
+
+  .formPanel {
+    padding: 0.9rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+  }
+
+  .statusLine {
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .visitGrid {
+    gap: 1.25rem;
+  }
+
+  .visitActions {
+    gap: 0.55rem;
+  }
+
+  .visitActions a {
+    min-height: 2.9rem;
+    font-size: 0.86rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .primaryButton,
   .secondaryButton,
