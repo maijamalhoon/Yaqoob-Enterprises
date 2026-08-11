@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, MapPin, MessageCircle } from "lucide-react";
+import { ArrowRight, Check, MapPin, MessageCircle, Phone } from "lucide-react";
 import { HomeContactFormClient } from "@/components/home-contact-form-client";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
 import { ServiceShowcase } from "@/components/service-showcase";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
@@ -36,13 +37,10 @@ export default async function HomePage() {
                 <span><MapPin size={14} /> Akhtar Colony, Karachi</span>
               </div>
 
-              <h1>
-                Everyday services.
-                <span>Handled simply.</span>
-              </h1>
+              <h1>Printing, documents &amp; digital services.</h1>
 
               <p className={styles.lead}>
-                Printing, documents, biometric services, online forms and everyday digital help from one local shop in Akhtar Colony.
+                Send your requirement before you visit. We’ll confirm what you need, current availability and charges before work starts.
               </p>
 
               <div className={styles.actions}>
@@ -53,17 +51,17 @@ export default async function HomePage() {
                   rel="noopener noreferrer"
                   eventName="whatsapp_click"
                 >
-                  <MessageCircle size={18} /> Send on WhatsApp <ArrowRight size={17} />
+                  <MessageCircle size={18} /> WhatsApp us <ArrowRight size={17} />
                 </TrackedLink>
                 <Link className={styles.secondaryButton} href="#services">
-                  Browse services <ArrowDown size={17} />
+                  View services
                 </Link>
               </div>
 
               <div className={styles.heroNote} aria-label="Service highlights">
-                <span>Send files first</span>
-                <span>Clear next step</span>
-                <span>Charges confirmed before work</span>
+                <span>Requirements confirmed first</span>
+                <span>Clear pricing before work</span>
+                <span>Local help in Akhtar Colony</span>
               </div>
             </div>
 
@@ -74,18 +72,15 @@ export default async function HomePage() {
                   alt={featuredImage?.alt_text || "Yaqoob Enterprises"}
                   fill
                   priority
-                  sizes="(max-width: 992px) 100vw, 44vw"
+                  sizes="(max-width: 992px) 100vw, 42vw"
                   style={featuredImage
                     ? { objectPosition: `${featuredImage.focal_x || 50}% ${featuredImage.focal_y || 50}%` }
                     : { objectFit: "contain", padding: "18%" }}
                 />
-                <div className={styles.imageMeta}>
-                  <div>
-                    <strong>Yaqoob Enterprises</strong>
-                    <span><MapPin size={13} /> Akhtar Colony</span>
-                  </div>
-                  <span>{hoursText}</span>
-                </div>
+              </div>
+              <div className={styles.imageCaption}>
+                <span>Yaqoob Enterprises</span>
+                <span><MapPin size={13} /> Akhtar Colony</span>
               </div>
             </div>
           </div>
@@ -95,22 +90,51 @@ export default async function HomePage() {
           <ServiceShowcase categories={categories} />
         </div>
 
+        <section className={styles.trustSection} aria-labelledby="why-us-title">
+          <div className="container">
+            <div className={styles.sectionIntro}>
+              <span>Simple process</span>
+              <h2 id="why-us-title">Know the next step before you travel.</h2>
+            </div>
+            <div className={styles.trustGrid}>
+              <div><Check size={18} /><strong>Confirm requirements</strong><p>See what to bring or send before visiting.</p></div>
+              <div><Check size={18} /><strong>Confirm availability</strong><p>Official-system and appointment-dependent work is checked first.</p></div>
+              <div><Check size={18} /><strong>Confirm charges</strong><p>We confirm the quotation before work begins.</p></div>
+            </div>
+          </div>
+        </section>
+
         <section className={styles.contactSection} id="get-in-touch">
           <div className={`container ${styles.contactShell}`}>
             <div className={styles.contactCopy}>
-              <span className={styles.eyebrow}>Get in touch</span>
+              <span className={styles.eyebrow}>Quick request</span>
               <h2>Tell us what you need.</h2>
-              <p>
-                Choose a service and add a short note. We’ll turn it into a clear WhatsApp request so you can continue directly with the shop.
-              </p>
+              <p>Choose a service, add a short note, then review the prepared message in WhatsApp before sending.</p>
+              <Link href="/contact" className={styles.textLink}>Need more guidance? Use the guided request <ArrowRight size={15} /></Link>
             </div>
-
             <div className={styles.formPanel}>
               <HomeContactFormClient categories={contactCategories} whatsappNumber={settings.whatsapp_e164} />
             </div>
           </div>
         </section>
+
+        <section className={styles.visitSection} id="visit">
+          <div className={`container ${styles.visitGrid}`}>
+            <div>
+              <span className={styles.eyebrow}>Visit the shop</span>
+              <h2>Akhtar Colony, Karachi.</h2>
+              <p>{settings.address}</p>
+              <span className={styles.statusLine}><span className={styles.statusDot} aria-hidden="true" /> {hoursText}</span>
+            </div>
+            <div className={styles.visitActions}>
+              <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={17} /> Directions</TrackedLink>
+              <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> {settings.phone_display}</TrackedLink>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <SiteFooter settings={settings} categories={categories} />
     </div>
   );
 }
