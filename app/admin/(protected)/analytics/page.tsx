@@ -1,8 +1,13 @@
-import { BarChart3, Building2, ExternalLink, Globe2, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
+import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
 const contactEvents = new Set(["whatsapp_click", "call_click", "directions_click"]);
+const contactLabels: Record<string, string> = {
+  whatsapp_click: "WhatsApp",
+  call_click: "Calls",
+  directions_click: "Directions",
+};
 
 function decodeLabel(value: string | null | undefined, fallback: string) {
   if (!value) return fallback;
@@ -25,12 +30,18 @@ function sourceLabel(event: {
   return "Direct / unknown";
 }
 
+function serviceLabel(path: string) {
+  const slug = path.split("/services/")[1]?.split("/")[0];
+  if (!slug) return path;
+  return slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
+
 export default async function AdminAnalyticsPage() {
   const { supabase } = await requireAdmin();
   // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
   // eslint-disable-next-line react-hooks/purity
   const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ data: events }, { data: settings }] = await Promise.all([
+  const [{ data: events }, { data: settings }, { data: categories }] = await Promise.all([
     supabase
       .from("analytics_events")
       .select("event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at")
@@ -38,8 +49,10 @@ export default async function AdminAnalyticsPage() {
       .order("created_at", { ascending: false })
       .limit(5000),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
+    supabase.from("service_categories").select("slug,title"),
   ]);
 
+  const categoryTitles = new Map((categories || []).map((category) => [category.slug, category.title]));
   const rows = (events || []).filter((event) => {
     const path = String(event.page_path || "/");
     return path !== "/admin" && !path.startsWith("/admin/");
@@ -60,6 +73,21 @@ export default async function AdminAnalyticsPage() {
     googleRows.filter((event) => contactEvents.has(event.event_name)).map((event) => event.session_hash).filter(Boolean),
   ).size;
   const googleConversion = googleVisitors > 0 ? Math.round((googleContactVisitors / googleVisitors) * 100) : 0;
+
+  const contactActions = Object.entries(contactRows.reduce<Record<string, number>>((acc, event) => {
+    const label = contactLabels[event.event_name] || event.event_name.replaceAll("_", " ");
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]);
+
+  const serviceInterest = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
+    const path = String(event.page_path || "");
+    if (!path.startsWith("/services/")) return acc;
+    const slug = path.split("/services/")[1]?.split("/")[0] || "";
+    const label = categoryTitles.get(slug) || serviceLabel(path);
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
   const cities = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
     const city = decodeLabel(event.city_name, "Unknown");
@@ -121,6 +149,8 @@ export default async function AdminAnalyticsPage() {
       </section>
 
       <div className="admin-two-column admin-insights-grid">
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><div className="rank-list">{contactActions.map(([action, count]) => <div key={action}><span>{action}</span><strong>{count}</strong></div>)}{contactActions.length === 0 && <p>No contact actions yet.</p>}</div></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><div className="rank-list">{serviceInterest.map(([service, count]) => <div key={service}><span>{service}</span><strong>{count}</strong></div>)}{serviceInterest.length === 0 && <p>No service-page views yet.</p>}</div></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><div className="rank-list">{sources.map(([source, count]) => <div key={source}><span>{source}</span><strong>{count}</strong></div>)}{sources.length === 0 && <p>No source data yet.</p>}</div></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><div className="rank-list">{pages.map(([page, count]) => <div key={page}><span>{page}</span><strong>{count}</strong></div>)}{pages.length === 0 && <p>No public data yet.</p>}</div></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><div className="rank-list">{cities.map(([city, count]) => <div key={city}><span>{city}</span><strong>{count}</strong></div>)}{cities.length === 0 && <p>No location data yet.</p>}</div></section>
