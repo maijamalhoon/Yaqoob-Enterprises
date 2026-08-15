@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/env";
 import { businessCity, businessLocationLabel } from "@/lib/business-display";
 import { getHourPeriods } from "@/lib/data";
-import type { BusinessHour, BusinessSettings, CoverageArea } from "@/lib/types";
+import type { BusinessHour, BusinessSettings, CoverageArea, ServiceCategory } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const socialProfiles = [
@@ -17,11 +17,13 @@ export function LocalBusinessSchema({
   settings,
   hours,
   coverage,
+  categories,
   imageUrl,
 }: {
   settings: BusinessSettings;
   hours: BusinessHour[];
   coverage: CoverageArea[];
+  categories: ServiceCategory[];
   imageUrl: string;
 }) {
   const openingHoursSpecification = hours.flatMap((hour) =>
@@ -37,6 +39,36 @@ export function LocalBusinessSchema({
   const city = businessCity(settings.address);
   const businessId = `${SITE_URL}/#business`;
   const sameAs = [settings.google_business_profile_url, ...socialProfiles].filter(Boolean);
+  const publicCategories = categories
+    .filter((category) => category.is_active)
+    .map((category) => ({
+      ...category,
+      services: (category.services || []).filter((service) => service.status !== "hidden"),
+    }))
+    .filter((category) => category.services.length > 0);
+
+  const serviceCatalog = publicCategories.length > 0
+    ? {
+        "@type": "OfferCatalog",
+        name: `${settings.business_name} services`,
+        itemListElement: publicCategories.map((category) => ({
+          "@type": "OfferCatalog",
+          name: category.title,
+          url: `${SITE_URL}/services/${category.slug}`,
+          itemListElement: category.services.map((service) => ({
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              "@id": `${SITE_URL}/services/${category.slug}/${service.slug}#service`,
+              name: service.title,
+              description: service.short_description,
+              url: `${SITE_URL}/services/${category.slug}/${service.slug}`,
+            },
+          })),
+        })),
+      }
+    : undefined;
+
   const businessData = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "Store"],
@@ -51,6 +83,7 @@ export function LocalBusinessSchema({
     priceRange: "PKR",
     currenciesAccepted: "PKR",
     hasMap: settings.map_url,
+    hasOfferCatalog: serviceCatalog,
     address: {
       "@type": "PostalAddress",
       streetAddress: settings.address,
