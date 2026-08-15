@@ -80,6 +80,8 @@ export default async function AdminServicesPage() {
             <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} /></label>
             <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} /></label>
             <label className="admin-span-2">Important note<textarea name="important_note" rows={2} /></label>
+            <label className="admin-span-2">Google title <small>optional — blank uses automatic local SEO</small><input name="seo_title" maxLength={90} placeholder="Service in Karachi | Business name" /></label>
+            <label className="admin-span-2">Google description <small>optional — blank uses service details + location automatically</small><textarea name="seo_description" maxLength={190} rows={2} /></label>
             <div className="admin-checks admin-span-2" aria-label="Service options">
               <label><input type="checkbox" name="available_at_shop" defaultChecked /> At shop</label>
               <label><input type="checkbox" name="pickup_available" /> Pickup</label>
@@ -156,6 +158,8 @@ export default async function AdminServicesPage() {
                           <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} defaultValue={service.detailed_description} /></label>
                           <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} defaultValue={(service.requirements || []).join("\n")} /></label>
                           <label className="admin-span-2">Important note<textarea name="important_note" rows={2} defaultValue={service.important_note} /></label>
+                          <label className="admin-span-2">Google title <small>optional — blank keeps automatic local SEO</small><input name="seo_title" maxLength={90} defaultValue={service.seo_title || ""} /></label>
+                          <label className="admin-span-2">Google description <small>optional — blank keeps automatic local SEO</small><textarea name="seo_description" maxLength={190} rows={2} defaultValue={service.seo_description || ""} /></label>
                           <div className="admin-checks admin-span-2" aria-label="Service options">
                             <label><input type="checkbox" name="available_at_shop" defaultChecked={service.available_at_shop} /> At shop</label>
                             <label><input type="checkbox" name="pickup_available" defaultChecked={service.pickup_available} /> Pickup</label>

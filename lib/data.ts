@@ -19,6 +19,7 @@ const fallbackSettings: BusinessSettings = {
   whatsapp_e164: "+923492568864",
   address: "Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi, Pakistan",
   map_url: "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A",
+  google_business_profile_url: "",
   pricing_message:
     "Service charges vary by work type, quantity, urgency, delivery location and any applicable official fees. We confirm the exact quotation before work begins, either on WhatsApp or at the shop.",
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",
@@ -32,6 +33,7 @@ const businessSettingsColumns = [
   "whatsapp_e164",
   "address",
   "map_url",
+  "google_business_profile_url",
   "pricing_message",
   "concept_image_notice",
 ].join(",");
@@ -55,6 +57,7 @@ const serviceCategoryColumns = [
   "icon_key",
   "display_order",
   "is_active",
+  "updated_at",
 ].join(",");
 
 const serviceColumns = [
@@ -75,6 +78,9 @@ const serviceColumns = [
   "important_note",
   "display_order",
   "is_featured",
+  "seo_title",
+  "seo_description",
+  "updated_at",
 ].join(",");
 
 const coverageColumns = [
@@ -158,7 +164,7 @@ async function loadSiteData() {
   };
 }
 
-export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v5"], {
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v6"], {
   revalidate: 300,
   tags: ["site-data"],
 });
@@ -166,6 +172,24 @@ export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v5"],
 export async function getCategoryBySlug(slug: string) {
   const { categories } = await getSiteData();
   return categories.find((category) => category.slug === slug) || null;
+}
+
+export async function getServiceBySlugs(categorySlug: string, serviceSlug: string) {
+  const { categories } = await getSiteData();
+  const category = categories.find((item) => item.slug === categorySlug);
+  if (!category) return null;
+  const service = category.services?.find((item) => item.slug === serviceSlug);
+  return service ? { category, service } : null;
+}
+
+export async function getPublicServicePaths() {
+  const { categories } = await getSiteData();
+  return categories.flatMap((category) =>
+    (category.services || []).map((service) => ({
+      categorySlug: category.slug,
+      serviceSlug: service.slug,
+    })),
+  );
 }
 
 export function whatsappUrl(number: string, message: string) {

@@ -22,6 +22,7 @@ import { TrackedLink } from "@/components/tracked-link";
 import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
 import { getActiveServiceCategorySlugs } from "@/lib/public-category-slugs";
 import { getCustomerServiceModes } from "@/lib/service-availability";
+import { getCategorySeo } from "@/lib/service-seo";
 
 function serviceAction(status: string, title: string, businessName: string) {
   if (status === "active") {
@@ -82,19 +83,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const [category, site] = await Promise.all([getCategoryBySlug(slug), getSiteData()]);
   if (!category) return {};
   const canonicalPath = `/services/${slug}`;
-  const socialTitle = `${category.title} | ${site.settings.business_name}`;
+  const seo = getCategorySeo(category, site.settings);
 
   return {
-    title: category.title,
-    description: category.description,
+    title: { absolute: seo.title },
+    description: seo.description,
     alternates: { canonical: canonicalPath },
     openGraph: {
       type: "website",
       locale: "en_PK",
       siteName: site.settings.business_name,
       url: canonicalPath,
-      title: socialTitle,
-      description: category.description,
+      title: seo.title,
+      description: seo.description,
       images: [{
         url: "/opengraph-image",
         width: 1200,
@@ -104,8 +105,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: "summary_large_image",
-      title: socialTitle,
-      description: category.description,
+      title: seo.title,
+      description: seo.description,
       images: ["/opengraph-image"],
     },
   };
@@ -117,6 +118,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   if (!category) notFound();
   const serviceCount = category.services?.length || 0;
   const statusText = getCurrentBusinessStatus(site.hours);
+  const seo = getCategorySeo(category, site.settings);
 
   return (
     <>
@@ -129,7 +131,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
               <Link className="back-link" href="/#services"><ArrowLeft size={16} /> All services</Link>
               <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={30} /></div>
               <span className="eyebrow">Service category</span>
-              <h1>{category.title}</h1>
+              <h1>{seo.heading}</h1>
               <p>{category.description}</p>
             </div>
             <aside className="page-hero__summary" aria-label="Category summary">
@@ -209,6 +211,9 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                     {service.important_note && <div className="important-note"><strong>Please note:</strong> {service.important_note}</div>}
                     {action.note && <p className="service-status-note"><ShieldCheck size={16} /> {action.note}</p>}
 
+                    <Link className="service-detail-link" href={`/services/${category.slug}/${service.slug}`}>
+                      Full service details <ArrowRight size={14} />
+                    </Link>
                     <TrackedLink className={`${action.className} service-card-action`} href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
                       <Send size={17} /> {action.label} <ArrowRight size={16} />
                     </TrackedLink>

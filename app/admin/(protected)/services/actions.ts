@@ -7,6 +7,12 @@ function text(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
 }
 
+function optionalText(formData: FormData, key: string, maxLength: number) {
+  const value = text(formData, key);
+  if (value.length > maxLength) throw new Error(`${key.replaceAll("_", " ")} is too long.`);
+  return value || null;
+}
+
 function bool(formData: FormData, key: string) {
   return formData.get(key) === "on" || formData.get(key) === "true";
 }
@@ -32,6 +38,7 @@ function requirements(formData: FormData) {
 function refreshServices() {
   updateTag("site-data");
   revalidatePath("/", "layout");
+  revalidatePath("/sitemap.xml");
   revalidatePath("/admin/services");
 }
 
@@ -81,6 +88,8 @@ export async function createService(formData: FormData) {
     appointment_required: bool(formData, "appointment_required"),
     is_featured: false,
     display_order: order(formData),
+    seo_title: optionalText(formData, "seo_title", 90),
+    seo_description: optionalText(formData, "seo_description", 190),
   });
   if (error) throw new Error(error.message);
   refreshServices();
@@ -102,6 +111,8 @@ export async function updateService(formData: FormData) {
     requirements: requirements(formData),
     important_note: text(formData, "important_note"),
     display_order: order(formData),
+    seo_title: optionalText(formData, "seo_title", 90),
+    seo_description: optionalText(formData, "seo_description", 190),
   }).eq("id", text(formData, "id"));
   if (error) throw new Error(error.message);
   refreshServices();

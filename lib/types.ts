@@ -13,6 +13,7 @@ export type BusinessSettings = {
   whatsapp_e164: string;
   address: string;
   map_url: string;
+  google_business_profile_url: string;
   pricing_message: string;
   concept_image_notice: string;
 };
@@ -52,6 +53,9 @@ export type Service = {
   important_note: string;
   display_order: number;
   is_featured: boolean;
+  seo_title: string | null;
+  seo_description: string | null;
+  updated_at: string;
 };
 
 export type ServiceCategory = {
@@ -62,6 +66,7 @@ export type ServiceCategory = {
   icon_key: string;
   display_order: number;
   is_active: boolean;
+  updated_at: string;
   services?: Service[];
 };
 
