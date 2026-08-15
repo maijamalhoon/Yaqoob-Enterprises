@@ -32,11 +32,28 @@ function refreshSettings() {
   revalidatePath("/admin/settings");
 }
 
-export async function updateBusinessSettings(formData: FormData) {
+export async function updateBusinessIdentity(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const businessName = text(formData, "business_name");
+  if (businessName.length < 2) throw new Error("Business name is required.");
+
+  const { error } = await supabase.from("business_settings").update({
+    business_name: businessName,
+    tagline: text(formData, "tagline"),
+  }).eq("id", true);
+
+  if (error) throw new Error(error.message);
+  refreshSettings();
+}
+
+export async function updateContactDetails(formData: FormData) {
   const { supabase } = await requireAdmin();
   const phone = normalizePkPhone(text(formData, "phone_number"));
   const whatsapp = normalizePkPhone(text(formData, "whatsapp_number"));
   const mapUrl = text(formData, "map_url");
+  const address = text(formData, "address");
+  if (!address) throw new Error("Address is required.");
+
   try {
     const parsed = new URL(mapUrl);
     if (parsed.protocol !== "https:") throw new Error("invalid protocol");
@@ -45,15 +62,11 @@ export async function updateBusinessSettings(formData: FormData) {
   }
 
   const { error } = await supabase.from("business_settings").update({
-    business_name: text(formData, "business_name"),
-    tagline: text(formData, "tagline"),
     phone_display: displayPhone(phone),
     phone_e164: phone,
     whatsapp_e164: whatsapp,
-    address: text(formData, "address"),
+    address,
     map_url: mapUrl,
-    pricing_message: text(formData, "pricing_message"),
-    concept_image_notice: text(formData, "concept_image_notice"),
   }).eq("id", true);
 
   if (error) throw new Error(error.message);
