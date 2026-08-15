@@ -37,10 +37,10 @@ export default async function HomePage() {
                 <span><MapPin size={14} /> Akhtar Colony, Karachi</span>
               </div>
 
-              <h1>Printing, documents &amp; digital services.</h1>
+              <h1>Printing, documents &amp; digital services, handled locally.</h1>
 
               <p className={styles.lead}>
-                Send your requirement before you visit. We’ll confirm what you need, current availability and charges before work starts.
+                Send us what you need before you visit. We’ll confirm the requirements, current availability and charges before you travel or we start the work.
               </p>
 
               <div className={styles.actions}>
@@ -51,17 +51,17 @@ export default async function HomePage() {
                   rel="noopener noreferrer"
                   eventName="whatsapp_click"
                 >
-                  <MessageCircle size={18} /> WhatsApp us <ArrowRight size={17} />
+                  <MessageCircle size={18} /> Send your requirement <ArrowRight size={17} />
                 </TrackedLink>
                 <Link className={styles.secondaryButton} href="#services">
-                  View services
+                  Browse services
                 </Link>
               </div>
 
               <div className={styles.heroNote} aria-label="Service highlights">
-                <span>Requirements confirmed first</span>
-                <span>Clear pricing before work</span>
-                <span>Local help in Akhtar Colony</span>
+                <span>Requirements checked first</span>
+                <span>Charges confirmed before work</span>
+                <span>Local support in Akhtar Colony</span>
               </div>
             </div>
 
@@ -93,13 +93,13 @@ export default async function HomePage() {
         <section className={styles.trustSection} aria-labelledby="why-us-title">
           <div className="container">
             <div className={styles.sectionIntro}>
-              <span>Simple process</span>
+              <span>How it works</span>
               <h2 id="why-us-title">Know the next step before you travel.</h2>
             </div>
             <div className={styles.trustGrid}>
-              <div><Check size={18} /><strong>Confirm requirements</strong><p>See what to bring or send before visiting.</p></div>
-              <div><Check size={18} /><strong>Confirm availability</strong><p>Official-system and appointment-dependent work is checked first.</p></div>
-              <div><Check size={18} /><strong>Confirm charges</strong><p>We confirm the quotation before work begins.</p></div>
+              <div><Check size={18} /><strong>Send the requirement</strong><p>Tell us the service, quantity, deadline or any detail that matters.</p></div>
+              <div><Check size={18} /><strong>Get a clear confirmation</strong><p>We confirm what is required, current availability, expected timing and charges.</p></div>
+              <div><Check size={18} /><strong>Use the right service option</strong><p>Visit the shop, collect, request delivery or arrange an appointment where supported.</p></div>
             </div>
           </div>
         </section>
