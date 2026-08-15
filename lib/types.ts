@@ -52,6 +52,9 @@ export type Service = {
   important_note: string;
   display_order: number;
   is_featured: boolean;
+  seo_title: string | null;
+  seo_description: string | null;
+  updated_at: string;
 };
 
 export type ServiceCategory = {
@@ -62,6 +65,7 @@ export type ServiceCategory = {
   icon_key: string;
   display_order: number;
   is_active: boolean;
+  updated_at: string;
   services?: Service[];
 };
 
