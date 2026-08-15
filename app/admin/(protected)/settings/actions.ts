@@ -26,10 +26,35 @@ function displayPhone(e164: string) {
   return match ? `+92 ${match[1]} ${match[2]}` : e164;
 }
 
+function secureUrl(value: string, label: string) {
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "https:") throw new Error("invalid protocol");
+    return parsed;
+  } catch {
+    throw new Error(`Enter a valid secure ${label} URL.`);
+  }
+}
+
+function validateGoogleBusinessProfileUrl(value: string) {
+  if (!value) return;
+  const parsed = secureUrl(value, "Google Business Profile");
+  const host = parsed.hostname.toLowerCase();
+  const allowed = host === "share.google"
+    || host === "g.page"
+    || host === "google.com"
+    || host.endsWith(".google.com")
+    || host === "goo.gl"
+    || host.endsWith(".goo.gl");
+  if (!allowed) throw new Error("Use a Google Business Profile or Google Maps share URL.");
+}
+
 function refreshSettings() {
   updateTag("site-data");
   revalidatePath("/", "layout");
+  revalidatePath("/admin");
   revalidatePath("/admin/settings");
+  revalidatePath("/admin/analytics");
 }
 
 export async function updateBusinessIdentity(formData: FormData) {
@@ -51,15 +76,12 @@ export async function updateContactDetails(formData: FormData) {
   const phone = normalizePkPhone(text(formData, "phone_number"));
   const whatsapp = normalizePkPhone(text(formData, "whatsapp_number"));
   const mapUrl = text(formData, "map_url");
+  const googleBusinessProfileUrl = text(formData, "google_business_profile_url");
   const address = text(formData, "address");
   if (!address) throw new Error("Address is required.");
 
-  try {
-    const parsed = new URL(mapUrl);
-    if (parsed.protocol !== "https:") throw new Error("invalid protocol");
-  } catch {
-    throw new Error("Enter a valid secure Google Maps URL.");
-  }
+  secureUrl(mapUrl, "Google Maps");
+  validateGoogleBusinessProfileUrl(googleBusinessProfileUrl);
 
   const { error } = await supabase.from("business_settings").update({
     phone_display: displayPhone(phone),
@@ -67,6 +89,7 @@ export async function updateContactDetails(formData: FormData) {
     whatsapp_e164: whatsapp,
     address,
     map_url: mapUrl,
+    google_business_profile_url: googleBusinessProfileUrl,
   }).eq("id", true);
 
   if (error) throw new Error(error.message);
