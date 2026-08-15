@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CheckCircle2, Clock3, MapPin, MessageCircle, Phone, ShieldCheck, Store } from "lucide-react";
+import { Clock3, MapPin, MessageCircle, Phone, ShieldCheck, Store } from "lucide-react";
 import { RequestForm } from "@/components/request-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -44,11 +44,6 @@ export default async function ContactPage() {
               <span className="eyebrow">Send a request</span>
               <h1>Tell us what you need.</h1>
               <p>We’ll prepare a WhatsApp message for you to review before sending.</p>
-              <div className="contact-assurance-pills">
-                <span><CheckCircle2 size={16} /> Faster reply</span>
-                <span><CheckCircle2 size={16} /> Correct requirements</span>
-                <span><CheckCircle2 size={16} /> Charges confirmed</span>
-              </div>
             </div>
             <aside className="page-hero__summary page-hero__summary--contact">
               <span className="page-hero__summary-icon"><ShieldCheck size={22} /></span>
@@ -94,11 +89,6 @@ export default async function ContactPage() {
                 <span className="eyebrow">Guided WhatsApp request</span>
                 <h2>Build your request.</h2>
                 <p>Choose the service, add the useful details, then review the message in WhatsApp.</p>
-              </div>
-              <div className="contact-flow" aria-label="Request process">
-                <span><small>01</small> Choose</span>
-                <span><small>02</small> Describe</span>
-                <span><small>03</small> Review</span>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
               <p className="contact-human-note"><MessageCircle size={16} /> Not sure where your request fits? Choose “I’m not sure which service I need”.</p>
