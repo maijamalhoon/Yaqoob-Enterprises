@@ -84,17 +84,13 @@ try {
       }
     }),
   );
-  const websiteSchema = structuredData.find((item) => item?.["@type"] === "WebSite");
-  const businessSchema = structuredData.find((item) => Array.isArray(item?.["@type"]) && item["@type"].includes("LocalBusiness"));
-  assert(websiteSchema?.name, "Homepage is missing the configured WebSite business identity.");
-  assert(businessSchema, "Homepage is missing LocalBusiness structured data.");
-  assert((await page.title()).includes(websiteSchema.name), "Homepage title should identify the configured business name.");
-  const homepageDescription = (await page.locator('meta[name="description"]').getAttribute("content")) || "";
-  assert(
-    !businessSchema?.address?.addressLocality || homepageDescription.includes(businessSchema.address.addressLocality),
-    "Homepage description should identify the configured business locality.",
-  );
-  assert((await page.locator("body").innerText()).includes(websiteSchema.name), "Homepage is missing the configured business identity.");
+  const websiteData = structuredData.find((item) => item?.["@type"] === "WebSite");
+  const businessData = structuredData.find((item) => Array.isArray(item?.["@type"]) && item["@type"].includes("LocalBusiness"));
+  assert(Boolean(websiteData?.name), "Homepage is missing configured WebSite structured data.");
+  assert(Boolean(businessData), "Homepage is missing LocalBusiness structured data.");
+  assert(Boolean(businessData?.address?.streetAddress), "Configured business location is missing from structured data.");
+  assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
+  assert((await page.locator("body").innerText()).includes(websiteData.name), "Homepage is missing the configured business identity.");
   assert((await page.locator("#services .minimal-service-item").count()) === 8, "Homepage must show all 8 service categories.");
   assert((await page.locator('[aria-roledescription="carousel"]').count()) === 0, "Homepage services should not use an autoplay carousel.");
   assert((await page.locator('.service-stage__pause').count()) === 0, "Homepage services should not ship autoplay controls.");
@@ -138,9 +134,17 @@ try {
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
   assert(await page.locator("main").count(), "Privacy page did not render its main content.");
+  assert((await page.locator("main").innerText()).includes("campaign"), "Privacy page must disclose campaign attribution cookies.");
 
-  await openHealthy(page, "/admin/login");
+  const adminLoginResponse = await openHealthy(page, "/admin/login");
   await assertNoHorizontalOverflow(page, "Desktop admin login");
+  assert(adminLoginResponse.status() < 400, "Admin login route is unavailable.");
+
+  for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history"]) {
+    const response = await page.request.get(`${baseUrl}${protectedPath}`, { maxRedirects: 0 });
+    assert([302, 303, 307, 308].includes(response.status()), `${protectedPath} must remain protected for signed-out visitors.`);
+  }
+
   assert(pageErrors.length === 0, `Browser page errors detected: ${pageErrors.join(" | ")}`);
   await desktop.close();
 
