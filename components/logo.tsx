@@ -4,9 +4,15 @@ type LogoProps = {
   compact?: boolean;
   inverse?: boolean;
   href?: string;
+  businessName?: string;
 };
 
-export function Logo({ compact = false, inverse = false, href = "/" }: LogoProps) {
+export function Logo({
+  compact = false,
+  inverse = false,
+  href = "/",
+  businessName = "Yaqoob Enterprises",
+}: LogoProps) {
   const src = compact
     ? inverse
       ? "/brand/logo-icon-white.svg"
@@ -17,7 +23,7 @@ export function Logo({ compact = false, inverse = false, href = "/" }: LogoProps
     <Link
       className={`brand-logo ${compact ? "brand-logo--compact" : ""} ${inverse ? "brand-logo--inverse" : ""}`}
       href={href}
-      aria-label="Yaqoob Enterprises home"
+      aria-label={`${businessName} home`}
     >
       {/* Direct SVG delivery is intentional here: it is tiny, reliable, and avoids unnecessary image-optimization usage. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -26,7 +32,7 @@ export function Logo({ compact = false, inverse = false, href = "/" }: LogoProps
         src={src}
         width={compact ? 468 : 940}
         height={compact ? 290 : 250}
-        alt="Yaqoob Enterprises"
+        alt={businessName}
       />
     </Link>
   );
