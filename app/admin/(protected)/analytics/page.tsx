@@ -50,20 +50,22 @@ export default async function AdminAnalyticsPage() {
   }, {})).sort((a, b) => b[1] - a[1]);
 
   const cards = [
-    ["Estimated visitors", visitors, Users],
-    ["Public page views", pageViews, BarChart3],
+    ["Visitors", visitors, Users],
+    ["Page views", pageViews, BarChart3],
     ["Contact clicks", contactClicks, MousePointerClick],
     ["Public events", rows.length, Globe2],
   ] as const;
 
   return (
-    <div className="admin-content">
-      <div className="admin-page-heading"><div><span className="eyebrow">Insights</span><h1>Website analytics</h1><p>Last 30 days. Admin activity, authenticated sessions and common bots are excluded from new data.</p></div></div>
-      <div className="admin-stats">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={20} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
-      <div className="admin-two-column">
-        <section className="admin-panel"><div className="admin-panel__heading"><div><h2>Popular pages</h2><p>Public page views by route</p></div><BarChart3 /></div><div className="rank-list">{pages.map(([page, count]) => <div key={page}><span>{page}</span><strong>{count}</strong></div>)}{pages.length === 0 && <p>No public data yet.</p>}</div></section>
-        <section className="admin-panel"><div className="admin-panel__heading"><div><h2>Approximate cities</h2><p>Public page views; location is shown only where the hosting network supplies it</p></div><Globe2 /></div><div className="rank-list">{cities.map(([city, count]) => <div key={city}><span>{city}</span><strong>{count}</strong></div>)}{cities.length === 0 && <p>No location data yet.</p>}</div></section>
-        <section className="admin-panel"><div className="admin-panel__heading"><div><h2>Device mix</h2><p>Public page views by basic device classification</p></div><MonitorSmartphone /></div><div className="rank-list">{devices.map(([device, count]) => <div key={device}><span>{device}</span><strong>{count}</strong></div>)}{devices.length === 0 && <p>No device data yet.</p>}</div></section>
+    <div className="admin-content admin-control-page">
+      <div className="admin-page-heading admin-page-heading--control">
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity from the last 30 days.</p></div>
+      </div>
+      <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
+      <div className="admin-two-column admin-insights-grid">
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><div className="rank-list">{pages.map(([page, count]) => <div key={page}><span>{page}</span><strong>{count}</strong></div>)}{pages.length === 0 && <p>No public data yet.</p>}</div></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><div className="rank-list">{cities.map(([city, count]) => <div key={city}><span>{city}</span><strong>{count}</strong></div>)}{cities.length === 0 && <p>No location data yet.</p>}</div></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MonitorSmartphone size={15} /> Devices</span><h2>Device mix</h2></div></div><div className="rank-list">{devices.map(([device, count]) => <div key={device}><span>{device}</span><strong>{count}</strong></div>)}{devices.length === 0 && <p>No device data yet.</p>}</div></section>
       </div>
     </div>
   );
