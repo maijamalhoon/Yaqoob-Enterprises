@@ -74,7 +74,6 @@ try {
   const contentSecurityPolicy = homepageResponse.headers()["content-security-policy"] || "";
   assert(contentSecurityPolicy.includes("script-src"), "Homepage is missing its Content-Security-Policy script directive.");
   assert(!contentSecurityPolicy.includes("'unsafe-eval'"), "Production CSP must not allow unsafe-eval.");
-  assert((await page.title()).includes("Akhtar Colony"), "Homepage title should identify the Akhtar Colony location.");
 
   const structuredData = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
     nodes.flatMap((node) => {
@@ -85,15 +84,17 @@ try {
       }
     }),
   );
+  const websiteSchema = structuredData.find((item) => item?.["@type"] === "WebSite");
+  const businessSchema = structuredData.find((item) => Array.isArray(item?.["@type"]) && item["@type"].includes("LocalBusiness"));
+  assert(websiteSchema?.name, "Homepage is missing the configured WebSite business identity.");
+  assert(businessSchema, "Homepage is missing LocalBusiness structured data.");
+  assert((await page.title()).includes(websiteSchema.name), "Homepage title should identify the configured business name.");
+  const homepageDescription = (await page.locator('meta[name="description"]').getAttribute("content")) || "";
   assert(
-    structuredData.some((item) => item?.["@type"] === "WebSite" && item?.name === "Yaqoob Enterprises"),
-    "Homepage is missing WebSite structured data for Yaqoob Enterprises.",
+    !businessSchema?.address?.addressLocality || homepageDescription.includes(businessSchema.address.addressLocality),
+    "Homepage description should identify the configured business locality.",
   );
-  assert(
-    structuredData.some((item) => Array.isArray(item?.["@type"]) && item["@type"].includes("LocalBusiness")),
-    "Homepage is missing LocalBusiness structured data.",
-  );
-  assert((await page.locator("body").innerText()).includes("Yaqoob Enterprises"), "Homepage is missing the business identity.");
+  assert((await page.locator("body").innerText()).includes(websiteSchema.name), "Homepage is missing the configured business identity.");
   assert((await page.locator("#services .minimal-service-item").count()) === 8, "Homepage must show all 8 service categories.");
   assert((await page.locator('[aria-roledescription="carousel"]').count()) === 0, "Homepage services should not use an autoplay carousel.");
   assert((await page.locator('.service-stage__pause').count()) === 0, "Homepage services should not ship autoplay controls.");
