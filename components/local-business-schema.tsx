@@ -4,6 +4,10 @@ import { getHourPeriods } from "@/lib/data";
 import type { BusinessHour, BusinessSettings, CoverageArea } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const socialProfiles = [
+  "https://www.facebook.com/yaqoobenterprises1",
+  "https://www.instagram.com/yaqoobenterprises1/",
+];
 
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
@@ -32,13 +36,14 @@ export function LocalBusinessSchema({
   const locationLabel = businessLocationLabel(settings.address);
   const city = businessCity(settings.address);
   const businessId = `${SITE_URL}/#business`;
+  const sameAs = [settings.google_business_profile_url, ...socialProfiles].filter(Boolean);
   const businessData = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "Store"],
     "@id": businessId,
     name: settings.business_name,
     url: SITE_URL,
-    sameAs: settings.google_business_profile_url ? [settings.google_business_profile_url] : undefined,
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
     logo: `${SITE_URL}/brand/logo-horizontal.svg`,
     image: imageUrl.startsWith("http") ? imageUrl : `${SITE_URL}${imageUrl}`,
     telephone: settings.phone_e164,
