@@ -8,9 +8,13 @@ export function TrackedLink({
   ...props
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { eventName: string; children: ReactNode }) {
   const track = () => {
+    const params = new URLSearchParams(window.location.search);
     const payload = JSON.stringify({
       eventName,
       pagePath: window.location.pathname,
+      utmSource: params.get("utm_source"),
+      utmMedium: params.get("utm_medium"),
+      utmCampaign: params.get("utm_campaign"),
     });
 
     if (navigator.sendBeacon) {
