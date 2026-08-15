@@ -1,11 +1,14 @@
-/* Homepage hero: concise headline with a lightweight CSS-only service rotation. */
+/* Homepage hero: concise headline with a lightweight CSS-only service rotation.
+ * The hero is content-sized on every device: no fixed/min viewport height and no decorative empty space.
+ */
 
 .home-hero {
-  padding: clamp(2.7rem, 3.8vw, 3.6rem) 0 clamp(2.6rem, 3.5vw, 3.4rem);
+  padding: clamp(2.45rem, 4.2svh, 3.45rem) 0;
 }
 
 .home-hero-grid.home-hero-grid {
-  gap: clamp(2rem, 3vw, 3.4rem);
+  align-items: center;
+  gap: clamp(1.85rem, 3vw, 3.3rem);
 }
 
 .home-hero-service-line {
@@ -13,7 +16,7 @@
   align-items: center;
   gap: 0.44rem;
   min-height: 1.35rem;
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.28rem;
   color: #697687;
   font-size: 0.79rem;
   font-weight: 720;
@@ -59,7 +62,7 @@
   display: block;
 }
 
-/* Keep desktop copy and shop photo visually balanced instead of floating in a tall hero. */
+/* Desktop: preserve the approved two-column composition. */
 @media (min-width: 68.001rem) {
   .home-hero.home-hero h1 > span:first-child {
     white-space: nowrap;
@@ -80,28 +83,61 @@
   100% { transform: translateY(calc(var(--hero-service-step) * -6)); }
 }
 
-@media (max-width: 68rem) {
+/* Compact laptops / landscape tablets: keep the premium desktop balance when width allows it. */
+@media (min-width: 54.001rem) and (max-width: 68rem) {
   .home-hero {
-    padding: 2.2rem 0 2.35rem;
+    padding: clamp(2rem, 4svh, 2.75rem) 0;
   }
 
   .home-hero-grid.home-hero-grid {
-    gap: 1.35rem;
+    grid-template-columns: minmax(0, 0.95fr) minmax(20rem, 1.05fr);
+    align-items: center;
+    gap: clamp(1.5rem, 2.8vw, 2.5rem);
+  }
+
+  .home-hero-visual.home-hero-visual {
+    width: 100%;
+    max-width: none;
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.32 / 1;
   }
 
   .home-hero.home-hero h1 {
     max-width: 16ch;
-    font-size: clamp(2.5rem, 6.2vw, 3.85rem);
+    font-size: clamp(2.6rem, 4.5vw, 3.25rem);
   }
 }
 
-@media (max-width: 46rem) {
+/* Portrait tablets / very large phones: stack naturally without turning the hero into a tall banner. */
+@media (max-width: 54rem) {
   .home-hero {
-    padding: 1.05rem 0 1.35rem;
+    padding: clamp(1.55rem, 3.2svh, 2.15rem) 0 clamp(1.7rem, 3.4svh, 2.3rem);
   }
 
   .home-hero-grid.home-hero-grid {
-    gap: 0.72rem;
+    gap: clamp(1rem, 2.4vw, 1.4rem);
+  }
+
+  .home-hero.home-hero h1 {
+    max-width: 17ch;
+    font-size: clamp(2.35rem, 6.3vw, 3.2rem);
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.62 / 1;
+  }
+}
+
+/* Phones: primary customer traffic. Fluid proportions instead of aggressively shrinking everything. */
+@media (max-width: 46rem) {
+  .home-hero {
+    padding: clamp(0.85rem, 2.4svh, 1.15rem) 0 clamp(1.05rem, 2.8svh, 1.35rem);
+  }
+
+  .home-hero-grid.home-hero-grid {
+    gap: clamp(0.82rem, 3vw, 1.05rem);
   }
 
   /* Header already shows open/closed state on phones; avoid repeating it in the hero. */
@@ -111,56 +147,100 @@
 
   .home-hero-service-line {
     gap: 0.36rem;
-    min-height: 1.18rem;
-    margin-bottom: 0.22rem;
-    font-size: 0.68rem;
+    min-height: 1.22rem;
+    margin-bottom: clamp(0.2rem, 1vw, 0.3rem);
+    font-size: clamp(0.67rem, 2.7vw, 0.75rem);
+    line-height: 1.2;
   }
 
   .home-hero-service-viewport {
-    --hero-service-step: 1.18rem;
-    min-width: 7.4rem;
+    --hero-service-step: 1.22rem;
+    min-width: 7.5rem;
+  }
+
+  .home-hero.home-hero h1 {
+    max-width: 18ch;
+    font-size: clamp(2rem, 8.7vw, 2.5rem);
+    line-height: 0.99;
+    letter-spacing: -0.052em;
+  }
+
+  .home-hero.home-hero p {
+    max-width: 36rem;
+    margin-top: clamp(0.52rem, 2vw, 0.68rem);
+    font-size: clamp(0.8rem, 3.15vw, 0.89rem);
+    line-height: 1.5;
+  }
+
+  .home-hero.home-hero [class*="actions"] {
+    margin-top: clamp(0.72rem, 2.8vw, 0.92rem);
+    gap: 0.38rem;
+  }
+
+  .home-hero.home-hero [class*="primaryButton"],
+  .home-hero.home-hero [class*="secondaryButton"] {
+    min-height: clamp(2.8rem, 11vw, 3rem);
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.55 / 1;
+  }
+}
+
+/* Narrow phones: keep the same hierarchy; only trim what is necessary for width. */
+@media (max-width: 21.25rem) {
+  .home-hero {
+    padding-top: 0.78rem;
+  }
+
+  .home-hero-grid.home-hero-grid {
+    gap: 0.75rem;
+  }
+
+  .home-hero-service-line {
+    font-size: 0.66rem;
+  }
+
+  .home-hero-service-viewport {
+    min-width: 7rem;
   }
 
   .home-hero.home-hero h1 {
     max-width: 17ch;
-    font-size: clamp(1.95rem, 8.8vw, 2.45rem);
-    line-height: 0.99;
+    font-size: clamp(1.95rem, 9.3vw, 2.08rem);
   }
 
   .home-hero.home-hero p {
-    margin-top: 0.58rem;
-  }
-
-  .home-hero.home-hero [class*="actions"] {
-    margin-top: 0.78rem;
-    gap: 0.34rem;
+    font-size: 0.8rem;
   }
 
   .home-hero-image.home-hero-image {
-    aspect-ratio: 1.68 / 1;
+    aspect-ratio: 1.5 / 1;
   }
 }
 
-@media (max-width: 23.5rem) {
+/* Short landscape screens: use the available width so the hero does not become vertically oversized. */
+@media (min-width: 40rem) and (max-width: 54rem) and (max-height: 34rem) {
   .home-hero {
-    padding-top: 0.95rem;
+    padding: 1rem 0 1.15rem;
   }
 
   .home-hero-grid.home-hero-grid {
-    gap: 0.65rem;
+    grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 1.05fr);
+    align-items: center;
+    gap: 1.2rem;
   }
 
-  .home-hero-service-line {
-    font-size: 0.64rem;
+  .home-hero-visual.home-hero-visual {
+    max-width: none;
   }
 
-  .home-hero-service-viewport {
-    min-width: 6.9rem;
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.35 / 1;
   }
 
   .home-hero.home-hero h1 {
-    max-width: 16ch;
-    font-size: 1.85rem;
+    font-size: clamp(2rem, 4.8vw, 2.55rem);
   }
 }
 
