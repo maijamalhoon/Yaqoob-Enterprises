@@ -12,10 +12,25 @@ const shortCategoryTitles: Record<string, string> = {
   tickets: "Tickets & Booking",
   retail: "Stationery & Accessories",
   laptop: "Laptop & Software Help",
+  "web-development-seo": "Web Development & SEO",
 };
 
 export function ServiceShowcase({ categories }: { categories: ServiceCategory[] }) {
-  if (categories.length === 0) return null;
+  const featuredServices = categories
+    .flatMap((category) =>
+      (category.services || [])
+        .filter((service) => service.is_featured && service.status !== "hidden")
+        .map((service) => ({ category, service })),
+    )
+    .sort((a, b) => {
+      const serviceOrder = a.service.display_order - b.service.display_order;
+      if (serviceOrder !== 0) return serviceOrder;
+      const categoryOrder = a.category.display_order - b.category.display_order;
+      if (categoryOrder !== 0) return categoryOrder;
+      return a.service.title.localeCompare(b.service.title);
+    });
+
+  if (featuredServices.length === 0) return null;
 
   return (
     <section className="section services-showcase minimal-services" id="services">
@@ -28,20 +43,21 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
         </div>
 
         <div className="minimal-services__list">
-          {categories.map((category) => {
-            const count = category.services?.length || 0;
-            return (
-              <Link className="minimal-service-item" key={category.id} href={`/services/${category.slug}`}>
-                <span className="minimal-service-item__icon"><ServiceIcon iconKey={category.icon_key} size={20} /></span>
-                <span className="minimal-service-item__copy">
-                  <strong>{shortCategoryTitles[category.slug] || category.title}</strong>
-                  <small>{category.description}</small>
-                </span>
-                <span className="minimal-service-item__meta">{count} {count === 1 ? "option" : "options"}</span>
-                <ArrowRight className="minimal-service-item__arrow" size={18} />
-              </Link>
-            );
-          })}
+          {featuredServices.map(({ category, service }) => (
+            <Link
+              className="minimal-service-item"
+              key={service.id}
+              href={`/services/${category.slug}/${service.slug}`}
+            >
+              <span className="minimal-service-item__icon"><ServiceIcon iconKey={category.icon_key} size={20} /></span>
+              <span className="minimal-service-item__copy">
+                <strong>{service.title}</strong>
+                <small>{service.short_description}</small>
+              </span>
+              <span className="minimal-service-item__meta">{shortCategoryTitles[category.slug] || category.title}</span>
+              <ArrowRight className="minimal-service-item__arrow" size={18} />
+            </Link>
+          ))}
         </div>
       </div>
     </section>
