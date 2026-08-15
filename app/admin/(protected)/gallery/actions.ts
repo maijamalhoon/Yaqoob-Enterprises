@@ -21,10 +21,15 @@ function refreshGallery() {
   updateTag("site-data");
   revalidatePath("/", "layout");
   revalidatePath("/admin/gallery");
+  revalidatePath("/admin/history");
 }
 
 async function makeFeatured(supabase: Awaited<ReturnType<typeof requireAdmin>>["supabase"], id: string) {
-  const { error: clearError } = await supabase.from("gallery_images").update({ is_featured: false }).neq("id", id);
+  const { error: clearError } = await supabase
+    .from("gallery_images")
+    .update({ is_featured: false })
+    .eq("is_featured", true)
+    .neq("id", id);
   if (clearError) throw new Error(clearError.message);
 
   const { error: featureError } = await supabase
@@ -118,15 +123,15 @@ export async function deleteGalleryImage(formData: FormData) {
   const id = text(formData, "id");
   const { data: image, error: lookupError } = await supabase
     .from("gallery_images")
-    .select("storage_path,is_featured")
+    .select("is_featured")
     .eq("id", id)
     .single();
   if (lookupError) throw new Error(lookupError.message);
 
   const { error } = await supabase.from("gallery_images").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  if (image?.storage_path) await supabase.storage.from("shop-media").remove([image.storage_path]);
 
+  // Keep the storage object so a safe audit rollback can restore the deleted image metadata and photo.
   if (image?.is_featured) await featureNextRealImage(supabase);
   refreshGallery();
 }
