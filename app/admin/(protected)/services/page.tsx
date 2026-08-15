@@ -9,7 +9,7 @@ const statuses = [
   ["appointment_only", "Book first"],
   ["temporarily_unavailable", "Temporarily paused"],
   ["coming_soon", "Coming soon"],
-  ["hidden", "Hidden"],
+  ["hidden", "Hidden from website"],
 ] as const;
 
 const iconOptions = [
@@ -60,12 +60,12 @@ export default async function AdminServicesPage() {
         <div>
           <span className="eyebrow">Website content</span>
           <h1>Services</h1>
-          <p>Categories, website visibility, service wording, availability and customer options.</p>
+          <p>Status controls whether a service is public. “Show in homepage Top services” only controls the main homepage list.</p>
         </div>
         <div className="admin-heading-metrics" aria-label="Service content summary">
           <span><strong>{activeCategories.length}</strong> categories</span>
-          <span><strong>{websiteServices.length}</strong> on website</span>
-          <span><strong>{publicServices.length}</strong> SEO/public</span>
+          <span><strong>{websiteServices.length}</strong> homepage Top</span>
+          <span><strong>{publicServices.length}</strong> public services</span>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export default async function AdminServicesPage() {
             <label>Title<input name="title" maxLength={120} required /></label>
             <label>URL slug<input name="slug" placeholder="service-name" required pattern="[a-zA-Z0-9-]+" /></label>
             <label>Order<input type="number" min="0" name="display_order" defaultValue={serviceList.length} /></label>
-            <label className="checkbox-line"><input type="checkbox" name="is_featured" /> Show on main website</label>
+            <label className="checkbox-line"><input type="checkbox" name="is_featured" /> Show in homepage Top services</label>
             <label className="admin-span-2">Short description<textarea name="short_description" rows={2} required /></label>
             <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} /></label>
             <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} /></label>
@@ -117,7 +117,7 @@ export default async function AdminServicesPage() {
               <div className="admin-service-group__head">
                 <span className="admin-service-group__icon"><ServiceIcon iconKey={category.icon_key} size={21} /></span>
                 <div className="admin-service-group__title">
-                  <div><h2>{category.title}</h2><span className={`admin-state ${category.is_active ? "is-live" : "is-hidden"}`}>{category.is_active ? <Eye size={13} /> : <EyeOff size={13} />}{category.is_active ? "Public" : "Hidden"}</span></div>
+                  <div><h2>{category.title}</h2><span className={`admin-state ${category.is_active ? "is-live" : "is-hidden"}`}>{category.is_active ? <Eye size={13} /> : <EyeOff size={13} />}{category.is_active ? "Enabled" : "Hidden"}</span></div>
                   <p>{categoryServices.length} {categoryServices.length === 1 ? "service" : "services"}</p>
                 </div>
                 <details className="admin-inline-editor">
@@ -128,7 +128,7 @@ export default async function AdminServicesPage() {
                     <label>Icon<select name="icon_key" defaultValue={category.icon_key}>{iconOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                     <label>Order<input type="number" min="0" name="display_order" defaultValue={category.display_order} /></label>
                     <label className="admin-span-2">Description<textarea name="description" rows={2} defaultValue={category.description} /></label>
-                    <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_active" defaultChecked={category.is_active} /> Show this category on the website</label>
+                    <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_active" defaultChecked={category.is_active} /> Enable this category when it has public services</label>
                     <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save category</AdminSubmitButton></div>
                   </form>
                 </details>
@@ -145,7 +145,7 @@ export default async function AdminServicesPage() {
                           <small>{service.short_description}</small>
                         </span>
                         <span className="admin-service-card__meta">
-                          {service.is_featured && <span className="admin-status admin-status--active">Website</span>}
+                          {service.is_featured && service.status !== "hidden" && <span className="admin-status admin-status--active">Top</span>}
                           <span className={`admin-status admin-status--${service.status}`}>{statusLabel(service.status)}</span>
                           {modes.length > 0 && <small>{modes.join(" · ")}</small>}
                         </span>
@@ -158,7 +158,7 @@ export default async function AdminServicesPage() {
                           <label>Category<select name="category_id" defaultValue={service.category_id}>{categoryList.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
                           <label>Status<select name="status" defaultValue={service.status}>{statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                           <label>Order<input type="number" min="0" name="display_order" defaultValue={service.display_order} /></label>
-                          <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={service.is_featured} /> Show on main website</label>
+                          <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={service.is_featured} /> Show in homepage Top services</label>
                           <label className="admin-span-2">Short description<textarea name="short_description" rows={2} defaultValue={service.short_description} /></label>
                           <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} defaultValue={service.detailed_description} /></label>
                           <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} defaultValue={(service.requirements || []).join("\n")} /></label>
@@ -176,7 +176,7 @@ export default async function AdminServicesPage() {
                         </form>
                         <form className="admin-destructive-row" action={deleteService}>
                           <input type="hidden" name="id" value={service.id} />
-                          <AdminDeleteButton label="Delete service" confirmMessage={`Delete “${service.title}”? This removes it from the public website and cannot be undone.`} />
+                          <AdminDeleteButton label="Delete service" confirmMessage={`Delete “${service.title}”? This permanently removes the service record and cannot be undone.`} />
                         </form>
                       </div>
                     </details>
