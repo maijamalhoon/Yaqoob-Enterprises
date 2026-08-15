@@ -4,6 +4,7 @@
   background: #fff;
 }
 
+/* Homepage layout is tuned mobile-first: narrow phones, large phones/tablets, then desktop. */
 .hero {
   position: relative;
   overflow: hidden;
