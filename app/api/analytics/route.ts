@@ -7,9 +7,17 @@ const allowedEvents = new Set(["page_view", "whatsapp_click", "call_click", "dir
 const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|uptimerobot/i;
 const rateLimitWindowMs = 60_000;
 const rateLimitMaximum = 30;
+const attributionMaxAge = 60 * 60 * 24 * 30;
 const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
 
 type HeaderReader = { get(name: string): string | null };
+type AnalyticsPayload = {
+  eventName?: string;
+  pagePath?: string;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+};
 
 function deviceType(userAgent: string) {
   if (/tablet|ipad/i.test(userAgent)) return "tablet";
@@ -33,6 +41,12 @@ function safeReferrerHost(value: string | null) {
   } catch {
     return null;
   }
+}
+
+function trackingValue(value: unknown, maxLength: number) {
+  if (typeof value !== "string") return null;
+  const normalized = value.trim().replace(/[\u0000-\u001f\u007f]/g, "").slice(0, maxLength);
+  return normalized || null;
 }
 
 function clientIp(requestHeaders: HeaderReader) {
@@ -71,9 +85,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 415 });
   }
 
-  let body: { eventName?: string; pagePath?: string };
+  let body: AnalyticsPayload;
   try {
-    body = (await request.json()) as { eventName?: string; pagePath?: string };
+    body = (await request.json()) as AnalyticsPayload;
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
@@ -117,6 +131,30 @@ export async function POST(request: Request) {
       });
     }
 
+    const incomingSource = trackingValue(body.utmSource, 80);
+    const incomingMedium = trackingValue(body.utmMedium, 80);
+    const incomingCampaign = trackingValue(body.utmCampaign, 120);
+    const attributionCookieOptions = {
+      httpOnly: true,
+      sameSite: "lax" as const,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: attributionMaxAge,
+      path: "/",
+    };
+
+    let utmSource = trackingValue(cookieStore.get("ye_utm_source")?.value, 80);
+    let utmMedium = trackingValue(cookieStore.get("ye_utm_medium")?.value, 80);
+    let utmCampaign = trackingValue(cookieStore.get("ye_utm_campaign")?.value, 120);
+
+    if (incomingSource) {
+      utmSource = incomingSource;
+      utmMedium = incomingMedium;
+      utmCampaign = incomingCampaign;
+      cookieStore.set("ye_utm_source", incomingSource, attributionCookieOptions);
+      cookieStore.set("ye_utm_medium", incomingMedium || "", { ...attributionCookieOptions, maxAge: incomingMedium ? attributionMaxAge : 0 });
+      cookieStore.set("ye_utm_campaign", incomingCampaign || "", { ...attributionCookieOptions, maxAge: incomingCampaign ? attributionMaxAge : 0 });
+    }
+
     const sessionHash = createHash("sha256").update(sessionId).digest("hex");
     const limitKey = `${clientIp(requestHeaders)}:${sessionHash.slice(0, 20)}`;
     if (isRateLimited(limitKey)) {
@@ -134,6 +172,9 @@ export async function POST(request: Request) {
       city_name: safeDecode(requestHeaders.get("x-vercel-ip-city"))?.slice(0, 120) || null,
       device_type: deviceType(userAgent),
       session_hash: sessionHash,
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
     });
 
     if (error) {
