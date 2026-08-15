@@ -4,6 +4,7 @@ import "./brand.css";
 import "./design-system.css";
 import "./admin-shell.css";
 import "./mobile-ui.css";
+import "./global-polish.css";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
 
