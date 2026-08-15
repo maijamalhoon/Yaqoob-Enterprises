@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/env";
+import { businessCity, businessLocationLabel } from "@/lib/business-display";
 import { getHourPeriods } from "@/lib/data";
 import type { BusinessHour, BusinessSettings, CoverageArea } from "@/lib/types";
 
@@ -28,6 +29,8 @@ export function LocalBusinessSchema({
     })),
   );
 
+  const locationLabel = businessLocationLabel(settings.address);
+  const city = businessCity(settings.address);
   const businessId = `${SITE_URL}/#business`;
   const businessData = {
     "@context": "https://schema.org",
@@ -38,15 +41,14 @@ export function LocalBusinessSchema({
     logo: `${SITE_URL}/brand/logo-horizontal.svg`,
     image: imageUrl.startsWith("http") ? imageUrl : `${SITE_URL}${imageUrl}`,
     telephone: settings.phone_e164,
-    description:
-      "Printing, document preparation, online applications, biometric support, payments, ticket booking, stationery and laptop support in Akhtar Colony, Karachi.",
+    description: `${settings.tagline}. Local services in ${locationLabel}.`,
     priceRange: "PKR",
     currenciesAccepted: "PKR",
     hasMap: settings.map_url,
     address: {
       "@type": "PostalAddress",
       streetAddress: settings.address,
-      addressLocality: "Karachi",
+      addressLocality: city,
       addressRegion: "Sindh",
       addressCountry: "PK",
     },
