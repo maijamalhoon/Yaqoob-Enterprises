@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 import { DesktopNavigation } from "@/components/desktop-navigation";
 import { Logo } from "@/components/logo";
 import { MobileNavigation } from "@/components/mobile-navigation";
@@ -25,7 +25,6 @@ export function SiteHeader({
         <div className="container site-header__inner">
           <div className="header-brand-cluster">
             <Logo />
-            <span className="header-location"><MapPin size={13} /> Akhtar Colony</span>
             {statusText && (
               <span className={`mobile-header-status ${isOpen ? "is-open" : ""}`} title={statusText}>
                 <span aria-hidden="true" />
