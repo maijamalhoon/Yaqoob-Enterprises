@@ -81,22 +81,6 @@ summary {
 .button:hover { transform: translateY(-1px); }
 .button:active { transform: translateY(0) scale(0.99); }
 
-.button--primary,
-.header-text-action--primary,
-.mobile-menu-action--primary {
-  border-color: var(--navy);
-  background: var(--navy);
-  box-shadow: none;
-}
-
-.button--primary:hover,
-.header-text-action--primary:hover,
-.mobile-menu-action--primary:hover {
-  border-color: #062b64;
-  background: #062b64;
-  box-shadow: 0 8px 20px rgba(0, 31, 86, 0.12);
-}
-
 .button--secondary,
 .button--ghost,
 .header-text-action,
@@ -112,6 +96,25 @@ summary {
   border-color: var(--line-strong);
   background: #fafbfd;
   box-shadow: var(--shadow-xs);
+}
+
+/* Keep primary rules after generic action rules so white-on-white regressions cannot occur. */
+.button--primary,
+.header-text-action.header-text-action--primary,
+.mobile-menu-action.mobile-menu-action--primary {
+  border-color: var(--navy);
+  color: #fff;
+  background: var(--navy);
+  box-shadow: none;
+}
+
+.button--primary:hover,
+.header-text-action.header-text-action--primary:hover,
+.mobile-menu-action.mobile-menu-action--primary:hover {
+  border-color: #062b64;
+  color: #fff;
+  background: #062b64;
+  box-shadow: 0 8px 20px rgba(0, 31, 86, 0.12);
 }
 
 /* Header and navigation */
@@ -188,7 +191,12 @@ summary {
 
 /* Service discovery */
 .minimal-services {
+  padding: clamp(3.5rem, 5.4vw, 4.8rem) 0;
   background: #fff;
+}
+
+.minimal-services__heading {
+  margin-bottom: clamp(1.35rem, 2.4vw, 1.8rem);
 }
 
 .minimal-services__heading h2 {
@@ -203,6 +211,8 @@ summary {
 .minimal-services__list { gap: 0.7rem; }
 
 .minimal-service-item {
+  min-height: 7.35rem;
+  padding: 1rem 1.05rem;
   border-color: var(--line);
   border-radius: 0.78rem;
   box-shadow: none;
@@ -503,13 +513,58 @@ tbody tr:hover td { background: #fafbfd; }
   background: #fafbfd;
 }
 
-@media (max-width: 46rem) {
-  :root { --header-h: 4.2rem; }
+/* Large tablet / compact desktop: avoid awkward half-desktop layouts. */
+@media (max-width: 68rem) {
+  .site-header__inner { gap: 0.8rem; }
+  .minimal-services { padding-block: 3.7rem; }
+}
 
-  .container { width: min(calc(100% - 1.15rem), var(--container)); }
+/* Tablet and landscape-phone layouts. */
+@media (max-width: 54rem) {
+  .minimal-services__heading {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 0.65rem;
+  }
+
+  .minimal-services__heading > p {
+    justify-self: start;
+    max-width: 39rem;
+  }
+
+  .minimal-services__list {
+    grid-template-columns: 1fr;
+    gap: 0.58rem;
+  }
+
+  .minimal-service-item {
+    min-height: 6.65rem;
+    padding: 0.9rem 0.95rem;
+  }
+}
+
+@media (max-width: 46rem) {
+  :root { --header-h: 4.05rem; }
+
+  .container { width: min(calc(100% - 1.05rem), var(--container)); }
+
+  .site-header__inner,
+  .site-header { min-height: var(--header-h); height: var(--header-h); }
+
+  .brand-logo__image { width: 9rem !important; }
+
+  .mobile-header-status {
+    font-size: 0.64rem;
+    gap: 0.3rem;
+  }
+
+  .mobile-nav summary {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
 
   .mobile-nav__panel {
-    padding-inline: 0.8rem;
+    padding-inline: 0.7rem;
   }
 
   .minimal-services,
@@ -519,20 +574,80 @@ tbody tr:hover td { background: #fafbfd; }
     scroll-margin-top: calc(var(--header-h) + 0.5rem);
   }
 
+  .minimal-services { padding-block: 2.65rem; }
+
+  .minimal-services__heading {
+    gap: 0.5rem;
+    margin-bottom: 1.05rem;
+  }
+
+  .minimal-services__heading h2 {
+    font-size: clamp(1.85rem, 8.5vw, 2.35rem);
+    line-height: 1.04;
+  }
+
+  .minimal-services__heading > p {
+    font-size: 0.8rem;
+    line-height: 1.58;
+  }
+
   .minimal-service-item,
   .service-detail-card--premium,
   .contact-details-card--premium,
   .form-card--premium,
   .page-hero__summary {
-    border-radius: 0.72rem;
+    border-radius: 0.68rem;
   }
+
+  .minimal-service-item {
+    min-height: 6.15rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    gap: 0.15rem 0.7rem;
+    padding: 0.75rem 0.72rem;
+  }
+
+  .minimal-service-item__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.58rem;
+  }
+
+  .minimal-service-item__copy strong {
+    font-size: 0.85rem;
+    line-height: 1.28;
+  }
+
+  .minimal-service-item__copy small {
+    font-size: 0.71rem;
+    line-height: 1.46;
+  }
+
+  .minimal-service-item__meta { font-size: 0.63rem; }
+  .minimal-service-item__arrow { width: 1rem; height: 1rem; }
 
   .page-hero__pattern { opacity: 0.7; }
 
   .admin-content {
-    width: min(calc(100% - 1rem), 74rem);
-    margin-top: 1rem;
+    width: min(calc(100% - 0.9rem), 74rem);
+    margin-top: 0.9rem;
   }
+}
+
+/* Narrow phones: preserve readable hierarchy without oversized headings. */
+@media (max-width: 23.5rem) {
+  :root { --header-h: 3.9rem; }
+
+  .container { width: min(calc(100% - 0.8rem), var(--container)); }
+  .brand-logo__image { width: 8.25rem !important; }
+  .mobile-header-status { font-size: 0.6rem; }
+  .mobile-header-status > span { width: 0.36rem; height: 0.36rem; }
+  .mobile-nav summary { width: 2.45rem; height: 2.45rem; }
+
+  .minimal-services { padding-block: 2.3rem; }
+  .minimal-services__heading h2 { font-size: 1.75rem; }
+  .minimal-service-item { padding-inline: 0.65rem; gap: 0.15rem 0.58rem; }
+  .minimal-service-item__copy strong { font-size: 0.8rem; }
+  .minimal-service-item__copy small { font-size: 0.68rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
