@@ -13,6 +13,7 @@ export type BusinessSettings = {
   whatsapp_e164: string;
   address: string;
   map_url: string;
+  google_business_profile_url: string;
   pricing_message: string;
   concept_image_notice: string;
 };
