@@ -36,7 +36,15 @@ async function assertHomepage(page, label, { columns, mobileNav, stackedHero }) 
 
   const serviceCards = page.locator("#services .minimal-service-item");
   assert((await serviceCards.count()) === expectedMainServices, `${label}: expected ${expectedMainServices} admin-selected main services.`);
+  const serviceSlugs = await serviceCards.evaluateAll((cards) => cards.map((card) => card.getAttribute("data-service-slug")));
+  assert(serviceSlugs[0] === "agreements-document-preparation", `${label}: agreements must be the first priority service.`);
+  assert(serviceSlugs[1] === "general-biometric-esahulat", `${label}: biometric must be the second priority service.`);
+  assert(serviceSlugs.indexOf("passport-size-photos") > serviceSlugs.indexOf("urdu-english-typing"), `${label}: passport photos should remain below core document services.`);
+  assert(serviceSlugs.indexOf("website-development-full-stack-seo") > serviceSlugs.indexOf("cash-deposit-withdrawal-transfer"), `${label}: website and IT support should remain a lower-priority service.`);
   assert((await serviceCards.first().getAttribute("href"))?.includes("/services/"), `${label}: main service cards must link to service detail pages.`);
+  assert((await serviceCards.first().innerText()).includes("Agreements, Affidavits"), `${label}: priority agreement copy is missing.`);
+  assert((await page.locator(".home-hero h1").innerText()).includes("Agreements"), `${label}: homepage hero must lead with the priority document service.`);
+  assert((await page.locator(".home-hero-service-track").count()) === 0, `${label}: homepage hero must not use a rotating service ticker.`);
   assert((await page.locator('[aria-roledescription="carousel"]').count()) === 0, `${label}: services must not use an autoplay carousel.`);
   assert((await page.locator("#get-in-touch form[data-home-contact-form]").count()) === 1, `${label}: homepage quick-request form is missing.`);
   assert((await page.locator("footer.site-footer--minimal").count()) === 1, `${label}: homepage footer is missing.`);
@@ -45,6 +53,8 @@ async function assertHomepage(page, label, { columns, mobileNav, stackedHero }) 
   const mobileMenuDisplay = await page.locator(".mobile-nav").evaluate((node) => getComputedStyle(node).display);
   if (mobileNav) {
     assert(mobileMenuDisplay !== "none", `${label}: mobile navigation should be available.`);
+    const firstServiceBox = await serviceCards.first().boundingBox();
+    assert(firstServiceBox && firstServiceBox.height >= 72, `${label}: service cards need a comfortable mobile tap target.`);
   } else {
     assert(mobileMenuDisplay === "none", `${label}: desktop should not show mobile navigation.`);
     const whatsapp = page.locator(".header-text-action--primary");

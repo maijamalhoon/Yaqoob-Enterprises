@@ -9,11 +9,8 @@ import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
 import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
+import { sortCategoriesByCustomerPriority } from "@/lib/service-presentation";
 import styles from "./home.module.css";
-
-function compactServiceLabel(title: string) {
-  return title.split(/,|&/)[0]?.trim() || title;
-}
 
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery } = await getSiteData();
@@ -25,9 +22,8 @@ export default async function HomePage() {
   const schemaImageUrl = featuredImage ? imageUrl : "/brand/logo-horizontal.svg";
   const hoursText = getCurrentBusinessStatus(hours);
   const locationLabel = businessLocationLabel(settings.address);
-  const heroServices = categories.slice(0, 6).map((category) => compactServiceLabel(category.title));
-  const rotatingServices = heroServices.length > 0 ? heroServices : ["Services"];
-  const contactCategories = categories.map(({ id, slug, title }) => ({ id, slug, title }));
+  const contactCategories = sortCategoriesByCustomerPriority(categories)
+    .map(({ id, slug, title }) => ({ id, slug, title }));
 
   return (
     <div className={styles.page}>
@@ -45,26 +41,18 @@ export default async function HomePage() {
                 <span><MapPin size={14} /> {locationLabel}</span>
               </div>
 
-              <div
-                className="home-hero-service-line"
-                aria-label={`Local help for ${rotatingServices.join(", ")}`}
-              >
-                <span className="home-hero-service-label">Local help for</span>
-                <span className="home-hero-service-viewport" aria-hidden="true">
-                  <span className="home-hero-service-track">
-                    {rotatingServices.map((service) => <span key={service}>{service}</span>)}
-                    <span>{rotatingServices[0]}</span>
-                  </span>
-                </span>
+              <div className={styles.priorityLine}>
+                <span className={styles.priorityMark} aria-hidden="true" />
+                <span>Documents · Biometrics · Digital help</span>
               </div>
 
               <h1>
-                <span>NADRA e-Sahulat, printing & online services</span>
+                <span>Agreements, biometrics & digital services</span>
                 <span>in Akhtar Colony, Karachi.</span>
               </h1>
 
               <p className={styles.lead}>
-                Check requirements, availability and charges before you visit.
+                Document preparation, NADRA e-Sahulat assistance and everyday digital help—with doorstep biometric visits across selected Karachi South areas.
               </p>
 
               <div className={styles.actions}>
@@ -80,6 +68,11 @@ export default async function HomePage() {
                 <Link className={styles.secondaryButton} href="#services">
                   Browse services
                 </Link>
+              </div>
+
+              <div className={styles.assurances} aria-label="Service assurances">
+                <span><Check size={15} aria-hidden="true" /> Requirements confirmed first</span>
+                <span><MapPin size={15} aria-hidden="true" /> Selected Karachi South doorstep visits</span>
               </div>
             </div>
 

@@ -37,10 +37,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
       `Online job applications and forms, Urdu and English typing, and CV preparation at ${businessName} in ${location}. Confirm the required documents and portal details before visiting.`,
   },
   documents: {
-    heading: (location) => `Agreements & Document Preparation in ${location}`,
-    title: (businessName) => `Agreement & Document Preparation Karachi | ${businessName}`,
+    heading: (location) => `Agreements, Affidavits & Document Preparation in ${location}`,
+    title: (businessName) => `Agreements & Affidavit Preparation Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Document typing, formatting, agreement preparation and printing assistance at ${businessName} in ${location}. Share the document type and required details before visiting.`,
+      `Sale/purchase and rent agreements, undertakings, affidavits, Urdu and English document preparation and printing assistance at ${businessName} in ${location}.`,
   },
   biometric: {
     heading: (location) => `NADRA e-Sahulat & Biometric Verification in ${location}`,
@@ -73,10 +73,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
       `Windows setup, drivers, software installation and basic laptop troubleshooting at ${businessName} in ${location}. Send the device issue first to confirm support.`,
   },
   "web-development-seo": {
-    heading: (location) => `Web Development & SEO Services in ${location}`,
-    title: (businessName) => `Website Development & SEO Services Karachi | ${businessName}`,
+    heading: (location) => `Website Development & IT Support in ${location}`,
+    title: (businessName) => `Website Development & IT Support Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Business websites, full-stack web development, redesign, maintenance and practical SEO services from ${businessName} in ${location}. Discuss scope, features, domain and hosting requirements before work begins.`,
+      `Business websites, redesign, maintenance, practical SEO, Windows setup and licensed software installation support from ${businessName} in ${location}.`,
   },
 };
 
@@ -180,17 +180,17 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "agreements-document-preparation": {
-    heading: (location) => `Agreement & Document Preparation in ${location}`,
-    title: (businessName) => `Agreement & Document Preparation Karachi | ${businessName}`,
+    heading: (location) => `Agreements, Affidavits & Document Preparation in ${location}`,
+    title: (businessName) => `Agreements & Affidavit Preparation Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Agreement typing, document preparation, formatting and printing assistance at ${businessName} in ${location}. Share the document type, parties and required details before visiting.`,
+      `Sale/purchase and rent agreements, undertakings, affidavits, Urdu and English document preparation and printing assistance at ${businessName} in ${location}. Share the document type and required details first.`,
     intro:
-      "Prepare clean documents and agreements from the information you provide. This service covers typing, formatting and document preparation; legal advice should be taken from a qualified professional where required.",
+      "Prepare clear, print-ready documents from the information you provide, including common agreements, undertakings and affidavit drafts. This service covers document preparation, typing and formatting; legal advice, notarization and attestation should be obtained from an appropriately qualified or authorized professional where required.",
     commonRequests: [
-      "Agreement typing and formatting",
-      "General document preparation",
-      "Draft cleanup and print-ready formatting",
-      "Document printing after preparation",
+      "Sale and purchase agreement preparation",
+      "Rent agreement preparation",
+      "Undertakings and affidavit drafts",
+      "Urdu and English document typing and formatting",
     ],
   },
   "general-biometric-esahulat": {
@@ -334,17 +334,17 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "website-development-full-stack-seo": {
-    heading: (location) => `Website Development, Full-Stack & SEO Services in ${location}`,
-    title: (businessName) => `Website Developer & SEO Services Karachi | ${businessName}`,
+    heading: (location) => `Website Development & IT Support in ${location}`,
+    title: (businessName) => `Website Development & IT Support Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Full-stack website development, business websites, redesign, maintenance and practical SEO services from ${businessName} in ${location}. Discuss pages, features, integrations, domain and hosting needs before starting.`,
+      `Business websites, redesign, maintenance, technical SEO, Windows setup and licensed software installation support from ${businessName} in ${location}. Discuss requirements before starting.`,
     intro:
-      "Build or improve a business website with a clear scope covering design, frontend and backend development, integrations, deployment and practical search optimization. Projects are quoted according to features, content and delivery requirements.",
+      "Build or improve a business website, maintain an existing site, or request practical computer setup support. Website projects are quoted by scope, while Windows and software assistance depends on the device, license and required configuration.",
     commonRequests: [
-      "Business website development",
-      "Full-stack web application development",
-      "Website redesign and maintenance",
-      "Technical SEO and Google Search setup",
+      "Business website design and development",
+      "Website redesign, maintenance and technical SEO",
+      "Windows setup and driver assistance",
+      "Licensed software installation and configuration",
     ],
   },
 };

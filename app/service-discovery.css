@@ -314,3 +314,54 @@
     transition: none;
   }
 }
+
+
+/* Priority services: subtle hierarchy without turning the list into a promotional grid. */
+.minimal-services__heading > p {
+  margin: 0;
+}
+
+.minimal-service-item--priority {
+  border-color: #c9dde0;
+  background: linear-gradient(145deg, #ffffff 0%, #f4f9f9 100%);
+}
+
+.minimal-service-item--priority:hover {
+  border-color: #a9cbd0;
+  background: linear-gradient(145deg, #ffffff 0%, #f0f7f7 100%);
+}
+
+.minimal-service-item--priority .minimal-service-item__icon {
+  border-color: var(--navy);
+  color: #fff;
+  background: var(--navy);
+}
+
+.minimal-service-item--priority .minimal-service-item__meta {
+  color: #4f747b;
+}
+
+@media (max-width: 46rem) {
+  .minimal-services__heading > p {
+    max-width: 32rem;
+  }
+
+  .minimal-service-item--priority {
+    border-color: #c6dade;
+  }
+}
+
+@media (hover: none) {
+  .minimal-service-item--priority,
+  .minimal-service-item--priority:hover {
+    border-color: #c6dade;
+    background: linear-gradient(145deg, #ffffff 0%, #f4f9f9 100%);
+  }
+
+  .minimal-service-item--priority .minimal-service-item__icon,
+  .minimal-service-item--priority:hover .minimal-service-item__icon {
+    border-color: var(--navy);
+    color: #fff;
+    background: var(--navy);
+  }
+}
