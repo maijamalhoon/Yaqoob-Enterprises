@@ -3,28 +3,32 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
-const description = "Plain-language privacy information for the Yaqoob Enterprises website and admin centre.";
+export async function generateMetadata(): Promise<Metadata> {
+  const { settings } = await getSiteData();
+  const description = `Plain-language privacy information for the ${settings.business_name} website and admin centre.`;
+  const socialTitle = `Privacy | ${settings.business_name}`;
 
-export const metadata: Metadata = {
-  title: "Privacy",
-  description,
-  alternates: { canonical: "/privacy" },
-  openGraph: {
-    type: "website",
-    locale: "en_PK",
-    siteName: "Yaqoob Enterprises",
-    url: "/privacy",
-    title: "Privacy | Yaqoob Enterprises",
+  return {
+    title: "Privacy",
     description,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Yaqoob Enterprises privacy information" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Privacy | Yaqoob Enterprises",
-    description,
-    images: ["/opengraph-image"],
-  },
-};
+    alternates: { canonical: "/privacy" },
+    openGraph: {
+      type: "website",
+      locale: "en_PK",
+      siteName: settings.business_name,
+      url: "/privacy",
+      title: socialTitle,
+      description,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${settings.business_name} privacy information` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: socialTitle,
+      description,
+      images: ["/opengraph-image"],
+    },
+  };
+}
 
 export default async function PrivacyPage() {
   const { settings, categories, hours } = await getSiteData();
