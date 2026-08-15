@@ -1,0 +1,53 @@
+.admin-topbar {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-topbar__identity {
+  display: grid;
+  text-align: left !important;
+}
+
+.admin-topbar__actions {
+  display: flex !important;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.admin-topbar__actions a,
+.admin-topbar__actions button {
+  min-height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  color: #455365;
+  background: #fff;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 720;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-topbar__actions a:hover,
+.admin-topbar__actions button:hover {
+  border-color: var(--line-strong);
+  color: var(--navy);
+  background: #f8fafb;
+}
+
+.admin-topbar__actions form { margin: 0; }
+
+@media (max-width: 46rem) {
+  .admin-topbar__identity span { display: none; }
+  .admin-topbar__actions a,
+  .admin-topbar__actions button {
+    min-height: 2.35rem;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.68rem;
+  }
+}
