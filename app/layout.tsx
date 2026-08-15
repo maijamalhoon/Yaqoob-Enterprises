@@ -11,37 +11,42 @@ import "./service-page-polish.css";
 import "./quick-request-polish.css";
 import "./guided-request-polish.css";
 import { PageTracker } from "@/components/page-tracker";
+import { businessLocationLabel } from "@/lib/business-display";
+import { getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 
-const description =
-  "Printing, biometric verification, online forms, documentation, payments, ticket booking, stationery and laptop support in Akhtar Colony, Karachi.";
-const homeTitle = "Yaqoob Enterprises | Printing & Digital Services in Akhtar Colony";
+export async function generateMetadata(): Promise<Metadata> {
+  const { settings } = await getSiteData();
+  const location = businessLocationLabel(settings.address);
+  const description = `Printing, biometric verification, online forms, documentation, payments, ticket booking, stationery and laptop support in ${location}.`;
+  const homeTitle = `${settings.business_name} | ${settings.tagline}`;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  applicationName: "Yaqoob Enterprises",
-  title: {
-    default: homeTitle,
-    template: "%s | Yaqoob Enterprises",
-  },
-  description,
-  alternates: { canonical: "/" },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  openGraph: {
-    type: "website",
-    locale: "en_PK",
-    siteName: "Yaqoob Enterprises",
-    url: "/",
-    title: homeTitle,
+  return {
+    metadataBase: new URL(SITE_URL),
+    applicationName: settings.business_name,
+    title: {
+      default: homeTitle,
+      template: `%s | ${settings.business_name}`,
+    },
     description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: homeTitle,
-    description,
-  },
-  icons: { icon: "/icon.svg" },
-};
+    alternates: { canonical: "/" },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+    openGraph: {
+      type: "website",
+      locale: "en_PK",
+      siteName: settings.business_name,
+      url: "/",
+      title: homeTitle,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: homeTitle,
+      description,
+    },
+    icons: { icon: "/icon.svg" },
+  };
+}
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
