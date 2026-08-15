@@ -150,7 +150,7 @@ try {
     { label: "390px phone", width: 390, height: 844, mobileNav: true, servicesColumns: 1, stackedHero: true },
     { label: "430px phone", width: 430, height: 932, mobileNav: true, servicesColumns: 1, stackedHero: true },
     { label: "768px tablet", width: 768, height: 1024, mobileNav: true, servicesColumns: 1, stackedHero: true },
-    { label: "1024px tablet", width: 1024, height: 768, mobileNav: true, servicesColumns: 2, stackedHero: true },
+    { label: "1024px landscape tablet", width: 1024, height: 768, mobileNav: true, servicesColumns: 2, stackedHero: false },
     { label: "1366px laptop", width: 1366, height: 768, mobileNav: false, servicesColumns: 2, stackedHero: false },
     { label: "1440px desktop", width: 1440, height: 900, mobileNav: false, servicesColumns: 2, stackedHero: false },
     { label: "1920px desktop", width: 1920, height: 1080, mobileNav: false, servicesColumns: 2, stackedHero: false },
