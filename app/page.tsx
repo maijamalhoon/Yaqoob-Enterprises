@@ -75,12 +75,6 @@ export default async function HomePage() {
                   Browse services
                 </Link>
               </div>
-
-              <div className={styles.heroNote} aria-label="Service highlights">
-                <span>Requirements checked first</span>
-                <span>Charges confirmed before work</span>
-                <span>Local support in Akhtar Colony</span>
-              </div>
             </div>
 
             <div className={`${styles.visual} home-hero-visual`}>
@@ -95,10 +89,6 @@ export default async function HomePage() {
                     ? { objectPosition: `${featuredImage.focal_x || 50}% ${featuredImage.focal_y || 50}%` }
                     : { objectFit: "contain", padding: "18%" }}
                 />
-              </div>
-              <div className={styles.imageCaption}>
-                <span>Yaqoob Enterprises</span>
-                <span><MapPin size={13} /> Akhtar Colony</span>
               </div>
             </div>
           </div>
