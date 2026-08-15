@@ -365,3 +365,30 @@
     background: var(--navy);
   }
 }
+/* Compact laptops / landscape tablets: preserve the premium two-column hero without restoring the old ticker. */
+@media (min-width: 54.001rem) and (max-width: 68rem) {
+  .home-hero.home-hero {
+    padding: clamp(2rem, 4svh, 2.75rem) 0;
+  }
+
+  .home-hero-grid.home-hero-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(20rem, 1.05fr);
+    align-items: center;
+    gap: clamp(1.5rem, 2.8vw, 2.5rem);
+  }
+
+  .home-hero-visual.home-hero-visual {
+    width: 100%;
+    max-width: none;
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.32 / 1;
+  }
+
+  .home-hero.home-hero h1 {
+    max-width: 16ch;
+    font-size: clamp(2.6rem, 4.5vw, 3.25rem);
+  }
+}
+
