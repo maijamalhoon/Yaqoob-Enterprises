@@ -34,6 +34,22 @@ async function makeFeatured(supabase: Awaited<ReturnType<typeof requireAdmin>>["
   if (featureError) throw new Error(featureError.message);
 }
 
+async function featureNextRealImage(
+  supabase: Awaited<ReturnType<typeof requireAdmin>>["supabase"],
+  excludedId?: string,
+) {
+  let query = supabase
+    .from("gallery_images")
+    .select("id")
+    .eq("is_active", true)
+    .eq("media_kind", "real")
+    .order("display_order")
+    .limit(1);
+  if (excludedId) query = query.neq("id", excludedId);
+  const { data } = await query.maybeSingle();
+  if (data?.id) await makeFeatured(supabase, data.id);
+}
+
 export async function uploadGalleryImage(formData: FormData) {
   const { supabase } = await requireAdmin();
   const file = formData.get("file");
@@ -50,12 +66,13 @@ export async function uploadGalleryImage(formData: FormData) {
   });
   if (uploadError) throw new Error(uploadError.message);
 
-  const wantsFeatured = bool(formData, "is_featured");
+  const mediaKind = text(formData, "media_kind") || "real";
+  const wantsFeatured = bool(formData, "is_featured") && mediaKind === "real";
   const { data: inserted, error } = await supabase.from("gallery_images").insert({
     storage_path: storagePath,
     alt_text: text(formData, "alt_text") || "Shop image",
-    caption: text(formData, "caption"),
-    media_kind: text(formData, "media_kind") || "real",
+    caption: "",
+    media_kind: mediaKind,
     is_featured: false,
     is_active: true,
     display_order: Number(formData.get("display_order") || 0),
@@ -76,12 +93,13 @@ export async function updateGalleryImage(formData: FormData) {
   const { supabase } = await requireAdmin();
   const id = text(formData, "id");
   const isActive = bool(formData, "is_active");
-  const wantsFeatured = bool(formData, "is_featured") && isActive;
+  const mediaKind = text(formData, "media_kind") || "real";
+  const wantsFeatured = bool(formData, "is_featured") && isActive && mediaKind === "real";
+  const { data: previous } = await supabase.from("gallery_images").select("is_featured").eq("id", id).single();
 
   const { error } = await supabase.from("gallery_images").update({
     alt_text: text(formData, "alt_text") || "Shop image",
-    caption: text(formData, "caption"),
-    media_kind: text(formData, "media_kind") || "real",
+    media_kind: mediaKind,
     is_featured: false,
     is_active: isActive,
     display_order: Number(formData.get("display_order") || 0),
@@ -91,6 +109,7 @@ export async function updateGalleryImage(formData: FormData) {
   if (error) throw new Error(error.message);
 
   if (wantsFeatured) await makeFeatured(supabase, id);
+  else if (previous?.is_featured) await featureNextRealImage(supabase, id);
   refreshGallery();
 }
 
@@ -108,17 +127,6 @@ export async function deleteGalleryImage(formData: FormData) {
   if (error) throw new Error(error.message);
   if (image?.storage_path) await supabase.storage.from("shop-media").remove([image.storage_path]);
 
-  if (image?.is_featured) {
-    const { data: nextImage } = await supabase
-      .from("gallery_images")
-      .select("id")
-      .eq("is_active", true)
-      .eq("media_kind", "real")
-      .order("display_order")
-      .limit(1)
-      .maybeSingle();
-    if (nextImage?.id) await makeFeatured(supabase, nextImage.id);
-  }
-
+  if (image?.is_featured) await featureNextRealImage(supabase);
   refreshGallery();
 }
