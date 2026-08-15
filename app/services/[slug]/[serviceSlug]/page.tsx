@@ -29,6 +29,7 @@ import {
 } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { getCustomerServiceModes } from "@/lib/service-availability";
+import { getServicePresentation } from "@/lib/service-presentation";
 import { getServiceSeo } from "@/lib/service-seo";
 
 function jsonLd(value: unknown) {
@@ -91,6 +92,7 @@ export async function generateMetadata({
   ]);
   if (!match) return {};
   const seo = getServiceSeo(match.category, match.service, site.settings);
+  const presentation = getServicePresentation(match.service);
 
   return {
     title: { absolute: seo.title },
@@ -108,7 +110,7 @@ export async function generateMetadata({
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${match.service.title} — ${site.settings.business_name}`,
+        alt: `${presentation.title} — ${site.settings.business_name}`,
       }],
     },
     twitter: {
@@ -134,9 +136,10 @@ export default async function PublicServicePage({
 
   const { category, service } = match;
   const seo = getServiceSeo(category, service, site.settings);
+  const presentation = getServicePresentation(service);
   const statusText = getCurrentBusinessStatus(site.hours);
   const modes = getCustomerServiceModes(service);
-  const action = serviceAction(service.status, service.title, site.settings.business_name);
+  const action = serviceAction(service.status, presentation.title, site.settings.business_name);
   const relatedServices = (category.services || []).filter((item) => item.id !== service.id).slice(0, 4);
   const pageUrl = `${SITE_URL.replace(/\/$/, "")}${seo.canonicalPath}`;
   const city = businessCity(site.settings.address);
@@ -151,7 +154,7 @@ export default async function PublicServicePage({
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
       { "@type": "ListItem", position: 2, name: category.title, item: `${SITE_URL}/services/${category.slug}` },
-      { "@type": "ListItem", position: 3, name: service.title, item: pageUrl },
+      { "@type": "ListItem", position: 3, name: presentation.title, item: pageUrl },
     ],
   };
 
@@ -159,8 +162,8 @@ export default async function PublicServicePage({
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${pageUrl}#service`,
-    name: service.title,
-    serviceType: service.title,
+    name: presentation.title,
+    serviceType: presentation.title,
     description: seo.description,
     url: pageUrl,
     areaServed: serviceAreas,
@@ -190,7 +193,7 @@ export default async function PublicServicePage({
             <nav className="seo-breadcrumbs" aria-label="Breadcrumb">
               <Link href="/">Home</Link><span aria-hidden="true">/</span>
               <Link href={`/services/${category.slug}`}>{category.title}</Link><span aria-hidden="true">/</span>
-              <span aria-current="page">{service.title}</span>
+              <span aria-current="page">{presentation.title}</span>
             </nav>
 
             <div className="seo-service-hero__grid">
@@ -289,7 +292,7 @@ export default async function PublicServicePage({
 
             <aside className="seo-service-cta">
               <span className="eyebrow">Confirm before travelling</span>
-              <h2>{service.title}</h2>
+              <h2>{presentation.title}</h2>
               <p>{site.settings.address}</p>
               <TrackedLink className="button button--primary" href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
                 <MessageCircle size={17} /> {action.label}

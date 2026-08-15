@@ -314,3 +314,81 @@
     transition: none;
   }
 }
+
+
+/* Priority services: subtle hierarchy without turning the list into a promotional grid. */
+.minimal-services__heading > p {
+  margin: 0;
+}
+
+.minimal-service-item--priority {
+  border-color: #c9dde0;
+  background: linear-gradient(145deg, #ffffff 0%, #f4f9f9 100%);
+}
+
+.minimal-service-item--priority:hover {
+  border-color: #a9cbd0;
+  background: linear-gradient(145deg, #ffffff 0%, #f0f7f7 100%);
+}
+
+.minimal-service-item--priority .minimal-service-item__icon {
+  border-color: var(--navy);
+  color: #fff;
+  background: var(--navy);
+}
+
+.minimal-service-item--priority .minimal-service-item__meta {
+  color: #4f747b;
+}
+
+@media (max-width: 46rem) {
+  .minimal-services__heading > p {
+    max-width: 32rem;
+  }
+
+  .minimal-service-item--priority {
+    border-color: #c6dade;
+  }
+}
+
+@media (hover: none) {
+  .minimal-service-item--priority,
+  .minimal-service-item--priority:hover {
+    border-color: #c6dade;
+    background: linear-gradient(145deg, #ffffff 0%, #f4f9f9 100%);
+  }
+
+  .minimal-service-item--priority .minimal-service-item__icon,
+  .minimal-service-item--priority:hover .minimal-service-item__icon {
+    border-color: var(--navy);
+    color: #fff;
+    background: var(--navy);
+  }
+}
+/* Compact laptops / landscape tablets: preserve the premium two-column hero without restoring the old ticker. */
+@media (min-width: 54.001rem) and (max-width: 68rem) {
+  .home-hero.home-hero {
+    padding: clamp(2rem, 4svh, 2.75rem) 0;
+  }
+
+  .home-hero-grid.home-hero-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(20rem, 1.05fr);
+    align-items: center;
+    gap: clamp(1.5rem, 2.8vw, 2.5rem);
+  }
+
+  .home-hero-visual.home-hero-visual {
+    width: 100%;
+    max-width: none;
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.32 / 1;
+  }
+
+  .home-hero.home-hero h1 {
+    max-width: 16ch;
+    font-size: clamp(2.6rem, 4.5vw, 3.25rem);
+  }
+}
+

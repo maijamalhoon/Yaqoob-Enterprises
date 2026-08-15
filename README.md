@@ -44,3 +44,8 @@ The owner email is allowlisted in Supabase. The login page sends a passwordless 
 ## Preview deployment
 
 Preview deployments are verified before this branch is merged into production. A fresh commit may be used to refresh Vercel preview routing without changing application behaviour.
+
+
+## SEO operations
+
+Use the [SEO launch checklist](docs/seo-launch-checklist.md) after merging metadata, URL or business-profile changes.
