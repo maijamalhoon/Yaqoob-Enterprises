@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clock3, MapPin, MessageCircle, Phone, ShieldCheck, Store } from "lucide-react";
+import { Clock3, MapPin, Phone, ShieldCheck, Store } from "lucide-react";
 import { RequestForm } from "@/components/request-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -91,7 +91,6 @@ export default async function ContactPage() {
                 <p>Choose the service, add the useful details, then review the message in WhatsApp.</p>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
-              <p className="contact-human-note"><MessageCircle size={16} /> Not sure where your request fits? Choose “I’m not sure which service I need”.</p>
             </div>
           </div>
         </section>
