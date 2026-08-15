@@ -9,10 +9,17 @@ export function PageTracker() {
   useEffect(() => {
     if (!pathname || pathname === "/admin" || pathname.startsWith("/admin/")) return;
 
+    const params = new URLSearchParams(window.location.search);
     void fetch("/api/analytics", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ eventName: "page_view", pagePath: pathname }),
+      body: JSON.stringify({
+        eventName: "page_view",
+        pagePath: pathname,
+        utmSource: params.get("utm_source"),
+        utmMedium: params.get("utm_medium"),
+        utmCampaign: params.get("utm_campaign"),
+      }),
       keepalive: true,
     });
   }, [pathname]);
