@@ -44,8 +44,6 @@ export function RequestFormClient({
   const selectedService = isUnsureService
     ? undefined
     : selectedCategory?.services?.find((service) => service.slug === serviceSlug);
-  const hasExactServiceStep = Boolean(selectedCategory);
-  const modeStep = hasExactServiceStep ? 3 : 2;
   const requestedService = isUnsureCategory
     ? "Please guide me to the right service"
     : isUnsureService && selectedCategory
@@ -94,9 +92,6 @@ export function RequestFormClient({
     },
   ].filter((option) => option.show);
   const locationRequired = mode === "Delivery" || mode === "Doorstep appointment";
-  const locationStep = modeStep + 1;
-  const detailsStep = locationRequired ? locationStep + 1 : modeStep + 1;
-  const nameStep = detailsStep + 1;
   const dynamicUpdate = locationRequired
     ? "Area or location is now required for this service option."
     : isUnsureCategory
@@ -111,7 +106,7 @@ export function RequestFormClient({
     <form className="request-form request-form--guided" onSubmit={submit}>
       <p style={visuallyHiddenStyle} role="status" aria-live="polite" aria-atomic="true">{dynamicUpdate}</p>
       <label>
-        <span className="field-label"><small>01</small>What service do you need?</span>
+        <span className="field-label">Service</span>
         <select
           name="category"
           value={categorySlug}
@@ -122,14 +117,14 @@ export function RequestFormClient({
           }}
           required
         >
-          <option value="">Choose a service category</option>
+          <option value="">Choose a service</option>
           <option value={unsureCategoryValue}>I’m not sure which service I need</option>
           {categories.map((category) => <option key={category.id} value={category.slug}>{category.title}</option>)}
         </select>
       </label>
       {selectedCategory && (
         <label>
-          <span className="field-label"><small>02</small>Choose the exact service</span>
+          <span className="field-label">Exact service</span>
           <select
             name="service"
             value={serviceSlug}
@@ -139,14 +134,14 @@ export function RequestFormClient({
             }}
             required
           >
-            <option value="">Choose the exact service</option>
+            <option value="">Choose exact service</option>
             <option value={unsureServiceValue}>I’m not sure — please guide me</option>
             {selectedCategory.services?.map((service) => <option key={service.id} value={service.slug}>{service.title}</option>)}
           </select>
         </label>
       )}
       <label>
-        <span className="field-label"><small>{String(modeStep).padStart(2, "0")}</small>How do you want it?</span>
+        <span className="field-label">Service option</span>
         <select name="mode" value={mode} onChange={(event) => setMode(event.target.value)} required>
           <option value="">Choose an option</option>
           {availableModes.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
@@ -155,46 +150,44 @@ export function RequestFormClient({
       {locationRequired && (
         <>
           <label>
-            <span className="field-label"><small>{String(locationStep).padStart(2, "0")}</small>Area / location — required</span>
+            <span className="field-label">Area / location</span>
             <input
               name="location"
               autoComplete="address-level2"
               enterKeyHint="next"
-              placeholder="e.g. DHA, PECHS or Dhoraji"
+              placeholder="Your area"
               maxLength={requestLimits.location}
               required
               aria-describedby="location-requirement"
             />
           </label>
-          <p className="field-help field-help--notice" id="location-requirement">
-            Add your area so we can check delivery or home-visit availability.
-          </p>
+          <p className="field-help field-help--notice" id="location-requirement">Required for delivery or home visit.</p>
         </>
       )}
       <label>
-        <span className="field-label"><small>{String(detailsStep).padStart(2, "0")}</small>What do you need?</span>
+        <span className="field-label">Details</span>
         <textarea
           name="details"
           enterKeyHint="next"
-          placeholder="Quantity, deadline, preferred time or any useful detail."
+          placeholder="Quantity, deadline or useful details"
           maxLength={requestLimits.details}
           required
         />
       </label>
       {selectedService?.important_note && <p className="form-note"><strong>Please note:</strong> {selectedService.important_note}</p>}
       <label>
-        <span className="field-label"><small>{String(nameStep).padStart(2, "0")}</small>Your name</span>
+        <span className="field-label">Name</span>
         <input
           name="name"
           autoComplete="name"
           enterKeyHint="send"
-          placeholder="e.g. Jamal Arain"
+          placeholder="Your name"
           maxLength={requestLimits.name}
           required
         />
       </label>
       <button className="button button--primary request-submit" type="submit">
-        <MessageCircle size={18} /> Open in WhatsApp <ArrowRight size={17} />
+        <MessageCircle size={18} /> Continue on WhatsApp <ArrowRight size={17} />
       </button>
     </form>
   );
