@@ -26,9 +26,9 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Biometric and e-Sahulat requirements vary by the official service being used. Confirm the exact verification type and required documents before you travel.",
     officialContext: {
       source: "NADRA",
-      title: "About biometric verification through e-Sahulat",
+      title: "About NADRA biometric verification",
       body:
-        "NADRA describes biometric verification as electronic identity verification and states that biometric verification services are extended through the e-Sahulat franchise network across Pakistan.",
+        "NADRA describes its biometric verification service as electronic identity verification that matches fingerprints and a photograph with CNIC data. NADRA also provides a locator for e-Sahulat centres on its official website.",
       url: "https://www.nadra.gov.pk/verification",
     },
   },
@@ -44,7 +44,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       title: "FBR Sales Tax biometric requirement",
       body:
         "FBR states that a person registered for Sales Tax through Iris is required to visit a NADRA e-Sahulat Centre within 30 days for biometric verification.",
-      url: "https://www.fbr.gov.pk/categ/register-sales-tax/51148/50848/101152",
+      url: "https://www.fbr.gov.pk/categ/check-active-taxpayer/51149/50848/101152",
     },
   },
   "fbr-psw-biometric": {
