@@ -89,6 +89,13 @@ try {
   assert(Boolean(websiteData?.name), "Homepage is missing configured WebSite structured data.");
   assert(Boolean(businessData), "Homepage is missing LocalBusiness structured data.");
   assert(Boolean(businessData?.address?.streetAddress), "Configured business location is missing from structured data.");
+  assert(Array.isArray(businessData?.sameAs), "Business entity is missing sameAs identity links.");
+  assert(businessData.sameAs.some((url) => String(url).includes("facebook.com/yaqoobenterprises1")), "Facebook business profile is missing from structured data.");
+  assert(businessData.sameAs.some((url) => String(url).includes("instagram.com/yaqoobenterprises1")), "Instagram business profile is missing from structured data.");
+  const catalogCategories = businessData?.hasOfferCatalog?.itemListElement || [];
+  const catalogServices = catalogCategories.flatMap((category) => category?.itemListElement || []);
+  assert(catalogCategories.length === 8, `Expected 8 service categories in LocalBusiness OfferCatalog; found ${catalogCategories.length}.`);
+  assert(catalogServices.length === 16, `Expected 16 public services in LocalBusiness OfferCatalog; found ${catalogServices.length}.`);
   assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
   assert((await page.locator("body").innerText()).includes(websiteData.name), "Homepage is missing the configured business identity.");
   assert((await page.locator("#services .minimal-service-item").count()) === 8, "Homepage must show all 8 service categories.");
@@ -134,10 +141,17 @@ try {
   assert((await page.locator("h1").first().innerText()).includes("Printing"), "Printing category page did not render its heading.");
   assert((await page.locator(".service-detail-link").count()) === 3, "Printing category must link each public service to an indexable detail page.");
 
+  await openHealthy(page, "/services/printing-photos/colour-black-white-printing");
+  await assertNoHorizontalOverflow(page, "Desktop printing SEO page");
+  assert((await page.locator("h1").first().innerText()).includes("Printing"), "Printing detail page lost its local search heading.");
+  assert((await page.title()).includes("Printing"), "Printing detail page title is not search-focused.");
+  assert((await page.locator("main").innerText()).includes("Common requests we handle"), "Printing detail page is missing long-tail customer intent content.");
+
   await openHealthy(page, "/services/biometric/general-biometric-esahulat");
   await assertNoHorizontalOverflow(page, "Desktop biometric SEO page");
   assert((await page.locator("h1").first().innerText()).includes("NADRA e-Sahulat"), "Biometric detail page lost its priority search heading.");
   assert((await page.title()).includes("Biometric Verification"), "Biometric detail page title is not search-focused.");
+  assert((await page.locator("main").innerText()).includes("Common requests we handle"), "Biometric detail page is missing long-tail customer intent content.");
   const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
   assert(Boolean(canonical?.endsWith("/services/biometric/general-biometric-esahulat")), "Biometric detail page canonical URL is incorrect.");
   const serviceStructuredData = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
@@ -149,9 +163,16 @@ try {
       }
     }),
   );
-  assert(serviceStructuredData.some((item) => item?.["@type"] === "Service"), "Service detail page is missing Service structured data.");
+  const serviceData = serviceStructuredData.find((item) => item?.["@type"] === "Service");
+  assert(Boolean(serviceData), "Service detail page is missing Service structured data.");
+  assert(Array.isArray(serviceData?.areaServed) && serviceData.areaServed.length > 1, "Service structured data should expose city and configured service areas.");
   assert(serviceStructuredData.some((item) => item?.["@type"] === "BreadcrumbList"), "Service detail page is missing Breadcrumb structured data.");
   assert((await page.locator(".seo-official-reference").count()) === 1, "Priority biometric page is missing its official-source context.");
+
+  await openHealthy(page, "/services/laptop/windows-software-support");
+  await assertNoHorizontalOverflow(page, "Desktop laptop SEO page");
+  assert((await page.locator("h1").first().innerText()).includes("Laptop"), "Laptop detail page lost its search heading.");
+  assert((await page.locator("main").innerText()).includes("Windows installation and setup"), "Laptop detail page is missing search-intent service coverage.");
 
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
