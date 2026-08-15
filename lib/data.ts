@@ -148,23 +148,27 @@ async function loadSiteData() {
   const rawCategories = (categoriesResult.data || []) as unknown as ServiceCategory[];
   const activeCategoryIds = new Set(rawCategories.map((category) => category.id));
   const services = ((servicesResult.data || []) as unknown as Service[]).filter((service) => activeCategoryIds.has(service.category_id));
-  const categories = rawCategories.map((category) => ({
-    ...category,
-    services: services.filter((service) => service.category_id === category.id),
-  }));
+  const categories = rawCategories
+    .map((category) => ({
+      ...category,
+      services: services.filter((service) => service.category_id === category.id),
+    }))
+    .filter((category) => category.services.length > 0);
+  const visibleCategoryIds = new Set(categories.map((category) => category.id));
+  const publicServices = services.filter((service) => visibleCategoryIds.has(service.category_id));
 
   return {
     settings,
     hours,
     categories,
-    services,
+    services: publicServices,
     coverage: coverageResult.error ? [] : ((coverageResult.data || []) as unknown as CoverageArea[]),
     gallery: galleryResult.error ? [] : ((galleryResult.data || []) as unknown as GalleryImage[]),
     announcements: announcementsResult.error ? [] : ((announcementsResult.data || []) as unknown as Announcement[]),
   };
 }
 
-export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v6"], {
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v7"], {
   revalidate: 300,
   tags: ["site-data"],
 });
