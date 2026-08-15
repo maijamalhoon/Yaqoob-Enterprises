@@ -40,12 +40,12 @@ export default async function HomePage() {
               </div>
 
               <div
-                className={styles.heroServiceLine}
+                className="home-hero-service-line"
                 aria-label="Local help for printing, documents, online forms, payments, tickets and biometric services"
               >
-                <span className={styles.heroServiceLabel}>Local help for</span>
-                <span className={styles.heroServiceViewport} aria-hidden="true">
-                  <span className={styles.heroServiceTrack}>
+                <span className="home-hero-service-label">Local help for</span>
+                <span className="home-hero-service-viewport" aria-hidden="true">
+                  <span className="home-hero-service-track">
                     {heroServices.map((service) => <span key={service}>{service}</span>)}
                     <span>{heroServices[0]}</span>
                   </span>
