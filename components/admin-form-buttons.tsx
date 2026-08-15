@@ -7,20 +7,27 @@ import { LoaderCircle, Trash2 } from "lucide-react";
 export function AdminSubmitButton({
   children,
   variant = "primary",
+  pendingLabel = "Saving…",
+  confirmMessage,
+  className = "",
 }: {
   children: ReactNode;
   variant?: "primary" | "secondary";
+  pendingLabel?: string;
+  confirmMessage?: string;
+  className?: string;
 }) {
   const { pending } = useFormStatus();
   return (
     <button
-      className={`button button--${variant} admin-submit-button`}
+      className={`button button--${variant} admin-submit-button ${className}`.trim()}
       type="submit"
       disabled={pending}
       aria-disabled={pending}
+      data-confirm={confirmMessage}
     >
       {pending && <LoaderCircle className="admin-spin" size={16} aria-hidden="true" />}
-      {pending ? "Saving…" : children}
+      {pending ? pendingLabel : children}
     </button>
   );
 }
