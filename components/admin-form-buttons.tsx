@@ -39,9 +39,7 @@ export function AdminDeleteButton({
       type="submit"
       disabled={pending}
       aria-disabled={pending}
-      onClick={(event) => {
-        if (!pending && !window.confirm(confirmMessage)) event.preventDefault();
-      }}
+      data-confirm={confirmMessage}
     >
       {pending ? <LoaderCircle className="admin-spin" size={16} aria-hidden="true" /> : <Trash2 size={16} aria-hidden="true" />}
       {pending ? "Deleting…" : label}
