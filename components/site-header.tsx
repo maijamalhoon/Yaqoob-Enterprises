@@ -55,6 +55,7 @@ export function SiteHeader({
               <span>WhatsApp</span>
             </TrackedLink>
             <MobileNavigation
+              businessName={settings.business_name}
               mapUrl={settings.map_url}
               phone={settings.phone_e164}
               whatsappUrl={whatsapp}
