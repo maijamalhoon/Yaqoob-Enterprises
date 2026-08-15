@@ -10,6 +10,8 @@ import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
 import styles from "./home.module.css";
 
+const heroServices = ["Printing", "Documents", "Online forms", "Payments", "Tickets", "Biometric"];
+
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery } = await getSiteData();
   const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help with: ");
@@ -37,10 +39,26 @@ export default async function HomePage() {
                 <span><MapPin size={14} /> Akhtar Colony, Karachi</span>
               </div>
 
-              <h1>Printing, documents &amp; digital services, handled locally.</h1>
+              <div
+                className={styles.heroServiceLine}
+                aria-label="Local help for printing, documents, online forms, payments, tickets and biometric services"
+              >
+                <span className={styles.heroServiceLabel}>Local help for</span>
+                <span className={styles.heroServiceViewport} aria-hidden="true">
+                  <span className={styles.heroServiceTrack}>
+                    {heroServices.map((service) => <span key={service}>{service}</span>)}
+                    <span>{heroServices[0]}</span>
+                  </span>
+                </span>
+              </div>
+
+              <h1>
+                <span>Everything you need,</span>
+                <span>handled locally.</span>
+              </h1>
 
               <p className={styles.lead}>
-                Send us what you need before you visit. We’ll confirm the requirements, current availability and charges before you travel or we start the work.
+                Check requirements, availability and charges before you visit.
               </p>
 
               <div className={styles.actions}>
