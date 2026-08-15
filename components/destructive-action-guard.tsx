@@ -9,11 +9,11 @@ export function DestructiveActionGuard() {
       if (!(form instanceof HTMLFormElement)) return;
 
       const submitter = event.submitter instanceof HTMLElement ? event.submitter : null;
-      const destructiveControl = submitter?.closest<HTMLElement>(".danger-button")
-        || form.querySelector<HTMLElement>(".danger-button");
+      const destructiveControl = submitter?.closest<HTMLElement>("[data-confirm], .danger-button")
+        || form.querySelector<HTMLElement>("[data-confirm], .danger-button");
       if (!destructiveControl) return;
 
-      const actionLabel = destructiveControl.textContent?.trim().toLowerCase() || "delete this item";
+      const actionLabel = destructiveControl.textContent?.trim().toLowerCase() || "continue";
       const message = destructiveControl.dataset.confirm
         || `Are you sure you want to ${actionLabel}? This action cannot be undone.`;
 
