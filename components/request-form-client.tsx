@@ -28,9 +28,11 @@ const visuallyHiddenStyle = {
 export function RequestFormClient({
   categories,
   whatsappNumber,
+  businessName,
 }: {
   categories: RequestFormCategory[];
   whatsappNumber: string;
+  businessName: string;
 }) {
   const [categorySlug, setCategorySlug] = useState("");
   const [serviceSlug, setServiceSlug] = useState("");
@@ -54,7 +56,7 @@ export function RequestFormClient({
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const lines = [
-      "Hello Yaqoob Enterprises,",
+      `Hello ${businessName},`,
       "",
       `Customer name: ${String(data.get("name") || "")}`,
       `Requested service: ${requestedService}`,
