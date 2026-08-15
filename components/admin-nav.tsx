@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Home, Images, MapPinned, Settings, Wrench } from "lucide-react";
+import { BarChart3, History, Images, LayoutDashboard, MapPinned, Settings2, Wrench } from "lucide-react";
 import { Logo } from "@/components/logo";
 
 const links = [
-  ["Dashboard", "/admin", Home],
+  ["Overview", "/admin", LayoutDashboard],
   ["Services", "/admin/services", Wrench],
+  ["Business", "/admin/settings", Settings2],
+  ["Images", "/admin/gallery", Images],
   ["Coverage", "/admin/coverage", MapPinned],
-  ["Gallery", "/admin/gallery", Images],
   ["Analytics", "/admin/analytics", BarChart3],
-  ["Settings", "/admin/settings", Settings],
+  ["History", "/admin/history", History],
 ] as const;
 
 export function AdminNav() {

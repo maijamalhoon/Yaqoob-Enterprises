@@ -1,0 +1,321 @@
+/* Admin reliability + attribution layer. Keeps safety tools compact and work-focused. */
+
+.admin-settings-preview-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.admin-health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.admin-health-grid > a {
+  min-width: 0;
+  min-height: 3.1rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.48rem;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid #dfe6ec;
+  border-radius: 0.62rem;
+  background: #fbfcfd;
+  color: #53647a;
+  text-decoration: none;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.admin-health-grid > a:hover {
+  border-color: #c7d7df;
+  background: #fff;
+}
+
+.admin-health-grid > a svg { color: #087b70; }
+.admin-health-grid > a.is-warning svg { color: #a66a08; }
+.admin-health-grid > a span {
+  overflow: hidden;
+  color: #172940;
+  font-size: 0.72rem;
+  font-weight: 730;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-health-grid > a small {
+  color: #7f8ea1;
+  font-size: 0.62rem;
+  font-weight: 690;
+}
+
+.admin-backup-create {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.65rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5ebef;
+}
+
+.admin-backup-create label {
+  display: grid;
+  gap: 0.34rem;
+  color: #304158;
+  font-size: 0.71rem;
+  font-weight: 720;
+}
+
+.admin-backup-create input {
+  min-height: 2.7rem;
+  width: 100%;
+  padding: 0 0.72rem;
+  border: 1px solid #d5dee6;
+  border-radius: 0.58rem;
+  background: #fff;
+  color: #14253d;
+  font: inherit;
+  font-size: 0.82rem;
+  outline: none;
+}
+
+.admin-backup-create input:focus {
+  border-color: #168894;
+  box-shadow: 0 0 0 3px rgba(1, 103, 115, 0.09);
+}
+
+.admin-backup-list,
+.admin-history-list {
+  display: grid;
+  gap: 0;
+}
+
+.admin-backup-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.78rem 0;
+  border-bottom: 1px solid #edf1f4;
+}
+.admin-backup-row:last-child { border-bottom: 0; }
+.admin-backup-row > div:first-child { min-width: 0; }
+.admin-backup-row strong {
+  display: block;
+  overflow: hidden;
+  color: #14243a;
+  font-size: 0.76rem;
+  font-weight: 760;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-backup-row small {
+  display: block;
+  margin-top: 0.16rem;
+  color: #8593a4;
+  font-size: 0.63rem;
+}
+.admin-backup-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+.admin-backup-actions form { margin: 0; }
+.admin-backup-actions .admin-submit-button,
+.admin-backup-actions .danger-button {
+  min-width: 0;
+  min-height: 2.35rem;
+  padding: 0.42rem 0.6rem;
+  font-size: 0.66rem;
+}
+
+.admin-history-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(10rem, auto) auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid #edf1f4;
+}
+.admin-history-row:last-child { border-bottom: 0; }
+.admin-history-row.is-reverted { opacity: 0.62; }
+.admin-history-row__icon {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.52rem;
+  background: #eef6f7;
+  color: #087985;
+}
+.admin-history-row__copy,
+.admin-history-row__meta { min-width: 0; }
+.admin-history-row__copy strong {
+  display: block;
+  overflow: hidden;
+  color: #14243a;
+  font-size: 0.75rem;
+  font-weight: 760;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-history-row__copy small,
+.admin-history-row__meta small,
+.admin-history-row__meta > span {
+  display: block;
+  overflow: hidden;
+  color: #8391a3;
+  font-size: 0.62rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-history-row__copy small { margin-top: 0.15rem; }
+.admin-history-row__meta { text-align: right; }
+.admin-history-row__meta > span { color: #5f7086; font-weight: 690; }
+.admin-history-row__meta small { margin-top: 0.12rem; }
+.admin-history-row__action form { margin: 0; }
+.admin-history-row__action .admin-submit-button {
+  min-width: 0;
+  min-height: 2.3rem;
+  padding: 0.4rem 0.58rem;
+  font-size: 0.65rem;
+}
+
+.admin-google-panel {
+  overflow: hidden;
+}
+
+.admin-google-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.admin-google-metrics > span {
+  min-width: 0;
+  padding: 0.7rem;
+  border: 1px solid #e0e7ec;
+  border-radius: 0.6rem;
+  background: #f9fbfc;
+}
+.admin-google-metrics strong {
+  display: block;
+  color: #071a35;
+  font-size: 1.15rem;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+.admin-google-metrics small {
+  display: block;
+  margin-top: 0.28rem;
+  color: #7b8a9d;
+  font-size: 0.63rem;
+  font-weight: 680;
+}
+
+.admin-tracking-link {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.6fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #dce6eb;
+  border-radius: 0.62rem;
+  background: #fff;
+}
+.admin-tracking-link strong {
+  display: block;
+  color: #182940;
+  font-size: 0.72rem;
+}
+.admin-tracking-link small {
+  display: block;
+  margin-top: 0.15rem;
+  color: #8190a2;
+  font-size: 0.61rem;
+  line-height: 1.35;
+}
+.admin-tracking-link code {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.46rem 0.58rem;
+  border-radius: 0.45rem;
+  background: #f3f6f8;
+  color: #34485f;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 64rem) {
+  .admin-health-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-history-row { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .admin-history-row__meta { grid-column: 2; grid-row: 2; text-align: left; }
+  .admin-history-row__action { grid-column: 3; grid-row: 1 / span 2; }
+  .admin-tracking-link { grid-template-columns: 1fr auto; }
+  .admin-tracking-link > div { grid-column: 1 / -1; }
+}
+
+@media (max-width: 46rem) {
+  .admin-settings-preview-links {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .admin-health-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .admin-health-grid > a {
+    min-height: 2.8rem;
+    padding: 0.55rem 0.58rem;
+  }
+  .admin-backup-create { grid-template-columns: 1fr; }
+  .admin-backup-create input { min-height: 2.8rem; font-size: 16px; }
+  .admin-backup-create .admin-submit-button { width: 100%; }
+  .admin-backup-row {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+  .admin-backup-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+  .admin-backup-actions .admin-submit-button { width: 100%; }
+  .admin-history-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.55rem;
+  }
+  .admin-history-row__copy strong { white-space: normal; line-height: 1.3; }
+  .admin-history-row__meta { grid-column: 2; }
+  .admin-history-row__meta > span { white-space: normal; }
+  .admin-history-row__meta small { display: none; }
+  .admin-history-row__action { grid-column: 3; }
+  .admin-history-row__action .admin-submit-button span { display: none; }
+  .admin-google-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-tracking-link {
+    grid-template-columns: 1fr auto;
+    gap: 0.55rem;
+    padding: 0.62rem;
+  }
+  .admin-tracking-link code {
+    overflow-x: auto;
+    text-overflow: clip;
+  }
+}
+
+@media (max-width: 22rem) {
+  .admin-health-grid { grid-template-columns: 1fr; }
+  .admin-google-metrics { grid-template-columns: 1fr 1fr; }
+  .admin-history-row__icon { display: none; }
+  .admin-history-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .admin-history-row__meta { grid-column: 1; }
+  .admin-history-row__action { grid-column: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-health-grid > a { transition: none; }
+}

@@ -2,18 +2,20 @@ import Link from "next/link";
 import { MapPin, MessageCircle, Phone } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { TrackedLink } from "@/components/tracked-link";
+import { businessLocationLabel } from "@/lib/business-display";
 import { whatsappUrl } from "@/lib/data";
 import type { BusinessSettings, ServiceCategory } from "@/lib/types";
 
 export function SiteFooter({ settings }: { settings: BusinessSettings; categories: ServiceCategory[] }) {
-  const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help choosing the right service.");
+  const whatsapp = whatsappUrl(settings.whatsapp_e164, `Hello ${settings.business_name}, I need help choosing the right service.`);
+  const locationLabel = businessLocationLabel(settings.address);
 
   return (
     <footer className="site-footer site-footer--minimal">
       <div className="container minimal-footer__top">
         <div className="minimal-footer__brand">
-          <Logo inverse />
-          <p>Printing, documents, biometric and everyday digital services in Akhtar Colony, Karachi.</p>
+          <Logo inverse businessName={settings.business_name} />
+          <p>{settings.tagline} · {locationLabel}.</p>
         </div>
 
         <nav className="minimal-footer__nav" aria-label="Footer navigation">
@@ -29,8 +31,8 @@ export function SiteFooter({ settings }: { settings: BusinessSettings; categorie
         </div>
       </div>
       <div className="container minimal-footer__bottom">
-        <span>© {new Date().getFullYear()} Yaqoob Enterprises.</span>
-        <span>Akhtar Colony, Karachi.</span>
+        <span>© {new Date().getFullYear()} {settings.business_name}.</span>
+        <span>{locationLabel}.</span>
       </div>
     </footer>
   );

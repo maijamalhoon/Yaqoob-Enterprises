@@ -1,10 +1,16 @@
 import { ImageResponse } from "next/og";
+import { businessLocationLabel } from "@/lib/business-display";
+import { getSiteData } from "@/lib/data";
 
-export const alt = "Yaqoob Enterprises — Everyday services in Akhtar Colony, Karachi";
+export const alt = "Business services social preview";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const { settings, categories } = await getSiteData();
+  const location = businessLocationLabel(settings.address).toUpperCase();
+  const serviceLine = categories.slice(0, 6).map((category) => category.title.split(/,|&/)[0]?.trim() || category.title).join(" · ");
+
   return new ImageResponse(
     (
       <div
@@ -22,13 +28,16 @@ export default function OpenGraphImage() {
       >
         <div style={{ display: "flex", flexDirection: "column", maxWidth: "820px" }}>
           <div style={{ display: "flex", fontSize: 28, fontWeight: 700, letterSpacing: 2, color: "#8fe1d9" }}>
-            AKHTAR COLONY · KARACHI
+            {location}
           </div>
-          <div style={{ display: "flex", marginTop: 30, fontSize: 68, fontWeight: 800, lineHeight: 1.05 }}>
-            Everyday services, handled clearly.
+          <div style={{ display: "flex", marginTop: 30, fontSize: 66, fontWeight: 800, lineHeight: 1.05 }}>
+            {settings.business_name}
           </div>
-          <div style={{ display: "flex", marginTop: 26, fontSize: 30, lineHeight: 1.35, color: "#dce8ee" }}>
-            Printing · Documents · Online Forms · Biometric · Payments · Tickets
+          <div style={{ display: "flex", marginTop: 18, fontSize: 34, fontWeight: 600, color: "#dce8ee" }}>
+            {settings.tagline}
+          </div>
+          <div style={{ display: "flex", marginTop: 26, fontSize: 25, lineHeight: 1.35, color: "#c9dae2" }}>
+            {serviceLine || "Local services"}
           </div>
         </div>
         <div
@@ -41,11 +50,11 @@ export default function OpenGraphImage() {
             border: "4px solid rgba(255,255,255,0.85)",
             borderRadius: 42,
             background: "rgba(255,255,255,0.08)",
-            fontSize: 72,
+            fontSize: 64,
             fontWeight: 900,
           }}
         >
-          YE
+          {settings.business_name.slice(0, 2).toUpperCase()}
         </div>
       </div>
     ),

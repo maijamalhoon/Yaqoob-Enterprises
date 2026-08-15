@@ -1,0 +1,447 @@
+/* Cross-device responsive QA layer.
+ * Purpose: stable alignment from 280px phones through tablets and large desktops.
+ * Keep structural/product styling in design-system.css and global-polish.css.
+ */
+
+html {
+  scroll-padding-top: calc(var(--header-h) + 0.75rem);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: clip;
+}
+
+#services,
+#get-in-touch,
+#visit {
+  scroll-margin-top: calc(var(--header-h) + 0.75rem);
+}
+
+.site-header__inner > *,
+.minimal-services__heading > *,
+.minimal-service-item__copy,
+.page-hero__content,
+.admin-main,
+.admin-content,
+.admin-panel {
+  min-width: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+/* Tablets / compact laptops: keep navigation, home layout and footer aligned. */
+@media (max-width: 68rem) {
+  .home-hero-grid.home-hero-grid,
+  .home-contact-shell.home-contact-shell,
+  .home-visit-grid.home-visit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-hero-visual.home-hero-visual {
+    width: 100%;
+    max-width: 52rem;
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.55 / 1;
+  }
+
+  .home-contact-shell > div:first-child {
+    position: static;
+  }
+
+  .home-visit-grid.home-visit-grid {
+    align-items: start;
+  }
+
+  .minimal-footer__top {
+    grid-template-columns: minmax(0, 1.15fr) minmax(12rem, 0.85fr);
+    gap: 1.75rem 2rem;
+  }
+
+  .minimal-footer__contact {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Portrait tablets and landscape phones. */
+@media (max-width: 54rem) {
+  .home-hero-visual.home-hero-visual {
+    max-width: none;
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.6 / 1;
+  }
+
+  .home-how-grid.home-how-grid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .home-how-grid > div {
+    min-height: auto;
+  }
+
+  .page-hero {
+    padding-block: 2.8rem;
+  }
+
+  .page-hero__grid,
+  .page-hero__grid--contact {
+    gap: 1.4rem;
+  }
+
+  .page-hero__summary {
+    width: min(100%, 34rem);
+  }
+
+  .minimal-footer__top {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .minimal-footer__contact {
+    grid-column: auto;
+  }
+}
+
+/* Phones: primary customer traffic target. */
+@media (max-width: 46rem) {
+  .site-header {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .site-header__inner {
+    gap: 0.45rem;
+  }
+
+  .header-brand-cluster {
+    gap: 0.45rem;
+    flex: 1 1 auto;
+  }
+
+  .header-actions {
+    flex: 0 0 auto;
+  }
+
+  .mobile-nav summary,
+  .mobile-menu-action,
+  .admin-nav nav a {
+    min-height: 2.75rem;
+  }
+
+  .mobile-nav__panel {
+    overscroll-behavior: contain;
+  }
+
+  .mobile-nav__panel nav a {
+    min-height: 3.75rem;
+  }
+
+  .home-hero.home-hero h1 {
+    max-width: 13ch;
+    font-size: clamp(1.95rem, 9.6vw, 2.75rem);
+  }
+
+  .home-hero-image.home-hero-image {
+    aspect-ratio: 1.6 / 1;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  input,
+  select {
+    min-height: 3rem;
+  }
+
+  textarea {
+    min-height: 6rem;
+  }
+
+  .site-footer--minimal {
+    padding: 2.45rem 0 1rem;
+  }
+
+  .minimal-footer__top {
+    gap: 1.25rem;
+  }
+
+  .minimal-footer__brand {
+    gap: 0.65rem;
+  }
+
+  .minimal-footer__brand p {
+    font-size: 0.75rem;
+    line-height: 1.55;
+  }
+
+  .minimal-footer__nav,
+  .minimal-footer__contact {
+    gap: 0.3rem;
+  }
+
+  .minimal-footer__nav a,
+  .minimal-footer__contact a {
+    min-height: 1.8rem;
+    font-size: 0.75rem;
+  }
+
+  .minimal-footer__bottom {
+    margin-top: 1.45rem;
+    padding-top: 0.8rem;
+    font-size: 0.66rem;
+    line-height: 1.45;
+  }
+
+  .admin-nav nav a {
+    min-height: 2.75rem;
+  }
+
+  .admin-topbar {
+    gap: 0.5rem;
+    padding-inline: 0.6rem;
+  }
+
+  .admin-topbar__actions {
+    flex: 0 0 auto;
+  }
+
+  .admin-topbar__actions a,
+  .admin-topbar__actions button {
+    min-height: 2.5rem;
+  }
+
+  .admin-content {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* Focused quick actions used on service/contact routes. */
+  .mobile-action-bar {
+    position: fixed;
+    left: 50%;
+    bottom: calc(0.55rem + env(safe-area-inset-bottom));
+    z-index: 70;
+    width: min(calc(100% - 1rem), 30rem);
+    transform: translateX(-50%);
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border: 1px solid rgba(210, 219, 226, 0.94);
+    border-radius: 0.72rem;
+    background: rgba(255, 255, 255, 0.975);
+    box-shadow: 0 12px 30px rgba(7, 24, 47, 0.13);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-action-bar a {
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
+    border-radius: 0.52rem;
+    color: var(--ink);
+    font-size: 0.72rem;
+    font-weight: 720;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+  }
+
+  .mobile-action-bar__primary {
+    color: #fff !important;
+    background: var(--navy);
+  }
+
+  .mobile-action-bar a:active {
+    transform: scale(0.99);
+  }
+
+  body:has(.mobile-action-bar) .site-footer {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Large phones (390–430px): keep copy compact and guided forms readable. */
+@media (max-width: 26.875rem) {
+  .home-hero.home-hero h1 {
+    max-width: 13ch;
+    font-size: clamp(1.95rem, 9.4vw, 2.5rem);
+    line-height: 0.99;
+  }
+
+  .page-hero {
+    padding: 2.15rem 0 2.35rem;
+  }
+
+  .page-hero h1 {
+    max-width: 15ch;
+    font-size: clamp(2rem, 9vw, 2.55rem);
+    line-height: 1;
+  }
+
+  .page-hero p {
+    font-size: 0.86rem;
+    line-height: 1.62;
+  }
+
+  .contact-flow {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    margin: 0.8rem 0 1rem;
+  }
+
+  .contact-flow span {
+    min-height: 2.4rem;
+    justify-content: flex-start;
+    padding: 0.48rem 0.6rem;
+  }
+
+  .contact-details-card--premium,
+  .form-card--premium {
+    padding: 0.82rem;
+  }
+
+  .service-detail-card--premium {
+    padding: 0.9rem 0.8rem;
+  }
+}
+
+/* 360px-class phones. */
+@media (max-width: 22.5rem) {
+  :root {
+    --header-h: 3.9rem;
+  }
+
+  .container {
+    width: min(calc(100% - 0.75rem), var(--container));
+  }
+
+  .brand-logo__image {
+    width: 8.05rem !important;
+  }
+
+  .mobile-header-status {
+    font-size: 0.58rem;
+  }
+
+  .mobile-nav summary {
+    width: 2.45rem;
+    height: 2.45rem;
+    min-height: 2.45rem;
+  }
+
+  .home-hero.home-hero h1 {
+    font-size: 1.95rem;
+  }
+
+  .minimal-service-item {
+    grid-template-columns: 2.35rem minmax(0, 1fr) auto;
+    gap: 0.12rem 0.55rem;
+    padding-inline: 0.6rem;
+  }
+
+  .minimal-service-item__icon {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .minimal-service-item__copy strong {
+    font-size: 0.79rem;
+  }
+
+  .minimal-service-item__copy small {
+    font-size: 0.67rem;
+  }
+
+  .admin-topbar__identity strong {
+    font-size: 0.72rem;
+  }
+
+  .admin-topbar__actions a,
+  .admin-topbar__actions button {
+    width: 2.45rem;
+    min-width: 2.45rem;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .admin-topbar__actions svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 280–320px legacy/small Android devices. */
+@media (max-width: 20rem) {
+  .container {
+    width: min(calc(100% - 0.6rem), var(--container));
+  }
+
+  .brand-logo__image {
+    width: 7.7rem !important;
+  }
+
+  .mobile-header-status {
+    gap: 0.22rem;
+    font-size: 0.56rem;
+  }
+
+  .mobile-header-status > span {
+    width: 0.34rem;
+    height: 0.34rem;
+  }
+
+  .mobile-nav summary {
+    width: 2.35rem;
+    height: 2.35rem;
+    min-height: 2.35rem;
+  }
+
+  .home-hero.home-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .minimal-service-item__meta {
+    font-size: 0.59rem;
+  }
+
+  .minimal-footer__brand p,
+  .minimal-footer__nav a,
+  .minimal-footer__contact a {
+    font-size: 0.72rem;
+  }
+}
+
+/* Short landscape screens: prevent overlays from consuming the viewport. */
+@media (max-width: 56rem) and (max-height: 30rem) and (orientation: landscape) {
+  .mobile-nav__panel {
+    max-height: calc(100dvh - var(--header-h));
+  }
+
+  .mobile-action-bar {
+    bottom: calc(0.3rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-action-bar a {
+    transition: none;
+  }
+}

@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 import { DesktopNavigation } from "@/components/desktop-navigation";
 import { Logo } from "@/components/logo";
 import { MobileNavigation } from "@/components/mobile-navigation";
@@ -15,7 +15,7 @@ export function SiteHeader({
   statusText?: string;
   showMobileQuickActions?: boolean;
 }) {
-  const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help with a service.");
+  const whatsapp = whatsappUrl(settings.whatsapp_e164, `Hello ${settings.business_name}, I need help with a service.`);
   const isOpen = statusText?.startsWith("Open now");
 
   return (
@@ -24,8 +24,7 @@ export function SiteHeader({
       <header className="site-header">
         <div className="container site-header__inner">
           <div className="header-brand-cluster">
-            <Logo />
-            <span className="header-location"><MapPin size={13} /> Akhtar Colony</span>
+            <Logo businessName={settings.business_name} />
             {statusText && (
               <span className={`mobile-header-status ${isOpen ? "is-open" : ""}`} title={statusText}>
                 <span aria-hidden="true" />
@@ -36,26 +35,27 @@ export function SiteHeader({
           <DesktopNavigation />
           <div className="header-actions">
             <TrackedLink
-              className="header-icon-action header-icon-action--phone desktop-only"
+              className="header-text-action desktop-only"
               href={`tel:${settings.phone_e164}`}
               eventName="call_click"
-              aria-label="Call Yaqoob Enterprises"
-              title="Call"
+              aria-label={`Call ${settings.business_name} at ${settings.phone_display}`}
             >
-              <Phone size={19} strokeWidth={1.9} aria-hidden="true" />
+              <Phone size={16} strokeWidth={1.9} aria-hidden="true" />
+              <span>Call</span>
             </TrackedLink>
             <TrackedLink
-              className="header-icon-action header-icon-action--whatsapp desktop-only"
+              className="header-text-action header-text-action--primary desktop-only"
               href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               eventName="whatsapp_click"
-              aria-label="Message Yaqoob Enterprises on WhatsApp"
-              title="WhatsApp"
+              aria-label={`Message ${settings.business_name} on WhatsApp`}
             >
-              <MessageCircle size={20} strokeWidth={1.9} aria-hidden="true" />
+              <MessageCircle size={17} strokeWidth={1.9} aria-hidden="true" />
+              <span>WhatsApp</span>
             </TrackedLink>
             <MobileNavigation
+              businessName={settings.business_name}
               mapUrl={settings.map_url}
               phone={settings.phone_e164}
               whatsappUrl={whatsapp}

@@ -1,0 +1,90 @@
+.admin-topbar {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-topbar__identity {
+  display: grid;
+  text-align: left !important;
+}
+
+.admin-topbar__actions {
+  display: flex !important;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.admin-topbar__actions a,
+.admin-topbar__actions button {
+  min-height: 2.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  padding: 0.42rem 0.62rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  color: #526073;
+  background: #fff;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 690;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 130ms ease, border-color 130ms ease, background 130ms ease, box-shadow 130ms ease;
+}
+
+.admin-topbar__actions a:hover,
+.admin-topbar__actions button:hover {
+  border-color: var(--line-strong);
+  color: var(--navy);
+  background: #fafbfd;
+  box-shadow: var(--shadow-xs);
+}
+
+.admin-topbar__actions a:active,
+.admin-topbar__actions button:active {
+  transform: scale(0.99);
+}
+
+.admin-topbar__actions form { margin: 0; }
+
+.admin-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-quick-actions .button {
+  min-height: 2.65rem;
+  font-size: 0.74rem;
+}
+
+@media (max-width: 46rem) {
+  .admin-topbar__identity span { display: none; }
+
+  .admin-topbar__actions { gap: 0.32rem; }
+
+  .admin-topbar__actions a,
+  .admin-topbar__actions button {
+    min-height: 2.3rem;
+    padding: 0.38rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.67rem;
+  }
+
+  .admin-quick-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quick-actions .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-topbar__actions a,
+  .admin-topbar__actions button { transition: none; }
+}

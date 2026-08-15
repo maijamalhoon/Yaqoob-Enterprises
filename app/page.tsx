@@ -7,18 +7,26 @@ import { ServiceShowcase } from "@/components/service-showcase";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
+import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
 import styles from "./home.module.css";
 
+function compactServiceLabel(title: string) {
+  return title.split(/,|&/)[0]?.trim() || title;
+}
+
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery } = await getSiteData();
-  const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help with: ");
+  const whatsapp = whatsappUrl(settings.whatsapp_e164, `Hello ${settings.business_name}, I need help with: `);
   const featuredImage = gallery.find((image) => image.is_featured && image.media_kind === "real");
   const imageUrl = featuredImage
     ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
     : "/brand/logo-horizontal.svg";
   const schemaImageUrl = featuredImage ? imageUrl : "/brand/logo-horizontal.svg";
   const hoursText = getCurrentBusinessStatus(hours);
+  const locationLabel = businessLocationLabel(settings.address);
+  const heroServices = categories.slice(0, 6).map((category) => compactServiceLabel(category.title));
+  const rotatingServices = heroServices.length > 0 ? heroServices : ["Services"];
   const contactCategories = categories.map(({ id, slug, title }) => ({ id, slug, title }));
 
   return (
@@ -27,20 +35,36 @@ export default async function HomePage() {
       <SiteHeader settings={settings} statusText={hoursText} showMobileQuickActions={false} />
 
       <main id="main-content">
-        <section className={styles.hero}>
-          <div className={`container ${styles.heroGrid}`}>
+        <section className={`${styles.hero} home-hero`}>
+          <div className={`container home-hero-grid ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              <div className={styles.kicker}>
+              <div className={`${styles.kicker} home-hero-kicker`}>
                 <span className={styles.statusDot} aria-hidden="true" />
                 <span>{hoursText}</span>
                 <span className={styles.kickerDivider} aria-hidden="true" />
-                <span><MapPin size={14} /> Akhtar Colony, Karachi</span>
+                <span><MapPin size={14} /> {locationLabel}</span>
               </div>
 
-              <h1>Printing, documents &amp; digital services.</h1>
+              <div
+                className="home-hero-service-line"
+                aria-label={`Local help for ${rotatingServices.join(", ")}`}
+              >
+                <span className="home-hero-service-label">Local help for</span>
+                <span className="home-hero-service-viewport" aria-hidden="true">
+                  <span className="home-hero-service-track">
+                    {rotatingServices.map((service) => <span key={service}>{service}</span>)}
+                    <span>{rotatingServices[0]}</span>
+                  </span>
+                </span>
+              </div>
+
+              <h1>
+                <span>Everything you need,</span>
+                <span>handled locally.</span>
+              </h1>
 
               <p className={styles.lead}>
-                Send your requirement before you visit. We’ll confirm what you need, current availability and charges before work starts.
+                Check requirements, availability and charges before you visit.
               </p>
 
               <div className={styles.actions}>
@@ -51,36 +75,26 @@ export default async function HomePage() {
                   rel="noopener noreferrer"
                   eventName="whatsapp_click"
                 >
-                  <MessageCircle size={18} /> WhatsApp us <ArrowRight size={17} />
+                  <MessageCircle size={18} /> Send your requirement <ArrowRight size={17} />
                 </TrackedLink>
                 <Link className={styles.secondaryButton} href="#services">
-                  View services
+                  Browse services
                 </Link>
-              </div>
-
-              <div className={styles.heroNote} aria-label="Service highlights">
-                <span>Requirements confirmed first</span>
-                <span>Clear pricing before work</span>
-                <span>Local help in Akhtar Colony</span>
               </div>
             </div>
 
-            <div className={styles.visual}>
-              <div className={styles.imageShell}>
+            <div className={`${styles.visual} home-hero-visual`}>
+              <div className={`${styles.imageShell} home-hero-image`}>
                 <Image
                   src={imageUrl}
-                  alt={featuredImage?.alt_text || "Yaqoob Enterprises"}
+                  alt={featuredImage?.alt_text || settings.business_name}
                   fill
                   priority
-                  sizes="(max-width: 992px) 100vw, 42vw"
+                  sizes="(max-width: 1088px) calc(100vw - 24px), 42vw"
                   style={featuredImage
                     ? { objectPosition: `${featuredImage.focal_x || 50}% ${featuredImage.focal_y || 50}%` }
                     : { objectFit: "contain", padding: "18%" }}
                 />
-              </div>
-              <div className={styles.imageCaption}>
-                <span>Yaqoob Enterprises</span>
-                <span><MapPin size={13} /> Akhtar Colony</span>
               </div>
             </div>
           </div>
@@ -90,22 +104,22 @@ export default async function HomePage() {
           <ServiceShowcase categories={categories} />
         </div>
 
-        <section className={styles.trustSection} aria-labelledby="why-us-title">
+        <section className={`${styles.trustSection} home-how-it-works`} aria-labelledby="why-us-title">
           <div className="container">
             <div className={styles.sectionIntro}>
-              <span>Simple process</span>
+              <span>How it works</span>
               <h2 id="why-us-title">Know the next step before you travel.</h2>
             </div>
-            <div className={styles.trustGrid}>
-              <div><Check size={18} /><strong>Confirm requirements</strong><p>See what to bring or send before visiting.</p></div>
-              <div><Check size={18} /><strong>Confirm availability</strong><p>Official-system and appointment-dependent work is checked first.</p></div>
-              <div><Check size={18} /><strong>Confirm charges</strong><p>We confirm the quotation before work begins.</p></div>
+            <div className={`${styles.trustGrid} home-how-grid`}>
+              <div><Check size={18} /><strong>Send the requirement</strong><p>Tell us the service, quantity, deadline or any detail that matters.</p></div>
+              <div><Check size={18} /><strong>Get a clear confirmation</strong><p>We confirm what is required, current availability, expected timing and charges.</p></div>
+              <div><Check size={18} /><strong>Use the right service option</strong><p>Visit the shop, collect, request delivery or arrange an appointment where supported.</p></div>
             </div>
           </div>
         </section>
 
-        <section className={styles.contactSection} id="get-in-touch">
-          <div className={`container ${styles.contactShell}`}>
+        <section className={`${styles.contactSection} home-contact-section`} id="get-in-touch">
+          <div className={`container home-contact-shell ${styles.contactShell}`}>
             <div className={styles.contactCopy}>
               <span className={styles.eyebrow}>Quick request</span>
               <h2>Tell us what you need.</h2>
@@ -113,16 +127,20 @@ export default async function HomePage() {
               <Link href="/contact" className={styles.textLink}>Need more guidance? Use the guided request <ArrowRight size={15} /></Link>
             </div>
             <div className={styles.formPanel}>
-              <HomeContactFormClient categories={contactCategories} whatsappNumber={settings.whatsapp_e164} />
+              <HomeContactFormClient
+                categories={contactCategories}
+                whatsappNumber={settings.whatsapp_e164}
+                businessName={settings.business_name}
+              />
             </div>
           </div>
         </section>
 
-        <section className={styles.visitSection} id="visit">
-          <div className={`container ${styles.visitGrid}`}>
+        <section className={`${styles.visitSection} home-visit-section`} id="visit">
+          <div className={`container home-visit-grid ${styles.visitGrid}`}>
             <div>
               <span className={styles.eyebrow}>Visit the shop</span>
-              <h2>Akhtar Colony, Karachi.</h2>
+              <h2>{locationLabel}.</h2>
               <p>{settings.address}</p>
               <span className={styles.statusLine}><span className={styles.statusDot} aria-hidden="true" /> {hoursText}</span>
             </div>

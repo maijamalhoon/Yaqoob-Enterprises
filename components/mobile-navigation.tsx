@@ -7,11 +7,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { TrackedLink } from "@/components/tracked-link";
 
 export function MobileNavigation({
+  businessName,
   mapUrl,
   phone,
   whatsappUrl,
   statusText,
 }: {
+  businessName: string;
   mapUrl: string;
   phone: string;
   whatsappUrl: string;
@@ -90,7 +92,7 @@ export function MobileNavigation({
         }}
       >
         <div className="mobile-menu-head">
-          <span className="mobile-menu-head__eyebrow">Yaqoob Enterprises</span>
+          <span className="mobile-menu-head__eyebrow">{businessName}</span>
           <strong>Services and contact</strong>
           {statusText && <span className="mobile-menu-status"><Clock3 size={15} /> {statusText}</span>}
         </div>

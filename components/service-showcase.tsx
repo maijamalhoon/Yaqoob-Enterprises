@@ -25,7 +25,6 @@ export function ServiceShowcase({ categories }: { categories: ServiceCategory[] 
             <span className="eyebrow">Services</span>
             <h2>What can we help with?</h2>
           </div>
-          <p>Open a category to check requirements, availability and the right next step before you visit.</p>
         </div>
 
         <div className="minimal-services__list">
