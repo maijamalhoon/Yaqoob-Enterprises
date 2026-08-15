@@ -196,7 +196,6 @@ export function RequestFormClient({
       <button className="button button--primary request-submit" type="submit">
         <MessageCircle size={18} /> Open in WhatsApp <ArrowRight size={17} />
       </button>
-      <p className="field-help field-help--privacy">Review it in WhatsApp before sending.</p>
     </form>
   );
 }
