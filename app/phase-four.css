@@ -1,9 +1,0 @@
-/* Frozen Phase 4 cascade entrypoint. Keep import order unchanged; new production corrections belong in final-hardening.css. */
-@import "./phase-four-min-1.css";
-@import "./phase-four-min-2.css";
-@import "./phase-four-min-3.css";
-@import "./phase-four-min-4.css";
-@import "./phase-four-min-5.css";
-@import "./phase-four-min-6.css";
-@import "./phase-four-min-7.css";
-@import "./phase-four-min-8.css";

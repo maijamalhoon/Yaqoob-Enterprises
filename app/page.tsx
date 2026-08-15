@@ -27,8 +27,8 @@ export default async function HomePage() {
       <SiteHeader settings={settings} statusText={hoursText} showMobileQuickActions={false} />
 
       <main id="main-content">
-        <section className={styles.hero}>
-          <div className={`container ${styles.heroGrid}`}>
+        <section className={`${styles.hero} home-hero`}>
+          <div className={`container home-hero-grid ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
               <div className={styles.kicker}>
                 <span className={styles.statusDot} aria-hidden="true" />
@@ -65,14 +65,14 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className={styles.visual}>
-              <div className={styles.imageShell}>
+            <div className={`${styles.visual} home-hero-visual`}>
+              <div className={`${styles.imageShell} home-hero-image`}>
                 <Image
                   src={imageUrl}
                   alt={featuredImage?.alt_text || "Yaqoob Enterprises"}
                   fill
                   priority
-                  sizes="(max-width: 992px) 100vw, 42vw"
+                  sizes="(max-width: 1088px) calc(100vw - 24px), 42vw"
                   style={featuredImage
                     ? { objectPosition: `${featuredImage.focal_x || 50}% ${featuredImage.focal_y || 50}%` }
                     : { objectFit: "contain", padding: "18%" }}
@@ -90,13 +90,13 @@ export default async function HomePage() {
           <ServiceShowcase categories={categories} />
         </div>
 
-        <section className={styles.trustSection} aria-labelledby="why-us-title">
+        <section className={`${styles.trustSection} home-how-it-works`} aria-labelledby="why-us-title">
           <div className="container">
             <div className={styles.sectionIntro}>
               <span>How it works</span>
               <h2 id="why-us-title">Know the next step before you travel.</h2>
             </div>
-            <div className={styles.trustGrid}>
+            <div className={`${styles.trustGrid} home-how-grid`}>
               <div><Check size={18} /><strong>Send the requirement</strong><p>Tell us the service, quantity, deadline or any detail that matters.</p></div>
               <div><Check size={18} /><strong>Get a clear confirmation</strong><p>We confirm what is required, current availability, expected timing and charges.</p></div>
               <div><Check size={18} /><strong>Use the right service option</strong><p>Visit the shop, collect, request delivery or arrange an appointment where supported.</p></div>
@@ -104,8 +104,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className={styles.contactSection} id="get-in-touch">
-          <div className={`container ${styles.contactShell}`}>
+        <section className={`${styles.contactSection} home-contact-section`} id="get-in-touch">
+          <div className={`container home-contact-shell ${styles.contactShell}`}>
             <div className={styles.contactCopy}>
               <span className={styles.eyebrow}>Quick request</span>
               <h2>Tell us what you need.</h2>
@@ -118,8 +118,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className={styles.visitSection} id="visit">
-          <div className={`container ${styles.visitGrid}`}>
+        <section className={`${styles.visitSection} home-visit-section`} id="visit">
+          <div className={`container home-visit-grid ${styles.visitGrid}`}>
             <div>
               <span className={styles.eyebrow}>Visit the shop</span>
               <h2>Akhtar Colony, Karachi.</h2>
