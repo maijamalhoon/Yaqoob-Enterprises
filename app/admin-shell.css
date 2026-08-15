@@ -42,12 +42,33 @@
 
 .admin-topbar__actions form { margin: 0; }
 
+.admin-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.admin-quick-actions .button {
+  min-height: 2.7rem;
+  font-size: 0.76rem;
+}
+
 @media (max-width: 46rem) {
   .admin-topbar__identity span { display: none; }
+
   .admin-topbar__actions a,
   .admin-topbar__actions button {
     min-height: 2.35rem;
     padding: 0.4rem 0.55rem;
     font-size: 0.68rem;
+  }
+
+  .admin-quick-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quick-actions .button {
+    width: 100%;
   }
 }
