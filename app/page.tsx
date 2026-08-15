@@ -32,7 +32,7 @@ export default async function HomePage() {
         <section className={`${styles.hero} home-hero`}>
           <div className={`container home-hero-grid ${styles.heroGrid}`}>
             <div className={styles.heroCopy}>
-              <div className={styles.kicker}>
+              <div className={`${styles.kicker} home-hero-kicker`}>
                 <span className={styles.statusDot} aria-hidden="true" />
                 <span>{hoursText}</span>
                 <span className={styles.kickerDivider} aria-hidden="true" />
