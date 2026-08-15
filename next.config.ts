@@ -32,6 +32,35 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/services/printing-photos/photocopy-scanning",
+        destination: "/services/printing-photos/colour-black-white-printing",
+        permanent: true,
+      },
+      {
+        source: "/services/typing-online/cv-preparation",
+        destination: "/services/typing-online/urdu-english-typing",
+        permanent: true,
+      },
+      {
+        source: "/services/biometric/fbr-sales-tax-biometric",
+        destination: "/services/biometric/general-biometric-esahulat",
+        permanent: true,
+      },
+      {
+        source: "/services/biometric/fbr-psw-biometric",
+        destination: "/services/biometric/general-biometric-esahulat",
+        permanent: true,
+      },
+      {
+        source: "/services/biometric/eto-vehicle-biometric",
+        destination: "/services/biometric/general-biometric-esahulat",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
