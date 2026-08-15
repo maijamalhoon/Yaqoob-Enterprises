@@ -1,4 +1,5 @@
 /* Final global polish — visual refinement only, no structural or functional changes. */
+/* Responsive policy: phones first (280–430px), then large phones/tablets, then desktop. */
 
 :root {
   --ink: #102037;
