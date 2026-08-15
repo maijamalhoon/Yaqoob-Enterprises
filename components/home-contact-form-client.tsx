@@ -13,9 +13,11 @@ type HomeContactCategory = {
 export function HomeContactFormClient({
   categories,
   whatsappNumber,
+  businessName,
 }: {
   categories: HomeContactCategory[];
   whatsappNumber: string;
+  businessName: string;
 }) {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,7 +28,7 @@ export function HomeContactFormClient({
       ? "Please guide me to the right service"
       : selectedCategory?.title || "General enquiry";
     const lines = [
-      "Hello Yaqoob Enterprises,",
+      `Hello ${businessName},`,
       "",
       `Name: ${String(data.get("name") || "")}`,
       `Service: ${service}`,
