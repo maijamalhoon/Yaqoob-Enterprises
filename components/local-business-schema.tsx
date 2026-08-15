@@ -38,6 +38,7 @@ export function LocalBusinessSchema({
     "@id": businessId,
     name: settings.business_name,
     url: SITE_URL,
+    sameAs: settings.google_business_profile_url ? [settings.google_business_profile_url] : undefined,
     logo: `${SITE_URL}/brand/logo-horizontal.svg`,
     image: imageUrl.startsWith("http") ? imageUrl : `${SITE_URL}${imageUrl}`,
     telephone: settings.phone_e164,
