@@ -1,26 +1,18 @@
 # Yaqoob Enterprises
 
-Production-oriented Next.js website and Supabase-backed admin centre for Yaqoob Enterprises in Akhtar Colony, Karachi.
+Customer website and admin centre for Yaqoob Enterprises, built with Next.js and Supabase.
 
-## Included
+## Current UI branch
 
-- Responsive customer-facing website
-- Eight service-category pages with service modes and requirements
-- WhatsApp request builder with service-aware delivery options
-- Coverage, pricing, hours and contact content from Supabase
-- Passwordless admin authentication restricted by an email allowlist
-- Service, category, coverage, gallery, settings, announcements and analytics management
-- Privacy-conscious page-view and contact-action analytics
-- Supabase Storage gallery with image focal-point controls
-- Temporary storefront concept image clearly labelled until real photos are uploaded
+The `agent/premium-ui-system` branch contains the current customer/admin visual redesign and responsive QA work.
 
-## Environment
+### Hero refinement
 
-Public Supabase values have safe defaults in `lib/env.ts`, and may be overridden using `.env.local`:
+The homepage hero uses a concise static headline with a lightweight CSS-only rotating service cue for Printing, Documents, Online forms, Payments, Tickets and Biometric services. The rotation respects `prefers-reduced-motion` and does not add a JavaScript carousel or timer.
 
-```bash
-cp .env.example .env.local
-```
+### Responsive validation
+
+Browser smoke coverage checks the homepage across 280, 320, 360, 390, 430, 768, 1024, 1366, 1440 and 1920px viewport widths, including horizontal-overflow protection, service visibility, mobile navigation, forms and the desktop WhatsApp action.
 
 ## Development
 
@@ -29,18 +21,10 @@ npm install
 npm run dev
 ```
 
-## Validation
+## Production checks
 
 ```bash
 npm run typecheck
 npm run lint
 npm run build
 ```
-
-## Admin access
-
-The owner email is allowlisted in Supabase. The login page sends a passwordless email link. Configure Supabase Auth redirect URLs for the production domain and Vercel previews before final launch.
-
-## Preview deployment
-
-Preview deployments are verified before this branch is merged into production. A fresh commit may be used to refresh Vercel preview routing without changing application behaviour.
