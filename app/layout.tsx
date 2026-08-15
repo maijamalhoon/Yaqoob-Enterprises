@@ -8,6 +8,7 @@ import "./responsive.css";
 import "./hero-ticker.css";
 import "./service-discovery.css";
 import "./service-page-polish.css";
+import "./seo-service-pages.css";
 import "./quick-request-polish.css";
 import "./guided-request-polish.css";
 import "./admin-control-center.css";
@@ -20,7 +21,7 @@ import { SITE_URL } from "@/lib/env";
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
   const location = businessLocationLabel(settings.address);
-  const description = `Printing, biometric verification, online forms, documentation, payments, ticket booking, stationery and laptop support in ${location}.`;
+  const description = `NADRA e-Sahulat and biometric verification, printing, photocopy, online forms, documents, payments, tickets, stationery and laptop support in ${location}.`;
   const homeTitle = `${settings.business_name} | ${settings.tagline}`;
 
   return {
