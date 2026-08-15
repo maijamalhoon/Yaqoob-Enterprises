@@ -205,7 +205,7 @@ try {
   await assertNoHorizontalOverflow(page, "Desktop biometric SEO page");
   const biometricText = await page.locator("main").innerText();
   assert((await page.locator("h1").first().innerText()).includes("NADRA e-Sahulat"), "Biometric detail page lost its priority search heading.");
-  assert((await page.title()).includes("Biometric Verification"), "Biometric detail page title is not search-focused.");
+  assert((await page.title()).includes("NADRA e-Sahulat Biometric Akhtar Colony"), "Biometric detail page title is not search-focused.");
   assert(biometricText.includes("FBR Sales Tax"), "Grouped biometric page must cover FBR Sales Tax biometric intent.");
   assert(biometricText.includes("PSW"), "Grouped biometric page must cover PSW biometric intent.");
   assert(biometricText.includes("Vehicle / ETO"), "Grouped biometric page must cover Vehicle / ETO biometric intent.");
