@@ -19,6 +19,7 @@ const fallbackSettings: BusinessSettings = {
   whatsapp_e164: "+923492568864",
   address: "Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi, Pakistan",
   map_url: "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A",
+  google_business_profile_url: "",
   pricing_message:
     "Service charges vary by work type, quantity, urgency, delivery location and any applicable official fees. We confirm the exact quotation before work begins, either on WhatsApp or at the shop.",
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",
@@ -32,6 +33,7 @@ const businessSettingsColumns = [
   "whatsapp_e164",
   "address",
   "map_url",
+  "google_business_profile_url",
   "pricing_message",
   "concept_image_notice",
 ].join(",");
