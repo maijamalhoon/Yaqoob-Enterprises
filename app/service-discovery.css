@@ -1,0 +1,316 @@
+/* Primary service discovery polish.
+ * This is the homepage's main customer decision area, tuned mobile-first without changing content or behavior.
+ */
+
+.minimal-services {
+  padding: clamp(3.25rem, 5vw, 4.5rem) 0;
+}
+
+.minimal-services__heading {
+  grid-template-columns: minmax(0, 1.15fr) minmax(19rem, 0.85fr);
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 3rem);
+  margin-bottom: clamp(1.35rem, 2.2vw, 1.7rem);
+}
+
+.minimal-services__heading > div {
+  gap: 0.5rem;
+}
+
+.minimal-services__heading h2 {
+  max-width: 17ch;
+  font-size: clamp(2.15rem, 3.7vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.046em;
+}
+
+.minimal-services__heading > p {
+  justify-self: end;
+  max-width: 29rem;
+  color: #667486;
+  font-size: 0.9rem;
+  line-height: 1.62;
+}
+
+.minimal-services__list {
+  gap: 0.68rem;
+}
+
+.minimal-service-item {
+  min-height: 6.9rem;
+  grid-template-columns: 3.05rem minmax(0, 1fr) 1.35rem;
+  gap: 0.2rem 0.95rem;
+  padding: 0.95rem 1rem;
+  border-color: #dfe6eb;
+  border-radius: 0.76rem;
+  background: #fff;
+  box-shadow: none;
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.minimal-service-item:hover {
+  transform: translateY(-1px);
+  border-color: #c7d7dc;
+  background: #fcfefe;
+  box-shadow: 0 8px 22px rgba(7, 24, 47, 0.05);
+}
+
+.minimal-service-item:active {
+  transform: translateY(0) scale(0.996);
+  background: #f8fbfb;
+}
+
+.minimal-service-item__icon {
+  width: 3.05rem;
+  height: 3.05rem;
+  border: 1px solid transparent;
+  border-radius: 0.66rem;
+  color: var(--teal);
+  background: #eef6f6;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.minimal-service-item:hover .minimal-service-item__icon {
+  border-color: #d7e7e8;
+  color: #005d68;
+  background: #e9f4f4;
+}
+
+.minimal-service-item__copy {
+  gap: 0.16rem;
+}
+
+.minimal-service-item__copy strong {
+  color: var(--ink-strong);
+  font-size: 0.96rem;
+  font-weight: 720;
+  line-height: 1.28;
+  letter-spacing: -0.018em;
+}
+
+.minimal-service-item__copy small {
+  color: #677587;
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.minimal-service-item__meta {
+  margin-top: 0.12rem;
+  color: #7d8997;
+  font-size: 0.7rem;
+  font-weight: 690;
+  line-height: 1.2;
+}
+
+.minimal-service-item__arrow {
+  width: 1.05rem;
+  height: 1.05rem;
+  justify-self: end;
+  color: #8d98a4;
+  stroke-width: 2;
+}
+
+.minimal-service-item:hover .minimal-service-item__arrow {
+  transform: translateX(2px);
+  color: var(--teal);
+}
+
+@media (max-width: 68rem) {
+  .minimal-services__heading {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 0.55rem;
+  }
+
+  .minimal-services__heading > p {
+    justify-self: start;
+    max-width: 40rem;
+  }
+}
+
+@media (max-width: 54rem) {
+  .minimal-services {
+    padding-block: 3rem;
+  }
+
+  .minimal-services__list {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .minimal-service-item {
+    min-height: 6.55rem;
+  }
+}
+
+@media (max-width: 46rem) {
+  .minimal-services {
+    padding-block: 2.7rem;
+  }
+
+  .minimal-services__heading {
+    gap: 0.42rem;
+    margin-bottom: 1.05rem;
+  }
+
+  .minimal-services__heading > div {
+    gap: 0.38rem;
+  }
+
+  .minimal-services__heading h2 {
+    max-width: none;
+    font-size: clamp(1.85rem, 8vw, 2.15rem);
+    line-height: 1.02;
+  }
+
+  .minimal-services__heading > p {
+    max-width: 36rem;
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .minimal-services__list {
+    gap: 0.48rem;
+  }
+
+  .minimal-service-item {
+    min-height: 6.45rem;
+    grid-template-columns: 2.7rem minmax(0, 1fr) 1.1rem;
+    gap: 0.16rem 0.68rem;
+    padding: 0.78rem 0.72rem;
+    border-radius: 0.68rem;
+  }
+
+  .minimal-service-item__icon {
+    width: 2.7rem;
+    height: 2.7rem;
+    align-self: center;
+    border-radius: 0.58rem;
+  }
+
+  .minimal-service-item__copy {
+    gap: 0.18rem;
+  }
+
+  .minimal-service-item__copy strong {
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  .minimal-service-item__copy small {
+    font-size: 0.75rem;
+    line-height: 1.43;
+    -webkit-line-clamp: 2;
+  }
+
+  .minimal-service-item__meta {
+    margin-top: 0.14rem;
+    font-size: 0.66rem;
+  }
+
+  .minimal-service-item__arrow {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (max-width: 22.5rem) {
+  .minimal-services {
+    padding-block: 2.45rem;
+  }
+
+  .minimal-services__heading h2 {
+    font-size: 1.78rem;
+  }
+
+  .minimal-services__heading > p {
+    font-size: 0.78rem;
+  }
+
+  .minimal-service-item {
+    min-height: 6.25rem;
+    grid-template-columns: 2.45rem minmax(0, 1fr) 0.95rem;
+    gap: 0.14rem 0.58rem;
+    padding: 0.72rem 0.62rem;
+  }
+
+  .minimal-service-item__icon {
+    width: 2.45rem;
+    height: 2.45rem;
+  }
+
+  .minimal-service-item__copy strong {
+    font-size: 0.84rem;
+  }
+
+  .minimal-service-item__copy small {
+    font-size: 0.71rem;
+    line-height: 1.42;
+  }
+
+  .minimal-service-item__meta {
+    font-size: 0.63rem;
+  }
+}
+
+@media (max-width: 20rem) {
+  .minimal-services__heading h2 {
+    font-size: 1.68rem;
+  }
+
+  .minimal-service-item {
+    min-height: 6.15rem;
+    grid-template-columns: 2.35rem minmax(0, 1fr) 0.9rem;
+    gap: 0.12rem 0.52rem;
+    padding-inline: 0.56rem;
+  }
+
+  .minimal-service-item__icon {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .minimal-service-item__copy strong {
+    font-size: 0.8rem;
+  }
+
+  .minimal-service-item__copy small {
+    font-size: 0.68rem;
+  }
+
+  .minimal-service-item__meta {
+    font-size: 0.6rem;
+  }
+}
+
+@media (hover: none) {
+  .minimal-service-item:hover {
+    transform: none;
+    border-color: #dfe6eb;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .minimal-service-item:hover .minimal-service-item__icon {
+    border-color: transparent;
+    color: var(--teal);
+    background: #eef6f6;
+  }
+
+  .minimal-service-item:hover .minimal-service-item__arrow {
+    transform: none;
+    color: #8d98a4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .minimal-service-item,
+  .minimal-service-item__icon,
+  .minimal-service-item__arrow {
+    transition: none;
+  }
+}
