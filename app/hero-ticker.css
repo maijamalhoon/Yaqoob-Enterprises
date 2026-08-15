@@ -3,12 +3,12 @@
 .home-hero-service-line {
   display: flex;
   align-items: center;
-  gap: 0.48rem;
+  gap: 0.46rem;
   min-height: 1.35rem;
-  margin: 0 0 0.72rem;
+  margin: 0 0 0.44rem;
   color: #697687;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.79rem;
+  font-weight: 720;
   letter-spacing: -0.008em;
 }
 
@@ -42,13 +42,20 @@
 }
 
 .home-hero.home-hero h1 {
-  max-width: 16ch;
-  font-size: clamp(2.85rem, 4.85vw, 4.55rem);
+  max-width: 18ch;
+  font-size: clamp(3rem, 4.1vw, 3.8rem);
   line-height: 0.99;
 }
 
 .home-hero.home-hero h1 > span {
   display: block;
+}
+
+/* Two deliberate lines on desktop; smaller layouts may wrap naturally. */
+@media (min-width: 68.001rem) {
+  .home-hero.home-hero h1 > span:first-child {
+    white-space: nowrap;
+  }
 }
 
 @keyframes home-hero-service-rotate {
@@ -76,7 +83,7 @@
   .home-hero-service-line {
     gap: 0.38rem;
     min-height: 1.18rem;
-    margin-bottom: 0.48rem;
+    margin-bottom: 0.42rem;
     font-size: 0.68rem;
   }
 
