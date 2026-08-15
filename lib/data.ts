@@ -55,6 +55,7 @@ const serviceCategoryColumns = [
   "icon_key",
   "display_order",
   "is_active",
+  "updated_at",
 ].join(",");
 
 const serviceColumns = [
@@ -75,6 +76,9 @@ const serviceColumns = [
   "important_note",
   "display_order",
   "is_featured",
+  "seo_title",
+  "seo_description",
+  "updated_at",
 ].join(",");
 
 const coverageColumns = [
@@ -158,7 +162,7 @@ async function loadSiteData() {
   };
 }
 
-export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v5"], {
+export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v6"], {
   revalidate: 300,
   tags: ["site-data"],
 });
@@ -166,6 +170,24 @@ export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v5"],
 export async function getCategoryBySlug(slug: string) {
   const { categories } = await getSiteData();
   return categories.find((category) => category.slug === slug) || null;
+}
+
+export async function getServiceBySlugs(categorySlug: string, serviceSlug: string) {
+  const { categories } = await getSiteData();
+  const category = categories.find((item) => item.slug === categorySlug);
+  if (!category) return null;
+  const service = category.services?.find((item) => item.slug === serviceSlug);
+  return service ? { category, service } : null;
+}
+
+export async function getPublicServicePaths() {
+  const { categories } = await getSiteData();
+  return categories.flatMap((category) =>
+    (category.services || []).map((service) => ({
+      categorySlug: category.slug,
+      serviceSlug: service.slug,
+    })),
+  );
 }
 
 export function whatsappUrl(number: string, message: string) {
