@@ -26,13 +26,13 @@ type CategoryOverride = {
 const categoryOverrides: Record<string, CategoryOverride> = {
   "printing-photos": {
     heading: (location) => `Printing, Photocopy, Scanning & Photos in ${location}`,
-    title: (businessName) => `Printing, Photocopy & Passport Photos Karachi | ${businessName}`,
+    title: (businessName) => `Printing & Photocopy Akhtar Colony | ${businessName}`,
     description: (location, businessName) =>
       `Printing, photocopy, document scanning and passport-size photo services at ${businessName} in ${location}. Send your file or requirement first to confirm availability and charges.`,
   },
   "typing-online": {
     heading: (location) => `Online Jobs, Forms, Typing & CV Services in ${location}`,
-    title: (businessName) => `Online Jobs, Forms, Typing & CV Karachi | ${businessName}`,
+    title: (businessName) => `Online Forms & Typing Akhtar Colony | ${businessName}`,
     description: (location, businessName) =>
       `Online job applications and forms, Urdu and English typing, and CV preparation at ${businessName} in ${location}. Confirm the required documents and portal details before visiting.`,
   },
@@ -44,7 +44,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   biometric: {
     heading: (location) => `NADRA e-Sahulat & Biometric Verification in ${location}`,
-    title: (businessName) => `NADRA e-Sahulat & Biometric Verification Karachi | ${businessName}`,
+    title: (businessName) => `Biometric Services Akhtar Colony | ${businessName}`,
     description: (location, businessName) =>
       `NADRA e-Sahulat, general biometric, FBR Sales Tax, PSW and Vehicle / ETO biometric verification assistance at ${businessName} in ${location}. Check requirements and availability before visiting.`,
   },
@@ -195,7 +195,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "general-biometric-esahulat": {
     heading: (location) => `NADRA e-Sahulat Biometric Verifications in ${location}`,
-    title: (businessName) => `NADRA e-Sahulat & Biometric Verification Karachi | ${businessName}`,
+    title: (businessName) => `NADRA e-Sahulat Biometric Akhtar Colony | ${businessName}`,
     description: (location, businessName) =>
       `General biometric, FBR Sales Tax, Pakistan Single Window (PSW) and Vehicle / ETO biometric verification assistance at ${businessName} in ${location}. Confirm the exact case, documents and system availability before visiting.`,
     intro:

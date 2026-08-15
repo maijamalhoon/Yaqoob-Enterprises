@@ -10,12 +10,14 @@ function validDate(value: string | null | undefined) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const site = await getSiteData();
-  const categoryEntries: MetadataRoute.Sitemap = site.categories.map((category) => ({
+  const categoryEntries: MetadataRoute.Sitemap = site.categories
+    .filter((category) => (category.services || []).length > 1)
+    .map((category) => ({
     url: `${SITE_URL}/services/${category.slug}`,
     lastModified: validDate(category.updated_at),
     changeFrequency: "monthly",
-    priority: category.slug === "biometric" ? 0.95 : 0.8,
-  }));
+      priority: 0.8,
+    }));
   const serviceEntries: MetadataRoute.Sitemap = site.categories.flatMap((category) =>
     (category.services || []).map((service) => ({
       url: `${SITE_URL}/services/${category.slug}/${service.slug}`,

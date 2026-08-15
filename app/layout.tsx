@@ -2,17 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./brand.css";
 import "./design-system.css";
-import "./admin-shell.css";
 import "./global-polish.css";
 import "./responsive.css";
 import "./hero-ticker.css";
 import "./service-discovery.css";
-import "./service-page-polish.css";
-import "./seo-service-pages.css";
 import "./quick-request-polish.css";
-import "./guided-request-polish.css";
-import "./admin-control-center.css";
-import "./admin-safety-analytics.css";
 import { PageTracker } from "@/components/page-tracker";
 import { businessLocationLabel } from "@/lib/business-display";
 import { getSiteData } from "@/lib/data";
@@ -21,8 +15,8 @@ import { SITE_URL } from "@/lib/env";
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
   const location = businessLocationLabel(settings.address);
-  const description = `NADRA e-Sahulat and biometric verification, printing, photocopy, online forms, documents, payments, tickets, stationery and laptop support in ${location}.`;
-  const homeTitle = `NADRA e-Sahulat & Biometric Verification Karachi | ${settings.business_name}`;
+  const description = `${settings.business_name} in ${location} offers NADRA e-Sahulat and biometric verification, printing, photocopying, online forms, document preparation, payments, tickets and stationery.`;
+  const homeTitle = `${settings.business_name} | Services in Akhtar Colony, Karachi`;
 
   return {
     metadataBase: new URL(SITE_URL),

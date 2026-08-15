@@ -1,14 +1,10 @@
 import { SITE_URL } from "@/lib/env";
 import { businessCity, businessLocationLabel } from "@/lib/business-display";
 import { getHourPeriods } from "@/lib/data";
+import { OFFICIAL_PROFILE_URLS } from "@/lib/official-profiles";
 import type { BusinessHour, BusinessSettings, CoverageArea, ServiceCategory } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const socialProfiles = [
-  "https://www.facebook.com/yaqoobenterprises1",
-  "https://www.instagram.com/yaqoobenterprises1/",
-];
-
 function jsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
@@ -38,7 +34,7 @@ export function LocalBusinessSchema({
   const locationLabel = businessLocationLabel(settings.address);
   const city = businessCity(settings.address);
   const businessId = `${SITE_URL}/#business`;
-  const sameAs = [settings.google_business_profile_url, ...socialProfiles].filter(Boolean);
+  const sameAs = OFFICIAL_PROFILE_URLS;
   const publicCategories = categories
     .filter((category) => category.is_active)
     .map((category) => ({

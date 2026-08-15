@@ -59,8 +59,8 @@ export default async function HomePage() {
               </div>
 
               <h1>
-                <span>Everything you need,</span>
-                <span>handled locally.</span>
+                <span>NADRA e-Sahulat, printing & online services</span>
+                <span>in Akhtar Colony, Karachi.</span>
               </h1>
 
               <p className={styles.lead}>

@@ -4,6 +4,7 @@ import { Logo } from "@/components/logo";
 import { TrackedLink } from "@/components/tracked-link";
 import { businessLocationLabel } from "@/lib/business-display";
 import { whatsappUrl } from "@/lib/data";
+import { OFFICIAL_PROFILES } from "@/lib/official-profiles";
 import type { BusinessSettings, ServiceCategory } from "@/lib/types";
 
 export function SiteFooter({ settings }: { settings: BusinessSettings; categories: ServiceCategory[] }) {
@@ -22,6 +23,11 @@ export function SiteFooter({ settings }: { settings: BusinessSettings; categorie
           <Link href="/#services">Services</Link>
           <Link href="/contact">Guided request</Link>
           <Link href="/privacy">Privacy</Link>
+          {OFFICIAL_PROFILES.map((profile) => (
+            <a key={profile.href} href={profile.href} target="_blank" rel="noopener noreferrer">
+              {profile.label}
+            </a>
+          ))}
         </nav>
 
         <div className="minimal-footer__contact">

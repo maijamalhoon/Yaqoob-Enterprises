@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -116,7 +116,11 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   const { slug } = await params;
   const [category, site] = await Promise.all([getCategoryBySlug(slug), getSiteData()]);
   if (!category) notFound();
-  const serviceCount = category.services?.length || 0;
+  const publicServices = category.services || [];
+  if (publicServices.length === 1) {
+    permanentRedirect(`/services/${category.slug}/${publicServices[0].slug}`);
+  }
+  const serviceCount = publicServices.length;
   const statusText = getCurrentBusinessStatus(site.hours);
   const seo = getCategorySeo(category, site.settings);
 
@@ -176,7 +180,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                 <p>Every card shows the requirement, service method and the correct next action.</p>
               </div>
 
-              {category.services?.map((service, index) => {
+              {publicServices.map((service, index) => {
                 const action = serviceAction(service.status, service.title, site.settings.business_name);
                 const customerModes = getCustomerServiceModes(service);
                 return (

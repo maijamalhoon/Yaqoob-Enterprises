@@ -93,25 +93,78 @@ try {
   assert(Boolean(businessData), "Homepage is missing LocalBusiness structured data.");
   assert(Boolean(businessData?.address?.streetAddress), "Homepage is missing LocalBusiness address data.");
   assert(Array.isArray(businessData?.sameAs), "Business entity is missing sameAs identity links.");
+  assert(businessData.sameAs.some((url) => String(url).includes("share.google/2S03TGi4gfULWqI6F")), "Google Business Profile is missing from business schema.");
   assert(businessData.sameAs.some((url) => String(url).includes("facebook.com/yaqoobenterprises1")), "Facebook profile is missing from business schema.");
   assert(businessData.sameAs.some((url) => String(url).includes("instagram.com/yaqoobenterprises1")), "Instagram profile is missing from business schema.");
+  assert((await page.locator('footer a[href="https://share.google/2S03TGi4gfULWqI6F"]').count()) === 1, "Footer is missing the official Google Business Profile.");
+  assert((await page.locator('footer a[href="https://www.facebook.com/yaqoobenterprises1"]').count()) === 1, "Footer is missing the official Facebook profile.");
+  assert((await page.locator('footer a[href="https://www.instagram.com/yaqoobenterprises1/"]').count()) === 1, "Footer is missing the official Instagram profile.");
 
   const catalogCategories = businessData?.hasOfferCatalog?.itemListElement || [];
   const catalogServices = catalogCategories.flatMap((category) => category?.itemListElement || []);
   assert(catalogCategories.length >= 8, `Expected at least 8 service categories in OfferCatalog; found ${catalogCategories.length}.`);
   assert(catalogServices.length >= 10, `Expected at least 10 public services in OfferCatalog; found ${catalogServices.length}.`);
   assert((await page.locator("#services .minimal-service-item").count()) === expectedMainServices, "Homepage must show exactly 10 admin-selected main services.");
-  assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
+  const homepageTitle = await page.title();
+  assert(homepageTitle.includes(websiteData.name), "Homepage title should follow the configured business identity.");
   assert((await page.locator("body").innerText()).includes(websiteData.name), "Homepage is missing the configured business identity.");
   await assertNoHorizontalOverflow(page, "Desktop homepage");
 
   const sitemapResponse = await page.request.get(`${baseUrl}/sitemap.xml`);
   assert(sitemapResponse.ok(), `Sitemap returned ${sitemapResponse.status()}.`);
   const sitemapText = await sitemapResponse.text();
-  const categoryEntries = sitemapText.match(/<loc>[^<]*\/services\/[^/<]+<\/loc>/g) || [];
-  const detailEntries = sitemapText.match(/<loc>[^<]*\/services\/[^/<]+\/[^/<]+<\/loc>/g) || [];
-  assert(categoryEntries.length >= 8, `Expected at least 8 active service categories in sitemap; found ${categoryEntries.length}.`);
-  assert(detailEntries.length >= 10, `Expected at least 10 public service detail URLs in sitemap; found ${detailEntries.length}.`);
+  const sitemapLocations = [...sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  const categoryLocations = sitemapLocations.filter((url) => {
+    const parts = new URL(url).pathname.split("/").filter(Boolean);
+    return parts[0] === "services" && parts.length === 2;
+  });
+  const detailLocations = sitemapLocations.filter((url) => {
+    const parts = new URL(url).pathname.split("/").filter(Boolean);
+    return parts[0] === "services" && parts.length === 3;
+  });
+  assert(detailLocations.length >= 10, `Expected at least 10 public service detail URLs in sitemap; found ${detailLocations.length}.`);
+
+  const serviceCountsByCategory = new Map();
+  for (const url of detailLocations) {
+    const [, categorySlug] = new URL(url).pathname.split("/").filter(Boolean);
+    const categoryUrl = `${baseUrl}/services/${categorySlug}`;
+    serviceCountsByCategory.set(categoryUrl, (serviceCountsByCategory.get(categoryUrl) || 0) + 1);
+  }
+
+  const expectedCategoryLocations = new Set(
+    [...serviceCountsByCategory.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([url]) => url),
+  );
+  assert(
+    categoryLocations.length === expectedCategoryLocations.size &&
+      categoryLocations.every((url) => expectedCategoryLocations.has(url)),
+    "Sitemap should include category URLs only when they contain multiple public service pages.",
+  );
+
+  for (const [categoryUrl, serviceCount] of serviceCountsByCategory) {
+    if (serviceCount !== 1) continue;
+    const onlyServiceUrl = detailLocations.find((url) => url.startsWith(`${categoryUrl}/`));
+    assert(Boolean(onlyServiceUrl), `${categoryUrl} is missing its only service URL.`);
+    const response = await page.request.get(categoryUrl, { maxRedirects: 0 });
+    assert(response.status() === 308, `${categoryUrl} should permanently redirect; received ${response.status()}.`);
+    assert(
+      (response.headers().location || "").endsWith(new URL(onlyServiceUrl).pathname),
+      `${categoryUrl} redirects to the wrong service.`,
+    );
+  }
+
+  const seenTitles = new Map();
+  for (const url of sitemapLocations) {
+    const response = await page.request.get(url);
+    assert(response.ok(), `Indexable sitemap URL returned ${response.status()}: ${url}`);
+    const html = await response.text();
+    const title = html.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim();
+    assert(Boolean(title), `Indexable sitemap URL has no title: ${url}`);
+    assert(!seenTitles.has(title), `Duplicate SEO title "${title}" on ${seenTitles.get(title)} and ${url}`);
+    seenTitles.set(title, url);
+  }
+  assert(seenTitles.get(homepageTitle) === baseUrl, "Homepage title should be unique and present in the sitemap.");
 
   for (const [source, destination] of [
     ["/services/printing-photos/photocopy-scanning", "/services/printing-photos/colour-black-white-printing"],
@@ -181,6 +234,8 @@ try {
   const adminLoginResponse = await openHealthy(page, "/admin/login");
   await assertNoHorizontalOverflow(page, "Desktop admin login");
   assert(adminLoginResponse.status() < 400, "Admin login route is unavailable.");
+  const adminRobots = await page.locator('meta[name="robots"]').getAttribute("content");
+  assert(Boolean(adminRobots?.includes("noindex")), "Admin routes must publish a noindex directive.");
   for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history"]) {
     const response = await page.request.get(`${baseUrl}${protectedPath}`, { maxRedirects: 0 });
     assert([302, 303, 307, 308].includes(response.status()), `${protectedPath} must remain protected for signed-out visitors.`);
