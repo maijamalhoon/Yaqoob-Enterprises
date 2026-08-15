@@ -39,16 +39,20 @@ export default async function AdminSettingsPage() {
 
         <section className="admin-panel admin-panel--control">
           <div className="admin-panel__heading admin-panel__heading--compact">
-            <div><span className="admin-panel-kicker"><Phone size={15} /> Contact</span><h2>Phone & WhatsApp</h2></div>
+            <div><span className="admin-panel-kicker"><Phone size={15} /> Contact</span><h2>Phone & location</h2></div>
           </div>
           <form className="admin-form-grid admin-form-grid--focused" action={updateContactDetails}>
             <label>Phone<input name="phone_number" inputMode="tel" defaultValue={settings?.phone_e164} placeholder="+923492568864" required /></label>
             <label>WhatsApp<input name="whatsapp_number" inputMode="tel" defaultValue={settings?.whatsapp_e164} placeholder="+923492568864" required /></label>
             <label className="admin-span-2">Address<textarea name="address" defaultValue={settings?.address} rows={3} required /></label>
             <label className="admin-span-2">Google Maps URL<input name="map_url" type="url" defaultValue={settings?.map_url} required /></label>
+            <label className="admin-span-2">Google Business Profile <small>Used for admin analysis</small><input name="google_business_profile_url" type="url" defaultValue={settings?.google_business_profile_url || ""} placeholder="https://share.google/..." /></label>
             <div className="admin-form-actions admin-form-actions--split admin-span-2">
               <AdminSubmitButton>Save contact & location</AdminSubmitButton>
-              {settings?.map_url && <a className="admin-inline-link" href={settings.map_url} target="_blank" rel="noopener noreferrer"><MapPin size={15} /> {location || "Preview location"}<ExternalLink size={13} /></a>}
+              <div className="admin-settings-preview-links">
+                {settings?.map_url && <a className="admin-inline-link" href={settings.map_url} target="_blank" rel="noopener noreferrer"><MapPin size={15} /> {location || "Map"}<ExternalLink size={13} /></a>}
+                {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Google profile <ExternalLink size={13} /></a>}
+              </div>
             </div>
           </form>
         </section>
