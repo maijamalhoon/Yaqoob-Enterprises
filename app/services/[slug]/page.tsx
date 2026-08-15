@@ -23,11 +23,11 @@ import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl }
 import { getActiveServiceCategorySlugs } from "@/lib/public-category-slugs";
 import { getCustomerServiceModes } from "@/lib/service-availability";
 
-function serviceAction(status: string, title: string) {
+function serviceAction(status: string, title: string, businessName: string) {
   if (status === "active") {
     return {
       label: "Send this requirement",
-      message: `Hello Yaqoob Enterprises, I want to ask about ${title}. My requirement is: `,
+      message: `Hello ${businessName}, I want to ask about ${title}. My requirement is: `,
       note: null,
       className: "button button--primary",
     };
@@ -35,7 +35,7 @@ function serviceAction(status: string, title: string) {
   if (status === "appointment_only") {
     return {
       label: "Book or confirm first",
-      message: `Hello Yaqoob Enterprises, I want to book or confirm ${title}. `,
+      message: `Hello ${businessName}, I want to book or confirm ${title}. `,
       note: "This service needs confirmation or an appointment before you visit.",
       className: "button button--primary",
     };
@@ -43,7 +43,7 @@ function serviceAction(status: string, title: string) {
   if (status === "coming_soon") {
     return {
       label: "Ask when it starts",
-      message: `Hello Yaqoob Enterprises, please tell me when ${title} will be available. `,
+      message: `Hello ${businessName}, please tell me when ${title} will be available. `,
       note: "This service is coming soon. Ask for the expected start date before visiting.",
       className: "button button--secondary",
     };
@@ -51,14 +51,14 @@ function serviceAction(status: string, title: string) {
   if (status === "temporarily_unavailable") {
     return {
       label: "Ask when available",
-      message: `Hello Yaqoob Enterprises, please tell me when ${title} will be available again. `,
+      message: `Hello ${businessName}, please tell me when ${title} will be available again. `,
       note: "This service is temporarily paused. Confirm before sending documents or travelling.",
       className: "button button--secondary",
     };
   }
   return {
     label: "Check availability",
-    message: `Hello Yaqoob Enterprises, please confirm the current availability of ${title}. `,
+    message: `Hello ${businessName}, please confirm the current availability of ${title}. `,
     note: "Availability may be limited. Confirm the current status before visiting.",
     className: "button button--secondary",
   };
@@ -79,10 +79,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const [category, site] = await Promise.all([getCategoryBySlug(slug), getSiteData()]);
   if (!category) return {};
   const canonicalPath = `/services/${slug}`;
-  const socialTitle = `${category.title} | Yaqoob Enterprises`;
+  const socialTitle = `${category.title} | ${site.settings.business_name}`;
 
   return {
     title: category.title,
@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       type: "website",
       locale: "en_PK",
-      siteName: "Yaqoob Enterprises",
+      siteName: site.settings.business_name,
       url: canonicalPath,
       title: socialTitle,
       description: category.description,
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${category.title} — Yaqoob Enterprises`,
+        alt: `${category.title} — ${site.settings.business_name}`,
       }],
     },
     twitter: {
@@ -175,7 +175,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
               </div>
 
               {category.services?.map((service, index) => {
-                const action = serviceAction(service.status, service.title);
+                const action = serviceAction(service.status, service.title, site.settings.business_name);
                 const customerModes = getCustomerServiceModes(service);
                 return (
                   <article className="service-detail-card service-detail-card--premium" key={service.id}>
