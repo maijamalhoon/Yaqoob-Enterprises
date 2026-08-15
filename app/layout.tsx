@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
   const location = businessLocationLabel(settings.address);
   const description = `NADRA e-Sahulat and biometric verification, printing, photocopy, online forms, documents, payments, tickets, stationery and laptop support in ${location}.`;
-  const homeTitle = `${settings.business_name} | ${settings.tagline}`;
+  const homeTitle = `NADRA e-Sahulat & Biometric Verification Karachi | ${settings.business_name}`;
 
   return {
     metadataBase: new URL(SITE_URL),
