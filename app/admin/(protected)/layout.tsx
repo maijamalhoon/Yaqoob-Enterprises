@@ -8,7 +8,9 @@ import { requireAdmin } from "@/lib/admin";
 export const metadata: Metadata = { title: "Admin Centre", robots: { index: false, follow: false } };
 
 export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
-  const { profile } = await requireAdmin();
+  const { profile, supabase } = await requireAdmin();
+  const { data: settings } = await supabase.from("business_settings").select("business_name").eq("id", true).single();
+
   return (
     <div className="admin-shell">
       <DestructiveActionGuard />
@@ -16,13 +18,13 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
       <main className="admin-main">
         <header className="admin-topbar">
           <div className="admin-topbar__identity">
-            <span>Yaqoob Enterprises</span>
+            <span>{settings?.business_name || "Website admin"}</span>
             <strong>{profile.display_name || "Administrator"}</strong>
           </div>
           <div className="admin-topbar__actions">
-            <Link href="/" target="_blank" rel="noopener noreferrer"><ExternalLink size={15} /> View site</Link>
+            <Link href="/" target="_blank" rel="noopener noreferrer"><ExternalLink size={15} /> <span>View site</span></Link>
             <form action="/admin/logout" method="post">
-              <button type="submit"><LogOut size={15} /> Sign out</button>
+              <button type="submit"><LogOut size={15} /> <span>Sign out</span></button>
             </form>
           </div>
         </header>
