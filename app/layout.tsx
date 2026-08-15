@@ -5,6 +5,7 @@ import "./design-system.css";
 import "./admin-shell.css";
 import "./global-polish.css";
 import "./responsive.css";
+import "./hero-ticker.css";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
 
