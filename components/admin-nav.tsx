@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Images, LayoutDashboard, MapPinned, Settings2, Wrench } from "lucide-react";
+import { BarChart3, History, Images, LayoutDashboard, MapPinned, Settings2, Wrench } from "lucide-react";
 import { Logo } from "@/components/logo";
 
 const links = [
@@ -12,6 +12,7 @@ const links = [
   ["Images", "/admin/gallery", Images],
   ["Coverage", "/admin/coverage", MapPinned],
   ["Analytics", "/admin/analytics", BarChart3],
+  ["History", "/admin/history", History],
 ] as const;
 
 export function AdminNav() {
