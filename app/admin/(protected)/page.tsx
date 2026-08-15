@@ -1,4 +1,5 @@
-import { Activity, Images, MapPinned, MousePointerClick, Wrench } from "lucide-react";
+import Link from "next/link";
+import { Activity, Images, MapPinned, MousePointerClick, Settings2, Wrench } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 
 export default async function AdminDashboardPage() {
@@ -23,10 +24,30 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="admin-content">
-      <div className="admin-page-heading"><div><span className="eyebrow">Overview</span><h1>Admin dashboard</h1><p>Manage the public website without editing code.</p></div></div>
+      <div className="admin-page-heading">
+        <div>
+          <span className="eyebrow">Overview</span>
+          <h1>Admin dashboard</h1>
+          <p>See website activity and jump straight into the tasks you use most.</p>
+        </div>
+      </div>
+
       <div className="admin-stats">
         {cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={20} /></span><strong>{value}</strong><p>{label}</p></article>)}
       </div>
+
+      <section className="admin-panel">
+        <div className="admin-panel__heading">
+          <div><h2>Common tasks</h2><p>Keep routine updates one click away.</p></div>
+          <Settings2 />
+        </div>
+        <div className="admin-quick-actions">
+          <Link className="button button--primary" href="/admin/services"><Wrench size={16} /> Edit services</Link>
+          <Link className="button button--secondary" href="/admin/settings"><Settings2 size={16} /> Hours & settings</Link>
+          <Link className="button button--secondary" href="/admin/gallery"><Images size={16} /> Manage gallery</Link>
+        </div>
+      </section>
+
       <section className="admin-panel">
         <div className="admin-panel__heading"><div><h2>Recent website activity</h2><p>Approximate aggregated activity only—no exact visitor address or full IP is stored.</p></div><MousePointerClick /></div>
         <div className="admin-table-wrap">
