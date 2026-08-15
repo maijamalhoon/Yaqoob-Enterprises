@@ -110,8 +110,10 @@ try {
   const sitemapResponse = await page.request.get(`${baseUrl}/sitemap.xml`);
   assert(sitemapResponse.ok(), `Sitemap returned ${sitemapResponse.status()}.`);
   const sitemapText = await sitemapResponse.text();
-  const serviceSitemapEntries = sitemapText.match(/<loc>[^<]*\/services\//g) || [];
-  assert(serviceSitemapEntries.length === 8, `Expected 8 active service URLs in sitemap; found ${serviceSitemapEntries.length}.`);
+  const categorySitemapEntries = sitemapText.match(/<loc>[^<]*\/services\/[^/<]+<\/loc>/g) || [];
+  const detailSitemapEntries = sitemapText.match(/<loc>[^<]*\/services\/[^/<]+\/[^/<]+<\/loc>/g) || [];
+  assert(categorySitemapEntries.length === 8, `Expected 8 active service categories in sitemap; found ${categorySitemapEntries.length}.`);
+  assert(detailSitemapEntries.length === 16, `Expected 16 public service detail URLs in sitemap; found ${detailSitemapEntries.length}.`);
 
   await openHealthy(page, "/contact");
   await assertNoHorizontalOverflow(page, "Desktop contact page");
@@ -128,8 +130,28 @@ try {
   assert(modeLabels.some((label) => label.includes("Not sure")), "Guided request lost the fallback guidance option.");
 
   await openHealthy(page, "/services/printing-photos");
-  await assertNoHorizontalOverflow(page, "Desktop printing service page");
-  assert((await page.locator("h1").first().innerText()).includes("Printing"), "Printing service page did not render its heading.");
+  await assertNoHorizontalOverflow(page, "Desktop printing category page");
+  assert((await page.locator("h1").first().innerText()).includes("Printing"), "Printing category page did not render its heading.");
+  assert((await page.locator(".service-detail-link").count()) === 3, "Printing category must link each public service to an indexable detail page.");
+
+  await openHealthy(page, "/services/biometric/general-biometric-esahulat");
+  await assertNoHorizontalOverflow(page, "Desktop biometric SEO page");
+  assert((await page.locator("h1").first().innerText()).includes("NADRA e-Sahulat"), "Biometric detail page lost its priority search heading.");
+  assert((await page.title()).includes("Biometric Verification"), "Biometric detail page title is not search-focused.");
+  const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+  assert(Boolean(canonical?.endsWith("/services/biometric/general-biometric-esahulat")), "Biometric detail page canonical URL is incorrect.");
+  const serviceStructuredData = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
+    nodes.flatMap((node) => {
+      try {
+        return [JSON.parse(node.textContent || "{}")];
+      } catch {
+        return [];
+      }
+    }),
+  );
+  assert(serviceStructuredData.some((item) => item?.["@type"] === "Service"), "Service detail page is missing Service structured data.");
+  assert(serviceStructuredData.some((item) => item?.["@type"] === "BreadcrumbList"), "Service detail page is missing Breadcrumb structured data.");
+  assert((await page.locator(".seo-official-reference").count()) === 1, "Priority biometric page is missing its official-source context.");
 
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
@@ -178,6 +200,10 @@ try {
 
       const formFontSize = await viewportPage.locator('select[name="category"]').evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
       assert(formFontSize >= 16, `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom.`);
+
+      await openHealthy(viewportPage, "/services/biometric/general-biometric-esahulat");
+      await assertNoHorizontalOverflow(viewportPage, `${viewport.label} biometric SEO page`);
+      assert((await viewportPage.locator("h1").first().innerText()).includes("Biometric Verification"), `${viewport.label}: biometric SEO heading is missing.`);
     }
 
     await context.close();
