@@ -41,7 +41,7 @@ export async function createCategory(formData: FormData) {
     slug: slug(formData),
     title: text(formData, "title"),
     description: text(formData, "description"),
-    icon_key: text(formData, "icon_key") || "store",
+    icon_key: text(formData, "icon_key") || "briefcase",
     display_order: order(formData),
     is_active: true,
   });
@@ -79,7 +79,7 @@ export async function createService(formData: FormData) {
     delivery_available: bool(formData, "delivery_available"),
     doorstep_available: bool(formData, "doorstep_available"),
     appointment_required: bool(formData, "appointment_required"),
-    is_featured: bool(formData, "is_featured"),
+    is_featured: false,
     display_order: order(formData),
   });
   if (error) throw new Error(error.message);
@@ -95,14 +95,12 @@ export async function updateService(formData: FormData) {
     detailed_description: text(formData, "detailed_description"),
     status: text(formData, "status"),
     available_at_shop: bool(formData, "available_at_shop"),
-    whatsapp_request: bool(formData, "whatsapp_request"),
     pickup_available: bool(formData, "pickup_available"),
     delivery_available: bool(formData, "delivery_available"),
     doorstep_available: bool(formData, "doorstep_available"),
     appointment_required: bool(formData, "appointment_required"),
     requirements: requirements(formData),
     important_note: text(formData, "important_note"),
-    is_featured: bool(formData, "is_featured"),
     display_order: order(formData),
   }).eq("id", text(formData, "id"));
   if (error) throw new Error(error.message);
