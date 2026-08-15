@@ -1,136 +1,143 @@
 .page {
   min-height: 100vh;
-  background: #ffffff;
-  color: #111827;
+  color: var(--ink);
+  background: #fff;
 }
 
 .hero {
-  padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(3.5rem, 6vw, 5.5rem);
-  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(4rem, 7vw, 6.5rem) 0 clamp(3.6rem, 6vw, 5.5rem);
+  background:
+    radial-gradient(circle at 80% 10%, rgba(1, 103, 115, 0.07), transparent 27%),
+    linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
 }
 
 .heroGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
+  grid-template-columns: minmax(0, 1.04fr) minmax(22rem, 0.96fr);
   align-items: center;
-  gap: clamp(2.5rem, 6vw, 5.5rem);
+  gap: clamp(2.7rem, 6vw, 5.7rem);
 }
 
 .heroCopy {
-  max-width: 43rem;
+  max-width: 44rem;
 }
 
 .kicker {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
   flex-wrap: wrap;
-  margin-bottom: 1.25rem;
-  color: #5b6472;
-  font-size: 0.8rem;
-  font-weight: 700;
+  gap: 0.5rem 0.65rem;
+  margin-bottom: 1.15rem;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 720;
+}
+
+.kicker span:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .statusDot {
-  width: 0.46rem;
-  height: 0.46rem;
+  width: 0.45rem;
+  height: 0.45rem;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #16856c;
+  background: var(--success);
+  box-shadow: 0 0 0 4px rgba(21, 113, 84, 0.08);
 }
 
 .kickerDivider {
   width: 1px;
   height: 0.85rem;
-  background: #d8dde5;
+  background: var(--line);
 }
 
 .hero h1 {
-  margin: 0;
-  max-width: 11.5ch;
-  color: #111827;
-  font-size: clamp(3rem, 6vw, 5.7rem);
-  line-height: 0.98;
-  letter-spacing: -0.055em;
+  max-width: 12ch;
+  color: var(--ink-strong);
+  font-size: clamp(3rem, 6vw, 5.45rem);
   font-weight: 720;
+  line-height: 0.99;
+  letter-spacing: -0.055em;
 }
 
 .lead {
-  max-width: 38rem;
-  margin: 1.5rem 0 0;
-  color: #5f6875;
-  font-size: clamp(1rem, 1.4vw, 1.14rem);
-  line-height: 1.75;
+  max-width: 39rem;
+  margin-top: 1.35rem;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.4vw, 1.13rem);
+  line-height: 1.72;
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 1.9rem;
+  gap: 0.7rem;
+  margin-top: 1.8rem;
 }
 
 .primaryButton,
 .secondaryButton {
-  min-height: 3.35rem;
+  min-height: 3.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  border-radius: 10px;
-  padding: 0 1.15rem;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 760;
   text-decoration: none;
-  font-weight: 700;
-  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  transition: transform 150ms ease, background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .primaryButton {
-  background: #0f766e;
-  color: #ffffff;
+  color: #fff;
+  background: var(--navy);
+  box-shadow: 0 9px 22px rgba(0, 31, 86, 0.15);
 }
 
 .primaryButton:hover {
-  background: #0b665f;
+  transform: translateY(-1px);
+  background: #002968;
+  box-shadow: 0 13px 28px rgba(0, 31, 86, 0.19);
 }
 
 .secondaryButton {
-  border: 1px solid #dfe3e8;
-  background: #ffffff;
-  color: #172033;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: #fff;
 }
 
 .secondaryButton:hover {
-  border-color: #b8c1ca;
-  background: #f8fafb;
-}
-
-.primaryButton:focus-visible,
-.secondaryButton:focus-visible,
-.textLink:focus-visible,
-.visitActions a:focus-visible {
-  outline: 3px solid rgba(15, 118, 110, 0.24);
-  outline-offset: 3px;
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-xs);
 }
 
 .heroNote {
   display: flex;
-  gap: 0.55rem 1rem;
   flex-wrap: wrap;
-  margin-top: 1.25rem;
-  color: #7a8491;
-  font-size: 0.82rem;
+  gap: 0.45rem;
+  margin-top: 1.1rem;
 }
 
 .heroNote span {
-  position: relative;
-}
-
-.heroNote span + span::before {
-  content: "·";
-  position: absolute;
-  left: -0.62rem;
-  color: #a9b0ba;
+  min-height: 1.85rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid #e4eaee;
+  border-radius: 999px;
+  color: #687482;
+  background: rgba(255,255,255,0.76);
+  font-size: 0.71rem;
+  font-weight: 680;
 }
 
 .visual {
@@ -141,9 +148,18 @@
   position: relative;
   overflow: hidden;
   aspect-ratio: 1.18 / 1;
-  border: 1px solid #e4e8ec;
-  border-radius: 14px;
-  background: #f3f6f5;
+  border: 1px solid #dce4e8;
+  border-radius: 1.1rem;
+  background: #eef2f4;
+  box-shadow: 0 22px 60px rgba(6, 19, 39, 0.1);
+}
+
+.imageShell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
 }
 
 .imageShell img {
@@ -155,103 +171,106 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding-top: 0.8rem;
-  color: #66707c;
-  font-size: 0.8rem;
+  padding-top: 0.75rem;
+  color: var(--ink-faint);
+  font-size: 0.73rem;
 }
 
 .imageCaption span {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .imageCaption span:first-child {
-  color: #283241;
-  font-weight: 700;
+  color: #3f4b58;
+  font-weight: 720;
 }
 
 .servicesWrap {
-  border-top: 1px solid #edf0f2;
-  background: #ffffff;
+  border-top: 1px solid #eef1f3;
+  background: #fff;
 }
 
 .servicesWrap :global(.services-showcase) {
-  scroll-margin-top: 5rem;
-  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
-  background: #ffffff;
+  scroll-margin-top: calc(var(--header-h) + 1rem);
 }
 
 .trustSection {
-  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
-  border-top: 1px solid #edf0f2;
-  background: #fafbfb;
+  padding: clamp(3.7rem, 6vw, 5.5rem) 0;
+  border-top: 1px solid #e9eef1;
+  background: #f7f9fa;
 }
 
 .sectionIntro {
-  max-width: 43rem;
+  max-width: 44rem;
+  display: grid;
+  gap: 0.65rem;
 }
 
 .sectionIntro > span,
 .eyebrow {
-  display: inline-block;
-  color: #0f766e;
-  font-size: 0.76rem;
-  font-weight: 750;
-  letter-spacing: 0.08em;
+  color: var(--teal);
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .sectionIntro h2,
 .contactCopy h2,
 .visitGrid h2 {
-  margin: 0.7rem 0 0;
-  color: #111827;
-  font-size: clamp(2rem, 4vw, 3.35rem);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  color: var(--ink-strong);
+  font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
 }
 
 .trustGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  margin-top: 2.2rem;
-  border: 1px solid #e3e7ea;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #e3e7ea;
+  gap: 0.75rem;
+  margin-top: 1.8rem;
 }
 
 .trustGrid > div {
-  padding: clamp(1.25rem, 2.5vw, 1.8rem);
-  background: #ffffff;
+  min-height: 11rem;
+  padding: 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: #fff;
+  box-shadow: var(--shadow-xs);
 }
 
 .trustGrid svg {
-  color: #0f766e;
+  width: 2.3rem;
+  height: 2.3rem;
+  padding: 0.55rem;
+  border-radius: 0.65rem;
+  color: var(--teal);
+  background: var(--teal-soft);
 }
 
 .trustGrid strong {
   display: block;
-  margin-top: 0.9rem;
-  color: #1b2432;
-  font-size: 0.98rem;
+  margin-top: 0.85rem;
+  color: var(--ink);
+  font-size: 0.9rem;
 }
 
 .trustGrid p {
-  margin: 0.5rem 0 0;
-  color: #697380;
-  font-size: 0.9rem;
-  line-height: 1.65;
+  margin-top: 0.4rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.6;
 }
 
 .contactSection {
-  scroll-margin-top: 5rem;
-  padding: clamp(3.5rem, 7vw, 6rem) 0;
-  border-top: 1px solid #edf0f2;
-  background: #ffffff;
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+  padding: clamp(4rem, 7vw, 6rem) 0;
+  border-top: 1px solid #e9eef1;
+  background: #fff;
 }
 
 .contactShell {
@@ -261,11 +280,19 @@
   align-items: start;
 }
 
+.contactCopy {
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+}
+
 .contactCopy p,
 .visitGrid p {
   max-width: 31rem;
-  margin: 1rem 0 0;
-  color: #66707c;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
   line-height: 1.7;
 }
 
@@ -273,10 +300,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  margin-top: 1.35rem;
-  color: #0f766e;
-  font-size: 0.9rem;
-  font-weight: 700;
+  margin-top: 0.3rem;
+  color: var(--teal);
+  font-size: 0.82rem;
+  font-weight: 750;
   text-decoration: none;
 }
 
@@ -286,17 +313,18 @@
 }
 
 .formPanel {
-  border: 1px solid #e2e6ea;
-  border-radius: 12px;
-  background: #ffffff;
-  padding: clamp(1.15rem, 2.8vw, 1.8rem);
+  padding: clamp(1.15rem, 2.6vw, 1.6rem);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
 }
 
 .visitSection {
-  scroll-margin-top: 5rem;
-  padding: clamp(3.5rem, 6vw, 5rem) 0;
-  border-top: 1px solid #edf0f2;
-  background: #fafbfb;
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+  padding: clamp(3.5rem, 6vw, 4.8rem) 0;
+  border-top: 1px solid #e9eef1;
+  background: #f7f9fa;
 }
 
 .visitGrid {
@@ -306,117 +334,48 @@
   gap: 2rem;
 }
 
+.visitGrid > div:first-child {
+  display: grid;
+  gap: 0.65rem;
+}
+
 .statusLine {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1rem;
-  color: #55606e;
-  font-size: 0.88rem;
-  font-weight: 650;
+  width: fit-content;
+  color: #566371;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .visitActions {
   display: flex;
-  gap: 0.7rem;
   flex-wrap: wrap;
+  gap: 0.55rem;
 }
 
 .visitActions a {
-  min-height: 3rem;
+  min-height: 2.9rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0 1rem;
-  border: 1px solid #dde2e6;
-  border-radius: 9px;
-  background: #ffffff;
-  color: #1d2735;
+  gap: 0.45rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  color: var(--ink);
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 750;
   text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 700;
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .visitActions a:hover {
-  background: #f5f7f8;
-}
-
-/* Polished minimal interaction layer */
-.primaryButton,
-.secondaryButton,
-.visitActions a {
-  border-radius: 12px;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.primaryButton {
-  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.18);
-}
-
-.primaryButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(15, 118, 110, 0.24);
-}
-
-.secondaryButton {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-}
-
-.secondaryButton:hover {
-  transform: translateY(-2px);
-  border-color: rgba(15, 118, 110, 0.34);
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
-}
-
-.imageShell {
-  border-radius: 16px;
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
-}
-
-.trustGrid {
-  gap: 0.9rem;
-  border: 0;
-  border-radius: 0;
-  overflow: visible;
-  background: transparent;
-}
-
-.trustGrid > div {
-  border: 1px solid #e3e8e8;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.035);
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-}
-
-.trustGrid > div:hover {
-  transform: translateY(-2px);
-  border-color: #d6e3df;
-  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
-}
-
-.trustGrid svg {
-  width: 2.15rem;
-  height: 2.15rem;
-  padding: 0.45rem;
-  border-radius: 9px;
-  background: #eef7f5;
-}
-
-.formPanel {
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
-}
-
-.visitActions a {
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-}
-
-.visitActions a:hover {
-  transform: translateY(-2px);
-  border-color: #cbded9;
-  background: #ffffff;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-xs);
 }
 
 @media (max-width: 62rem) {
@@ -425,229 +384,66 @@
     grid-template-columns: 1fr;
   }
 
-  .visual {
-    max-width: 46rem;
-  }
-
-  .imageShell {
-    aspect-ratio: 1.45 / 1;
-  }
-
-  .visitGrid {
-    grid-template-columns: 1fr;
-    align-items: start;
-  }
+  .visual { max-width: 46rem; }
+  .imageShell { aspect-ratio: 1.45 / 1; }
+  .contactCopy { position: static; }
+  .visitGrid { grid-template-columns: 1fr; align-items: start; }
 }
 
 @media (max-width: 46rem) {
-  .hero {
-    padding-top: 2.75rem;
-  }
-
-  .hero h1 {
-    max-width: 12ch;
-    font-size: clamp(2.75rem, 13vw, 4.2rem);
-  }
-
-  .kickerDivider {
-    display: none;
-  }
-
-  .actions {
-    display: grid;
-  }
-
-  .primaryButton,
-  .secondaryButton {
-    width: 100%;
-  }
-
-  .heroNote {
-    display: grid;
-    gap: 0.35rem;
-  }
-
-  .heroNote span + span::before {
-    display: none;
-  }
-
-  .imageShell {
-    aspect-ratio: 1 / 0.86;
-    border-radius: 14px;
-  }
-
-  .imageCaption {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .trustGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .visitActions {
-    display: grid;
-  }
-
-  .visitActions a {
-    width: 100%;
-  }
-}
-
-/* Mobile density pass based on real-device screenshots */
-@media (max-width: 46rem) {
-  .hero {
-    padding: 1.9rem 0 2.5rem;
-  }
-
-  .heroGrid {
-    gap: 1.7rem;
-  }
-
+  .hero { padding: 2.25rem 0 2.9rem; }
+  .heroGrid { gap: 1.7rem; }
   .kicker {
-    gap: 0.4rem 0.7rem;
-    margin-bottom: 0.9rem;
-    font-size: 0.74rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.7rem;
     line-height: 1.4;
   }
-
+  .kickerDivider { display: none; }
   .hero h1 {
-    max-width: 10.5ch;
-    font-size: clamp(2.45rem, 10.5vw, 3.25rem);
+    max-width: 11ch;
+    font-size: clamp(2.55rem, 11.5vw, 3.55rem);
     line-height: 0.98;
   }
-
   .lead {
-    margin-top: 1rem;
-    font-size: 0.96rem;
+    margin-top: 0.95rem;
+    font-size: 0.91rem;
     line-height: 1.62;
   }
-
   .actions {
-    gap: 0.55rem;
-    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
   }
-
   .primaryButton,
   .secondaryButton {
+    width: 100%;
     min-height: 3.05rem;
-    border-radius: 11px;
-    padding-inline: 1rem;
-    font-size: 0.94rem;
-  }
-
-  .heroNote {
-    gap: 0.25rem;
-    margin-top: 0.9rem;
-    font-size: 0.75rem;
-    line-height: 1.45;
-  }
-
-  .imageShell {
-    aspect-ratio: 1.35 / 1;
-    border-radius: 13px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
-  }
-
-  .imageCaption {
-    flex-direction: row;
-    align-items: center;
-    padding-top: 0.65rem;
-    font-size: 0.75rem;
-  }
-
-  .servicesWrap :global(.services-showcase),
-  .trustSection,
-  .contactSection,
-  .visitSection {
-    padding-top: 2.75rem;
-    padding-bottom: 2.75rem;
-  }
-
-  .sectionIntro h2,
-  .contactCopy h2,
-  .visitGrid h2 {
-    margin-top: 0.55rem;
-    font-size: clamp(2rem, 9vw, 2.45rem);
-    line-height: 1.02;
-  }
-
-  .trustGrid {
-    gap: 0.7rem;
-    margin-top: 1.45rem;
-  }
-
-  .trustGrid > div {
-    padding: 1.05rem;
-    border-radius: 12px;
-  }
-
-  .trustGrid svg {
-    width: 1.85rem;
-    height: 1.85rem;
-    padding: 0.38rem;
-    border-radius: 8px;
-  }
-
-  .trustGrid strong {
-    margin-top: 0.7rem;
-    font-size: 0.93rem;
-  }
-
-  .trustGrid p {
-    margin-top: 0.35rem;
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
-
-  .contactShell {
-    gap: 1.35rem;
-  }
-
-  .contactCopy p,
-  .visitGrid p {
-    margin-top: 0.7rem;
-    font-size: 0.93rem;
-    line-height: 1.6;
-  }
-
-  .textLink {
-    margin-top: 0.9rem;
-    font-size: 0.84rem;
-    line-height: 1.4;
-  }
-
-  .formPanel {
-    padding: 0.9rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
-  }
-
-  .statusLine {
-    margin-top: 0.75rem;
-    font-size: 0.82rem;
-  }
-
-  .visitGrid {
-    gap: 1.25rem;
-  }
-
-  .visitActions {
-    gap: 0.55rem;
-  }
-
-  .visitActions a {
-    min-height: 2.9rem;
     font-size: 0.86rem;
   }
+  .heroNote { gap: 0.3rem; margin-top: 0.75rem; }
+  .heroNote span { font-size: 0.66rem; }
+  .imageShell {
+    aspect-ratio: 1.35 / 1;
+    border-radius: 0.9rem;
+    box-shadow: 0 14px 36px rgba(6, 19, 39, 0.08);
+  }
+  .imageCaption { padding-top: 0.6rem; font-size: 0.68rem; }
+  .trustSection,
+  .contactSection,
+  .visitSection { padding: 3rem 0; }
+  .sectionIntro h2,
+  .contactCopy h2,
+  .visitGrid h2 { font-size: clamp(1.8rem, 9vw, 2.45rem); }
+  .trustGrid { grid-template-columns: 1fr; gap: 0.55rem; margin-top: 1.3rem; }
+  .trustGrid > div { min-height: auto; padding: 0.95rem; }
+  .contactShell { gap: 1.5rem; }
+  .formPanel { padding: 0.85rem; border-radius: 0.85rem; box-shadow: var(--shadow-xs); }
+  .visitActions { display: grid; }
+  .visitActions a { width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .primaryButton,
   .secondaryButton,
-  .trustGrid > div,
-  .visitActions a {
-    transition: none;
-  }
+  .visitActions a { transition: none; }
 }
