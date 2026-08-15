@@ -140,6 +140,10 @@ export default async function PublicServicePage({
   const relatedServices = (category.services || []).filter((item) => item.id !== service.id).slice(0, 4);
   const pageUrl = `${SITE_URL.replace(/\/$/, "")}${seo.canonicalPath}`;
   const city = businessCity(site.settings.address);
+  const serviceAreas = [
+    { "@type": "City", name: city },
+    ...site.coverage.slice(0, 12).map((area) => ({ "@type": "Place", name: area.name })),
+  ];
 
   const breadcrumbData = {
     "@context": "https://schema.org",
@@ -159,7 +163,7 @@ export default async function PublicServicePage({
     serviceType: service.title,
     description: seo.description,
     url: pageUrl,
-    areaServed: { "@type": "City", name: city },
+    areaServed: serviceAreas,
     provider: {
       "@type": "LocalBusiness",
       "@id": `${SITE_URL}/#business`,
@@ -221,6 +225,13 @@ export default async function PublicServicePage({
                 <p>{seo.intro}</p>
                 {service.detailed_description && service.detailed_description !== seo.intro && <p>{service.detailed_description}</p>}
               </section>
+
+              {seo.commonRequests.length > 0 && (
+                <section className="seo-content-block seo-requirements">
+                  <h2><ListChecks size={20} /> Common requests we handle</h2>
+                  <ul>{seo.commonRequests.map((item) => <li key={item}><Check size={16} /> <span>{item}</span></li>)}</ul>
+                </section>
+              )}
 
               {modes.length > 0 && (
                 <section className="seo-content-block">

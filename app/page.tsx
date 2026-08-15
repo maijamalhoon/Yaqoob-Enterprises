@@ -31,7 +31,7 @@ export default async function HomePage() {
 
   return (
     <div className={styles.page}>
-      <LocalBusinessSchema settings={settings} hours={hours} coverage={coverage} imageUrl={schemaImageUrl} />
+      <LocalBusinessSchema settings={settings} hours={hours} coverage={coverage} categories={categories} imageUrl={schemaImageUrl} />
       <SiteHeader settings={settings} statusText={hoursText} showMobileQuickActions={false} />
 
       <main id="main-content">
