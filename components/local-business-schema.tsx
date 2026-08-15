@@ -41,7 +41,7 @@ export function LocalBusinessSchema({
     logo: `${SITE_URL}/brand/logo-horizontal.svg`,
     image: imageUrl.startsWith("http") ? imageUrl : `${SITE_URL}${imageUrl}`,
     telephone: settings.phone_e164,
-    description: `${settings.tagline}. Local services in ${locationLabel}.`,
+    description: `${settings.tagline}. NADRA e-Sahulat and biometric verification, printing, online forms, documents and everyday local services in ${locationLabel}.`,
     priceRange: "PKR",
     currenciesAccepted: "PKR",
     hasMap: settings.map_url,
