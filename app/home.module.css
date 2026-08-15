@@ -94,6 +94,10 @@
   text-wrap: balance;
 }
 
+.hero h1 > span {
+  display: block;
+}
+
 .lead {
   max-width: 42rem;
   margin-top: 1.15rem;
