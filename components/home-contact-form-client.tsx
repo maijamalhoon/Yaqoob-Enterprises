@@ -81,7 +81,6 @@ export function HomeContactFormClient({
         <button className={styles.submit} type="submit">
           <MessageCircle size={18} /> Continue on WhatsApp <ArrowRight size={17} />
         </button>
-        <p>Review the message in WhatsApp before sending.</p>
       </div>
     </form>
   );
