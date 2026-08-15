@@ -9,6 +9,7 @@ import "./hero-ticker.css";
 import "./service-discovery.css";
 import "./service-page-polish.css";
 import "./quick-request-polish.css";
+import "./guided-request-polish.css";
 import { PageTracker } from "@/components/page-tracker";
 import { SITE_URL } from "@/lib/env";
 
