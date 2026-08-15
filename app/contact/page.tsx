@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clock3, MapPin, Phone, ShieldCheck, Store } from "lucide-react";
+import { Clock3, MapPin, Phone, Store } from "lucide-react";
 import { RequestForm } from "@/components/request-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -38,19 +38,11 @@ export default async function ContactPage() {
       <SiteHeader settings={settings} statusText={statusText} />
       <main id="main-content">
         <section className="page-hero page-hero--contact">
-          <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid page-hero__grid--contact">
             <div className="page-hero__content">
-              <span className="eyebrow">Send a request</span>
+              <span className="eyebrow">Guided request</span>
               <h1>Tell us what you need.</h1>
-              <p>We’ll prepare a WhatsApp message for you to review before sending.</p>
             </div>
-            <aside className="page-hero__summary page-hero__summary--contact">
-              <span className="page-hero__summary-icon"><ShieldCheck size={22} /></span>
-              <strong>You stay in control</strong>
-              <span>Review before sending</span>
-              <small>Nothing is submitted until WhatsApp opens and you press Send.</small>
-            </aside>
           </div>
         </section>
 
@@ -59,9 +51,9 @@ export default async function ContactPage() {
             <div className="contact-details-card contact-details-card--premium">
               <div className="contact-card-heading">
                 <span className="contact-card-heading__icon"><Store size={21} /></span>
-                <div><span className="eyebrow eyebrow--light">Local support</span><h2>Shop details.</h2></div>
+                <h2>Shop details</h2>
               </div>
-              <div className="contact-detail contact-detail--status"><Clock3 /><div><strong>Right now</strong><span>{statusText}</span></div></div>
+              <div className="contact-detail contact-detail--status"><Clock3 /><div><strong>Open now</strong><span>{statusText.replace("Open now · ", "")}</span></div></div>
               <div className="contact-detail contact-detail--phone"><Phone /><div><strong>Call or WhatsApp</strong><TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">{settings.phone_display}</TrackedLink></div></div>
               <div className="contact-detail contact-detail--address"><MapPin /><div><strong>Visit the shop</strong><TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">{settings.address}</TrackedLink></div></div>
               <div className="contact-detail contact-detail--schedule">
@@ -69,7 +61,7 @@ export default async function ContactPage() {
                 <div>
                   <strong>Opening hours</strong>
                   <details className="contact-hours-disclosure" style={{ display: "block" }}>
-                    <summary>View weekly schedule</summary>
+                    <summary>Weekly schedule</summary>
                     <div className="contact-hours">
                       {hours.map((hour) => (
                         <div className="contact-hours__row" key={hour.id}>
@@ -81,14 +73,11 @@ export default async function ContactPage() {
                   </details>
                 </div>
               </div>
-              <div className="contact-detail contact-detail--promise"><ShieldCheck /><div><strong>Before work begins</strong><span>We confirm the requirement, expected time and total charges first.</span></div></div>
             </div>
 
             <div className="form-card form-card--premium">
               <div className="form-card__heading">
-                <span className="eyebrow">Guided WhatsApp request</span>
-                <h2>Build your request.</h2>
-                <p>Choose the service, add the useful details, then review the message in WhatsApp.</p>
+                <h2>Build your request</h2>
               </div>
               <RequestForm categories={categories} whatsappNumber={settings.whatsapp_e164} />
             </div>
