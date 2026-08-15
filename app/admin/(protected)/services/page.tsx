@@ -20,7 +20,7 @@ const iconOptions = [
   ["wallet-cards", "Payments"],
   ["ticket", "Tickets"],
   ["shopping-bag", "Retail"],
-  ["laptop", "Laptop"],
+  ["laptop", "Laptop / web"],
   ["briefcase", "General"],
 ] as const;
 
@@ -51,6 +51,7 @@ export default async function AdminServicesPage() {
   const categoryList = categories || [];
   const serviceList = services || [];
   const publicServices = serviceList.filter((service) => service.status !== "hidden");
+  const websiteServices = publicServices.filter((service) => service.is_featured);
   const activeCategories = categoryList.filter((category) => category.is_active);
 
   return (
@@ -59,11 +60,12 @@ export default async function AdminServicesPage() {
         <div>
           <span className="eyebrow">Website content</span>
           <h1>Services</h1>
-          <p>Categories, service wording, availability and customer options.</p>
+          <p>Categories, website visibility, service wording, availability and customer options.</p>
         </div>
         <div className="admin-heading-metrics" aria-label="Service content summary">
           <span><strong>{activeCategories.length}</strong> categories</span>
-          <span><strong>{publicServices.length}</strong> public services</span>
+          <span><strong>{websiteServices.length}</strong> on website</span>
+          <span><strong>{publicServices.length}</strong> SEO/public</span>
         </div>
       </div>
 
@@ -76,6 +78,7 @@ export default async function AdminServicesPage() {
             <label>Title<input name="title" maxLength={120} required /></label>
             <label>URL slug<input name="slug" placeholder="service-name" required pattern="[a-zA-Z0-9-]+" /></label>
             <label>Order<input type="number" min="0" name="display_order" defaultValue={serviceList.length} /></label>
+            <label className="checkbox-line"><input type="checkbox" name="is_featured" /> Show on main website</label>
             <label className="admin-span-2">Short description<textarea name="short_description" rows={2} required /></label>
             <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} /></label>
             <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} /></label>
@@ -142,6 +145,7 @@ export default async function AdminServicesPage() {
                           <small>{service.short_description}</small>
                         </span>
                         <span className="admin-service-card__meta">
+                          {service.is_featured && <span className="admin-status admin-status--active">Website</span>}
                           <span className={`admin-status admin-status--${service.status}`}>{statusLabel(service.status)}</span>
                           {modes.length > 0 && <small>{modes.join(" · ")}</small>}
                         </span>
@@ -154,6 +158,7 @@ export default async function AdminServicesPage() {
                           <label>Category<select name="category_id" defaultValue={service.category_id}>{categoryList.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
                           <label>Status<select name="status" defaultValue={service.status}>{statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                           <label>Order<input type="number" min="0" name="display_order" defaultValue={service.display_order} /></label>
+                          <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={service.is_featured} /> Show on main website</label>
                           <label className="admin-span-2">Short description<textarea name="short_description" rows={2} defaultValue={service.short_description} /></label>
                           <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} defaultValue={service.detailed_description} /></label>
                           <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} defaultValue={(service.requirements || []).join("\n")} /></label>
