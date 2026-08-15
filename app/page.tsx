@@ -7,20 +7,26 @@ import { ServiceShowcase } from "@/components/service-showcase";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { TrackedLink } from "@/components/tracked-link";
+import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
 import styles from "./home.module.css";
 
-const heroServices = ["Printing", "Documents", "Online forms", "Payments", "Tickets", "Biometric"];
+function compactServiceLabel(title: string) {
+  return title.split(/,|&/)[0]?.trim() || title;
+}
 
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery } = await getSiteData();
-  const whatsapp = whatsappUrl(settings.whatsapp_e164, "Hello Yaqoob Enterprises, I need help with: ");
+  const whatsapp = whatsappUrl(settings.whatsapp_e164, `Hello ${settings.business_name}, I need help with: `);
   const featuredImage = gallery.find((image) => image.is_featured && image.media_kind === "real");
   const imageUrl = featuredImage
     ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
     : "/brand/logo-horizontal.svg";
   const schemaImageUrl = featuredImage ? imageUrl : "/brand/logo-horizontal.svg";
   const hoursText = getCurrentBusinessStatus(hours);
+  const locationLabel = businessLocationLabel(settings.address);
+  const heroServices = categories.slice(0, 6).map((category) => compactServiceLabel(category.title));
+  const rotatingServices = heroServices.length > 0 ? heroServices : ["Services"];
   const contactCategories = categories.map(({ id, slug, title }) => ({ id, slug, title }));
 
   return (
@@ -36,18 +42,18 @@ export default async function HomePage() {
                 <span className={styles.statusDot} aria-hidden="true" />
                 <span>{hoursText}</span>
                 <span className={styles.kickerDivider} aria-hidden="true" />
-                <span><MapPin size={14} /> Akhtar Colony, Karachi</span>
+                <span><MapPin size={14} /> {locationLabel}</span>
               </div>
 
               <div
                 className="home-hero-service-line"
-                aria-label="Local help for printing, documents, online forms, payments, tickets and biometric services"
+                aria-label={`Local help for ${rotatingServices.join(", ")}`}
               >
                 <span className="home-hero-service-label">Local help for</span>
                 <span className="home-hero-service-viewport" aria-hidden="true">
                   <span className="home-hero-service-track">
-                    {heroServices.map((service) => <span key={service}>{service}</span>)}
-                    <span>{heroServices[0]}</span>
+                    {rotatingServices.map((service) => <span key={service}>{service}</span>)}
+                    <span>{rotatingServices[0]}</span>
                   </span>
                 </span>
               </div>
@@ -81,7 +87,7 @@ export default async function HomePage() {
               <div className={`${styles.imageShell} home-hero-image`}>
                 <Image
                   src={imageUrl}
-                  alt={featuredImage?.alt_text || "Yaqoob Enterprises"}
+                  alt={featuredImage?.alt_text || settings.business_name}
                   fill
                   priority
                   sizes="(max-width: 1088px) calc(100vw - 24px), 42vw"
@@ -121,7 +127,11 @@ export default async function HomePage() {
               <Link href="/contact" className={styles.textLink}>Need more guidance? Use the guided request <ArrowRight size={15} /></Link>
             </div>
             <div className={styles.formPanel}>
-              <HomeContactFormClient categories={contactCategories} whatsappNumber={settings.whatsapp_e164} />
+              <HomeContactFormClient
+                categories={contactCategories}
+                whatsappNumber={settings.whatsapp_e164}
+                businessName={settings.business_name}
+              />
             </div>
           </div>
         </section>
@@ -130,7 +140,7 @@ export default async function HomePage() {
           <div className={`container home-visit-grid ${styles.visitGrid}`}>
             <div>
               <span className={styles.eyebrow}>Visit the shop</span>
-              <h2>Akhtar Colony, Karachi.</h2>
+              <h2>{locationLabel}.</h2>
               <p>{settings.address}</p>
               <span className={styles.statusLine}><span className={styles.statusDot} aria-hidden="true" /> {hoursText}</span>
             </div>
