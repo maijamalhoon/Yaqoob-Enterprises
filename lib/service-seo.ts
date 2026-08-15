@@ -31,10 +31,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
       `Printing, photocopy, document scanning and passport-size photo services at ${businessName} in ${location}. Send your file or requirement first to confirm availability and charges.`,
   },
   "typing-online": {
-    heading: (location) => `Typing, CV & Online Form Services in ${location}`,
-    title: (businessName) => `Online Forms, Typing & CV Services Karachi | ${businessName}`,
+    heading: (location) => `Online Jobs, Forms, Typing & CV Services in ${location}`,
+    title: (businessName) => `Online Jobs, Forms, Typing & CV Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Urdu and English typing, CV preparation, online applications and FBR registration assistance at ${businessName} in ${location}. Confirm the required documents before visiting.`,
+      `Online job applications and forms, Urdu and English typing, and CV preparation at ${businessName} in ${location}. Confirm the required documents and portal details before visiting.`,
   },
   documents: {
     heading: (location) => `Agreements & Document Preparation in ${location}`,
@@ -43,16 +43,16 @@ const categoryOverrides: Record<string, CategoryOverride> = {
       `Document typing, formatting, agreement preparation and printing assistance at ${businessName} in ${location}. Share the document type and required details before visiting.`,
   },
   biometric: {
-    heading: (location) => `Biometric & NADRA e-Sahulat Services in ${location}`,
+    heading: (location) => `NADRA e-Sahulat & Biometric Verification in ${location}`,
     title: (businessName) => `NADRA e-Sahulat & Biometric Verification Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `NADRA e-Sahulat, FBR Sales Tax, PSW, vehicle and supported biometric verification services at ${businessName} in ${location}. Check requirements and availability before visiting.`,
+      `NADRA e-Sahulat, general biometric, FBR Sales Tax, PSW and Vehicle / ETO biometric verification assistance at ${businessName} in ${location}. Check requirements and availability before visiting.`,
   },
   payments: {
-    heading: (location) => `Cash Deposit, Withdrawal & Transfer Services in ${location}`,
-    title: (businessName) => `Cash Deposit, Withdrawal & Transfer Karachi | ${businessName}`,
+    heading: (location) => `Cash Deposit, Withdrawal & Money Transfer in ${location}`,
+    title: (businessName) => `Cash Deposit, Withdrawal & Money Transfer Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Supported cash deposit, withdrawal and domestic transfer assistance at ${businessName} in ${location}. Confirm the service, limits and current availability before visiting.`,
+      `Supported cash deposit, withdrawal and domestic money transfer assistance at ${businessName} in ${location}. Confirm the service, limits and current availability before visiting.`,
   },
   tickets: {
     heading: (location) => `Railway, Bus & Airline Ticket Assistance in ${location}`,
@@ -72,21 +72,27 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     description: (location, businessName) =>
       `Windows setup, drivers, software installation and basic laptop troubleshooting at ${businessName} in ${location}. Send the device issue first to confirm support.`,
   },
+  "web-development-seo": {
+    heading: (location) => `Web Development & SEO Services in ${location}`,
+    title: (businessName) => `Website Development & SEO Services Karachi | ${businessName}`,
+    description: (location, businessName) =>
+      `Business websites, full-stack web development, redesign, maintenance and practical SEO services from ${businessName} in ${location}. Discuss scope, features, domain and hosting requirements before work begins.`,
+  },
 };
 
 const serviceOverrides: Record<string, ServiceOverride> = {
   "colour-black-white-printing": {
-    heading: (location) => `Colour & Black-and-White Printing in ${location}`,
-    title: (businessName) => `Colour & Black and White Printing Karachi | ${businessName}`,
+    heading: (location) => `Printing, Photocopy & Document Scanning in ${location}`,
+    title: (businessName) => `Printing, Photocopy & Document Scanning Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Colour and black-and-white document printing at ${businessName} in ${location}. Send PDFs, documents or images and confirm paper size, quantity and colour requirements before visiting.`,
+      `Colour and black-and-white printing, photocopy and document scanning at ${businessName} in ${location}. Send files or bring originals and confirm paper size, quantity, colour and scan format before visiting.`,
     intro:
-      "Print documents, PDFs and images for everyday personal, study and office needs. Share the file and quantity first when timing, paper size or colour output matters.",
+      "Handle everyday printing, photocopying and document scanning in one place. Send digital files for printing or bring original pages for copying and scanning, and confirm quantity or output format when it matters.",
     commonRequests: [
-      "A4 black-and-white printouts",
-      "Colour document and image printing",
-      "PDF or WhatsApp file printouts",
-      "Small-batch urgent printing",
+      "A4 black-and-white and colour printing",
+      "Photocopy of forms and documents",
+      "Document scanning to PDF",
+      "Print or scan files shared by WhatsApp",
     ],
   },
   "photocopy-scanning": {
@@ -118,30 +124,30 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "urdu-english-typing": {
-    heading: (location) => `Urdu & English Typing Services in ${location}`,
-    title: (businessName) => `Urdu & English Typing Services Karachi | ${businessName}`,
+    heading: (location) => `Urdu & English Typing & CV Preparation in ${location}`,
+    title: (businessName) => `Urdu English Typing & CV Preparation Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Urdu and English typing, formatting and document preparation at ${businessName} in ${location}. Share handwritten, image or draft content and confirm the required file format.`,
+      `Urdu and English typing, document formatting and CV preparation at ${businessName} in ${location}. Share handwritten content, existing text or CV details and confirm the required file format.`,
     intro:
-      "Turn handwritten notes, images or rough drafts into clean Urdu or English documents. Formatting can be adjusted for letters, applications, forms and general office documents.",
+      "Turn handwritten notes, images or rough drafts into clean Urdu or English documents, and prepare or update a professional CV for job applications. Files can be prepared for print or digital sharing.",
     commonRequests: [
-      "English document typing",
-      "Urdu typing",
+      "Urdu and English document typing",
       "Application and letter typing",
-      "Typing from handwritten pages or images",
+      "New CV or resume preparation",
+      "Existing CV update and formatting",
     ],
   },
   "online-forms-applications": {
-    heading: (location) => `Online Forms & Application Assistance in ${location}`,
-    title: (businessName) => `Online Form & Application Assistance Karachi | ${businessName}`,
+    heading: (location) => `Online Jobs, Forms & Applications in ${location}`,
+    title: (businessName) => `Online Jobs, Forms & Applications Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Online form and application assistance at ${businessName} in ${location}. Bring the required documents, active mobile number and email where the relevant portal requires them.`,
+      `Online job applications, admissions, registrations and supported web forms at ${businessName} in ${location}. Bring required documents, an active mobile number and email where the portal requires them.`,
     intro:
-      "Get practical help entering information, uploading documents and completing supported online applications. Official approval, eligibility and processing remain with the relevant portal or authority.",
+      "Get practical help with online job applications, admissions, registrations, document uploads and supported web forms. Official eligibility, approval and processing remain with the relevant employer, portal or authority.",
     commonRequests: [
-      "Online application form assistance",
+      "Online job application assistance",
+      "Admission and registration forms",
       "Document upload and resize help",
-      "Portal account and form guidance",
       "Application printout or PDF preparation",
     ],
   },
@@ -188,17 +194,17 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "general-biometric-esahulat": {
-    heading: (location) => `NADRA e-Sahulat & Biometric Verification in ${location}`,
+    heading: (location) => `NADRA e-Sahulat Biometric Verifications in ${location}`,
     title: (businessName) => `NADRA e-Sahulat & Biometric Verification Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Check supported NADRA e-Sahulat and biometric verification services at ${businessName} in ${location}. Confirm the verification type, required documents and system availability before visiting.`,
+      `General biometric, FBR Sales Tax, Pakistan Single Window (PSW) and Vehicle / ETO biometric verification assistance at ${businessName} in ${location}. Confirm the exact case, documents and system availability before visiting.`,
     intro:
-      "Biometric and e-Sahulat requirements vary by the official service being used. Confirm the exact verification type and required documents before you travel.",
+      "Use this main biometric service for supported NADRA e-Sahulat verification needs, including general biometric verification and supported FBR Sales Tax, PSW, and Vehicle / ETO cases. Requirements vary by official system, so confirm your exact case before travelling.",
     commonRequests: [
-      "NADRA e-Sahulat biometric verification",
-      "Fingerprint or thumb biometric verification",
-      "Biometric verification near Akhtar Colony",
-      "Supported identity verification at e-Sahulat",
+      "NADRA e-Sahulat general biometric verification",
+      "FBR Sales Tax biometric verification",
+      "Pakistan Single Window (PSW) biometric verification",
+      "Vehicle / ETO biometric verification",
     ],
     officialContext: {
       source: "NADRA",
@@ -272,10 +278,10 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     },
   },
   "cash-deposit-withdrawal-transfer": {
-    heading: (location) => `Cash Deposit, Withdrawal & Transfer in ${location}`,
-    title: (businessName) => `Cash Deposit, Withdrawal & Transfer Karachi | ${businessName}`,
+    heading: (location) => `Cash Deposit, Withdrawal & Money Transfer in ${location}`,
+    title: (businessName) => `Cash Deposit, Withdrawal & Money Transfer Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Supported cash deposit, withdrawal and domestic transfer services at ${businessName} in ${location}. Confirm the transaction type, amount limits and current service availability before visiting.`,
+      `Supported cash deposit, withdrawal and domestic money transfer services at ${businessName} in ${location}. Confirm the transaction type, amount limits and current service availability before visiting.`,
     intro:
       "Use supported payment and transfer channels for eligible cash deposits, withdrawals and domestic transfers. Limits, identification requirements and availability can vary by provider.",
     commonRequests: [
@@ -325,6 +331,20 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Driver installation",
       "Software installation and configuration",
       "Basic laptop troubleshooting",
+    ],
+  },
+  "website-development-full-stack-seo": {
+    heading: (location) => `Website Development, Full-Stack & SEO Services in ${location}`,
+    title: (businessName) => `Website Developer & SEO Services Karachi | ${businessName}`,
+    description: (location, businessName) =>
+      `Full-stack website development, business websites, redesign, maintenance and practical SEO services from ${businessName} in ${location}. Discuss pages, features, integrations, domain and hosting needs before starting.`,
+    intro:
+      "Build or improve a business website with a clear scope covering design, frontend and backend development, integrations, deployment and practical search optimization. Projects are quoted according to features, content and delivery requirements.",
+    commonRequests: [
+      "Business website development",
+      "Full-stack web application development",
+      "Website redesign and maintenance",
+      "Technical SEO and Google Search setup",
     ],
   },
 };
