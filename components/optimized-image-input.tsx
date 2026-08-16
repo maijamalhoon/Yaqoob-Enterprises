@@ -3,9 +3,11 @@
 import { useState } from "react";
 
 const MAX_SOURCE_BYTES = 20 * 1024 * 1024;
+const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 const MAX_DIMENSION = 1920;
 const WEBP_QUALITY = 0.82;
 const SUPPORTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const INITIAL_STATUS = "JPG, PNG or WebP · up to 20 MB · resized in your browser when supported";
 
 function webpName(name: string) {
   const base = name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "shop-photo";
@@ -43,8 +45,16 @@ async function optimizeImage(file: File) {
   }
 }
 
-export function OptimizedImageInput() {
-  const [status, setStatus] = useState("JPG, PNG or WebP · optimized to max 1920px before upload");
+export function OptimizedImageInput({
+  disabled = false,
+  onBusyChange,
+  onFileReady,
+}: {
+  disabled?: boolean;
+  onBusyChange?: (busy: boolean) => void;
+  onFileReady?: (file: File | null) => void;
+}) {
+  const [status, setStatus] = useState(INITIAL_STATUS);
   const [busy, setBusy] = useState(false);
 
   return (
@@ -54,20 +64,27 @@ export function OptimizedImageInput() {
         name="file"
         accept="image/jpeg,image/png,image/webp"
         required
+        disabled={disabled || busy}
         aria-describedby="gallery-image-upload-status"
         onChange={async (event) => {
           const input = event.currentTarget;
           const source = input.files?.[0];
-          if (!source) return;
+          if (!source) {
+            onFileReady?.(null);
+            setStatus(INITIAL_STATUS);
+            return;
+          }
 
-          input.value = "";
           setBusy(true);
+          onBusyChange?.(true);
+          onFileReady?.(null);
           setStatus("Preparing image…");
           try {
             const optimized = await optimizeImage(source);
-            const transfer = new DataTransfer();
-            transfer.items.add(optimized);
-            input.files = transfer.files;
+            if (optimized.size > MAX_UPLOAD_BYTES) {
+              throw new Error("The prepared image is still larger than 8 MB. Choose a smaller image.");
+            }
+            onFileReady?.(optimized);
             const saved = Math.max(0, source.size - optimized.size);
             const savedPercent = source.size > 0 ? Math.round((saved / source.size) * 100) : 0;
             setStatus(
@@ -76,9 +93,18 @@ export function OptimizedImageInput() {
                 : `Ready · ${(optimized.size / 1024 / 1024).toFixed(1)} MB · ${savedPercent}% smaller`,
             );
           } catch (error) {
-            setStatus(error instanceof Error ? error.message : "Could not prepare this image.");
+            const canUseOriginal = SUPPORTED_TYPES.has(source.type) && source.size <= MAX_UPLOAD_BYTES;
+            if (canUseOriginal) {
+              onFileReady?.(source);
+              setStatus(`Ready · ${(source.size / 1024 / 1024).toFixed(1)} MB · original file will be uploaded`);
+            } else {
+              input.value = "";
+              onFileReady?.(null);
+              setStatus(error instanceof Error ? error.message : "Could not prepare this image.");
+            }
           } finally {
             setBusy(false);
+            onBusyChange?.(false);
           }
         }}
       />

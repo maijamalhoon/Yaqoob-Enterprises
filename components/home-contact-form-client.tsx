@@ -2,6 +2,7 @@
 
 import { FormEvent } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { ANALYTICS_ENABLED } from "@/lib/env";
 import styles from "./home-contact-form.module.css";
 
 type HomeContactCategory = {
@@ -39,12 +40,14 @@ export function HomeContactFormClient({
     const number = whatsappNumber.replace(/[^0-9]/g, "");
     const url = `https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`;
 
-    void fetch("/api/analytics", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ eventName: "whatsapp_click", pagePath: window.location.pathname }),
-      keepalive: true,
-    }).catch(() => undefined);
+    if (ANALYTICS_ENABLED) {
+      void fetch("/api/analytics", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ eventName: "whatsapp_click", pagePath: window.location.pathname }),
+        keepalive: true,
+      }).catch(() => undefined);
+    }
 
     const opened = window.open(url, "_blank", "noopener,noreferrer");
     if (!opened) window.location.assign(url);

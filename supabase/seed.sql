@@ -1,0 +1,2 @@
+-- Foundational business content is versioned in the historical migrations.
+-- Keep local-only test fixtures out of production migrations and add them here.

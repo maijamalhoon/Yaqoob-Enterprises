@@ -1,6 +1,7 @@
 import { DatabaseBackup, History, RotateCcw, ShieldCheck } from "lucide-react";
 import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
 import { createAdminSnapshot, deleteAdminSnapshot, restoreAdminSnapshot, rollbackAuditEntry } from "./actions";
 
 const tableLabels: Record<string, string> = {
@@ -70,8 +71,9 @@ function formatChangedFields(fields: string[]) {
 }
 
 export default async function AdminHistoryPage() {
-  const { supabase } = await requireAdmin();
-  const [{ data: history }, { data: snapshots }] = await Promise.all([
+  const { supabase, profile } = await requireAdmin();
+  const canManageRecovery = profile.role === "owner";
+  const [historyResult, snapshotResult] = await Promise.all([
     supabase
       .from("admin_audit_log")
       .select("id,table_name,record_id,record_label,operation,actor_email,old_data,new_data,created_at,reverted_at")
@@ -83,9 +85,13 @@ export default async function AdminHistoryPage() {
       .order("created_at", { ascending: false })
       .limit(20),
   ]);
+  assertQuerySucceeded(historyResult.error, "admin history");
+  assertQuerySucceeded(snapshotResult.error, "content snapshots");
+  const history = historyResult.data;
+  const snapshots = snapshotResult.data;
 
   const historyRows = history || [];
-  const backupRows = snapshots || [];
+  const snapshotRows = snapshots || [];
   const liveChanges = historyRows.filter((entry) => !entry.reverted_at).length;
 
   return (
@@ -93,55 +99,57 @@ export default async function AdminHistoryPage() {
       <div className="admin-page-heading admin-page-heading--control">
         <div>
           <span className="eyebrow">Safety</span>
-          <h1>History & backups</h1>
-          <p>See important admin changes, undo the latest safe change, or restore a full website backup.</p>
+          <h1>History & content snapshots</h1>
+          <p>See important admin changes, undo the latest safe change, or restore saved website content.</p>
         </div>
         <div className="admin-heading-metrics">
           <span><strong>{liveChanges}</strong> recent changes</span>
-          <span><strong>{backupRows.length}</strong> backups</span>
+          <span><strong>{snapshotRows.length}</strong> snapshots</span>
         </div>
       </div>
 
       <section className="admin-panel admin-panel--control admin-backup-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><DatabaseBackup size={15} /> Backups</span><h2>Website snapshot</h2><p>Business details, hours, services, images and coverage.</p></div>
+          <div><span className="admin-panel-kicker"><DatabaseBackup size={15} /> Content snapshots</span><h2>Website content snapshot</h2><p>Saves business details, hours, services, image records and coverage settings.</p></div>
           <ShieldCheck size={20} aria-hidden="true" />
         </div>
 
         <form className="admin-backup-create" action={createAdminSnapshot}>
-          <label>Backup name<input name="label" maxLength={100} placeholder="Before major changes" /></label>
-          <AdminSubmitButton pendingLabel="Creating…">Create backup</AdminSubmitButton>
+          <label>Snapshot name<input name="label" maxLength={100} placeholder="Before major changes" /></label>
+          <AdminSubmitButton pendingLabel="Creating…">Create snapshot</AdminSubmitButton>
         </form>
 
         <div className="admin-backup-list">
-          {backupRows.map((backup) => (
-            <article className="admin-backup-row" key={backup.id}>
-              <div><strong>{backup.label}</strong><small>{new Date(backup.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</small></div>
-              <div className="admin-backup-actions">
-                <form action={restoreAdminSnapshot}>
-                  <input type="hidden" name="id" value={backup.id} />
-                  <AdminSubmitButton
-                    variant="secondary"
-                    pendingLabel="Restoring…"
-                    confirmMessage="Restore this backup? A safety backup of the current website will be created first."
-                  >
-                    <RotateCcw size={15} /> Restore
-                  </AdminSubmitButton>
-                </form>
-                <form action={deleteAdminSnapshot}>
-                  <input type="hidden" name="id" value={backup.id} />
-                  <AdminDeleteButton label="Delete" confirmMessage={`Delete backup “${backup.label}”?`} />
-                </form>
-              </div>
+          {snapshotRows.map((snapshot) => (
+            <article className="admin-backup-row" key={snapshot.id}>
+              <div><strong>{snapshot.label}</strong><small>{new Date(snapshot.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</small></div>
+              {canManageRecovery && (
+                <div className="admin-backup-actions">
+                  <form action={restoreAdminSnapshot}>
+                    <input type="hidden" name="id" value={snapshot.id} />
+                    <AdminSubmitButton
+                      variant="secondary"
+                      pendingLabel="Restoring…"
+                      confirmMessage="Restore this content snapshot? A safety snapshot of the current website content will be created first."
+                    >
+                      <RotateCcw size={15} /> Restore
+                    </AdminSubmitButton>
+                  </form>
+                  <form action={deleteAdminSnapshot}>
+                    <input type="hidden" name="id" value={snapshot.id} />
+                    <AdminDeleteButton label="Delete" confirmMessage={`Delete content snapshot “${snapshot.label}”?`} />
+                  </form>
+                </div>
+              )}
             </article>
           ))}
-          {backupRows.length === 0 && <div className="admin-empty-state admin-empty-state--compact"><DatabaseBackup size={21} /><p>No backups yet.</p></div>}
+          {snapshotRows.length === 0 && <div className="admin-empty-state admin-empty-state--compact"><DatabaseBackup size={21} /><p>No content snapshots yet.</p></div>}
         </div>
       </section>
 
       <section className="admin-panel admin-panel--control admin-history-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><History size={15} /> Audit trail</span><h2>Recent admin changes</h2><p>Newest changes appear first. Undo is blocked if a newer change would be overwritten.</p></div>
+          <div><span className="admin-panel-kicker"><History size={15} /> Audit trail</span><h2>Recent admin changes</h2><p>Newest changes appear first. Undo is blocked if a newer change would be overwritten; gallery changes use content snapshots.</p></div>
         </div>
 
         <div className="admin-history-list">
@@ -151,6 +159,7 @@ export default async function AdminHistoryPage() {
               entry.new_data as Record<string, unknown> | null,
             );
             const reverted = Boolean(entry.reverted_at);
+            const rollbackable = entry.table_name !== "gallery_images";
             const label = entry.record_label || entry.record_id;
             return (
               <article className={`admin-history-row ${reverted ? "is-reverted" : ""}`} key={entry.id}>
@@ -166,7 +175,7 @@ export default async function AdminHistoryPage() {
                 <div className="admin-history-row__action">
                   {reverted ? (
                     <span className="admin-state is-hidden">Undone</span>
-                  ) : (
+                  ) : canManageRecovery && rollbackable ? (
                     <form action={rollbackAuditEntry}>
                       <input type="hidden" name="id" value={entry.id} />
                       <AdminSubmitButton
@@ -177,7 +186,9 @@ export default async function AdminHistoryPage() {
                         <RotateCcw size={14} /> Undo
                       </AdminSubmitButton>
                     </form>
-                  )}
+                  ) : canManageRecovery && !rollbackable ? (
+                    <span className="admin-state is-hidden">Snapshot recovery</span>
+                  ) : null}
                 </div>
               </article>
             );

@@ -4,6 +4,7 @@ import { FormEvent, useMemo, useState } from "react";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { getCustomerServiceModes, serviceNeedsAvailabilityConfirmation } from "@/lib/service-availability";
 import type { RequestFormCategory } from "@/lib/client-data";
+import { ANALYTICS_ENABLED } from "@/lib/env";
 
 const unsureCategoryValue = "__unsure_category__";
 const unsureServiceValue = "__unsure__";
@@ -69,12 +70,14 @@ export function RequestFormClient({
     const number = whatsappNumber.replace(/[^0-9]/g, "");
     const url = `https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`;
 
-    void fetch("/api/analytics", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ eventName: "whatsapp_click", pagePath: window.location.pathname }),
-      keepalive: true,
-    }).catch(() => undefined);
+    if (ANALYTICS_ENABLED) {
+      void fetch("/api/analytics", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ eventName: "whatsapp_click", pagePath: window.location.pathname }),
+        keepalive: true,
+      }).catch(() => undefined);
+    }
 
     const opened = window.open(url, "_blank", "noopener,noreferrer");
     if (!opened) window.location.assign(url);

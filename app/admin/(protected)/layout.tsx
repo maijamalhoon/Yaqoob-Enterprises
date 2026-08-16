@@ -4,12 +4,18 @@ import { ExternalLink, LogOut } from "lucide-react";
 import { AdminNav } from "@/components/admin-nav";
 import { DestructiveActionGuard } from "@/components/destructive-action-guard";
 import { requireAdmin } from "@/lib/admin";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
 
-export const metadata: Metadata = { title: "Admin Centre", robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: "Admin Centre",
+  manifest: "/admin.webmanifest",
+  robots: { index: false, follow: false },
+};
 
 export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
   const { profile, supabase } = await requireAdmin();
-  const { data: settings } = await supabase.from("business_settings").select("business_name").eq("id", true).single();
+  const { data: settings, error } = await supabase.from("business_settings").select("business_name").eq("id", true).single();
+  assertQuerySucceeded(error, "business identity");
 
   return (
     <div className="admin-shell">

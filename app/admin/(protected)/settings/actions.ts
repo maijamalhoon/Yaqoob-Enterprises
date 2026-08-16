@@ -1,10 +1,26 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
-import { requireAdmin } from "@/lib/admin";
+import { requireAdminMutation } from "@/lib/admin";
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
+}
+
+function limitedText(formData: FormData, key: string, label: string, maxLength: number, required = false) {
+  const value = text(formData, key);
+  if ((required && !value) || value.length > maxLength) {
+    throw new Error(`Enter ${label} using ${maxLength} characters or fewer.`);
+  }
+  return value;
+}
+
+function recordId(formData: FormData) {
+  const id = text(formData, "id");
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+    throw new Error("The opening-hours reference is invalid.");
+  }
+  return id;
 }
 
 function bool(formData: FormData, key: string) {
@@ -58,41 +74,40 @@ function refreshSettings() {
 }
 
 export async function updateBusinessIdentity(formData: FormData) {
-  const { supabase } = await requireAdmin();
-  const businessName = text(formData, "business_name");
-  if (businessName.length < 2) throw new Error("Business name is required.");
+  const { supabase } = await requireAdminMutation();
+  const businessName = limitedText(formData, "business_name", "a business name", 80, true);
+  if (businessName.length < 2) throw new Error("Business name must use at least two characters.");
 
-  const { error } = await supabase.from("business_settings").update({
+  const { data, error } = await supabase.from("business_settings").update({
     business_name: businessName,
-    tagline: text(formData, "tagline"),
-  }).eq("id", true);
+    tagline: limitedText(formData, "tagline", "a tagline", 120),
+  }).eq("id", true).select("id").maybeSingle();
 
-  if (error) throw new Error(error.message);
+  if (error || !data) throw new Error("The business identity could not be updated.");
   refreshSettings();
 }
 
 export async function updateContactDetails(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdminMutation();
   const phone = normalizePkPhone(text(formData, "phone_number"));
   const whatsapp = normalizePkPhone(text(formData, "whatsapp_number"));
-  const mapUrl = text(formData, "map_url");
-  const googleBusinessProfileUrl = text(formData, "google_business_profile_url");
-  const address = text(formData, "address");
-  if (!address) throw new Error("Address is required.");
+  const mapUrl = limitedText(formData, "map_url", "a Google Maps URL", 2_048, true);
+  const googleBusinessProfileUrl = limitedText(formData, "google_business_profile_url", "a Google Business Profile URL", 2_048);
+  const address = limitedText(formData, "address", "an address", 500, true);
 
   secureUrl(mapUrl, "Google Maps");
   validateGoogleBusinessProfileUrl(googleBusinessProfileUrl);
 
-  const { error } = await supabase.from("business_settings").update({
+  const { data, error } = await supabase.from("business_settings").update({
     phone_display: displayPhone(phone),
     phone_e164: phone,
     whatsapp_e164: whatsapp,
     address,
     map_url: mapUrl,
     google_business_profile_url: googleBusinessProfileUrl,
-  }).eq("id", true);
+  }).eq("id", true).select("id").maybeSingle();
 
-  if (error) throw new Error(error.message);
+  if (error || !data) throw new Error("The contact details could not be updated.");
   refreshSettings();
 }
 
@@ -101,11 +116,18 @@ function minutes(time: string) {
   return hours * 60 + mins;
 }
 
+function validTime(value: string) {
+  if (!/^\d{2}:\d{2}$/.test(value)) return false;
+  const [hours, mins] = value.split(":").map(Number);
+  return hours >= 0 && hours <= 23 && mins >= 0 && mins <= 59;
+}
+
 function readPeriod(formData: FormData, prefix: string) {
   const opensAt = text(formData, `${prefix}_opens_at`);
   const closesAt = text(formData, `${prefix}_closes_at`);
   if (!opensAt && !closesAt) return null;
   if (!opensAt || !closesAt) throw new Error("Both opening and closing time are required for each interval.");
+  if (!validTime(opensAt) || !validTime(closesAt)) throw new Error("Enter valid opening and closing times.");
   return {
     opens_at: opensAt,
     closes_at: closesAt,
@@ -114,7 +136,7 @@ function readPeriod(formData: FormData, prefix: string) {
 }
 
 export async function updateBusinessHour(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdminMutation();
   const isClosed = bool(formData, "is_closed");
   const periods = [readPeriod(formData, "first"), readPeriod(formData, "second")].filter(Boolean) as Array<{
     opens_at: string;
@@ -132,13 +154,13 @@ export async function updateBusinessHour(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.from("business_hours").update({
+  const { data, error } = await supabase.from("business_hours").update({
     periods: isClosed ? [] : periods,
     opens_at: isClosed ? null : periods[0]?.opens_at || null,
     closes_at: isClosed ? null : periods.at(-1)?.closes_at || null,
     is_closed: isClosed,
-  }).eq("id", text(formData, "id"));
+  }).eq("id", recordId(formData)).select("id").maybeSingle();
 
-  if (error) throw new Error(error.message);
+  if (error || !data) throw new Error("The opening hours could not be updated or no longer exist.");
   refreshSettings();
 }

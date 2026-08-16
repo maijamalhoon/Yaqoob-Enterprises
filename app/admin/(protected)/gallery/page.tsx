@@ -1,16 +1,20 @@
 import Image from "next/image";
 import { Eye, EyeOff, ImagePlus, Star } from "lucide-react";
-import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
-import { OptimizedImageInput } from "@/components/optimized-image-input";
+import { AdminSubmitButton } from "@/components/admin-form-buttons";
+import { GalleryUploadForm } from "@/components/gallery-upload-form";
 import { requireAdmin } from "@/lib/admin";
-import { deleteGalleryImage, updateGalleryImage, uploadGalleryImage } from "./actions";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
+import { publicStorageUrl } from "@/lib/supabase/storage";
+import { archiveGalleryImage, updateGalleryImage } from "./actions";
 
 export default async function AdminGalleryPage() {
   const { supabase } = await requireAdmin();
-  const { data: images } = await supabase.from("gallery_images").select("*").order("display_order");
+  const { data: images, error } = await supabase.from("gallery_images").select("*").order("display_order");
+  assertQuerySucceeded(error, "gallery images");
   const imageList = images || [];
   const activeImages = imageList.filter((image) => image.is_active);
-  const featuredImage = activeImages.find((image) => image.is_featured && image.media_kind === "real");
+  const featuredImages = activeImages.filter((image) => image.is_featured && image.media_kind === "real");
+  const featuredImage = featuredImages[0];
 
   return (
     <div className="admin-content admin-control-page">
@@ -22,27 +26,18 @@ export default async function AdminGalleryPage() {
         </div>
         <div className="admin-heading-metrics">
           <span><strong>{activeImages.length}</strong> active</span>
-          <span className={featuredImage ? "is-good" : "is-warning"}><strong>{featuredImage ? "1" : "0"}</strong> featured</span>
+          <span className={featuredImages.length === 1 ? "is-good" : "is-warning"}><strong>{featuredImages.length}</strong> featured</span>
         </div>
       </div>
 
       <details className="admin-panel admin-create-panel admin-upload-panel">
-        <summary><span><ImagePlus size={17} /> Upload shop image</span><small>Optimized before upload</small></summary>
-        <form className="admin-form-grid admin-form-grid--focused" action={uploadGalleryImage}>
-          <label className="admin-span-2">Image<OptimizedImageInput /></label>
-          <label>Type<select name="media_kind" defaultValue="real"><option value="real">Real shop photo</option><option value="concept">Concept image</option></select></label>
-          <label>Order<input type="number" min="0" name="display_order" defaultValue={imageList.length} /></label>
-          <label className="admin-span-2">Alt text<input name="alt_text" required placeholder="Short description of the photo" /></label>
-          <label>Horizontal focus<input type="number" min="0" max="100" name="focal_x" defaultValue="50" /></label>
-          <label>Vertical focus<input type="number" min="0" max="100" name="focal_y" defaultValue="50" /></label>
-          <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={!featuredImage} /> Use as homepage hero image</label>
-          <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Upload image</AdminSubmitButton></div>
-        </form>
+        <summary><span><ImagePlus size={17} /> Upload shop image</span><small>Prepared in your browser</small></summary>
+        <GalleryUploadForm defaultFeatured={!featuredImage} defaultOrder={imageList.length} />
       </details>
 
       <section className="admin-media-grid">
         {imageList.map((image) => {
-          const url = `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${image.storage_path}`;
+          const url = publicStorageUrl("shop-media", image.storage_path);
           const isHomepageImage = image.is_featured && image.is_active && image.media_kind === "real";
           return (
             <article className={`admin-media-card ${isHomepageImage ? "is-featured" : ""}`} key={image.id}>
@@ -67,9 +62,9 @@ export default async function AdminGalleryPage() {
                 <summary>Edit image</summary>
                 <form className="admin-form-grid admin-form-grid--focused" action={updateGalleryImage}>
                   <input type="hidden" name="id" value={image.id} />
-                  <label className="admin-span-2">Alt text<input name="alt_text" defaultValue={image.alt_text} required /></label>
+                  <label className="admin-span-2">Alt text<input name="alt_text" maxLength={180} defaultValue={image.alt_text} required /></label>
                   <label>Type<select name="media_kind" defaultValue={image.media_kind}><option value="real">Real shop photo</option><option value="concept">Concept image</option></select></label>
-                  <label>Order<input type="number" min="0" name="display_order" defaultValue={image.display_order} /></label>
+                  <label>Order<input type="number" min="0" max="10000" name="display_order" defaultValue={image.display_order} /></label>
                   <label>Horizontal focus<input type="number" min="0" max="100" name="focal_x" defaultValue={image.focal_x} /></label>
                   <label>Vertical focus<input type="number" min="0" max="100" name="focal_y" defaultValue={image.focal_y} /></label>
                   <div className="admin-checks admin-span-2">
@@ -78,10 +73,18 @@ export default async function AdminGalleryPage() {
                   </div>
                   <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save image</AdminSubmitButton></div>
                 </form>
-                <form className="admin-destructive-row" action={deleteGalleryImage}>
-                  <input type="hidden" name="id" value={image.id} />
-                  <AdminDeleteButton label="Delete image" confirmMessage="Delete this image permanently? It will also be removed from storage." />
-                </form>
+                {image.is_active && (
+                  <form className="admin-destructive-row" action={archiveGalleryImage}>
+                    <input type="hidden" name="id" value={image.id} />
+                    <AdminSubmitButton
+                      variant="secondary"
+                      pendingLabel="Archiving…"
+                      confirmMessage="Archive this image? It will be hidden from the website and can be restored by enabling Active later."
+                    >
+                      Archive image
+                    </AdminSubmitButton>
+                  </form>
+                )}
               </details>
             </article>
           );
