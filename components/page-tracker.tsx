@@ -2,12 +2,13 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { ANALYTICS_ENABLED } from "@/lib/env";
 
 export function PageTracker() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!pathname || pathname === "/admin" || pathname.startsWith("/admin/")) return;
+    if (!ANALYTICS_ENABLED || !pathname || pathname === "/admin" || pathname.startsWith("/admin/")) return;
 
     const params = new URLSearchParams(window.location.search);
     void fetch("/api/analytics", {

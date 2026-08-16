@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./brand.css";
 import "./design-system.css";
@@ -27,6 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(SITE_URL),
     applicationName: settings.business_name,
+    manifest: "/manifest.webmanifest",
     title: {
       default: homeTitle,
       template: `%s | ${settings.business_name}`,
@@ -50,9 +51,19 @@ export async function generateMetadata(): Promise<Metadata> {
       title: homeTitle,
       description,
     },
-    icons: { icon: "/icon.svg" },
+    icons: { icon: "/icon.svg", apple: "/icons/apple-touch-icon.png" },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: settings.business_name,
+    },
   };
 }
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#001f56",
+};
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

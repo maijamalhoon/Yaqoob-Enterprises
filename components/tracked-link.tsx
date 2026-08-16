@@ -1,6 +1,7 @@
 "use client";
 
 import type { AnchorHTMLAttributes, ReactNode } from "react";
+import { ANALYTICS_ENABLED } from "@/lib/env";
 
 export function TrackedLink({
   eventName,
@@ -8,6 +9,8 @@ export function TrackedLink({
   ...props
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { eventName: string; children: ReactNode }) {
   const track = () => {
+    if (!ANALYTICS_ENABLED) return;
+
     const params = new URLSearchParams(window.location.search);
     const payload = JSON.stringify({
       eventName,

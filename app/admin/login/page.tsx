@@ -4,7 +4,11 @@ import { redirect } from "next/navigation";
 import { AdminLoginForm } from "@/components/admin-login-form";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Admin Login", robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: "Admin Login",
+  manifest: "/admin.webmanifest",
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminLoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const supabase = await createServerSupabaseClient();

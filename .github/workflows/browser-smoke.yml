@@ -23,6 +23,12 @@ jobs:
       (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.CI_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.CI_SUPABASE_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+      NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
+      ANALYTICS_ALLOW_NON_PRODUCTION: "false"
     steps:
       - name: Checkout tested revision
         uses: actions/checkout@v4
@@ -35,6 +41,15 @@ jobs:
           node-version: 24
           cache: npm
 
+      - name: Validate pull request environment
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          if [[ -z "$NEXT_PUBLIC_SUPABASE_URL" || -z "$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY" ]]; then
+            echo "::error::Configure CI_SUPABASE_URL and CI_SUPABASE_PUBLISHABLE_KEY as GitHub repository variables for a dedicated non-production Supabase project."
+            exit 1
+          fi
+
       - name: Install application dependencies
         run: npm ci --no-audit --no-fund
 
@@ -46,14 +61,10 @@ jobs:
 
       - name: Build pull request application
         if: github.event_name == 'pull_request'
-        env:
-          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
         run: npm run build
 
       - name: Start pull request production server
         if: github.event_name == 'pull_request'
-        env:
-          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
         run: |
           nohup npm start > /tmp/yaqoob-next.log 2>&1 &
           echo $! > /tmp/yaqoob-next.pid

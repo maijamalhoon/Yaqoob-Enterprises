@@ -1,8 +1,9 @@
 import { Eye, EyeOff, Plus, Wrench } from "lucide-react";
-import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminSubmitButton } from "@/components/admin-form-buttons";
 import { ServiceIcon } from "@/components/service-icon";
 import { requireAdmin } from "@/lib/admin";
-import { createCategory, createService, deleteService, updateCategory, updateService } from "./actions";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
+import { archiveService, createCategory, createService, updateCategory, updateService } from "./actions";
 
 const statuses = [
   ["active", "Available"],
@@ -44,15 +45,22 @@ function serviceModes(service: {
 
 export default async function AdminServicesPage() {
   const { supabase } = await requireAdmin();
-  const [{ data: categories }, { data: services }] = await Promise.all([
+  const [categoryResult, serviceResult] = await Promise.all([
     supabase.from("service_categories").select("*").order("display_order"),
     supabase.from("services").select("*").order("display_order"),
   ]);
+  assertQuerySucceeded(categoryResult.error, "service categories");
+  assertQuerySucceeded(serviceResult.error, "services");
+  const categories = categoryResult.data;
+  const services = serviceResult.data;
   const categoryList = categories || [];
   const serviceList = services || [];
-  const publicServices = serviceList.filter((service) => service.status !== "hidden");
-  const websiteServices = publicServices.filter((service) => service.is_featured);
   const activeCategories = categoryList.filter((category) => category.is_active);
+  const activeCategoryIds = new Set(activeCategories.map((category) => category.id));
+  const publicServices = serviceList.filter(
+    (service) => service.status !== "hidden" && activeCategoryIds.has(service.category_id),
+  );
+  const websiteServices = publicServices.filter((service) => service.is_featured);
 
   return (
     <div className="admin-content admin-control-page">
@@ -79,10 +87,10 @@ export default async function AdminServicesPage() {
             <label>URL slug<input name="slug" placeholder="service-name" required pattern="[a-zA-Z0-9-]+" /></label>
             <label>Order<input type="number" min="0" name="display_order" defaultValue={serviceList.length} /></label>
             <label className="checkbox-line"><input type="checkbox" name="is_featured" /> Show in homepage Top services</label>
-            <label className="admin-span-2">Short description<textarea name="short_description" rows={2} required /></label>
-            <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} /></label>
-            <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} /></label>
-            <label className="admin-span-2">Important note<textarea name="important_note" rows={2} /></label>
+            <label className="admin-span-2">Short description<textarea name="short_description" rows={2} maxLength={300} required /></label>
+            <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} maxLength={2000} /></label>
+            <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} maxLength={6000} /></label>
+            <label className="admin-span-2">Important note<textarea name="important_note" rows={2} maxLength={1000} /></label>
             <label className="admin-span-2">Google title <small>optional — blank uses automatic local SEO</small><input name="seo_title" maxLength={90} placeholder="Service in Karachi | Business name" /></label>
             <label className="admin-span-2">Google description <small>optional — blank uses service details + location automatically</small><textarea name="seo_description" maxLength={190} rows={2} /></label>
             <div className="admin-checks admin-span-2" aria-label="Service options">
@@ -103,7 +111,7 @@ export default async function AdminServicesPage() {
             <label>URL slug<input name="slug" placeholder="category-name" required pattern="[a-zA-Z0-9-]+" /></label>
             <label>Icon<select name="icon_key" defaultValue="briefcase">{iconOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             <label>Order<input type="number" min="0" name="display_order" defaultValue={categoryList.length} /></label>
-            <label className="admin-span-2">Description<textarea name="description" rows={2} required /></label>
+            <label className="admin-span-2">Description<textarea name="description" rows={2} maxLength={500} required /></label>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add category</AdminSubmitButton></div>
           </form>
         </details>
@@ -124,10 +132,10 @@ export default async function AdminServicesPage() {
                   <summary>Category settings</summary>
                   <form className="admin-form-grid admin-form-grid--focused" action={updateCategory}>
                     <input type="hidden" name="id" value={category.id} />
-                    <label>Category name<input name="title" defaultValue={category.title} required /></label>
+                    <label>Category name<input name="title" maxLength={100} defaultValue={category.title} required /></label>
                     <label>Icon<select name="icon_key" defaultValue={category.icon_key}>{iconOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                     <label>Order<input type="number" min="0" name="display_order" defaultValue={category.display_order} /></label>
-                    <label className="admin-span-2">Description<textarea name="description" rows={2} defaultValue={category.description} /></label>
+                    <label className="admin-span-2">Description<textarea name="description" rows={2} maxLength={500} defaultValue={category.description} required /></label>
                     <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_active" defaultChecked={category.is_active} /> Enable this category when it has public services</label>
                     <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save category</AdminSubmitButton></div>
                   </form>
@@ -154,15 +162,15 @@ export default async function AdminServicesPage() {
                       <div className="admin-edit-card__body">
                         <form className="admin-form-grid admin-form-grid--focused" action={updateService}>
                           <input type="hidden" name="id" value={service.id} />
-                          <label>Title<input name="title" defaultValue={service.title} required /></label>
+                          <label>Title<input name="title" maxLength={120} defaultValue={service.title} required /></label>
                           <label>Category<select name="category_id" defaultValue={service.category_id}>{categoryList.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
                           <label>Status<select name="status" defaultValue={service.status}>{statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
                           <label>Order<input type="number" min="0" name="display_order" defaultValue={service.display_order} /></label>
                           <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={service.is_featured} /> Show in homepage Top services</label>
-                          <label className="admin-span-2">Short description<textarea name="short_description" rows={2} defaultValue={service.short_description} /></label>
-                          <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} defaultValue={service.detailed_description} /></label>
-                          <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} defaultValue={(service.requirements || []).join("\n")} /></label>
-                          <label className="admin-span-2">Important note<textarea name="important_note" rows={2} defaultValue={service.important_note} /></label>
+                          <label className="admin-span-2">Short description<textarea name="short_description" rows={2} maxLength={300} defaultValue={service.short_description} required /></label>
+                          <label className="admin-span-2">Detailed description<textarea name="detailed_description" rows={3} maxLength={2000} defaultValue={service.detailed_description} /></label>
+                          <label className="admin-span-2">What to bring / send <small>one item per line</small><textarea name="requirements" rows={4} maxLength={6000} defaultValue={(service.requirements || []).join("\n")} /></label>
+                          <label className="admin-span-2">Important note<textarea name="important_note" rows={2} maxLength={1000} defaultValue={service.important_note} /></label>
                           <label className="admin-span-2">Google title <small>optional — blank keeps automatic local SEO</small><input name="seo_title" maxLength={90} defaultValue={service.seo_title || ""} /></label>
                           <label className="admin-span-2">Google description <small>optional — blank keeps automatic local SEO</small><textarea name="seo_description" maxLength={190} rows={2} defaultValue={service.seo_description || ""} /></label>
                           <div className="admin-checks admin-span-2" aria-label="Service options">
@@ -174,9 +182,15 @@ export default async function AdminServicesPage() {
                           </div>
                           <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save service</AdminSubmitButton></div>
                         </form>
-                        <form className="admin-destructive-row" action={deleteService}>
+                        <form className="admin-destructive-row" action={archiveService}>
                           <input type="hidden" name="id" value={service.id} />
-                          <AdminDeleteButton label="Delete service" confirmMessage={`Delete “${service.title}”? This permanently removes the service record and cannot be undone.`} />
+                          <AdminSubmitButton
+                            variant="secondary"
+                            pendingLabel="Archiving…"
+                            confirmMessage={`Archive “${service.title}”? It will be hidden from the website and can be restored by changing its status later.`}
+                          >
+                            Archive service
+                          </AdminSubmitButton>
                         </form>
                       </div>
                     </details>

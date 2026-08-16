@@ -4,14 +4,19 @@ import { AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 import { formatBusinessHours, getHourPeriods } from "@/lib/data";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
 import { updateBusinessHour, updateBusinessIdentity, updateContactDetails } from "./actions";
 
 export default async function AdminSettingsPage() {
   const { supabase } = await requireAdmin();
-  const [{ data: settings }, { data: hours }] = await Promise.all([
+  const [settingsResult, hoursResult] = await Promise.all([
     supabase.from("business_settings").select("*").eq("id", true).single(),
     supabase.from("business_hours").select("*").order("display_order"),
   ]);
+  assertQuerySucceeded(settingsResult.error, "business settings");
+  assertQuerySucceeded(hoursResult.error, "business hours");
+  const settings = settingsResult.data;
+  const hours = hoursResult.data;
   const location = businessLocationLabel(settings?.address || "");
 
   return (
@@ -44,9 +49,9 @@ export default async function AdminSettingsPage() {
           <form className="admin-form-grid admin-form-grid--focused" action={updateContactDetails}>
             <label>Phone<input name="phone_number" inputMode="tel" defaultValue={settings?.phone_e164} placeholder="+923492568864" required /></label>
             <label>WhatsApp<input name="whatsapp_number" inputMode="tel" defaultValue={settings?.whatsapp_e164} placeholder="+923492568864" required /></label>
-            <label className="admin-span-2">Address<textarea name="address" defaultValue={settings?.address} rows={3} required /></label>
-            <label className="admin-span-2">Google Maps URL<input name="map_url" type="url" defaultValue={settings?.map_url} required /></label>
-            <label className="admin-span-2">Google Business Profile <small>Used for admin analysis</small><input name="google_business_profile_url" type="url" defaultValue={settings?.google_business_profile_url || ""} placeholder="https://share.google/..." /></label>
+            <label className="admin-span-2">Address<textarea name="address" defaultValue={settings?.address} rows={3} maxLength={500} required /></label>
+            <label className="admin-span-2">Google Maps URL<input name="map_url" type="url" maxLength={2048} defaultValue={settings?.map_url} required /></label>
+            <label className="admin-span-2">Google Business Profile <small>Used for admin analysis</small><input name="google_business_profile_url" type="url" maxLength={2048} defaultValue={settings?.google_business_profile_url || ""} placeholder="https://share.google/..." /></label>
             <div className="admin-form-actions admin-form-actions--split admin-span-2">
               <AdminSubmitButton>Save contact & location</AdminSubmitButton>
               <div className="admin-settings-preview-links">

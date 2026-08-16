@@ -2,13 +2,14 @@ import Link from "next/link";
 import { Activity, ArrowRight, BarChart3, CheckCircle2, History, ImageIcon, MapPin, MousePointerClick, Phone, Settings2, ShieldCheck, TriangleAlert, Wrench } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireAdmin();
   // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day activity window.
   // eslint-disable-next-line react-hooks/purity
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const [services, categories, featured, settings, hours, events, recent, latestBackup] = await Promise.all([
+  const [services, categories, featured, settings, hours, events, recent, latestSnapshot] = await Promise.all([
     supabase.from("services").select("id,category_id,status"),
     supabase.from("service_categories").select("id,is_active"),
     supabase.from("gallery_images").select("id,alt_text").eq("is_active", true).eq("is_featured", true).eq("media_kind", "real").limit(1).maybeSingle(),
@@ -18,6 +19,14 @@ export default async function AdminDashboardPage() {
     supabase.from("analytics_events").select("event_name,page_path,city_name,device_type,created_at").order("created_at", { ascending: false }).limit(8),
     supabase.from("admin_snapshots").select("id,created_at").order("created_at", { ascending: false }).limit(1).maybeSingle(),
   ]);
+  assertQuerySucceeded(services.error, "services");
+  assertQuerySucceeded(categories.error, "service categories");
+  assertQuerySucceeded(featured.error, "homepage image");
+  assertQuerySucceeded(settings.error, "business settings");
+  assertQuerySucceeded(hours.error, "business hours");
+  assertQuerySucceeded(events.error, "analytics summary");
+  assertQuerySucceeded(recent.error, "recent activity");
+  assertQuerySucceeded(latestSnapshot.error, "content snapshot status");
 
   const activeCategoryIds = new Set((categories.data || []).filter((category) => category.is_active).map((category) => category.id));
   const publicServiceCount = (services.data || []).filter((service) => service.status !== "hidden" && activeCategoryIds.has(service.category_id)).length;
@@ -36,7 +45,7 @@ export default async function AdminDashboardPage() {
     ["Public services", publicServiceCount > 0 && categoryCount > 0, "/admin/services"],
     ["Homepage image", featuredReady, "/admin/gallery"],
     ["Google Business", Boolean(settingsData?.google_business_profile_url), "/admin/analytics"],
-    ["Backup", Boolean(latestBackup.data?.id), "/admin/history"],
+    ["Content snapshot", Boolean(latestSnapshot.data?.id), "/admin/history"],
   ] as const;
   const healthyCount = healthChecks.filter(([, ready]) => ready).length;
 
@@ -103,7 +112,7 @@ export default async function AdminDashboardPage() {
         </Link>
         <Link className="admin-control-link" href="/admin/history">
           <span className="admin-control-link__icon"><History size={20} /></span>
-          <span><strong>History & backups</strong><small>{latestBackup.data?.id ? `Latest backup ${new Date(latestBackup.data.created_at).toLocaleDateString("en-PK", { timeZone: "Asia/Karachi" })}` : "Create your first backup"}</small></span>
+          <span><strong>History & content snapshots</strong><small>{latestSnapshot.data?.id ? `Latest snapshot ${new Date(latestSnapshot.data.created_at).toLocaleDateString("en-PK", { timeZone: "Asia/Karachi" })}` : "Create your first content snapshot"}</small></span>
           <ArrowRight size={17} />
         </Link>
       </section>

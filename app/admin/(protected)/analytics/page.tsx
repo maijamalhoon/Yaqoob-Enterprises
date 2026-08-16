@@ -1,6 +1,7 @@
 import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
+import { assertQuerySucceeded } from "@/lib/supabase/query-error";
 
 const contactEvents = new Set(["whatsapp_click", "call_click", "directions_click"]);
 const contactLabels: Record<string, string> = {
@@ -41,16 +42,24 @@ export default async function AdminAnalyticsPage() {
   // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
   // eslint-disable-next-line react-hooks/purity
   const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ data: events }, { data: settings }, { data: categories }] = await Promise.all([
+  const [eventResult, settingsResult, categoryResult] = await Promise.all([
     supabase
       .from("analytics_events")
-      .select("event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at")
+      .select("event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at", { count: "exact" })
       .gte("created_at", start)
       .order("created_at", { ascending: false })
       .limit(5000),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
     supabase.from("service_categories").select("slug,title"),
   ]);
+  assertQuerySucceeded(eventResult.error, "analytics events");
+  assertQuerySucceeded(settingsResult.error, "business settings");
+  assertQuerySucceeded(categoryResult.error, "service categories");
+  const events = eventResult.data;
+  const settings = settingsResult.data;
+  const categories = categoryResult.data;
+  const totalEvents = eventResult.count || 0;
+  const analyticsTruncated = totalEvents > (events?.length || 0);
 
   const categoryTitles = new Map((categories || []).map((category) => [category.slug, category.title]));
   const rows = (events || []).filter((event) => {
@@ -125,7 +134,15 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity from the last 30 days.</p></div>
+        <div>
+          <span className="eyebrow">Insights</span>
+          <h1>Analytics</h1>
+          <p>
+            {analyticsTruncated
+              ? `Showing the newest ${(events?.length || 0).toLocaleString()} of ${totalEvents.toLocaleString()} events from the last 30 days.`
+              : "Public website activity from the last 30 days."}
+          </p>
+        </div>
       </div>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>

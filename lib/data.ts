@@ -214,11 +214,17 @@ function timeToMinutes(time: string) {
   return hours * 60 + minutes;
 }
 
-export function getHourPeriods(hour: BusinessHour): BusinessHourPeriod[] {
+type BusinessHourInput = Pick<BusinessHour, "closes_at" | "is_closed" | "opens_at"> & { periods: unknown };
+
+function isHourPeriod(value: unknown): value is { closes_at: unknown; closes_next_day?: unknown; opens_at: unknown } {
+  return typeof value === "object" && value !== null && "opens_at" in value && "closes_at" in value;
+}
+
+export function getHourPeriods(hour: BusinessHourInput): BusinessHourPeriod[] {
   if (hour.is_closed) return [];
   if (Array.isArray(hour.periods) && hour.periods.length > 0) {
     return hour.periods
-      .filter((period) => period?.opens_at && period?.closes_at)
+      .filter((period) => isHourPeriod(period) && period.opens_at && period.closes_at)
       .map((period) => ({
         opens_at: String(period.opens_at).slice(0, 5),
         closes_at: String(period.closes_at).slice(0, 5),
@@ -240,7 +246,7 @@ export function getHourPeriods(hour: BusinessHour): BusinessHourPeriod[] {
   return [];
 }
 
-export function formatBusinessHours(hour: BusinessHour) {
+export function formatBusinessHours(hour: BusinessHourInput) {
   const periods = getHourPeriods(hour);
   if (hour.is_closed || periods.length === 0) return "Closed";
   return periods

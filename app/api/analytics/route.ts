@@ -1,14 +1,33 @@
 import { createHash, randomUUID } from "node:crypto";
+import { createClient } from "@supabase/supabase-js";
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
+import type { Database } from "@/lib/database.types";
+import { ANALYTICS_ENABLED, SUPABASE_URL } from "@/lib/env";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 const allowedEvents = new Set(["page_view", "whatsapp_click", "call_click", "directions_click", "service_view"]);
-const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|uptimerobot/i;
+const botPattern =
+  /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|uptimerobot|headlesschrome|playwright/i;
 const rateLimitWindowMs = 60_000;
 const rateLimitMaximum = 30;
 const attributionMaxAge = 60 * 60 * 24 * 30;
 const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
+
+function createAnalyticsSupabaseClient() {
+  const secretKey = process.env.SUPABASE_SECRET_KEY?.trim();
+  if (!secretKey?.startsWith("sb_secret_")) {
+    throw new Error("Analytics ingestion is not configured.");
+  }
+
+  return createClient<Database>(SUPABASE_URL, secretKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+}
 
 type HeaderReader = { get(name: string): string | null };
 type AnalyticsPayload = {
@@ -76,7 +95,19 @@ function isRateLimited(key: string) {
   return current.count > rateLimitMaximum;
 }
 
+function isAnalyticsCollectionEnabled() {
+  if (!ANALYTICS_ENABLED) return false;
+  if (process.env.ANALYTICS_ALLOW_NON_PRODUCTION === "true") return true;
+  if (process.env.CI === "true" || process.env.NODE_ENV === "test") return false;
+  if (process.env.VERCEL_ENV) return process.env.VERCEL_ENV === "production";
+  return process.env.NODE_ENV === "production";
+}
+
 export async function POST(request: Request) {
+  if (!isAnalyticsCollectionEnabled()) {
+    return NextResponse.json({ ok: true, ignored: true });
+  }
+
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > 2_048) {
     return NextResponse.json({ ok: false }, { status: 413 });
@@ -85,12 +116,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 415 });
   }
 
-  let body: AnalyticsPayload;
+  let payload: unknown;
   try {
-    body = (await request.json()) as AnalyticsPayload;
+    payload = await request.json();
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
+
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return NextResponse.json({ ok: false }, { status: 400 });
+  }
+
+  const body = payload as AnalyticsPayload;
 
   if (!body.eventName || !allowedEvents.has(body.eventName)) {
     return NextResponse.json({ ok: false }, { status: 400 });
@@ -164,7 +201,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { error } = await supabase.from("analytics_events").insert({
+    const analyticsSupabase = createAnalyticsSupabaseClient();
+    const { error } = await analyticsSupabase.from("analytics_events").insert({
       event_name: body.eventName,
       page_path: pagePath,
       referrer_host: safeReferrerHost(requestHeaders.get("referer")),
