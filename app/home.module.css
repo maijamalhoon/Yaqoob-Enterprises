@@ -112,8 +112,7 @@
   box-shadow: 0 8px 20px rgba(0, 31, 86, 0.12);
 }
 
-.primaryButton:active,
-.secondaryButton:active {
+.primaryButton:active {
   transform: translateY(0) scale(0.99);
 }
 
@@ -121,13 +120,38 @@
   border: 1px solid var(--line);
   color: var(--ink);
   background: #fff;
+  position: relative;
+  cursor: pointer;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    color 200ms ease;
 }
 
 .secondaryButton:hover {
-  transform: translateY(-1px);
-  border-color: var(--line-strong);
-  background: #fafbfd;
-  box-shadow: var(--shadow-xs);
+  transform: translateY(-2px);
+  border-color: rgba(8, 118, 111, 0.45);
+  background: #fbfdfd;
+  box-shadow: 0 6px 18px rgba(7, 26, 50, 0.08);
+}
+
+.secondaryButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.browseIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), color 200ms ease;
+}
+
+.secondaryButton:hover .browseIcon {
+  transform: translateY(3px);
+  color: var(--teal-bright);
 }
 
 .heroNote {

@@ -314,3 +314,26 @@
     transition: none;
   }
 }
+
+/* Smooth anchor navigation & showcase entrance polish */
+#services {
+  scroll-margin-top: 5.6rem;
+  transition: background-color 450ms ease;
+}
+
+#services:target,
+.services-highlight-pulse {
+  animation: servicesShowcasePulse 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes servicesShowcasePulse {
+  0% {
+    background-color: transparent;
+  }
+  25% {
+    background-color: rgba(8, 118, 111, 0.04);
+  }
+  100% {
+    background-color: transparent;
+  }
+}

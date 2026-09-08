@@ -1,0 +1,6 @@
+{
+  "name": "Yaqoob Enterprises",
+  "description": "NADRA e-Sahulat, biometric verification, printing, and business services portal for Yaqoob Enterprises.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

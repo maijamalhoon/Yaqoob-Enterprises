@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, MapPin, MessageCircle, Phone } from "lucide-react";
+import { BrowseServicesLink } from "@/components/browse-services-link";
 import { HomeContactFormClient } from "@/components/home-contact-form-client";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
 import { ServiceShowcase } from "@/components/service-showcase";
@@ -77,9 +78,12 @@ export default async function HomePage() {
                 >
                   <MessageCircle size={18} /> Send your requirement <ArrowRight size={17} />
                 </TrackedLink>
-                <Link className={styles.secondaryButton} href="#services">
+                <BrowseServicesLink
+                  className={styles.secondaryButton}
+                  iconClassName={styles.browseIcon}
+                >
                   Browse services
-                </Link>
+                </BrowseServicesLink>
               </div>
             </div>
 
