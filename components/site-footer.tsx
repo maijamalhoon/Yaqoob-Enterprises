@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { BrandIcon } from "@/components/brand-icon";
 import { Logo } from "@/components/logo";
 import { TrackedLink } from "@/components/tracked-link";
 import { businessLocationLabel } from "@/lib/business-display";
@@ -25,9 +25,15 @@ export function SiteFooter({ settings }: { settings: BusinessSettings; categorie
         </nav>
 
         <div className="minimal-footer__contact">
-          <TrackedLink href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={15} /> WhatsApp</TrackedLink>
-          <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={15} /> {settings.phone_display}</TrackedLink>
-          <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={15} /> Directions</TrackedLink>
+          <TrackedLink href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
+            <BrandIcon name="whatsapp" size={15} /> WhatsApp
+          </TrackedLink>
+          <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">
+            <BrandIcon name="phone" size={15} /> {settings.phone_display}
+          </TrackedLink>
+          <TrackedLink href={settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">
+            <BrandIcon name="location" size={15} /> Directions
+          </TrackedLink>
         </div>
       </div>
       <div className="container minimal-footer__bottom">

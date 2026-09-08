@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent } from "react";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { BrandIcon } from "@/components/brand-icon";
 import styles from "./home-contact-form.module.css";
 
 type HomeContactCategory = {
@@ -81,7 +82,7 @@ export function HomeContactFormClient({
 
       <div className={styles.submitRow}>
         <button className={styles.submit} type="submit">
-          <MessageCircle size={18} /> Continue on WhatsApp <ArrowRight size={17} />
+          <BrandIcon name="whatsapp" size={18} /> Continue on WhatsApp <ArrowRight size={17} />
         </button>
       </div>
     </form>

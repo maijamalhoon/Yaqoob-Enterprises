@@ -1,0 +1,56 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85em;
+  height: 1.85em;
+  border-radius: 50%;
+  flex-shrink: 0;
+  vertical-align: middle;
+  position: relative;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms ease;
+}
+
+.badgeWhatsapp {
+  background: linear-gradient(145deg, #25d366 0%, #1ebe5d 100%);
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.38);
+}
+
+.badgePhone {
+  background: linear-gradient(145deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
+}
+
+.badgeLocation {
+  background: linear-gradient(145deg, #ea4335 0%, #c5221f 100%);
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(234, 67, 53, 0.38);
+}
+
+/* Standalone / raw icons */
+.iconWhatsapp {
+  color: #25d366;
+  filter: drop-shadow(0 1px 2px rgba(37, 211, 102, 0.25));
+  flex-shrink: 0;
+}
+
+.iconPhone {
+  color: #0284c7;
+  filter: drop-shadow(0 1px 2px rgba(2, 132, 199, 0.22));
+  flex-shrink: 0;
+}
+
+.iconLocation {
+  color: #ea4335;
+  filter: drop-shadow(0 1px 2px rgba(234, 67, 53, 0.25));
+  flex-shrink: 0;
+}
+
+.innerIconWhatsapp,
+.innerIconPhone,
+.innerIconLocation {
+  color: #ffffff;
+  flex-shrink: 0;
+}

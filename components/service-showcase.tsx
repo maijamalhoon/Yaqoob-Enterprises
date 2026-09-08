@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ServiceIcon } from "@/components/service-icon";
+import { ServiceShowcaseSkeleton } from "@/components/service-showcase-skeleton";
 import type { ServiceCategory } from "@/lib/types";
+
+export { ServiceShowcaseSkeleton };
 
 const shortCategoryTitles: Record<string, string> = {
   "printing-photos": "Print, Copy & Photos",
@@ -15,7 +18,17 @@ const shortCategoryTitles: Record<string, string> = {
   "web-development-seo": "Web Development & SEO",
 };
 
-export function ServiceShowcase({ categories }: { categories: ServiceCategory[] }) {
+export function ServiceShowcase({
+  categories,
+  loading = false,
+}: {
+  categories: ServiceCategory[];
+  loading?: boolean;
+}) {
+  if (loading) {
+    return <ServiceShowcaseSkeleton />;
+  }
+
   const featuredServices = categories
     .flatMap((category) =>
       (category.services || [])

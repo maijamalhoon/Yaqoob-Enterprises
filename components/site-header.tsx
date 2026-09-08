@@ -1,5 +1,5 @@
-import { MessageCircle, Phone } from "lucide-react";
 import { DesktopNavigation } from "@/components/desktop-navigation";
+import { BrandIcon } from "@/components/brand-icon";
 import { Logo } from "@/components/logo";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { TrackedLink } from "@/components/tracked-link";
@@ -40,7 +40,7 @@ export function SiteHeader({
               eventName="call_click"
               aria-label={`Call ${settings.business_name} at ${settings.phone_display}`}
             >
-              <Phone size={16} strokeWidth={1.9} aria-hidden="true" />
+              <BrandIcon name="phone" size={15} />
               <span>Call</span>
             </TrackedLink>
             <TrackedLink
@@ -51,7 +51,7 @@ export function SiteHeader({
               eventName="whatsapp_click"
               aria-label={`Message ${settings.business_name} on WhatsApp`}
             >
-              <MessageCircle size={17} strokeWidth={1.9} aria-hidden="true" />
+              <BrandIcon name="whatsapp" size={16} />
               <span>WhatsApp</span>
             </TrackedLink>
             <MobileNavigation
@@ -70,8 +70,12 @@ export function SiteHeader({
           aria-label="Quick actions"
           style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
         >
-          <TrackedLink className="mobile-action-bar__primary" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click"><MessageCircle size={17} /> WhatsApp</TrackedLink>
-          <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click"><Phone size={17} /> Call</TrackedLink>
+          <TrackedLink className="mobile-action-bar__primary" href={whatsapp} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
+            <BrandIcon name="whatsapp" size={16} /> WhatsApp
+          </TrackedLink>
+          <TrackedLink href={`tel:${settings.phone_e164}`} eventName="call_click">
+            <BrandIcon name="phone" size={16} /> Call
+          </TrackedLink>
         </div>
       )}
     </>

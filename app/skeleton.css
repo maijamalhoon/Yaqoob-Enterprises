@@ -1,0 +1,121 @@
+/* Loading Skeleton Screens & Shimmer System */
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #e9eef2 0%,
+    #f8fafc 50%,
+    #e9eef2 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.skeleton-block {
+  display: block;
+  border-radius: 0.45rem;
+  background: linear-gradient(
+    90deg,
+    #e9eef2 0%,
+    #f8fafc 50%,
+    #e9eef2 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.skeleton-text {
+  display: inline-block;
+  height: 0.82rem;
+  border-radius: 0.35rem;
+}
+
+.skeleton-title {
+  display: block;
+  height: 1.15rem;
+  border-radius: 0.4rem;
+}
+
+.skeleton-pill {
+  display: inline-block;
+  height: 1.25rem;
+  border-radius: 9999px;
+}
+
+.skeleton-icon {
+  display: inline-block;
+  border-radius: 0.65rem;
+}
+
+/* Service Showcase Skeleton */
+.minimal-service-item--skeleton {
+  pointer-events: none;
+  cursor: default;
+  border-color: rgba(220, 228, 235, 0.85);
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(7, 24, 47, 0.03);
+}
+
+.minimal-service-item--skeleton:hover {
+  transform: none !important;
+  border-color: rgba(220, 228, 235, 0.85) !important;
+  box-shadow: 0 2px 10px rgba(7, 24, 47, 0.03) !important;
+}
+
+.minimal-service-item--skeleton .minimal-service-item__icon {
+  background: #f1f5f8;
+}
+
+.minimal-service-item--skeleton .minimal-service-item__arrow {
+  opacity: 0.25;
+}
+
+/* Admin Analytics Skeleton */
+.admin-stat-card--skeleton {
+  border: 1px solid #dfe6ec;
+  border-radius: 0.78rem;
+  background: #ffffff;
+  padding: 1.15rem;
+}
+
+.admin-google-panel--skeleton {
+  border: 1px solid #dfe6ec;
+  border-radius: 0.78rem;
+  background: #ffffff;
+}
+
+.admin-panel--skeleton {
+  border: 1px solid #dfe6ec;
+  border-radius: 0.78rem;
+  background: #ffffff;
+}
+
+.rank-row--skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #edf2f6;
+}
+
+.rank-row--skeleton:last-child {
+  border-bottom: none;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer,
+  .skeleton-block {
+    animation: none;
+    background: #e9eef2;
+  }
+}

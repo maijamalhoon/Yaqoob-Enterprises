@@ -148,8 +148,10 @@ textarea {
   }
 
   .home-hero.home-hero h1 {
-    max-width: 13ch;
-    font-size: clamp(1.95rem, 9.6vw, 2.75rem);
+    max-width: none;
+    font-size: clamp(2.15rem, 8vw, 2.85rem);
+    line-height: 1.18;
+    letter-spacing: -0.024em;
   }
 
   .home-hero-image.home-hero-image {
@@ -164,46 +166,46 @@ textarea {
 
   input,
   select {
-    min-height: 3rem;
+    min-height: 3.15rem;
   }
 
   textarea {
-    min-height: 6rem;
+    min-height: 6.5rem;
   }
 
   .site-footer--minimal {
-    padding: 2.45rem 0 1rem;
+    padding: 3rem 0 1.5rem;
   }
 
   .minimal-footer__top {
-    gap: 1.25rem;
+    gap: 1.6rem;
   }
 
   .minimal-footer__brand {
-    gap: 0.65rem;
+    gap: 0.75rem;
   }
 
   .minimal-footer__brand p {
-    font-size: 0.75rem;
-    line-height: 1.55;
+    font-size: 0.88rem;
+    line-height: 1.6;
   }
 
   .minimal-footer__nav,
   .minimal-footer__contact {
-    gap: 0.3rem;
+    gap: 0.5rem;
   }
 
   .minimal-footer__nav a,
   .minimal-footer__contact a {
-    min-height: 1.8rem;
-    font-size: 0.75rem;
+    min-height: 2.2rem;
+    font-size: 0.88rem;
   }
 
   .minimal-footer__bottom {
-    margin-top: 1.45rem;
-    padding-top: 0.8rem;
-    font-size: 0.66rem;
-    line-height: 1.45;
+    margin-top: 1.6rem;
+    padding-top: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 
   .admin-nav nav a {
@@ -232,41 +234,43 @@ textarea {
   .mobile-action-bar {
     position: fixed;
     left: 50%;
-    bottom: calc(0.55rem + env(safe-area-inset-bottom));
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
     z-index: 70;
-    width: min(calc(100% - 1rem), 30rem);
+    width: min(calc(100% - 1.25rem), 32rem);
     transform: translateX(-50%);
     display: grid;
-    gap: 0.35rem;
-    padding: 0.35rem;
+    gap: 0.5rem;
+    padding: 0.5rem;
     border: 1px solid rgba(210, 219, 226, 0.94);
-    border-radius: 0.72rem;
-    background: rgba(255, 255, 255, 0.975);
-    box-shadow: 0 12px 30px rgba(7, 24, 47, 0.13);
-    backdrop-filter: blur(10px);
+    border-radius: 0.85rem;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 12px 32px rgba(7, 24, 47, 0.16);
+    backdrop-filter: blur(12px);
   }
 
   .mobile-action-bar a {
-    min-height: 2.75rem;
+    min-height: 3.1rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.38rem;
-    border-radius: 0.52rem;
+    gap: 0.5rem;
+    border-radius: 0.68rem;
     color: var(--ink);
-    font-size: 0.72rem;
+    font-size: 0.88rem;
     font-weight: 720;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
     text-decoration: none;
+    box-shadow: 0 2px 6px rgba(7, 24, 47, 0.04);
   }
 
   .mobile-action-bar__primary {
     color: #fff !important;
-    background: var(--navy);
+    background: linear-gradient(135deg, #071f45 0%, #0c3574 100%) !important;
+    box-shadow: 0 4px 14px rgba(7, 31, 69, 0.22) !important;
   }
 
   .mobile-action-bar a:active {
-    transform: scale(0.99);
+    transform: scale(0.985);
   }
 
   body:has(.mobile-action-bar) .site-footer {
@@ -274,100 +278,107 @@ textarea {
   }
 }
 
-/* Large phones (390–430px): keep copy compact and guided forms readable. */
+/* Large phones (390–430px): keep copy readable and guided forms spacious. */
 @media (max-width: 26.875rem) {
   .home-hero.home-hero h1 {
-    max-width: 13ch;
-    font-size: clamp(1.95rem, 9.4vw, 2.5rem);
-    line-height: 0.99;
+    max-width: none;
+    font-size: clamp(2.05rem, 8.5vw, 2.55rem);
+    line-height: 1.18;
+    letter-spacing: -0.022em;
   }
 
   .page-hero {
-    padding: 2.15rem 0 2.35rem;
+    padding: 2.5rem 0 2.8rem;
   }
 
   .page-hero h1 {
-    max-width: 15ch;
-    font-size: clamp(2rem, 9vw, 2.55rem);
-    line-height: 1;
+    max-width: none;
+    font-size: clamp(2.1rem, 8vw, 2.6rem);
+    line-height: 1.18;
+    letter-spacing: -0.022em;
   }
 
   .page-hero p {
-    font-size: 0.86rem;
-    line-height: 1.62;
+    font-size: 0.96rem;
+    line-height: 1.65;
   }
 
   .contact-flow {
     grid-template-columns: 1fr;
-    gap: 0.35rem;
-    margin: 0.8rem 0 1rem;
+    gap: 0.5rem;
+    margin: 1rem 0 1.25rem;
   }
 
   .contact-flow span {
-    min-height: 2.4rem;
+    min-height: 2.6rem;
     justify-content: flex-start;
-    padding: 0.48rem 0.6rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.88rem;
   }
 
   .contact-details-card--premium,
   .form-card--premium {
-    padding: 0.82rem;
+    padding: 1.25rem;
+    border-radius: 0.85rem;
   }
 
   .service-detail-card--premium {
-    padding: 0.9rem 0.8rem;
+    padding: 1.25rem 1.15rem;
+    border-radius: 0.85rem;
   }
 }
 
 /* 360px-class phones. */
 @media (max-width: 22.5rem) {
   :root {
-    --header-h: 3.9rem;
+    --header-h: 4.2rem;
   }
 
   .container {
-    width: min(calc(100% - 0.75rem), var(--container));
+    width: min(calc(100% - 0.95rem), var(--container));
   }
 
   .brand-logo__image {
-    width: 8.05rem !important;
+    width: 8.5rem !important;
   }
 
   .mobile-header-status {
-    font-size: 0.58rem;
+    font-size: 0.72rem;
   }
 
   .mobile-nav summary {
-    width: 2.45rem;
-    height: 2.45rem;
-    min-height: 2.45rem;
+    width: 2.65rem;
+    height: 2.65rem;
+    min-height: 2.65rem;
   }
 
   .home-hero.home-hero h1 {
-    font-size: 1.95rem;
+    font-size: 2.05rem;
+    line-height: 1.18;
   }
 
   .minimal-service-item {
-    grid-template-columns: 2.35rem minmax(0, 1fr) auto;
-    gap: 0.12rem 0.55rem;
-    padding-inline: 0.6rem;
+    grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+    gap: 0.2rem 0.75rem;
+    padding: 0.95rem 0.85rem;
   }
 
   .minimal-service-item__icon {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 2.6rem;
+    height: 2.6rem;
   }
 
   .minimal-service-item__copy strong {
-    font-size: 0.79rem;
+    font-size: 0.94rem;
   }
 
   .minimal-service-item__copy small {
-    font-size: 0.67rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
   }
 
   .admin-topbar__identity strong {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
   }
 
   .admin-topbar__actions a,
@@ -391,41 +402,42 @@ textarea {
 /* 280–320px legacy/small Android devices. */
 @media (max-width: 20rem) {
   .container {
-    width: min(calc(100% - 0.6rem), var(--container));
+    width: min(calc(100% - 0.75rem), var(--container));
   }
 
   .brand-logo__image {
-    width: 7.7rem !important;
+    width: 8rem !important;
   }
 
   .mobile-header-status {
-    gap: 0.22rem;
-    font-size: 0.56rem;
+    gap: 0.3rem;
+    font-size: 0.68rem;
   }
 
   .mobile-header-status > span {
-    width: 0.34rem;
-    height: 0.34rem;
+    width: 0.4rem;
+    height: 0.4rem;
   }
 
   .mobile-nav summary {
-    width: 2.35rem;
-    height: 2.35rem;
-    min-height: 2.35rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-height: 2.5rem;
   }
 
   .home-hero.home-hero h1 {
-    font-size: 1.9rem;
+    font-size: 1.95rem;
+    line-height: 1.18;
   }
 
   .minimal-service-item__meta {
-    font-size: 0.59rem;
+    font-size: 0.72rem;
   }
 
   .minimal-footer__brand p,
   .minimal-footer__nav a,
   .minimal-footer__contact a {
-    font-size: 0.72rem;
+    font-size: 0.84rem;
   }
 }
 

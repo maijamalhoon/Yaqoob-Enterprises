@@ -1,4 +1,5 @@
 import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
+import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
@@ -126,6 +127,7 @@ export default async function AdminAnalyticsPage() {
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
         <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity from the last 30 days.</p></div>
+        <AnalyticsRefreshButton />
       </div>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>

@@ -9,12 +9,11 @@ import {
   ExternalLink,
   ListChecks,
   MapPin,
-  MessageCircle,
-  Phone,
   ShieldCheck,
   Store,
   Truck,
 } from "lucide-react";
+import { BrandIcon } from "@/components/brand-icon";
 import { ServiceIcon } from "@/components/service-icon";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -292,10 +291,14 @@ export default async function PublicServicePage({
               <h2>{service.title}</h2>
               <p>{site.settings.address}</p>
               <TrackedLink className="button button--primary" href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                <MessageCircle size={17} /> {action.label}
+                <BrandIcon name="whatsapp" size={17} /> {action.label}
               </TrackedLink>
-              <TrackedLink className="seo-service-cta__link" href={`tel:${site.settings.phone_e164}`} eventName="call_click"><Phone size={16} /> {site.settings.phone_display}</TrackedLink>
-              <TrackedLink className="seo-service-cta__link" href={site.settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click"><MapPin size={16} /> Directions</TrackedLink>
+              <TrackedLink className="seo-service-cta__link" href={`tel:${site.settings.phone_e164}`} eventName="call_click">
+                <BrandIcon name="phone" size={15} /> {site.settings.phone_display}
+              </TrackedLink>
+              <TrackedLink className="seo-service-cta__link" href={site.settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">
+                <BrandIcon name="location" size={15} /> Directions
+              </TrackedLink>
             </aside>
           </div>
         </section>

@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock3, MapPin, Menu, MessageCircle, Phone, Store, X } from "lucide-react";
+import { Clock3, MapPin, Menu, MessageCircle, Store, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BrandIcon } from "@/components/brand-icon";
 import { TrackedLink } from "@/components/tracked-link";
 
 export function MobileNavigation({
@@ -105,13 +106,13 @@ export function MobileNavigation({
 
         <div className="mobile-menu-actions">
           <TrackedLink className="mobile-menu-action mobile-menu-action--primary" href={whatsappUrl} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-            <MessageCircle size={18} /> WhatsApp
+            <BrandIcon name="whatsapp" size={17} /> WhatsApp
           </TrackedLink>
           <TrackedLink className="mobile-menu-action" href={`tel:${phone}`} eventName="call_click">
-            <Phone size={18} /> Call
+            <BrandIcon name="phone" size={17} /> Call
           </TrackedLink>
           <TrackedLink className="mobile-menu-action" href={mapUrl} target="_blank" rel="noopener noreferrer" eventName="directions_click">
-            <MapPin size={18} /> Directions
+            <BrandIcon name="location" size={17} /> Directions
           </TrackedLink>
         </div>
       </div>

@@ -24,5 +24,5 @@ const icons = {
 
 export function ServiceIcon({ iconKey, size = 24 }: { iconKey: string; size?: number }) {
   const Icon = icons[iconKey as keyof typeof icons] || BriefcaseBusiness;
-  return <Icon size={size} strokeWidth={1.8} aria-hidden="true" />;
+  return <Icon size={size} strokeWidth={2} aria-hidden="true" />;
 }

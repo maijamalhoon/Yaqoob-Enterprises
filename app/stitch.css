@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-brand-navy: #0B192C;
+  --color-brand-dark: #08121f;
+  --color-brand-teal: #0e7490;
+  --color-brand-tealDark: #155e75;
+  --color-brand-tealLight: #f0f9ff;
+  --color-brand-surface: #F8FAFC;
+  --color-brand-slateBg: #F1F5F9;
+  --color-brand-muted: #64748B;
+  --color-brand-border: #E2E8F0;
+}
+
+/* Custom Stitch Utility Behaviors */
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] summary svg.chevron-icon {
+  transform: rotate(180deg);
+}
+
+.touch-action-btn {
+  touch-action: manipulation;
+}
+
+/* Premium Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb {
+  background: #0e7490;
+  border-radius: 9999px;
+  border: 2px solid #f1f5f9;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0b192c;
+}
+
+/* Firefox scrollbar */
+html, body, * {
+  scrollbar-width: thin;
+  scrollbar-color: #0e7490 #f1f5f9;
+}
+
+/* Button & Link High-Contrast Text Enforcement */
+a.text-white,
+button.text-white,
+.text-white,
+.text-white > span,
+.text-white span,
+[class*="text-white"] {
+  color: #ffffff !important;
+}
+
+.text-emerald-400,
+[class*="text-emerald-400"] {
+  color: #34d399 !important;
+}
+
+.text-slate-300,
+[class*="text-slate-300"] {
+  color: #cbd5e1 !important;
+}
+
+.text-slate-400,
+[class*="text-slate-400"] {
+  color: #94a3b8 !important;
+}
+
+/* Dark action buttons text guarantee */
+.bg-slate-900,
+.bg-slate-900 span,
+.bg-slate-800,
+.bg-slate-800 span,
+[class*="bg-slate-900"] > span,
+[class*="bg-slate-800"] > span {
+  color: #ffffff;
+}

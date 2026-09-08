@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { BrandIcon } from "@/components/brand-icon";
 import { getCustomerServiceModes, serviceNeedsAvailabilityConfirmation } from "@/lib/service-availability";
 import type { RequestFormCategory } from "@/lib/client-data";
 
@@ -189,7 +190,7 @@ export function RequestFormClient({
         />
       </label>
       <button className="button button--primary request-submit" type="submit">
-        <MessageCircle size={18} /> Continue on WhatsApp <ArrowRight size={17} />
+        <BrandIcon name="whatsapp" size={18} /> Continue on WhatsApp <ArrowRight size={17} />
       </button>
     </form>
   );
