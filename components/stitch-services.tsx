@@ -14,6 +14,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import type { Service, ServiceCategory } from "@/lib/types";
+
 export interface ServiceItem {
   id: string;
   title: string;
@@ -108,6 +110,22 @@ const DEFAULT_SERVICES: ServiceItem[] = [
 
 interface StitchServicesProps {
   onSelectService?: (serviceName: string) => void;
+  services?: Service[];
+  categories?: ServiceCategory[];
+}
+
+function resolveIconForService(title: string): string {
+  const t = title.toLowerCase();
+  if (t.includes("biometric") || t.includes("nadra") || t.includes("sahulat")) return "fingerprint";
+  if (t.includes("print") || t.includes("scan") || t.includes("copy") || t.includes("photocopy")) return "printer";
+  if (t.includes("photo") || t.includes("passport")) return "camera";
+  if (t.includes("form") || t.includes("job") || t.includes("application")) return "file-text";
+  if (t.includes("typing") || t.includes("cv") || t.includes("resume")) return "pen-tool";
+  if (t.includes("agreement") || t.includes("stamp") || t.includes("legal") || t.includes("rent")) return "scroll";
+  if (t.includes("money") || t.includes("cash") || t.includes("transfer") || t.includes("bank") || t.includes("bill")) return "banknote";
+  if (t.includes("ticket") || t.includes("train") || t.includes("air") || t.includes("flight") || t.includes("bus")) return "ticket";
+  if (t.includes("stationery") || t.includes("mobile") || t.includes("accessor")) return "shopping-bag";
+  return "globe";
 }
 
 function renderServiceIcon(name: string) {
@@ -137,7 +155,30 @@ function renderServiceIcon(name: string) {
   }
 }
 
-export function StitchServices({ onSelectService }: StitchServicesProps) {
+export function StitchServices({ onSelectService, services, categories }: StitchServicesProps) {
+  // Convert Supabase dynamic services if present, otherwise default
+  const displayServices: ServiceItem[] =
+    services && services.length > 0
+      ? services
+          .filter((s) => s.status !== "hidden")
+          .map((s) => {
+            const cat = categories?.find((c) => c.id === s.category_id);
+            return {
+              id: s.id,
+              title: s.title,
+              description: s.short_description || s.detailed_description || "Available at shop counter & online inquiry.",
+              categoryTag: cat?.title || "Counter Service",
+              badge: s.appointment_required
+                ? "Appointment Only"
+                : s.status === "coming_soon"
+                ? "Coming Soon"
+                : s.whatsapp_request
+                ? "WhatsApp Pre-Check"
+                : "● Instant Service",
+              iconName: resolveIconForService(s.title),
+            };
+          })
+      : DEFAULT_SERVICES;
   const handleServiceClick = (serviceTitle: string) => {
     if (typeof window !== "undefined") {
       const selectElement = document.getElementById("userService") as HTMLSelectElement | null;
@@ -190,7 +231,7 @@ export function StitchServices({ onSelectService }: StitchServicesProps) {
 
         {/* Services List (Single column mobile, 2 cols on md) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5" id="services-container">
-          {DEFAULT_SERVICES.map((service) => (
+          {displayServices.map((service) => (
             <article
               id={`service-card-${service.id}`}
               key={service.id}

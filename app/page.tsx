@@ -12,7 +12,7 @@ import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
 export default async function HomePage() {
-  const { settings, hours, categories, coverage, gallery } = await getSiteData();
+  const { settings, hours, categories, coverage, gallery, services } = await getSiteData();
   const featuredImage = gallery.find((image) => image.is_featured && image.media_kind === "real");
   const imageUrl = featuredImage
     ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
@@ -34,8 +34,13 @@ export default async function HomePage() {
       <StitchHeader settings={settings} statusText={hoursText} />
 
       <main id="main-content">
-        <StitchHero settings={settings} statusText={hoursText} locationLabel={locationLabel} />
-        <StitchServices />
+        <StitchHero
+          settings={settings}
+          statusText={hoursText}
+          locationLabel={locationLabel}
+          gallery={gallery}
+        />
+        <StitchServices services={services} categories={categories} />
         <StitchHowItWorks />
         <StitchQuickRequest settings={settings} />
         <StitchVisitShop settings={settings} statusText={hoursText} />

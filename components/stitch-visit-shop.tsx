@@ -15,9 +15,10 @@ export function StitchVisitShop({ settings, statusText }: StitchVisitShopProps) 
   return (
     <section
       id="visit-shop"
-      className="py-12 sm:py-20 bg-white border-b border-slate-200"
+      className="relative py-12 sm:py-20 bg-white border-b border-slate-200"
       data-purpose="visit-shop"
     >
+      <div id="visit" className="absolute -top-24" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Heading */}
         <div className="max-w-3xl mb-8 sm:mb-12">

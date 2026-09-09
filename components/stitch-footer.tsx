@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, MapPin, Clock, ArrowUp, CheckCircle2, MessageCircle } from "lucide-react";
+import { Phone, MapPin, Clock, ArrowUp, MessageCircle } from "lucide-react";
 import type { BusinessSettings } from "@/lib/types";
 
 interface StitchFooterProps {

@@ -26,61 +26,54 @@ details[open] summary svg.chevron-icon {
   touch-action: manipulation;
 }
 
-/* Premium Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+/* Smooth Custom Scrollbar without up/down errors */
+html {
+  scrollbar-gutter: stable;
 }
-::-webkit-scrollbar-track {
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
   background: #f1f5f9;
-  border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb {
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
   background: #0e7490;
   border-radius: 9999px;
   border: 2px solid #f1f5f9;
 }
-::-webkit-scrollbar-thumb:hover {
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
   background: #0b192c;
 }
 
-/* Firefox scrollbar */
-html, body, * {
+/* Eliminate up and down arrow buttons that cause clicking errors */
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button,
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Firefox scrollbar only on root page */
+html, body {
   scrollbar-width: thin;
   scrollbar-color: #0e7490 #f1f5f9;
 }
 
-/* Button & Link High-Contrast Text Enforcement */
-a.text-white,
-button.text-white,
-.text-white,
-.text-white > span,
-.text-white span,
-[class*="text-white"] {
+/* Specific Dark CTA Buttons Text Color Guarantee */
+#hero-whatsapp-cta,
+#header-whatsapp-btn,
+#mobile-bottom-whatsapp-btn,
+#desktop-floating-whatsapp-btn,
+#whatsapp-form-submit-btn {
   color: #ffffff !important;
-}
-
-.text-emerald-400,
-[class*="text-emerald-400"] {
-  color: #34d399 !important;
-}
-
-.text-slate-300,
-[class*="text-slate-300"] {
-  color: #cbd5e1 !important;
-}
-
-.text-slate-400,
-[class*="text-slate-400"] {
-  color: #94a3b8 !important;
-}
-
-/* Dark action buttons text guarantee */
-.bg-slate-900,
-.bg-slate-900 span,
-.bg-slate-800,
-.bg-slate-800 span,
-[class*="bg-slate-900"] > span,
-[class*="bg-slate-800"] > span {
-  color: #ffffff;
 }

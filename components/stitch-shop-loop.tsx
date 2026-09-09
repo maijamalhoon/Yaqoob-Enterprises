@@ -190,6 +190,15 @@ export function StitchShopLoop({ galleryImages, locationLabel, whatsappLink }: S
 
             <div className="flex items-center gap-2 pt-1 sm:pt-0 shrink-0">
               <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm"
+                style={{ color: "#ffffff" }}
+              >
+                <span>WhatsApp</span>
+              </a>
+              <a
                 href="#visit-shop"
                 className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow-sm"
                 style={{ color: "#ffffff" }}
