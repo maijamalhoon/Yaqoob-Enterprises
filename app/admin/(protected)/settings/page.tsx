@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { Clock3, ExternalLink, ImageIcon, MapPin, Phone, Store, Type } from "lucide-react";
+import { Clock3, ExternalLink, ImageIcon, Info, MapPin, Phone, Store, Type } from "lucide-react";
 import { AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 import { formatBusinessHours, getHourPeriods } from "@/lib/data";
-import { updateBusinessHour, updateBusinessIdentity, updateContactDetails } from "./actions";
+import { updateBusinessHour, updateBusinessIdentity, updateContactDetails, updateNoticesAndPolicies } from "./actions";
 
 export default async function AdminSettingsPage() {
   const { supabase } = await requireAdmin();
@@ -54,6 +54,17 @@ export default async function AdminSettingsPage() {
                 {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Google profile <ExternalLink size={13} /></a>}
               </div>
             </div>
+          </form>
+        </section>
+
+        <section className="admin-panel admin-panel--control admin-span-2">
+          <div className="admin-panel__heading admin-panel__heading--compact">
+            <div><span className="admin-panel-kicker"><Info size={15} /> Policy & Notices</span><h2>Customer notices</h2></div>
+          </div>
+          <form className="admin-form-grid admin-form-grid--focused" action={updateNoticesAndPolicies}>
+            <label className="admin-span-2">Pricing notice <small>e.g., government fee confirmation</small><textarea name="pricing_message" defaultValue={settings?.pricing_message || ""} rows={2} placeholder="Prices and government fees depend on the exact service, document type and requirements." /></label>
+            <label className="admin-span-2">Concept image notice <small>shown when illustration placeholder is active</small><textarea name="concept_image_notice" defaultValue={settings?.concept_image_notice || ""} rows={2} placeholder="Representative visualization. Actual shop facilities and service counters are located in Akhtar Colony, Karachi." /></label>
+            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save customer notices</AdminSubmitButton></div>
           </form>
         </section>
       </div>

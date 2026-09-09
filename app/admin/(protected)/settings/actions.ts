@@ -52,6 +52,7 @@ function validateGoogleBusinessProfileUrl(value: string) {
 function refreshSettings() {
   updateTag("site-data");
   revalidatePath("/", "layout");
+  revalidatePath("/services");
   revalidatePath("/admin");
   revalidatePath("/admin/settings");
   revalidatePath("/admin/analytics");
@@ -142,3 +143,15 @@ export async function updateBusinessHour(formData: FormData) {
   if (error) throw new Error(error.message);
   refreshSettings();
 }
+
+export async function updateNoticesAndPolicies(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.from("business_settings").update({
+    pricing_message: text(formData, "pricing_message"),
+    concept_image_notice: text(formData, "concept_image_notice"),
+  }).eq("id", true);
+
+  if (error) throw new Error(error.message);
+  refreshSettings();
+}
+

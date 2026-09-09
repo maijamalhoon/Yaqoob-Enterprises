@@ -38,6 +38,7 @@ function requirements(formData: FormData) {
 function refreshServices() {
   updateTag("site-data");
   revalidatePath("/", "layout");
+  revalidatePath("/services");
   revalidatePath("/sitemap.xml");
   revalidatePath("/admin/services");
 }

@@ -88,6 +88,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: { absolute: seo.title },
     description: seo.description,
+    keywords: seo.keywords,
     alternates: { canonical: canonicalPath },
     openGraph: {
       type: "website",
@@ -120,8 +121,40 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   const statusText = getCurrentBusinessStatus(site.hours);
   const seo = getCategorySeo(category, site.settings);
 
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://yaqoobenterprises.com" },
+      { "@type": "ListItem", position: 2, name: "Services", item: "https://yaqoobenterprises.com/services" },
+      { "@type": "ListItem", position: 3, name: category.title, item: `https://yaqoobenterprises.com/services/${category.slug}` },
+    ],
+  };
+
+  const itemListData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${category.title} Services in Akhtar Colony Karachi`,
+    description: seo.description,
+    itemListElement: (category.services || []).map((service, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      name: service.title,
+      description: service.short_description,
+      url: `https://yaqoobenterprises.com/services/${category.slug}/${service.slug}`,
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData).replace(/</g, "\\u003c") }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData).replace(/</g, "\\u003c") }}
+      />
       <SiteHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">
         <section className="page-hero page-hero--service">

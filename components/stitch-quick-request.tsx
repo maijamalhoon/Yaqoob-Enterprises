@@ -3,22 +3,57 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import type { BusinessSettings } from "@/lib/types";
+import type { BusinessSettings, Service } from "@/lib/types";
 
 interface StitchQuickRequestProps {
   settings: BusinessSettings;
+  services?: Service[];
 }
 
-export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
+const DEFAULT_SERVICES = [
+  "NADRA e-Sahulat Biometric Verifications",
+  "Printing, Photocopy & Document Scanning",
+  "Passport-Size Photos",
+  "Online Jobs, Forms & Applications",
+  "Urdu & English Typing & CV Preparation",
+  "Agreements & Document Preparation",
+  "Cash Deposit, Withdrawal & Money Transfer",
+  "Railway, Airline & Bus Tickets",
+  "Stationery & Mobile Accessories",
+  "Website Development, Full-Stack & SEO Services",
+];
+
+export function StitchQuickRequest({ settings, services }: StitchQuickRequestProps) {
   const [userName, setUserName] = useState("");
   const [userService, setUserService] = useState("");
   const [userMessage, setUserMessage] = useState("");
+
+  const availableServices =
+    services && services.length > 0
+      ? services.filter((s) => s.status !== "hidden")
+      : null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const phone = (settings.whatsapp_e164 || "+923492568864").replace(/\+/g, "");
     const business = settings.business_name || "Yaqoob Enterprises";
-    
+
+    // Track analytics event
+    const payload = JSON.stringify({
+      eventName: "whatsapp_click",
+      pagePath: typeof window !== "undefined" ? window.location.pathname : "/",
+    });
+    if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+      navigator.sendBeacon("/api/analytics", new Blob([payload], { type: "application/json" }));
+    } else if (typeof fetch !== "undefined") {
+      void fetch("/api/analytics", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: payload,
+        keepalive: true,
+      });
+    }
+
     const messageParts = [
       `Hello ${business},`,
       userName ? `My name is ${userName.trim()}.` : "",
@@ -30,7 +65,8 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
     const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(fullMessage)}`;
 
     if (typeof window !== "undefined") {
-      window.open(waUrl, "_blank", "noopener,noreferrer");
+      // Use direct navigation to prevent mobile popup blocking
+      window.location.href = waUrl;
     }
   };
 
@@ -124,34 +160,17 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
                       <option disabled value="">
                         Choose a service
                       </option>
-                      <option value="NADRA e-Sahulat Biometric Verifications">
-                        NADRA e-Sahulat Biometric Verifications
-                      </option>
-                      <option value="Printing, Photocopy & Document Scanning">
-                        Printing, Photocopy & Document Scanning
-                      </option>
-                      <option value="Passport-Size Photos">Passport-Size Photos</option>
-                      <option value="Online Jobs, Forms & Applications">
-                        Online Jobs, Forms & Applications
-                      </option>
-                      <option value="Urdu & English Typing & CV Preparation">
-                        Urdu & English Typing & CV Preparation
-                      </option>
-                      <option value="Agreements & Document Preparation">
-                        Agreements & Document Preparation
-                      </option>
-                      <option value="Cash Deposit, Withdrawal & Money Transfer">
-                        Cash Deposit, Withdrawal & Money Transfer
-                      </option>
-                      <option value="Railway, Airline & Bus Tickets">
-                        Railway, Airline & Bus Tickets
-                      </option>
-                      <option value="Stationery & Mobile Accessories">
-                        Stationery & Mobile Accessories
-                      </option>
-                      <option value="Website Development, Full-Stack & SEO Services">
-                        Website Development & SEO Services
-                      </option>
+                      {availableServices
+                        ? availableServices.map((service) => (
+                            <option key={service.id} value={service.title}>
+                              {service.title}
+                            </option>
+                          ))
+                        : DEFAULT_SERVICES.map((name) => (
+                            <option key={name} value={name}>
+                              {name}
+                            </option>
+                          ))}
                       <option value="General Inquiry">General Question / Other</option>
                     </select>
                   </div>

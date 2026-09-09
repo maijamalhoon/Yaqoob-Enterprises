@@ -94,6 +94,7 @@ export async function generateMetadata({
   return {
     title: { absolute: seo.title },
     description: seo.description,
+    keywords: seo.keywords,
     alternates: { canonical: seo.canonicalPath },
     robots: { index: true, follow: true },
     openGraph: {
@@ -178,10 +179,27 @@ export default async function PublicServicePage({
     },
   };
 
+  const faqData =
+    seo.faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: seo.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }
+      : null;
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(serviceData) }} />
+      {faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqData) }} />}
       <SiteHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">
         <section className="seo-service-hero">
@@ -223,6 +241,16 @@ export default async function PublicServicePage({
                 <h2>What this service covers</h2>
                 <p>{seo.intro}</p>
                 {service.detailed_description && service.detailed_description !== seo.intro && <p>{service.detailed_description}</p>}
+                {seo.urduNote && (
+                  <div className="mt-4 p-4 rounded-xl bg-amber-50/90 border border-amber-200 text-amber-950 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                    <span className="shrink-0 font-bold text-xs bg-amber-200 text-amber-900 px-2.5 py-1 rounded-md uppercase tracking-wide">
+                      ضروری رہنمائی
+                    </span>
+                    <p className="text-xs sm:text-sm font-medium leading-relaxed">
+                      {seo.urduNote}
+                    </p>
+                  </div>
+                )}
               </section>
 
               {seo.commonRequests.length > 0 && (
@@ -267,6 +295,28 @@ export default async function PublicServicePage({
                   <h2>Before you visit</h2>
                   <div className="important-note"><strong>Please note:</strong> {service.important_note}</div>
                   <p>Send the service name and your case details on WhatsApp first if you are unsure about eligibility, documents or current system availability.</p>
+                </section>
+              )}
+
+              {seo.faqs.length > 0 && (
+                <section className="seo-content-block">
+                  <span className="eyebrow">Frequently asked questions</span>
+                  <h2>Aksar Poochay Janay Walay Sawalat</h2>
+                  <div className="space-y-3 mt-4">
+                    {seo.faqs.map((faq, idx) => (
+                      <details key={idx} className="group bg-slate-50 border border-slate-200 rounded-xl p-4 transition-all">
+                        <summary className="font-bold text-sm text-slate-900 cursor-pointer flex items-center justify-between list-none select-none">
+                          <span>{faq.question}</span>
+                          <span className="ml-2 text-xs text-slate-500 group-open:text-slate-900 group-open:font-bold">
+                            +
+                          </span>
+                        </summary>
+                        <p className="text-xs sm:text-sm text-slate-600 mt-2.5 pt-2.5 border-t border-slate-200 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </details>
+                    ))}
+                  </div>
                 </section>
               )}
 

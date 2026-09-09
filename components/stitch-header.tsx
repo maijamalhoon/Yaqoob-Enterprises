@@ -87,21 +87,21 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             id="desktop-nav-menu"
             className="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-700"
           >
-            <a className="hover:text-[#0E7490] transition-colors py-1" href="#services">
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/services">
               Services
-            </a>
-            <a className="hover:text-[#0E7490] transition-colors py-1" href="#how-it-works">
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#how-it-works">
               How It Works
-            </a>
-            <a className="hover:text-[#0E7490] transition-colors py-1" href="#quick-request">
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#quick-request">
               Quick Request
-            </a>
-            <a className="hover:text-[#0E7490] transition-colors py-1" href="#visit-shop">
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#visit-shop">
               Visit Shop
-            </a>
-            <a className="hover:text-[#0E7490] transition-colors py-1" href="#faq">
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#faq">
               FAQ
-            </a>
+            </Link>
           </nav>
 
           {/* Action Buttons */}
@@ -150,41 +150,41 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-5 shadow-xl transition-all"
           >
             <div className="flex flex-col space-y-3 font-semibold text-slate-800 text-sm">
-              <a
+              <Link
                 className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="#services"
+                href="/services"
                 onClick={() => setDrawerOpen(false)}
               >
                 Services Catalog
-              </a>
-              <a
+              </Link>
+              <Link
                 className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="#how-it-works"
+                href="/#how-it-works"
                 onClick={() => setDrawerOpen(false)}
               >
                 How It Works
-              </a>
-              <a
+              </Link>
+              <Link
                 className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="#quick-request"
+                href="/#quick-request"
                 onClick={() => setDrawerOpen(false)}
               >
                 Send Fast WhatsApp Request
-              </a>
-              <a
+              </Link>
+              <Link
                 className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="#visit-shop"
+                href="/#visit-shop"
                 onClick={() => setDrawerOpen(false)}
               >
                 Shop Address &amp; Timings
-              </a>
-              <a
+              </Link>
+              <Link
                 className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="#faq"
+                href="/#faq"
                 onClick={() => setDrawerOpen(false)}
               >
                 Frequently Asked Questions
-              </a>
+              </Link>
             </div>
             <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span className="truncate pr-2">{settings.address || "Sector B, Akhtar Colony"}</span>

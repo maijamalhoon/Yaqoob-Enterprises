@@ -115,29 +115,29 @@ export function StitchFooter({ settings }: StitchFooterProps) {
             </p>
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
-                <a className="hover:text-teal-400 transition-colors" href="#services">
-                  All Services
-                </a>
+                <Link className="hover:text-teal-400 transition-colors" href="/services">
+                  All Services Directory
+                </Link>
               </li>
               <li>
-                <a className="hover:text-teal-400 transition-colors" href="#how-it-works">
+                <Link className="hover:text-teal-400 transition-colors" href="/#how-it-works">
                   How It Works
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-teal-400 transition-colors" href="#quick-request">
+                <Link className="hover:text-teal-400 transition-colors" href="/#quick-request">
                   WhatsApp Inquiry
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-teal-400 transition-colors" href="#visit-shop">
+                <Link className="hover:text-teal-400 transition-colors" href="/#visit-shop">
                   Shop Timings &amp; Map
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-teal-400 transition-colors" href="#faq">
+                <Link className="hover:text-teal-400 transition-colors" href="/#faq">
                   Frequently Asked
-                </a>
+                </Link>
               </li>
               <li>
                 <Link className="hover:text-teal-400 transition-colors" href="/contact">

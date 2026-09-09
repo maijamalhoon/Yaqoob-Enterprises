@@ -42,8 +42,8 @@ export default async function HomePage() {
         />
         <StitchServices services={services} categories={categories} />
         <StitchHowItWorks />
-        <StitchQuickRequest settings={settings} />
-        <StitchVisitShop settings={settings} statusText={hoursText} />
+        <StitchQuickRequest settings={settings} services={services} />
+        <StitchVisitShop settings={settings} statusText={hoursText} hours={hours} />
         <StitchFAQ />
       </main>
 

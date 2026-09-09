@@ -99,7 +99,7 @@ export function MobileNavigation({
         </div>
 
         <nav id="mobile-primary-navigation" aria-label="Mobile navigation">
-          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/#services"><Store size={19} /> <span><strong>Services</strong><small>Browse categories</small></span></Link>
+          <Link className={active === "services" ? "is-active" : undefined} aria-current={active === "services" ? (pathname.startsWith("/services") ? "page" : "location") : undefined} href="/services"><Store size={19} /> <span><strong>Services</strong><small>Browse categories</small></span></Link>
           <Link className={active === "visit" ? "is-active" : undefined} aria-current={active === "visit" ? "location" : undefined} href="/#visit"><MapPin size={19} /> <span><strong>Visit us</strong><small>Address and directions</small></span></Link>
           <Link className={active === "contact" ? "is-active" : undefined} aria-current={active === "contact" ? "page" : undefined} href="/contact"><MessageCircle size={19} /> <span><strong>Guided request</strong><small>For more detailed help</small></span></Link>
         </nav>
