@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Phone, Menu, X } from "lucide-react";
+import { Phone, Menu, X, ChevronDown, MapPin } from "lucide-react";
 import type { BusinessSettings } from "@/lib/types";
 
 interface StitchHeaderProps {
@@ -12,6 +12,7 @@ interface StitchHeaderProps {
 
 export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   const phoneLink = `tel:${settings.phone_e164 || "+923492568864"}`;
   const whatsappLink = `https://wa.me/${(settings.whatsapp_e164 || "+923492568864").replace(/\+/g, "")}?text=${encodeURIComponent(
@@ -33,11 +34,12 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
-              <span>{statusText || "Open Now · Until 11:00 PM"}</span>
+              <span>{statusText || "Open now · until 11:00 PM"}</span>
             </span>
             <span className="text-slate-600 hidden xs:inline">|</span>
-            <span className="hidden sm:inline text-slate-400 truncate text-xs">
-              {settings.address || "Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi"}
+            <span className="hidden sm:inline text-slate-400 truncate text-xs flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-[#0E7490] inline" />
+              Plot No. 7, Street 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi
             </span>
           </div>
           <div className="flex items-center gap-3 shrink-0 text-slate-300 text-[11px] sm:text-xs">
@@ -85,23 +87,72 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
           {/* Desktop Nav */}
           <nav
             id="desktop-nav-menu"
-            className="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-700"
+            aria-label="Main Navigation"
+            className="hidden lg:flex items-center gap-4 xl:gap-5 text-xs xl:text-sm font-semibold text-slate-700"
           >
-            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/services">
-              Services
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/">
+              Home
             </Link>
-            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#how-it-works">
-              How It Works
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/printing">
+              Printing
             </Link>
-            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#quick-request">
-              Quick Request
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/photocopying">
+              Photocopying
             </Link>
-            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#visit-shop">
-              Visit Shop
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/notes-printing">
+              Notes
             </Link>
-            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/#faq">
-              FAQ
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/bulk-printing">
+              Bulk
             </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/photo-printing">
+              Photos
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/nadra-esahulat">
+              NADRA
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/about">
+              About
+            </Link>
+            <Link className="hover:text-[#0E7490] transition-colors py-1" href="/contact">
+              Contact
+            </Link>
+
+            {/* Dropdown for More / Secondary Services */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMoreOpen(!moreOpen)}
+                onBlur={() => setTimeout(() => setMoreOpen(false), 200)}
+                className="flex items-center gap-1 hover:text-[#0E7490] transition-colors py-1 font-semibold text-slate-600 hover:text-slate-900"
+                aria-expanded={moreOpen}
+              >
+                <span>More</span>
+                <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+              {moreOpen && (
+                <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                  <Link
+                    href="/color-printing"
+                    className="block px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0E7490]"
+                  >
+                    Color Printing &amp; Copy
+                  </Link>
+                  <Link
+                    href="/office-printing"
+                    className="block px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0E7490]"
+                  >
+                    Office &amp; Org Printing
+                  </Link>
+                  <Link
+                    href="/services"
+                    className="block px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#0E7490] border-t border-slate-100"
+                  >
+                    All Services Directory
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Action Buttons */}
@@ -110,7 +161,7 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             <a
               id="header-call-btn"
               aria-label="Call Yaqoob Enterprises"
-              className="inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 text-sm font-semibold text-slate-800 bg-slate-100 sm:bg-white sm:border border-slate-200/90 rounded-full hover:bg-slate-100 active:scale-95 transition"
+              className="inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-100 sm:bg-white sm:border border-slate-200/90 rounded-full hover:bg-slate-100 active:scale-95 transition"
               href={phoneLink}
             >
               <Phone className="w-4 h-4 text-slate-800" />
@@ -135,7 +186,7 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             <button
               id="mobileMenuBtn"
               aria-label="Toggle navigation drawer"
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 active:scale-95 transition"
+              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 active:scale-95 transition"
               onClick={() => setDrawerOpen(!drawerOpen)}
             >
               {drawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -147,47 +198,97 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
         {drawerOpen && (
           <div
             id="mobileDrawer"
-            className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-5 shadow-xl transition-all"
+            className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl transition-all"
           >
-            <div className="flex flex-col space-y-3 font-semibold text-slate-800 text-sm">
+            <div className="grid grid-cols-2 gap-2 font-semibold text-slate-800 text-xs sm:text-sm">
               <Link
-                className="py-2 px-3 rounded-lg hover:bg-slate-100"
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold"
+                href="/"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold text-[#0E7490]"
+                href="/printing"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Printing
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold text-[#0E7490]"
+                href="/photocopying"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Photocopying
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
+                href="/notes-printing"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Notes Printing
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
+                href="/bulk-printing"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Bulk Printing
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
+                href="/photo-printing"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Photo Printing
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold text-emerald-800"
+                href="/nadra-esahulat"
+                onClick={() => setDrawerOpen(false)}
+              >
+                NADRA e-Sahulat
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
+                href="/color-printing"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Color Printing
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
+                href="/office-printing"
+                onClick={() => setDrawerOpen(false)}
+              >
+                Office Printing
+              </Link>
+              <Link
+                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
+                href="/about"
+                onClick={() => setDrawerOpen(false)}
+              >
+                About Yaqoob
+              </Link>
+              <Link
+                className="col-span-2 py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-100 font-bold text-slate-900 flex items-center justify-between"
+                href="/contact"
+                onClick={() => setDrawerOpen(false)}
+              >
+                <span>Contact &amp; Location</span>
+                <span className="text-xs text-slate-500">Shop Hours &amp; Directions →</span>
+              </Link>
+              <Link
+                className="col-span-2 py-2 px-3 text-xs text-slate-500 hover:text-slate-900"
                 href="/services"
                 onClick={() => setDrawerOpen(false)}
               >
-                Services Catalog
-              </Link>
-              <Link
-                className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="/#how-it-works"
-                onClick={() => setDrawerOpen(false)}
-              >
-                How It Works
-              </Link>
-              <Link
-                className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="/#quick-request"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Send Fast WhatsApp Request
-              </Link>
-              <Link
-                className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="/#visit-shop"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Shop Address &amp; Timings
-              </Link>
-              <Link
-                className="py-2 px-3 rounded-lg hover:bg-slate-100"
-                href="/#faq"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Frequently Asked Questions
+                Browse All Other Services (Online Forms, Typing, Stamp Paper, Tickets) →
               </Link>
             </div>
-            <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span className="truncate pr-2">{settings.address || "Sector B, Akhtar Colony"}</span>
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span className="truncate pr-2">Sector B, Near Jamia Masjid Muhammadi</span>
               <span className="text-emerald-600 font-bold shrink-0">{statusText || "Open till 11 PM"}</span>
             </div>
           </div>

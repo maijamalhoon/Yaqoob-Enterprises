@@ -2,134 +2,18 @@
 
 import Link from "next/link";
 import {
-  Fingerprint,
   Printer,
+  Copy,
+  Palette,
+  BookOpen,
+  Layers,
   Camera,
-  FileText,
-  PenTool,
-  Scroll,
-  Banknote,
-  Ticket,
-  ShoppingBag,
-  Globe,
+  Briefcase,
+  Fingerprint,
   ArrowRight,
+  MessageCircle,
 } from "lucide-react";
-
 import type { Service, ServiceCategory } from "@/lib/types";
-
-export interface ServiceItem {
-  id: string;
-  title: string;
-  description: string;
-  categoryTag: string;
-  badge: string;
-  iconName: string;
-  url: string;
-  urduTip?: string;
-}
-
-const DEFAULT_SERVICES: ServiceItem[] = [
-  {
-    id: "nadra-biometric",
-    title: "NADRA e-Sahulat Biometric Verifications",
-    description: "General biometric, FBR Sales Tax, PSW and Vehicle / ETO biometric verification assistance.",
-    categoryTag: "Biometric & e-Sahulat",
-    badge: "● Instant verify",
-    iconName: "fingerprint",
-    url: "/services",
-    urduTip: "اصل شناختی کارڈ اور موبائل ساتھ لائیں",
-  },
-  {
-    id: "printing-scanning",
-    title: "Printing, Photocopy & Document Scanning",
-    description: "Colour and black-and-white printing, photocopying and document scanning for everyday requirements.",
-    categoryTag: "Print, Copy & Photos",
-    badge: "High-speed laser",
-    iconName: "printer",
-    url: "/services",
-    urduTip: "واٹس ایپ پر فائل پہلے بھیجیں",
-  },
-  {
-    id: "passport-photos",
-    title: "Passport-Size Photos",
-    description: "Standard and urgent passport-size photo preparation with crisp white or blue background.",
-    categoryTag: "Print, Copy & Photos",
-    badge: "5 Min Delivery",
-    iconName: "camera",
-    url: "/services",
-    urduTip: "سفید و نیلا بیک گراؤنڈ 5 منٹ میں تیار",
-  },
-  {
-    id: "online-jobs-forms",
-    title: "Online Jobs, Forms & Applications",
-    description: "Online job applications, admissions, registrations and other web-based forms and submissions.",
-    categoryTag: "Typing & Online Forms",
-    badge: "Error-free filing",
-    iconName: "file-text",
-    url: "/services",
-    urduTip: "FPSC, SPSC, STS ملازمت و داخلہ فارمز",
-  },
-  {
-    id: "typing-cv",
-    title: "Urdu & English Typing & CV Preparation",
-    description: "Urdu and English typing plus clean CV preparation for jobs, applications and formal documents.",
-    categoryTag: "Typing, CV & Online Forms",
-    badge: "ATS-Friendly",
-    iconName: "pen-tool",
-    url: "/services",
-    urduTip: "انگلش و اردو ٹائپنگ اور پروفیشنل سی وی",
-  },
-  {
-    id: "agreements-documents",
-    title: "Agreements & Document Preparation",
-    description: "Urdu and English sale, rent and other document preparation assistance formatted for legal validity.",
-    categoryTag: "Agreements & Documents",
-    badge: "Rent & Sale",
-    iconName: "scroll",
-    url: "/services",
-    urduTip: "کرایہ نامہ، اقرار نامہ اور اسٹامپ پیپر",
-  },
-  {
-    id: "cash-transfer",
-    title: "Cash Deposit, Withdrawal & Money Transfer",
-    description: "Supported cash deposit, withdrawal and domestic transfer services safely executed on spot.",
-    categoryTag: "Payments & Transfer",
-    badge: "● Fast Receipt",
-    iconName: "banknote",
-    url: "/services",
-    urduTip: "کیش ڈپازٹ، ٹرانسفر اور یوٹیلیٹی بلز",
-  },
-  {
-    id: "ticket-booking",
-    title: "Railway, Airline & Bus Tickets",
-    description: "Search and booking assistance for supported routes and operators with e-ticket printouts.",
-    categoryTag: "Tickets & Booking",
-    badge: "All Major Routes",
-    iconName: "ticket",
-    url: "/services",
-    urduTip: "پاکستان ریلوے اور فیصل موورز ٹکٹ",
-  },
-  {
-    id: "stationery-accessories",
-    title: "Stationery & Mobile Accessories",
-    description: "Confirm availability on WhatsApp, then collect or request eligible local delivery.",
-    categoryTag: "Stationery & Accessories",
-    badge: "In-Stock Check",
-    iconName: "shopping-bag",
-    url: "/services",
-    urduTip: "اسٹیشنری، موبائل چارجر و کیبلز",
-  },
-  {
-    id: "web-dev-seo",
-    title: "Website Development, Full-Stack & SEO Services",
-    description: "Business websites, full-stack development, redesign, maintenance and practical SEO support.",
-    categoryTag: "Web Development & SEO",
-    badge: "Digital Growth",
-    iconName: "globe",
-    url: "/services",
-    urduTip: "بزنس ویب سائٹ اور لوکل SEO",
-  },
-];
 
 interface StitchServicesProps {
   onSelectService?: (serviceName: string) => void;
@@ -137,124 +21,114 @@ interface StitchServicesProps {
   categories?: ServiceCategory[];
 }
 
-function resolveIconForService(title: string): string {
-  const t = title.toLowerCase();
-  if (t.includes("biometric") || t.includes("nadra") || t.includes("sahulat")) return "fingerprint";
-  if (t.includes("print") || t.includes("scan") || t.includes("copy") || t.includes("photocopy")) return "printer";
-  if (t.includes("photo") || t.includes("passport")) return "camera";
-  if (t.includes("form") || t.includes("job") || t.includes("application")) return "file-text";
-  if (t.includes("typing") || t.includes("cv") || t.includes("resume")) return "pen-tool";
-  if (t.includes("agreement") || t.includes("stamp") || t.includes("legal") || t.includes("rent")) return "scroll";
-  if (t.includes("money") || t.includes("cash") || t.includes("transfer") || t.includes("bank") || t.includes("bill")) return "banknote";
-  if (t.includes("ticket") || t.includes("train") || t.includes("air") || t.includes("flight") || t.includes("bus")) return "ticket";
-  if (t.includes("stationery") || t.includes("mobile") || t.includes("accessor")) return "shopping-bag";
-  return "globe";
+interface PrimaryService {
+  id: string;
+  title: string;
+  shortDesc: string;
+  url: string;
+  icon: typeof Printer;
+  isPrimaryFeatured?: boolean;
+  badge: string;
+  whatsappMessage: string;
+  urduTip: string;
 }
 
-function resolveUrduTip(title: string): string {
-  const t = title.toLowerCase();
-  if (t.includes("biometric") || t.includes("nadra")) return "اصل شناختی کارڈ اور رجسٹرڈ موبائل ساتھ لائیں";
-  if (t.includes("print") || t.includes("scan") || t.includes("photocopy")) return "فائل واٹس ایپ پر پہلے بھیج سکتے ہیں";
-  if (t.includes("photo") || t.includes("passport")) return "سفید و نیلا بیک گراؤنڈ 5 منٹ میں تیار";
-  if (t.includes("form") || t.includes("job") || t.includes("application")) return "سرکاری و نجی آن لائن نوکری فارم بھریں";
-  if (t.includes("typing") || t.includes("cv") || t.includes("resume")) return "اردو انگلش ٹائپنگ اور پروفیشنل سی وی";
-  if (t.includes("agreement") || t.includes("stamp") || t.includes("rent")) return "کرایہ نامہ اور قانونی دستاویزات اسٹامپ پیپر پر";
-  if (t.includes("cash") || t.includes("transfer") || t.includes("bill")) return "کیش ڈپازٹ، رقم کی منتقلی اور تمام بلز";
-  if (t.includes("ticket") || t.includes("railway") || t.includes("train") || t.includes("bus")) return "پاکستان ریلوے اور بسوں کے کنفرم ای ٹکٹ";
-  if (t.includes("stationery") || t.includes("mobile")) return "روزمرہ دفتری و اسکول اسٹیشنری اور موبائل کیبلز";
-  if (t.includes("website") || t.includes("seo") || t.includes("development")) return "دکان و کاروبار کے لیے ویب سائٹ اور لوکل SEO";
-  return "دکان کاؤنٹر پر دستیاب";
-}
+const PRIMARY_SERVICES: PrimaryService[] = [
+  {
+    id: "printing",
+    title: "Printing Services",
+    shortDesc:
+      "High-speed black & white and color laser printing for documents, assignments, office files, and reports. Send PDFs via WhatsApp for zero-wait pickup.",
+    url: "/printing",
+    icon: Printer,
+    isPrimaryFeatured: true,
+    badge: "Core Service • Fast Laser",
+    whatsappMessage: "Hello Yaqoob Enterprises, I want document printing. Here are my details:",
+    urduTip: "ہائی اسپیڈ بلیک اینڈ وائٹ و کلر لیزر پرنٹنگ",
+  },
+  {
+    id: "photocopying",
+    title: "Photocopying Services",
+    shortDesc:
+      "Crisp single and bulk black & white and color photocopying for documents, notes, books, and IDs. Sharp contrast on standard 75/80 GSM paper.",
+    url: "/photocopying",
+    icon: Copy,
+    isPrimaryFeatured: true,
+    badge: "Core Service • Bulk Ready",
+    whatsappMessage: "Hello Yaqoob Enterprises, I need photocopying services. Details:",
+    urduTip: "صاف اور معیاری فوٹو کاپی برائے اسکول، دفاتر و رہائشی",
+  },
+  {
+    id: "color-printing",
+    title: "Color Printing",
+    shortDesc:
+      "Vibrant full-color laser printing and color photocopy for presentation slides, certificates, project covers, and graphical documents.",
+    url: "/color-printing",
+    icon: Palette,
+    badge: "High Resolution",
+    whatsappMessage: "Hello Yaqoob Enterprises, I need color printing. My file details:",
+    urduTip: "پروجیکٹس اور سرٹیفکیٹس کے لیے عمدہ کلر پرنٹ",
+  },
+  {
+    id: "notes-printing",
+    title: "Notes Printing",
+    shortDesc:
+      "Student handouts, school, college, and university syllabus notes and assignment printing. Single or double-sided with neat stapling.",
+    url: "/notes-printing",
+    icon: BookOpen,
+    badge: "Students & Institutes",
+    whatsappMessage: "Hello Yaqoob Enterprises, I want student notes printed. Pages and details:",
+    urduTip: "اسکول، کالج و یونیورسٹی نوٹس و اسائنمنٹس",
+  },
+  {
+    id: "bulk-printing",
+    title: "Bulk Printing",
+    shortDesc:
+      "Large-volume document printing and bulk copying for offices, schools, colleges, and organizations. Contact us ahead for scheduled completion.",
+    url: "/bulk-printing",
+    icon: Layers,
+    badge: "Volume Orders",
+    whatsappMessage: "Hello Yaqoob Enterprises, I need a bulk printing / photocopy quote:",
+    urduTip: "بڑے آرڈرز کے لیے پیشگی واٹس ایپ رابطہ کریں",
+  },
+  {
+    id: "photo-printing",
+    title: "Photo Printing & Passport Photos",
+    shortDesc:
+      "Urgent passport-size photos with white or blue background for CNIC, passports, visas, licenses, and admissions. Ready in 5 minutes.",
+    url: "/photo-printing",
+    icon: Camera,
+    badge: "Ready in 5 Mins",
+    whatsappMessage: "Hello Yaqoob Enterprises, I need passport photos / photo printing:",
+    urduTip: "پاسپورٹ سائز تصاویر 5 منٹ میں تیار (سفید و نیلا بیک گراؤنڈ)",
+  },
+  {
+    id: "office-printing",
+    title: "Office Printing",
+    shortDesc:
+      "Corporate documentation, legal agreements, official forms, proposals, meeting handouts, and institutional paperwork for local businesses.",
+    url: "/office-printing",
+    icon: Briefcase,
+    badge: "Commercial / Business",
+    whatsappMessage: "Hello Yaqoob Enterprises, I have an office printing requirement:",
+    urduTip: "دفتری دستاویزات، ایگریمنٹس اور فارمز پرنٹنگ",
+  },
+  {
+    id: "nadra-esahulat",
+    title: "NADRA e-Sahulat & Biometrics",
+    shortDesc:
+      "Authorized local biometric verification for General verification, Vehicle / ETO transfers, FBR Sales Tax, and Pakistan Single Window (PSW).",
+    url: "/nadra-esahulat",
+    icon: Fingerprint,
+    badge: "Authorized Franchise",
+    whatsappMessage: "Hello Yaqoob Enterprises, I need NADRA biometric verification. My case is:",
+    urduTip: "بائیومیٹرک تصدیق (گاڑی ٹرانسفر، ایف بی آر، پی ایس ڈبلیو)",
+  },
+];
 
-function renderServiceIcon(name: string) {
-  const iconProps = { className: "w-5 h-5 sm:w-6 sm:h-6" };
-  switch (name) {
-    case "fingerprint":
-      return <Fingerprint {...iconProps} />;
-    case "printer":
-      return <Printer {...iconProps} />;
-    case "camera":
-      return <Camera {...iconProps} />;
-    case "file-text":
-      return <FileText {...iconProps} />;
-    case "pen-tool":
-      return <PenTool {...iconProps} />;
-    case "scroll":
-      return <Scroll {...iconProps} />;
-    case "banknote":
-      return <Banknote {...iconProps} />;
-    case "ticket":
-      return <Ticket {...iconProps} />;
-    case "shopping-bag":
-      return <ShoppingBag {...iconProps} />;
-    case "globe":
-    default:
-      return <Globe {...iconProps} />;
-  }
-}
-
-export function StitchServices({ onSelectService, services, categories }: StitchServicesProps) {
-  // Sort services: featured first, then display_order
-  const displayServices: ServiceItem[] =
-    services && services.length > 0
-      ? [...services]
-          .filter((s) => s.status !== "hidden")
-          .sort((a, b) => {
-            if (a.is_featured && !b.is_featured) return -1;
-            if (!a.is_featured && b.is_featured) return 1;
-            return a.display_order - b.display_order;
-          })
-          .map((s) => {
-            const cat = categories?.find((c) => c.id === s.category_id);
-            const serviceUrl = cat ? `/services/${cat.slug}/${s.slug}` : "/services";
-            return {
-              id: s.id,
-              title: s.title,
-              description: s.short_description || s.detailed_description || "Available at shop counter & online inquiry.",
-              categoryTag: cat?.title || "Counter Service",
-              badge: s.appointment_required
-                ? "Appointment Only"
-                : s.status === "coming_soon"
-                ? "Coming Soon"
-                : s.is_featured
-                ? "★ Featured Service"
-                : s.whatsapp_request
-                ? "WhatsApp Pre-Check"
-                : "● Instant Service",
-              iconName: resolveIconForService(s.title),
-              url: serviceUrl,
-              urduTip: resolveUrduTip(s.title),
-            };
-          })
-      : DEFAULT_SERVICES;
-
-  const handleServiceClick = (serviceTitle: string) => {
-    if (typeof window !== "undefined") {
-      const selectElement = document.getElementById("userService") as HTMLSelectElement | null;
-      if (selectElement) {
-        let found = false;
-        for (let i = 0; i < selectElement.options.length; i++) {
-          if (selectElement.options[i].value.toLowerCase().includes(serviceTitle.toLowerCase().slice(0, 10))) {
-            selectElement.selectedIndex = i;
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          selectElement.value = serviceTitle;
-        }
-      }
-      const quickReq = document.getElementById("quick-request");
-      if (quickReq) {
-        quickReq.scrollIntoView({ behavior: "smooth" });
-        const msgField = document.getElementById("userMessage");
-        if (msgField) msgField.focus();
-      }
-    }
-    if (onSelectService) {
-      onSelectService(serviceTitle);
-    }
-  };
+export function StitchServices({}: StitchServicesProps) {
+  const whatsappUrl = (msg: string) =>
+    `https://wa.me/923492568864?text=${encodeURIComponent(msg)}`;
 
   return (
     <section
@@ -268,120 +142,162 @@ export function StitchServices({ onSelectService, services, categories }: Stitch
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 text-[#0E7490] font-bold text-xs uppercase tracking-wider mb-2">
               <span className="w-4 h-0.5 bg-[#0E7490]"></span>
-              <span>Our Services · تمام سہولیات</span>
+              <span>Primary Services · پرائمری سہولیات</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              What can we help with?
+              Printing, Photocopying &amp; Biometric Center
             </h2>
             <p className="text-slate-600 mt-2 text-sm sm:text-base leading-relaxed">
-              NADRA e-Sahulat biometrics, document printing, passport photos, online forms, rent agreements, ticketing, and web development in Akhtar Colony, Karachi.
+              Everyday walk-in and online document services in Sector B, Akhtar Colony, Karachi. Select any service to explore options, paper specifications, and requirements.
             </p>
           </div>
-          <div className="shrink-0">
+          <div className="shrink-0 flex items-center gap-2">
             <Link
               href="/services"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-slate-400 text-slate-900 font-bold text-xs sm:text-sm shadow-sm transition hover:bg-slate-50"
             >
-              <span>Explore All Services</span>
+              <span>All Services Directory</span>
               <ArrowRight className="w-4 h-4 text-[#0E7490]" />
             </Link>
           </div>
         </div>
 
-        {/* Services List (Single column mobile, 2 cols on md) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5" id="services-container">
-          {displayServices.map((service) => (
-            <article
-              id={`service-card-${service.id}`}
-              key={service.id}
-              className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 hover:shadow-md hover:border-slate-300 transition-all duration-200 group flex flex-col justify-between"
-            >
-              <div className="flex items-start gap-3 sm:gap-4 mb-3">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 text-[#0E7490] group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                  {renderServiceIcon(service.iconName)}
+        {/* 1. HERO SERVICES: Printing and Photocopying (Strongest Visual Categories) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
+          {PRIMARY_SERVICES.filter((s) => s.isPrimaryFeatured).map((service) => {
+            const Icon = service.icon;
+            return (
+              <article
+                key={service.id}
+                id={`featured-card-${service.id}`}
+                className="relative bg-white border-2 border-[#0E7490]/30 hover:border-[#0E7490] rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-200 group flex flex-col justify-between"
+              >
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider px-3 py-1 bg-[#0E7490]/10 text-[#0E7490] rounded-full border border-[#0E7490]/20">
+                    {service.badge}
+                  </span>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#0E7490] transition-colors">
-                      <Link href={service.url}>
-                        {service.title}
-                      </Link>
-                    </h3>
+
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-[#0E7490]/10 text-[#0E7490] group-hover:bg-[#0E7490] group-hover:text-white transition-colors flex items-center justify-center mb-5">
+                    <Icon className="w-7 h-7" />
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                    {service.description}
+
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#0E7490] transition-colors">
+                    <Link href={service.url}>{service.title}</Link>
+                  </h3>
+
+                  <p className="text-sm text-slate-600 mt-2.5 leading-relaxed">
+                    {service.shortDesc}
                   </p>
 
-                  {/* Urdu Tip Banner */}
-                  {service.urduTip && (
-                    <div className="mt-2 text-[11px] sm:text-xs text-slate-500 font-medium flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
-                      <span className="text-[#0E7490] font-bold">●</span>
-                      <span>{service.urduTip}</span>
-                    </div>
-                  )}
+                  <div className="mt-3 text-xs text-slate-500 font-medium flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                    <span className="text-[#0E7490] font-bold">●</span>
+                    <span>{service.urduTip}</span>
+                  </div>
+                </div>
 
-                  <div className="mt-2.5 sm:mt-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
-                    <span className="text-[11px] font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">
-                      {service.categoryTag}
-                    </span>
-                    <span
-                      className={`text-[11px] font-semibold ${
-                        service.badge.includes("★")
-                          ? "text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200"
-                          : service.badge.includes("●")
-                          ? "text-emerald-600 font-semibold"
-                          : "text-slate-500 font-medium"
-                      }`}
-                    >
+                {/* CTAs */}
+                <div className="pt-6 mt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                  <Link
+                    href={service.url}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 group-hover:text-[#0E7490] hover:underline"
+                  >
+                    <span>Learn More &amp; Rates</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+
+                  <a
+                    href={whatsappUrl(service.whatsappMessage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        {/* 2. OTHER PRIMARY SERVICES GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          {PRIMARY_SERVICES.filter((s) => !s.isPrimaryFeatured).map((service) => {
+            const Icon = service.icon;
+            return (
+              <article
+                key={service.id}
+                id={`service-card-${service.id}`}
+                className="bg-white border border-slate-200 hover:border-slate-300 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <div className="w-11 h-11 rounded-xl bg-slate-100 text-[#0E7490] group-hover:bg-slate-900 group-hover:text-white transition-colors flex items-center justify-center shrink-0">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">
                       {service.badge}
                     </span>
                   </div>
+
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0E7490] transition-colors">
+                    <Link href={service.url}>{service.title}</Link>
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                    {service.shortDesc}
+                  </p>
+
+                  <div className="mt-2.5 text-[11px] text-slate-500 font-medium bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100">
+                    {service.urduTip}
+                  </div>
                 </div>
-              </div>
 
-              {/* Action Bar */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 mt-auto">
-                <Link
-                  href={service.url}
-                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#0E7490] hover:underline"
-                  aria-label={`See more about ${service.title}`}
-                >
-                  <span>See more about service</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <Link
+                    href={service.url}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-slate-800 group-hover:text-[#0E7490] hover:underline"
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
 
-                <button
-                  type="button"
-                  aria-label={`Send fast request for ${service.title}`}
-                  className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleServiceClick(service.title);
-                  }}
-                >
-                  Quick Inquire
-                </button>
-              </div>
-            </article>
-          ))}
+                  <a
+                    href={whatsappUrl(service.whatsappMessage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 transition"
+                  >
+                    <MessageCircle className="w-3 h-3 text-emerald-600" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
         </div>
 
-        {/* Section bottom banner CTA */}
-        <div className="mt-10 sm:mt-14 bg-gradient-to-r from-[#0B192C] to-slate-900 rounded-2xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
+        {/* 3. SECONDARY SERVICES DISCOVERY BANNER */}
+        <div className="mt-8 sm:mt-12 bg-white border border-slate-200 rounded-2xl p-5 sm:p-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
           <div>
-            <h3 className="text-lg sm:text-xl font-bold">
-              Looking for a specific government portal, ticket or document?
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              Also Available at our Counter
+            </span>
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 mt-0.5">
+              Online Job Forms • Typing &amp; CVs • Rent Agreements • Bus/Train Tickets • Stationery
             </h3>
-            <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl">
-              Browse our complete service catalog with live search, requirements lists, and direct WhatsApp consultations.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Government portals, legal agreements on stamp paper, document scanning, utility bills, and basic stationery accessories.
             </p>
           </div>
           <Link
             href="/services"
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs sm:text-sm transition shadow"
+            className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition shadow-sm"
           >
-            <span>Browse All Services &amp; Portals</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Browse All Services</span>
+            <ArrowRight className="w-4 h-4 text-emerald-400" />
           </Link>
         </div>
       </div>

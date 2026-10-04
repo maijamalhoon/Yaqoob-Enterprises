@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
 import { StitchFAQ } from "@/components/stitch-faq";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
@@ -7,9 +8,40 @@ import { StitchHero } from "@/components/stitch-hero";
 import { StitchHowItWorks } from "@/components/stitch-how-it-works";
 import { StitchQuickRequest } from "@/components/stitch-quick-request";
 import { StitchServices } from "@/components/stitch-services";
+import { StitchTrust } from "@/components/stitch-trust";
 import { StitchVisitShop } from "@/components/stitch-visit-shop";
 import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
+import { SITE_URL } from "@/lib/env";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { settings } = await getSiteData();
+  const title = `Yaqoob Enterprises | Printing & Photocopying in Akhtar Colony, Karachi`;
+  const description = `${settings.business_name} provides printing, photocopying, color printing, notes printing, photo printing, bulk printing and NADRA e-Sahulat services in Akhtar Colony, Karachi.`;
+
+  return {
+    title: {
+      absolute: title,
+    },
+    description,
+    alternates: {
+      canonical: SITE_URL,
+    },
+    openGraph: {
+      title,
+      description,
+      url: SITE_URL,
+      siteName: settings.business_name,
+      locale: "en_PK",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery, services } = await getSiteData();
@@ -42,6 +74,7 @@ export default async function HomePage() {
         />
         <StitchServices services={services} categories={categories} />
         <StitchHowItWorks />
+        <StitchTrust settings={settings} statusText={hoursText} />
         <StitchQuickRequest settings={settings} services={services} />
         <StitchVisitShop settings={settings} statusText={hoursText} hours={hours} />
         <StitchFAQ />

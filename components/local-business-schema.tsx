@@ -1,6 +1,7 @@
 import { SITE_URL } from "@/lib/env";
 import { businessCity, businessLocationLabel } from "@/lib/business-display";
 import { getHourPeriods } from "@/lib/data";
+import { FAQ_ITEMS } from "@/lib/faq-data";
 import type { BusinessHour, BusinessSettings, CoverageArea, ServiceCategory } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -79,7 +80,7 @@ export function LocalBusinessSchema({
     logo: `${SITE_URL}/brand/logo-horizontal.svg`,
     image: imageUrl.startsWith("http") ? imageUrl : `${SITE_URL}${imageUrl}`,
     telephone: settings.phone_e164,
-    description: `${settings.tagline}. NADRA e-Sahulat and biometric verification, printing, online forms, documents and everyday local services in ${locationLabel}.`,
+    description: `Printing, Photocopying & NADRA e-Sahulat Services in Akhtar Colony, Karachi. Color & B&W Printing, Notes Printing, Photo Printing, Bulk Printing, and Biometric Services in ${locationLabel}.`,
     priceRange: "PKR",
     currenciesAccepted: "PKR",
     hasMap: settings.map_url,
@@ -90,7 +91,7 @@ export function LocalBusinessSchema({
       longitude: 67.0735,
     },
     keywords:
-      "NADRA e-Sahulat Akhtar Colony, Biometric Verification Karachi, Vehicle Biometric Transfer, Color Laser Printing, Photocopy, Document Scanning, Passport Size Photos, Online Job Apply, Urdu English Typing, Rent Agreement, Money Transfer, Railway Ticket Booking, Web Development SEO",
+      "Printing in Akhtar Colony, Photocopy shop Akhtar Colony, Color printing Akhtar Colony, Notes printing Akhtar Colony, Bulk printing Akhtar Colony, Photo printing Akhtar Colony, Passport size photos Karachi, NADRA e-Sahulat Akhtar Colony, Biometric verification Akhtar Colony, Yaqoob Enterprises Karachi",
     address: {
       "@type": "PostalAddress",
       streetAddress: settings.address,
@@ -121,40 +122,14 @@ export function LocalBusinessSchema({
   const faqData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "What documents do I need for NADRA e-Sahulat Biometric Verification?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Please bring your original CNIC (or Smart Card) along with your vehicle registration details, FBR Tax registration number, or PSW transaction ID depending on which verification you require. We confirm specific prerequisites on WhatsApp before you head over.",
-        },
+    mainEntity: FAQ_ITEMS.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
       },
-      {
-        "@type": "Question",
-        name: "Can I send PDFs or images via WhatsApp for printing?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes! You can WhatsApp your documents directly to +92 349 2568864. Let us know whether you need B&W or color laser prints, page orientation, and quantity. Your prints will be ready for instant pickup when you arrive.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Do you draft rental and sale agreements on stamp paper?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, we provide bilingual (Urdu and English) typing and document preparation for residential rental agreements, commercial contracts, vehicle sale deeds, and basic affidavits compliant with local requirements.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Where is Yaqoob Enterprises located in Karachi?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "We are located at Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi.",
-        },
-      },
-    ],
+    })),
   };
 
   return (

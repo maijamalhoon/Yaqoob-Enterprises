@@ -16,15 +16,13 @@ import "./admin-safety-analytics.css";
 import "./skeleton.css";
 import "./stitch.css";
 import { PageTracker } from "@/components/page-tracker";
-import { businessLocationLabel } from "@/lib/business-display";
 import { getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
-  const location = businessLocationLabel(settings.address);
-  const description = `NADRA e-Sahulat and biometric verification, printing, photocopy, online forms, documents, payments, tickets, stationery and laptop support in ${location}.`;
-  const homeTitle = `NADRA e-Sahulat & Biometric Verification Karachi | ${settings.business_name}`;
+  const homeTitle = `Yaqoob Enterprises | Printing & Photocopying in Akhtar Colony, Karachi`;
+  const description = `${settings.business_name} provides printing, photocopying, color printing, notes printing, photo printing, bulk printing and NADRA e-Sahulat services in Akhtar Colony, Karachi.`;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -35,29 +33,29 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     keywords: [
+      "Printing in Akhtar Colony",
+      "Photocopy shop Akhtar Colony",
+      "Photocopy near me",
+      "Printing near me",
+      "Color printing Akhtar Colony",
+      "Color photocopy Akhtar Colony",
+      "Black and white printing Akhtar Colony",
+      "Notes printing Akhtar Colony",
+      "School notes printing",
+      "College notes printing",
+      "University notes printing",
+      "Bulk printing Akhtar Colony",
+      "Bulk photocopying Akhtar Colony",
+      "Office printing Akhtar Colony",
+      "Photo printing Akhtar Colony",
+      "Passport size photos Karachi",
       "NADRA e-Sahulat Akhtar Colony",
-      "Biometric Verification Karachi",
-      "Vehicle Biometric Transfer Karachi",
-      "Car Biometric Transfer Karachi",
-      "Bike Biometric Verification",
-      "FBR Sales Tax Biometric Karachi",
-      "PSW Biometric Center Karachi",
-      "Color Printing Akhtar Colony",
-      "Photocopy Shop Akhtar Colony",
-      "Document Scanning to PDF Karachi",
-      "Passport Size Photos Karachi",
-      "Online Job Apply Karachi",
-      "Urdu English Typing Akhtar Colony",
-      "CV Maker Karachi",
-      "Rent Agreement Typing Akhtar Colony",
-      "Kirayanama Stamp Paper Karachi",
-      "Money Transfer Akhtar Colony",
-      "Utility Bill Payment Karachi",
-      "Pakistan Railway Ticket Booking Karachi",
-      "Bus Ticket Booking Karachi",
-      "Stationery Shop Akhtar Colony",
-      "Website Development & SEO Services Karachi",
-      "Yaqoob Enterprises Akhtar Colony",
+      "NADRA biometric Akhtar Colony",
+      "Biometric verification Akhtar Colony",
+      "Vehicle biometric transfer Karachi",
+      "FBR sales tax biometric Karachi",
+      "PSW biometric Karachi",
+      "Yaqoob Enterprises Karachi",
       "Sector B Akhtar Colony Karachi",
       "Near Jamia Masjid Muhammadi",
     ],
