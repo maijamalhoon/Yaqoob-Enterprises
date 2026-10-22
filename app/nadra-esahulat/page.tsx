@@ -18,9 +18,10 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "NADRA e-Sahulat Biometric Verification in Akhtar Colony, Karachi | Yaqoob Enterprises",
+  title: "NADRA Biometrics in Akhtar Colony",
   description:
     "Authorized local NADRA e-Sahulat franchise in Akhtar Colony, Karachi. Biometric verification for Vehicle / ETO transfers, FBR Sales Tax biometric, Pakistan Single Window (PSW), and general biometric verification.",
   alternates: {
@@ -126,15 +127,15 @@ export default async function NadraEsahulatPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -379,7 +380,7 @@ export default async function NadraEsahulatPage() {
         </section>
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

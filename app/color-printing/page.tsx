@@ -18,11 +18,12 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Color Printing & Color Photocopy in Akhtar Colony, Karachi | Yaqoob Enterprises",
+  title: "Color Printing in Akhtar Colony",
   description:
-    "Color laser printing and color photocopying in Akhtar Colony, Karachi. Clear, vibrant printouts for project reports, certificates, presentations, official forms, and charts. Send files on WhatsApp for instant counter collection.",
+    "Color laser printing and photocopying in Akhtar Colony, Karachi. Clear prints for reports, certificates, presentations, forms, and charts. Send files on WhatsApp before visiting.",
   alternates: {
     canonical: `${SITE_URL}/color-printing`,
   },
@@ -126,15 +127,15 @@ export default async function ColorPrintingPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -341,7 +342,7 @@ export default async function ColorPrintingPage() {
         </section>
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

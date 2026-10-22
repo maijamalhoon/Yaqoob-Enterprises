@@ -15,11 +15,12 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Printing Services in Akhtar Colony, Karachi | Yaqoob Enterprises",
+  title: "Printing Services in Akhtar Colony",
   description:
-    "Laser printing services in Akhtar Colony, Karachi. Black & white and color document printing, student assignments, university notes, office paperwork, and bulk printouts. Send your PDF on WhatsApp for zero-wait pickup.",
+    "Laser printing in Akhtar Colony, Karachi. Black-and-white and color prints for assignments, notes, office documents, and bulk orders. Send your PDF on WhatsApp before visiting.",
   alternates: {
     canonical: `${SITE_URL}/printing`,
   },
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
 const PRINTING_FAQS = [
   {
     q: "Can I send my documents on WhatsApp before visiting?",
-    a: "Yes! Simply send your PDF, Word file, or images to +92 349 2568864. Tell us whether you need black-and-white or color, single or double-sided, and the number of copies. We will print your document so it is ready for instant pickup when you arrive.",
+    a: "Send your PDF, Word file, or images to +92 349 2568864. Tell us whether you need black-and-white or color, single- or double-sided printing, and how many copies. We will confirm the pickup time.",
   },
   {
     q: "What paper sizes and weights do you support?",
@@ -127,15 +128,15 @@ export default async function PrintingPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -244,7 +245,7 @@ export default async function PrintingPage() {
                   <span className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center mb-3">
                     03
                   </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">Instant Counter Pickup</h3>
+                  <h3 className="font-bold text-slate-900 text-sm mb-1">Collect at the Counter</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     Walk in to Plot 7, Street 1, Sector B (Near Jamia Masjid Muhammadi) and collect your printed pages.
                   </p>
@@ -412,7 +413,7 @@ export default async function PrintingPage() {
         </section>
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

@@ -14,8 +14,9 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
   return (
     <div className="admin-shell">
       <DestructiveActionGuard />
+      <a className="skip-link" href="#admin-main">Skip to main content</a>
       <AdminNav />
-      <main className="admin-main">
+      <main className="admin-main" id="admin-main">
         <header className="admin-topbar">
           <div className="admin-topbar__identity">
             <span>{settings?.business_name || "Website admin"}</span>

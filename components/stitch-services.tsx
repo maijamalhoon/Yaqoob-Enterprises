@@ -38,7 +38,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "printing",
     title: "Printing Services",
     shortDesc:
-      "High-speed black & white and color laser printing for documents, assignments, office files, and reports. Send PDFs via WhatsApp for zero-wait pickup.",
+      "Color and black-and-white laser printing for documents, assignments, office files, and reports. Send PDFs on WhatsApp to ask about pickup.",
     url: "/printing",
     icon: Printer,
     isPrimaryFeatured: true,

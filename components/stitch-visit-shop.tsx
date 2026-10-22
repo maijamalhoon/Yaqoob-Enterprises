@@ -150,13 +150,13 @@ export function StitchVisitShop({ settings, statusText, hours }: StitchVisitShop
             </p>
           </div>
 
-          <div id="shop-card-zero-wait" className="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
+          <div id="shop-card-before-visit" className="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
             <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#0E7490]" />
-              <span>Zero Wait Guarantee</span>
+              <span>Before You Visit</span>
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Send your documents on WhatsApp in advance. We will prepare your printouts or verify biometric servers before you walk into the shop.
+              Message us on WhatsApp before visiting to confirm what you need to bring.
             </p>
           </div>
         </div>

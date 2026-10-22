@@ -38,8 +38,6 @@ export function AdminNav() {
           );
         })}
       </nav>
-      <Link className="admin-view-site" href="/" target="_blank" rel="noopener noreferrer">View public website</Link>
-      <form action="/admin/logout" method="post"><button type="submit">Sign out</button></form>
     </aside>
   );
 }

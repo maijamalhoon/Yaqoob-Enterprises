@@ -18,9 +18,10 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Photocopy Services in Akhtar Colony, Karachi | Yaqoob Enterprises",
+  title: "Photocopy Services in Akhtar Colony",
   description:
     "Fast, clear black & white and color photocopying in Akhtar Colony, Karachi. Single and bulk copying for students, offices, institutes, and local residents. Clean contrast on 75/80 GSM paper near Jamia Masjid Muhammadi.",
   alternates: {
@@ -130,15 +131,15 @@ export default async function PhotocopyingPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -399,7 +400,7 @@ export default async function PhotocopyingPage() {
         </section>
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

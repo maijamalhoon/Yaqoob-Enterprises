@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, MapPin, CheckCircle2, Camera } from "lucide-react";
 import type { GalleryImage } from "@/lib/types";
+import { SUPABASE_URL } from "@/lib/env";
 
 interface ShopSlide {
   id: string;
@@ -11,7 +12,6 @@ interface ShopSlide {
   title: string;
   subtitle: string;
   tag: string;
-  isReal: boolean;
 }
 
 interface StitchShopLoopProps {
@@ -25,34 +25,30 @@ const FALLBACK_SLIDES: ShopSlide[] = [
   {
     id: "shop-1",
     url: "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=1200&q=80",
-    title: "Yaqoob Enterprises Storefront",
+    title: "Storefront concept preview",
     subtitle: "Street No. 1, Sector B, Akhtar Colony, Karachi",
-    tag: "Physical Shop Front",
-    isReal: true,
+    tag: "Storefront concept preview",
   },
   {
     id: "shop-2",
     url: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80",
-    title: "NADRA e-Sahulat Biometric Desk",
-    subtitle: "Instant biometric, FBR, and vehicle verification terminal",
-    tag: "Biometric Terminal",
-    isReal: true,
+    title: "Biometric service preview",
+    subtitle: "NADRA e-Sahulat biometric verification services",
+    tag: "Service concept preview",
   },
   {
     id: "shop-3",
     url: "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=crop&w=1200&q=80",
-    title: "High-Speed Laser Printing & Copy",
+    title: "Printing and copying preview",
     subtitle: "Urgent documents, color prints, scans & lamination",
-    tag: "Print & Copy Counter",
-    isReal: true,
+    tag: "Service concept preview",
   },
   {
     id: "shop-4",
     url: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
-    title: "Online Applications & Documentation",
+    title: "Online services preview",
     subtitle: "Job portals, admissions, legal agreements & forms",
-    tag: "Customer Support Desk",
-    isReal: true,
+    tag: "Service concept preview",
   },
 ];
 
@@ -62,11 +58,10 @@ export function StitchShopLoop({ galleryImages, locationLabel, whatsappLink }: S
     .filter((img) => img.is_active)
     .map((img) => ({
       id: img.id,
-      url: `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${img.storage_path}`,
+      url: `${SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/shop-media/${img.storage_path}`,
       title: img.alt_text || "Yaqoob Enterprises Shop View",
       subtitle: locationLabel || "Akhtar Colony, Karachi",
-      tag: img.media_kind === "real" ? "Real Shop Photo" : "Verified Shop",
-      isReal: true,
+      tag: img.media_kind === "real" ? "Shop photo" : "Concept preview",
     }));
 
   const slides: ShopSlide[] = activeDbImages.length > 0 ? activeDbImages : FALLBACK_SLIDES;

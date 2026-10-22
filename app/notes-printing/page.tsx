@@ -17,9 +17,10 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "School, College & University Notes Printing Karachi | Yaqoob Enterprises",
+  title: "Notes Printing in Karachi",
   description:
     "Student notes and assignment printing in Akhtar Colony, Karachi. School handouts, college syllabus notes, university research projects, and past papers. Send PDFs on WhatsApp for fast, affordable printing and stapling.",
   alternates: {
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "School, College & University Notes Printing Karachi | Yaqoob Enterprises",
     description:
-      "Affordable student notes and assignment printing in Akhtar Colony, Karachi. Send your PDF on WhatsApp for zero-wait counter pickup.",
+      "Affordable student notes and assignment printing in Akhtar Colony, Karachi. Send your PDF on WhatsApp before visiting or ask about counter pickup.",
     url: `${SITE_URL}/notes-printing`,
     type: "website",
   },
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "School, College & University Notes Printing Karachi | Yaqoob Enterprises",
     description:
-      "Affordable student notes and assignment printing in Akhtar Colony, Karachi. Send your PDF on WhatsApp for zero-wait counter pickup.",
+      "Affordable student notes and assignment printing in Akhtar Colony, Karachi. Send your PDF on WhatsApp before visiting or ask about counter pickup.",
   },
 };
 
@@ -129,15 +130,15 @@ export default async function NotesPrintingPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -163,7 +164,7 @@ export default async function NotesPrintingPage() {
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Fast, clear, and budget-friendly printing for school handouts, college syllabus booklets, university lecture slides, and semester assignments. Send your PDF on WhatsApp and collect your printed notes with zero wait.
+                Clear, affordable printing for school handouts, college notes, university slides, and assignments. Send your PDF on WhatsApp before visiting and collect your notes at the counter.
               </p>
 
               {/* 3 Prominent CTAs */}
@@ -344,7 +345,7 @@ export default async function NotesPrintingPage() {
         </section>
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

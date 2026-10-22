@@ -21,6 +21,7 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
 
   return (
     <>
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       {/* Top Status Banner */}
       <aside
         id="top-operating-banner"

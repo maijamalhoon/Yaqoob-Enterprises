@@ -149,7 +149,7 @@ export function ServicesCatalogView({
   return (
     <div className="w-full pb-20">
       {/* Hero Header Section */}
-      <section className="bg-gradient-to-b from-slate-900 via-[#0B192C] to-slate-900 text-white pt-12 sm:pt-16 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800 relative overflow-hidden">
+      <section className="services-directory-hero bg-gradient-to-b from-slate-900 via-[#0B192C] to-slate-900 text-white pt-12 sm:pt-16 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800 relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -166,7 +166,7 @@ export function ServicesCatalogView({
 
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-300 text-xs font-semibold tracking-wide uppercase mb-4">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Complete Service Directory &amp; Verification Center</span>
+            <span>Service Directory</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight max-w-3xl">
@@ -174,14 +174,14 @@ export function ServicesCatalogView({
           </h1>
 
           <p className="mt-4 text-base sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
-            All major government portal verifications, documentation, ticketing, and everyday digital services in one place.
+            Government services, paperwork, ticketing, and everyday support in one place.
           </p>
 
           {/* Quick stats pills */}
           <div className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-emerald-400 font-medium">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>NADRA e-Sahulat Verified</span>
+              <span>Authorized e-Sahulat Franchise</span>
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-cyan-300 font-medium">
               <Store className="w-4 h-4 text-cyan-400" />
@@ -201,8 +201,9 @@ export function ServicesCatalogView({
                 id="services-search-input"
                 type="text"
                 value={searchQuery}
+                aria-label="Search services"
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search services (e.g., NADRA, FBR, Passport photo, Ticket, Rental agreement, CV, Printing)..."
+                placeholder="Search services..."
                 className="w-full bg-slate-800/95 border border-slate-700 text-white placeholder-slate-400 text-sm sm:text-base rounded-2xl pl-12 pr-11 py-3.5 sm:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/80 focus:border-cyan-500 transition shadow-lg"
               />
               {searchQuery && (
@@ -238,7 +239,7 @@ export function ServicesCatalogView({
       </section>
 
       {/* Main Catalog Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-12">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-12">
         {/* Filters Bar */}
         <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-sm mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -495,10 +496,10 @@ export function ServicesCatalogView({
               Core Service Pillars
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-              Browse services by department
+              Browse by category
             </h2>
             <p className="text-slate-600 text-sm sm:text-base mt-2">
-              Explore our full range of public services categorized by government, legal, ticketing, printing, and digital support.
+              Government, legal, ticketing, printing, and digital support.
             </p>
           </div>
 

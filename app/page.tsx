@@ -12,11 +12,11 @@ import { StitchTrust } from "@/components/stitch-trust";
 import { StitchVisitShop } from "@/components/stitch-visit-shop";
 import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
-import { SITE_URL } from "@/lib/env";
+import { SITE_URL, SUPABASE_URL } from "@/lib/env";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
-  const title = `Yaqoob Enterprises | Printing & Photocopying in Akhtar Colony, Karachi`;
+  const title = `Yaqoob Enterprises | Printing & Photocopy, Karachi`;
   const description = `${settings.business_name} provides printing, photocopying, color printing, notes printing, photo printing, bulk printing and NADRA e-Sahulat services in Akhtar Colony, Karachi.`;
 
   return {
@@ -47,7 +47,7 @@ export default async function HomePage() {
   const { settings, hours, categories, coverage, gallery, services } = await getSiteData();
   const featuredImage = gallery.find((image) => image.is_featured && image.media_kind === "real");
   const imageUrl = featuredImage
-    ? `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
+    ? `${SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
     : "/brand/logo-horizontal.svg";
   const schemaImageUrl = featuredImage ? imageUrl : "/brand/logo-horizontal.svg";
   const hoursText = getCurrentBusinessStatus(hours);
@@ -80,7 +80,7 @@ export default async function HomePage() {
         <StitchFAQ />
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={hoursText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

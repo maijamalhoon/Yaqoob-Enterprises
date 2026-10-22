@@ -37,6 +37,24 @@ function serviceLabel(path: string) {
   return slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 }
 
+function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMessage: string }) {
+  const max = Math.max(1, ...rows.map(([, count]) => count));
+
+  return (
+    <div className="rank-list admin-bar-chart">
+      {rows.map(([label, count]) => {
+        const width = Math.round((count / max) * 100);
+        return (
+          <div key={label} style={{ background: `linear-gradient(90deg, #e5f1f2 ${width}%, #f8fafb ${width}%)` }}>
+            <span>{label}</span><strong>{count}</strong>
+          </div>
+        );
+      })}
+      {rows.length === 0 && <p>{emptyMessage}</p>}
+    </div>
+  );
+}
+
 export default async function AdminAnalyticsPage() {
   const { supabase } = await requireAdmin();
   // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
@@ -151,12 +169,12 @@ export default async function AdminAnalyticsPage() {
       </section>
 
       <div className="admin-two-column admin-insights-grid">
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><div className="rank-list">{contactActions.map(([action, count]) => <div key={action}><span>{action}</span><strong>{count}</strong></div>)}{contactActions.length === 0 && <p>No contact actions yet.</p>}</div></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><div className="rank-list">{serviceInterest.map(([service, count]) => <div key={service}><span>{service}</span><strong>{count}</strong></div>)}{serviceInterest.length === 0 && <p>No service-page views yet.</p>}</div></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><div className="rank-list">{sources.map(([source, count]) => <div key={source}><span>{source}</span><strong>{count}</strong></div>)}{sources.length === 0 && <p>No source data yet.</p>}</div></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><div className="rank-list">{pages.map(([page, count]) => <div key={page}><span>{page}</span><strong>{count}</strong></div>)}{pages.length === 0 && <p>No public data yet.</p>}</div></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><div className="rank-list">{cities.map(([city, count]) => <div key={city}><span>{city}</span><strong>{count}</strong></div>)}{cities.length === 0 && <p>No location data yet.</p>}</div></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MonitorSmartphone size={15} /> Devices</span><h2>Device mix</h2></div></div><div className="rank-list">{devices.map(([device, count]) => <div key={device}><span>{device}</span><strong>{count}</strong></div>)}{devices.length === 0 && <p>No device data yet.</p>}</div></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><InsightBars rows={contactActions} emptyMessage="No contact actions yet." /></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><InsightBars rows={serviceInterest} emptyMessage="No service-page views yet." /></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><InsightBars rows={sources} emptyMessage="No source data yet." /></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><InsightBars rows={pages} emptyMessage="No public data yet." /></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><InsightBars rows={cities} emptyMessage="No location data yet." /></section>
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MonitorSmartphone size={15} /> Devices</span><h2>Device mix</h2></div></div><InsightBars rows={devices} emptyMessage="No device data yet." /></section>
       </div>
     </div>
   );

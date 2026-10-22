@@ -21,7 +21,7 @@ import { SITE_URL } from "@/lib/env";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
-  const homeTitle = `Yaqoob Enterprises | Printing & Photocopying in Akhtar Colony, Karachi`;
+  const homeTitle = `Yaqoob Enterprises | Printing & Photocopy, Karachi`;
   const description = `${settings.business_name} provides printing, photocopying, color printing, notes printing, photo printing, bulk printing and NADRA e-Sahulat services in Akhtar Colony, Karachi.`;
 
   return {

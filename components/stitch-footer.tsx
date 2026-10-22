@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Phone, MapPin, Clock, ArrowUp, MessageCircle, ExternalLink } from "lucide-react";
+import { businessLocationLabel } from "@/lib/business-display";
 import type { BusinessSettings } from "@/lib/types";
 
 interface StitchFooterProps {
   settings: BusinessSettings;
+  statusText: string;
 }
 
-export function StitchFooter({ settings }: StitchFooterProps) {
+export function StitchFooter({ settings, statusText }: StitchFooterProps) {
   const phone = settings.phone_e164 || "+923492568864";
   const whatsappUrl = `https://wa.me/${phone.replace(/\+/g, "")}?text=${encodeURIComponent(
     `Hello ${settings.business_name}, I have an inquiry.`
@@ -15,6 +17,7 @@ export function StitchFooter({ settings }: StitchFooterProps) {
     settings.google_business_profile_url ||
     settings.map_url ||
     "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const locationLabel = businessLocationLabel(settings.address);
 
   return (
     <footer
@@ -64,7 +67,7 @@ export function StitchFooter({ settings }: StitchFooterProps) {
             </Link>
 
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-              Printing, Photocopying &amp; NADRA e-Sahulat Services in Akhtar Colony, Karachi. Serving local residents, students, and businesses with fast, reliable counter and WhatsApp service.
+              Printing, photocopying and NADRA e-Sahulat services in {locationLabel}.
             </p>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -200,12 +203,12 @@ export function StitchFooter({ settings }: StitchFooterProps) {
               <li className="flex items-start gap-2.5 text-xs text-slate-400 pt-1">
                 <MapPin className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
                 <span>
-                  Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi, Pakistan.
+                  {settings.address}
                 </span>
               </li>
               <li className="flex items-center gap-2.5 text-xs text-slate-400">
                 <Clock className="w-4 h-4 text-teal-400 shrink-0" />
-                <span>Mon – Sat: 9:00 AM – 11:00 PM</span>
+                <span>Today: {statusText}</span>
               </li>
             </ul>
           </div>
@@ -215,7 +218,7 @@ export function StitchFooter({ settings }: StitchFooterProps) {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} Yaqoob Enterprises. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <span>Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi</span>
+            <span>{locationLabel}</span>
             <a
               href="#site-header"
               className="inline-flex items-center gap-1.5 text-slate-400 hover:text-teal-400 transition"

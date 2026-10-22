@@ -2,6 +2,8 @@
  * This is the homepage's main customer decision area, tuned mobile-first without changing content or behavior.
  */
 
+.services-directory-hero h1 { color: #fff; }
+
 .minimal-services {
   padding: clamp(3.25rem, 5vw, 4.5rem) 0;
 }

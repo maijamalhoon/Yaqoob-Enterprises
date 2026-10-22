@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV === "development";
+const supabaseUrl = new URL(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kzikyufuyanfjlddyepo.supabase.co",
+);
+const supabaseProtocol = supabaseUrl.protocol === "http:" ? "http" : "https";
+const supabaseOrigin = `${supabaseProtocol}://${supabaseUrl.host}`;
+const supabaseRealtimeOrigin = `${supabaseProtocol === "http" ? "ws" : "wss"}://${supabaseUrl.host}`;
 const scriptSources = ["'self'", "'unsafe-inline'", ...(isDevelopment ? ["'unsafe-eval'"] : [])].join(" ");
 
 const contentSecurityPolicy = [
@@ -8,12 +14,12 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "object-src 'none'",
   "form-action 'self'",
-  "img-src 'self' data: blob: https://kzikyufuyanfjlddyepo.supabase.co https://images.unsplash.com",
-  "media-src 'self' https://kzikyufuyanfjlddyepo.supabase.co",
+  `img-src 'self' data: blob: ${supabaseOrigin} https://images.unsplash.com`,
+  `media-src 'self' ${supabaseOrigin}`,
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   `script-src ${scriptSources}`,
-  "connect-src 'self' https://kzikyufuyanfjlddyepo.supabase.co wss://kzikyufuyanfjlddyepo.supabase.co",
+  `connect-src 'self' ${supabaseOrigin} ${supabaseRealtimeOrigin}`,
   "worker-src 'self' blob:",
   "manifest-src 'self'",
   "upgrade-insecure-requests",
@@ -25,8 +31,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "kzikyufuyanfjlddyepo.supabase.co",
+        protocol: supabaseProtocol,
+        hostname: supabaseUrl.hostname,
+        ...(supabaseUrl.port ? { port: supabaseUrl.port } : {}),
         pathname: "/storage/v1/object/public/**",
       },
       {

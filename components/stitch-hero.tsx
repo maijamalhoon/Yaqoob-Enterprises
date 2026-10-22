@@ -50,17 +50,17 @@ export function StitchHero({ settings, statusText, locationLabel, gallery }: Sti
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.12]">
-              Printing, Photocopying &amp; NADRA e-Sahulat Services in Akhtar Colony
+              Printing, Photocopy &amp; NADRA e-Sahulat in Akhtar Colony
             </h1>
 
             {/* Supporting Text Pill / Tagline */}
             <p className="text-xs sm:text-sm font-bold text-slate-700 bg-slate-100/90 px-3.5 py-2 rounded-xl border border-slate-200/80 leading-normal">
-              Color &amp; B&amp;W Printing • Photocopying • Notes Printing • Photo Printing • Bulk Printing • Biometric Services
+              Color &amp; B&amp;W printing • Photocopying • Notes • Passport photos • Bulk orders • Biometrics
             </p>
 
             {/* Value Proposition */}
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Serving Akhtar Colony, Karachi with walk-in laser printing, photocopy, student notes, passport photos, and authorized NADRA e-Sahulat biometric verifications. Send your documents on WhatsApp before visiting for zero waiting time.
+              Visit our Akhtar Colony shop for printing, photocopying, notes, passport photos, and NADRA e-Sahulat biometrics. Send your documents on WhatsApp before you visit.
             </p>
 
             {/* Primary & Secondary CTAs */}

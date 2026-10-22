@@ -35,9 +35,9 @@ type CategoryOverride = {
 const categoryOverrides: Record<string, CategoryOverride> = {
   "printing-photos": {
     heading: (location) => `Printing, Photocopy, Scanning & Photos in ${location}`,
-    title: (businessName) => `Printing, Photocopy & Passport Photos Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `Printing, Copy & Photos Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Colour and black-and-white printing, photocopy, document scanning to PDF, and urgent 5-minute passport photos at ${businessName} in ${location}. Send files via WhatsApp for instant print.`,
+      `Colour and black-and-white printing, photocopy, document scanning to PDF, and passport photos at ${businessName} in ${location}. Send files via WhatsApp to request printing.`,
     keywords: [
       "color print akhtar colony",
       "photocopy near me karachi",
@@ -49,7 +49,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   "typing-online": {
     heading: (location) => `Online Jobs, Forms, Typing & CV Services in ${location}`,
-    title: (businessName) => `Online Jobs, Forms, Typing & CV Preparation Karachi | ${businessName}`,
+    title: (businessName) => `Online Forms, Typing & CVs Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Online job applications, admissions, government forms, Urdu and English typing, and CV/resume preparation at ${businessName} in ${location}. Error-free application filing.`,
     keywords: [
@@ -62,7 +62,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   documents: {
     heading: (location) => `Agreements & Legal Document Preparation in ${location}`,
-    title: (businessName) => `Rent Agreement & Stamp Paper Typing Karachi | ${businessName}`,
+    title: (businessName) => `Agreement Typing Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Residential rent agreements, commercial contracts, vehicle sale deeds, affidavits, and legal document typing on stamp paper at ${businessName} in ${location}.`,
     keywords: [
@@ -75,7 +75,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   biometric: {
     heading: (location) => `NADRA e-Sahulat & Biometric Verification in ${location}`,
-    title: (businessName) => `NADRA e-Sahulat & Biometric Verification Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `NADRA e-Sahulat & Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `NADRA e-Sahulat biometric verification center in ${location}. General biometric, FBR Sales Tax, Pakistan Single Window (PSW), and Vehicle / ETO transfer biometrics at ${businessName}.`,
     keywords: [
@@ -89,7 +89,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   payments: {
     heading: (location) => `Cash Deposit, Withdrawal & Money Transfer in ${location}`,
-    title: (businessName) => `Cash Deposit, Withdrawal & Money Transfer Karachi | ${businessName}`,
+    title: (businessName) => `Cash & Money Transfer Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Supported cash deposit, withdrawal, utility bill payments, and domestic money transfers at ${businessName} in ${location}. Fast and secure counter service.`,
     keywords: [
@@ -101,7 +101,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   tickets: {
     heading: (location) => `Railway, Bus & Airline Ticket Assistance in ${location}`,
-    title: (businessName) => `Railway, Bus & Airline Ticket Booking Karachi | ${businessName}`,
+    title: (businessName) => `Train, Bus & Air Tickets Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Pakistan Railway train tickets, intercity bus bookings (Daewoo, Faisal Movers), and airline ticket reservation assistance at ${businessName} in ${location}.`,
     keywords: [
@@ -113,7 +113,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   retail: {
     heading: (location) => `Stationery & Mobile Accessories in ${location}`,
-    title: (businessName) => `Stationery & Mobile Accessories Akhtar Colony | ${businessName}`,
+    title: (businessName) => `Stationery & Mobile Accessories Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Everyday office and school stationery, registers, files, plus mobile phone chargers, data cables, and handsfree accessories at ${businessName} in ${location}.`,
     keywords: [
@@ -125,7 +125,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   laptop: {
     heading: (location) => `Laptop, Windows & Software Support in ${location}`,
-    title: (businessName) => `Laptop, Windows & Software Support Karachi | ${businessName}`,
+    title: (businessName) => `Laptop & Windows Support Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Windows 10/11 installation, hardware drivers, essential software setup, and laptop troubleshooting at ${businessName} in ${location}.`,
     keywords: [
@@ -136,7 +136,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   "web-development-seo": {
     heading: (location) => `Web Development & Local SEO Services in ${location}`,
-    title: (businessName) => `Website Development & Local SEO Services Karachi | ${businessName}`,
+    title: (businessName) => `Web Development & SEO Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Professional business websites, Next.js web applications, Google Maps optimization, and local SEO services by ${businessName} in ${location}. Increase online business leads.`,
     keywords: [
@@ -152,16 +152,16 @@ const categoryOverrides: Record<string, CategoryOverride> = {
 const serviceOverrides: Record<string, ServiceOverride> = {
   "colour-black-white-printing": {
     heading: (location) => `Printing, Photocopy & Document Scanning in ${location}`,
-    title: (businessName) => `Color & B&W Printing, Photocopy & Scanning Akhtar Colony | ${businessName}`,
+    title: (businessName) => `Color & B&W Printing, Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `High-speed color and black-and-white laser printing, bulk photocopies, and multi-page document scanning to PDF at ${businessName} in ${location}. Send files via WhatsApp for instant print.`,
+      `Color and black-and-white laser printing, bulk photocopies, and document scanning to PDF at ${businessName} in ${location}. Send files via WhatsApp to request printing.`,
     intro:
-      "Handle all your everyday printing, photocopying, and document scanning in one convenient local spot. Send digital files via WhatsApp for instant pickup, or bring physical originals for clean, high-resolution copying and scanning.",
+      "Handle everyday printing, photocopying, and document scanning in one local shop. Send digital files via WhatsApp before visiting, or bring physical originals for copying and scanning.",
     commonRequests: [
       "A4 and Legal black-and-white & high-resolution color laser prints",
       "Photocopies of CNIC, forms, certificates, and academic documents",
       "Multi-page document scanning converted to searchable PDF",
-      "Direct WhatsApp document printing for zero wait time",
+      "WhatsApp document printing requests",
     ],
     urduNote: "واٹس ایپ پر فائل پہلے بھیج دیں تاکہ دکان پر پہنچتے ہی آپ کا پرنٹ تیار ملے۔ (A4 اور لیگل سائز، کلر اور بلیک اینڈ وائٹ دستیاب ہے)",
     keywords: [
@@ -190,7 +190,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "photocopy-scanning": {
     heading: (location) => `Photocopy & Document Scanning in ${location}`,
-    title: (businessName) => `Photocopy & Document Scanning Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `Photocopy & Scanning Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Photocopy and document scanning services at ${businessName} in ${location}. Clear double-sided copies and PDF conversion delivered via WhatsApp or email.`,
     intro:
@@ -216,7 +216,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "passport-size-photos": {
     heading: (location) => `Urgent Passport-Size Photos in ${location}`,
-    title: (businessName) => `Passport Size Photos (5 Min) Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `Passport Photos in Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Instant 5-minute passport-size photos with white or blue backgrounds at ${businessName} in ${location}. Compliant with Pakistani passports, CNIC, driving license, and visa specs.`,
     intro:
@@ -250,7 +250,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "urdu-english-typing": {
     heading: (location) => `Urdu & English Typing & CV Preparation in ${location}`,
-    title: (businessName) => `Urdu & English Typing & Professional CV Maker Karachi | ${businessName}`,
+    title: (businessName) => `Urdu & English Typing, Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Professional Urdu inpage and English typing, resume and CV formatting, job application letters, and document typing at ${businessName} in ${location}.`,
     intro:
@@ -283,7 +283,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "online-forms-applications": {
     heading: (location) => `Online Jobs, Forms & Admissions Assistance in ${location}`,
-    title: (businessName) => `Online Job Apply, Forms & Admissions Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `Online Forms & Applications Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Complete assistance with online job applications (STS, PTS, FPSC, SPSC), university admissions, document resizing, and fee challan generation at ${businessName} in ${location}.`,
     intro:
@@ -316,7 +316,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "cv-preparation": {
     heading: (location) => `CV Preparation & Formatting in ${location}`,
-    title: (businessName) => `Professional CV Preparation Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `CV Preparation in Karachi | ${businessName}`,
     description: (location, businessName) =>
       `CV preparation, resume formatting, and modern template design at ${businessName} in ${location}. Clean, job-ready CVs printed and shared via WhatsApp.`,
     intro:
@@ -330,7 +330,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "fbr-registration-assistance": {
     heading: (location) => `FBR Filer & Tax Assistance in ${location}`,
-    title: (businessName) => `FBR NTN & Filer Assistance Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `FBR NTN & Filer Help Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Assistance with FBR NTN registration, Iris portal guidance, and tax filing documentation support at ${businessName} in ${location}.`,
     intro:
@@ -344,7 +344,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "agreements-document-preparation": {
     heading: (location) => `Rental & Sale Agreements on Stamp Paper in ${location}`,
-    title: (businessName) => `Rent Agreement & Stamp Paper Typing Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `Rent Agreement Typing Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Residential rent agreements (Kirayanama), commercial shop agreements, vehicle sale deeds, affidavits (Bayan-e-Halfi), and legal document typing on stamp paper at ${businessName} in ${location}.`,
     intro:
@@ -378,7 +378,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "general-biometric-esahulat": {
     heading: (location) => `NADRA e-Sahulat Biometric Verifications in ${location}`,
-    title: (businessName) => `NADRA e-Sahulat & Biometric Center Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `NADRA Biometric Verification Karachi | ${businessName}`,
     description: (location, businessName) =>
       `NADRA e-Sahulat biometric verification center in ${location}. General biometric, FBR Sales Tax biometric, Pakistan Single Window (PSW), and Vehicle / ETO biometric transfer at ${businessName}.`,
     intro:
@@ -424,7 +424,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "fbr-sales-tax-biometric": {
     heading: (location) => `FBR Sales Tax Biometric Verification in ${location}`,
-    title: (businessName) => `FBR Sales Tax Biometric Verification Akhtar Colony Karachi | ${businessName}`,
+    title: (businessName) => `FBR Sales Tax Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `FBR Sales Tax biometric verification support at ${businessName} in ${location}. Complete your mandatory 30-day post-registration biometric verification at our NADRA e-Sahulat counter.`,
     intro:
@@ -456,7 +456,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "fbr-psw-biometric": {
     heading: (location) => `PSW Biometric Verification in ${location}`,
-    title: (businessName) => `PSW Pakistan Single Window Biometric Karachi | ${businessName}`,
+    title: (businessName) => `PSW Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Pakistan Single Window (PSW) subscription and renewal biometric verification at ${businessName} in ${location}. Fast e-Sahulat counter verification.`,
     intro:
@@ -477,7 +477,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "eto-vehicle-biometric": {
     heading: (location) => `Vehicle & ETO Biometric Verification in ${location}`,
-    title: (businessName) => `Vehicle Transfer Biometric Verification Karachi | ${businessName}`,
+    title: (businessName) => `Vehicle Transfer Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Car and motorcycle transfer biometric verification for buyer and seller at ${businessName} in ${location}. Authorized NADRA e-Sahulat system verification.`,
     intro:
@@ -510,7 +510,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "cash-deposit-withdrawal-transfer": {
     heading: (location) => `Cash Deposit, Withdrawal & Money Transfer in ${location}`,
-    title: (businessName) => `Cash Deposit, Withdrawal & Money Transfer Karachi | ${businessName}`,
+    title: (businessName) => `Cash Deposit & Transfer Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Supported cash deposits, cash withdrawals, utility bill payments, and domestic money transfers at ${businessName} in ${location}. Instant printed receipts.`,
     intro:
@@ -538,7 +538,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "railway-airline-bus-tickets": {
     heading: (location) => `Railway, Bus & Airline Ticket Booking in ${location}`,
-    title: (businessName) => `Pakistan Railway, Bus & Airline Ticket Booking Karachi | ${businessName}`,
+    title: (businessName) => `Train, Bus & Airline Tickets Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Pakistan Railway train tickets (Green Line, Tezgam, Karakoram, Awam Express), intercity bus tickets (Daewoo, Faisal Movers), and airline ticket booking at ${businessName} in ${location}.`,
     intro:
@@ -571,7 +571,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "stationery-mobile-accessories": {
     heading: (location) => `Stationery & Mobile Accessories in ${location}`,
-    title: (businessName) => `Stationery & Mobile Accessories Shop Akhtar Colony | ${businessName}`,
+    title: (businessName) => `Stationery & Mobile Accessories Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Everyday office and school stationery, files, registers, pens, paper, plus high-speed mobile chargers, Type-C cables, handsfree, and phone accessories at ${businessName} in ${location}.`,
     intro:
@@ -591,7 +591,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "windows-software-support": {
     heading: (location) => `Laptop, Windows & Software Support in ${location}`,
-    title: (businessName) => `Windows Setup & Laptop Software Support Akhtar Colony | ${businessName}`,
+    title: (businessName) => `Windows & Laptop Setup Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Clean Windows 10/11 installation, hardware driver updates, MS Office setup, and basic laptop software troubleshooting at ${businessName} in ${location}.`,
     intro:
@@ -611,7 +611,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "website-development-full-stack-seo": {
     heading: (location) => `Website Development, Full-Stack & Local SEO Services in ${location}`,
-    title: (businessName) => `Website Development & Local SEO Services Karachi | ${businessName}`,
+    title: (businessName) => `Web Development & SEO Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Modern business websites, full-stack Next.js web applications, Google Business Profile ranking, and local SEO services by ${businessName} in ${location}. Get more local and international clients.`,
     intro:

@@ -3,6 +3,7 @@ import { Eye, EyeOff, ImagePlus, Star } from "lucide-react";
 import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { OptimizedImageInput } from "@/components/optimized-image-input";
 import { requireAdmin } from "@/lib/admin";
+import { SUPABASE_URL } from "@/lib/env";
 import { deleteGalleryImage, updateGalleryImage, uploadGalleryImage } from "./actions";
 
 export default async function AdminGalleryPage() {
@@ -42,7 +43,7 @@ export default async function AdminGalleryPage() {
 
       <section className="admin-media-grid">
         {imageList.map((image) => {
-          const url = `https://kzikyufuyanfjlddyepo.supabase.co/storage/v1/object/public/shop-media/${image.storage_path}`;
+          const url = `${SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/shop-media/${image.storage_path}`;
           const isHomepageImage = image.is_featured && image.is_active && image.media_kind === "real";
           return (
             <article className={`admin-media-card ${isHomepageImage ? "is-featured" : ""}`} key={image.id}>

@@ -19,9 +19,10 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "About Yaqoob Enterprises | Print, Copy & Biometrics in Akhtar Colony, Karachi",
+  title: "About the Shop | Printing & Biometrics",
   description:
     "Learn about Yaqoob Enterprises, an established physical print, photocopy, and NADRA e-Sahulat biometric shop located at Plot 7, Street 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi.",
   alternates: {
@@ -94,11 +95,11 @@ export default async function AboutPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(aboutSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -319,7 +320,7 @@ export default async function AboutPage() {
         </section>
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

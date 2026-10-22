@@ -16,9 +16,10 @@ import { CopyableAddress } from "@/components/copyable-address";
 import { TrackedLink } from "@/components/tracked-link";
 import { formatBusinessHours, getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Contact & Location | Yaqoob Enterprises Karachi",
+  title: "Contact & Location in Karachi",
   description:
     "Visit Yaqoob Enterprises at Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi. Phone: +92 349 2568864. Call, WhatsApp, or get directions.",
   alternates: {
@@ -89,11 +90,11 @@ export default async function ContactPage() {
     <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(contactSchema) }}
       />
 
       <StitchHeader settings={settings} statusText={statusText} />
@@ -296,7 +297,7 @@ export default async function ContactPage() {
         <StitchQuickRequest settings={settings} services={services} />
       </main>
 
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

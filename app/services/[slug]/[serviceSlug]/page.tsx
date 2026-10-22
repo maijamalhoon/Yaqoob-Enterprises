@@ -29,10 +29,7 @@ import {
 import { SITE_URL } from "@/lib/env";
 import { getCustomerServiceModes } from "@/lib/service-availability";
 import { getServiceSeo } from "@/lib/service-seo";
-
-function jsonLd(value: unknown) {
-  return JSON.stringify(value).replace(/</g, "\\u003c");
-}
+import { serializeJsonLd } from "@/lib/structured-data";
 
 function statusLabel(status: string) {
   if (status === "active") return "Available";
@@ -197,9 +194,9 @@ export default async function PublicServicePage({
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(serviceData) }} />
-      {faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqData) }} />}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceData) }} />
+      {faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />}
       <SiteHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">
         <section className="seo-service-hero">

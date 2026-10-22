@@ -23,6 +23,8 @@ import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl }
 import { getActiveServiceCategorySlugs } from "@/lib/public-category-slugs";
 import { getCustomerServiceModes } from "@/lib/service-availability";
 import { getCategorySeo } from "@/lib/service-seo";
+import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 function serviceAction(status: string, title: string, businessName: string) {
   if (status === "active") {
@@ -120,14 +122,15 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   const serviceCount = category.services?.length || 0;
   const statusText = getCurrentBusinessStatus(site.hours);
   const seo = getCategorySeo(category, site.settings);
+  const siteUrl = SITE_URL.replace(/\/$/, "");
 
   const breadcrumbData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://yaqoobenterprises.com" },
-      { "@type": "ListItem", position: 2, name: "Services", item: "https://yaqoobenterprises.com/services" },
-      { "@type": "ListItem", position: 3, name: category.title, item: `https://yaqoobenterprises.com/services/${category.slug}` },
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${siteUrl}/services` },
+      { "@type": "ListItem", position: 3, name: category.title, item: `${siteUrl}/services/${category.slug}` },
     ],
   };
 
@@ -141,7 +144,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
       position: idx + 1,
       name: service.title,
       description: service.short_description,
-      url: `https://yaqoobenterprises.com/services/${category.slug}/${service.slug}`,
+      url: `${siteUrl}/services/${category.slug}/${service.slug}`,
     })),
   };
 
@@ -149,11 +152,11 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListData).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListData) }}
       />
       <SiteHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">

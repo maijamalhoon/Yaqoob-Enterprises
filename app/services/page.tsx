@@ -5,9 +5,10 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { ServicesCatalogView } from "@/components/services-catalog-view";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "What can we help with? | All Services | Yaqoob Enterprises Karachi",
+  title: "Services Directory in Akhtar Colony",
   description:
     "All major government portal verifications, documentation, ticketing, and everyday digital services in one place. NADRA e-Sahulat, FBR tax, agreements, and urgent printing in Akhtar Colony, Karachi.",
   alternates: {
@@ -53,7 +54,7 @@ export default async function ServicesPage() {
     <div className="min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white flex flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <StitchHeader settings={settings} statusText={statusText} />
       <div className="flex-1">
@@ -64,7 +65,7 @@ export default async function ServicesPage() {
           statusText={statusText}
         />
       </div>
-      <StitchFooter settings={settings} />
+      <StitchFooter settings={settings} statusText={statusText} />
       <StitchFloatingActions settings={settings} />
     </div>
   );

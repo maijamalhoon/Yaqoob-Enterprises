@@ -2,6 +2,7 @@ import { SITE_URL } from "@/lib/env";
 import { businessCity, businessLocationLabel } from "@/lib/business-display";
 import { getHourPeriods } from "@/lib/data";
 import { FAQ_ITEMS } from "@/lib/faq-data";
+import { serializeJsonLd } from "@/lib/structured-data";
 import type { BusinessHour, BusinessSettings, CoverageArea, ServiceCategory } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -9,10 +10,6 @@ const socialProfiles = [
   "https://www.facebook.com/yaqoobenterprises1",
   "https://www.instagram.com/yaqoobenterprises1/",
 ];
-
-function jsonLd(value: unknown) {
-  return JSON.stringify(value).replace(/</g, "\\u003c");
-}
 
 export function LocalBusinessSchema({
   settings,
@@ -134,9 +131,9 @@ export function LocalBusinessSchema({
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(businessData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(websiteData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(businessData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />
     </>
   );
 }
