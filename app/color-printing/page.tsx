@@ -21,43 +21,43 @@ import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Color Printing in Akhtar Colony",
+  title: "Color Printing & Photocopying in Karachi",
   description:
-    "Color laser printing and photocopying in Akhtar Colony, Karachi. Clear prints for reports, certificates, presentations, forms, and charts. Send files on WhatsApp before visiting.",
+    "Color printing and photocopying in Akhtar Colony, Karachi. Print school, college, and university assignments, notes, and documents. Ask about discounted bulk rates.",
   alternates: {
     canonical: `${SITE_URL}/color-printing`,
   },
   openGraph: {
-    title: "Color Printing & Color Photocopy in Akhtar Colony, Karachi | Yaqoob Enterprises",
+    title: "Color Printing & Photocopying in Karachi | Yaqoob Enterprises",
     description:
-      "Vibrant color laser printing and color photocopy in Akhtar Colony, Karachi. For certificates, assignments, and presentations. Send files on WhatsApp.",
+      "Color printing and color photocopies for school, college, and university work. Ask about discounted rates for bulk orders.",
     url: `${SITE_URL}/color-printing`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Color Printing & Color Photocopy in Akhtar Colony, Karachi | Yaqoob Enterprises",
+    title: "Color Printing & Photocopying in Karachi | Yaqoob Enterprises",
     description:
-      "Vibrant color laser printing and color photocopy in Akhtar Colony, Karachi. For certificates, assignments, and presentations.",
+      "Color printing and photocopying for assignments, notes, and documents in Akhtar Colony, Karachi.",
   },
 };
 
 const COLOR_FAQS = [
   {
     q: "What digital formats are best for color printing?",
-    a: "PDF files are the most reliable format because they preserve exact fonts, margins, page breaks, and color gamuts. High-resolution JPG or PNG images and Microsoft Word (.docx) files are also supported.",
+    a: "PDF is recommended. JPG, PNG, and Word files are also accepted.",
   },
   {
     q: "Can you photocopy a color certificate or diagram?",
-    a: "Yes. Our digital color copiers reproduce color certificates, official stamps, colored logos, and educational diagrams with clear, accurate tone separation.",
+    a: "Yes. We make color copies of certificates, logos, and educational diagrams.",
   },
   {
     q: "What paper do you recommend for color presentations and certificates?",
-    a: "For standard documents and slides, our 80 GSM bright white paper is standard. For certificates or special title pages, we also have heavier cardstock options available on request.",
+    a: "We use 80 GSM paper for standard prints. Ask us about heavier paper for certificates.",
   },
   {
     q: "Can I print just one or two color pages from a large document?",
-    a: "Yes! Many students and offices have documents that are mostly black & white with only a few color pages (such as graphs or cover pages). We can print specific pages in color and the rest in black & white to save costs.",
+    a: "Yes. Tell us which pages you need in color; we can print the rest in black-and-white.",
   },
 ];
 
@@ -89,7 +89,7 @@ export default async function ColorPrintingPage() {
     name: "Color Printing & Color Photocopy in Akhtar Colony, Karachi",
     serviceType: "Color Laser Printing",
     description:
-      "Color laser printing and color photocopying for documents, presentations, certificates, and forms in Akhtar Colony, Karachi.",
+      "Color printing and photocopying in Akhtar Colony, Karachi, including school, college, and university notes and assignments.",
     url: pageUrl,
     provider: {
       "@type": "LocalBusiness",
@@ -157,15 +157,15 @@ export default async function ColorPrintingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Color Printing &amp; Color Photocopying in Akhtar Colony
+                Color Printing &amp; Copies
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Clean, vibrant color laser printing and sharp color photocopying for your important presentation slides, certificates, academic projects, and official color forms.
+                Color prints and copies for documents, presentations and student work. Ask about bulk discounts.
               </p>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -183,7 +183,7 @@ export default async function ColorPrintingPage() {
                   className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  <span>SEND DOCUMENT ON WHATSAPP</span>
+                  <span>SEND ON WHATSAPP</span>
                 </TrackedLink>
 
                 <TrackedLink
@@ -200,7 +200,7 @@ export default async function ColorPrintingPage() {
 
               <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Open for Walk-ins: {statusText || "Open daily until 11:00 PM"}</span>
+                <span>Open for Walk-ins: {statusText || "Hours available on WhatsApp"}</span>
               </div>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default async function ColorPrintingPage() {
                 Real Use Cases for Color Printing &amp; Copying
               </h2>
               <p className="text-sm text-slate-600 mt-2">
-                We produce clean color reproductions on high-grade paper for diverse personal and professional needs.
+                Color prints and copies for study, work, and everyday needs.
               </p>
             </div>
 
@@ -228,7 +228,7 @@ export default async function ColorPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Certificates &amp; Diplomas</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Clear color printing for completion certificates, training awards, and color reproductions of official diplomas.
+                  Color prints and copies of certificates and diplomas.
                 </p>
               </div>
 
@@ -238,7 +238,7 @@ export default async function ColorPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Presentations &amp; Pitch Decks</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  PowerPoint slides, charts, infographics, and project proposals where color distinction is vital for readers.
+                  Slides, charts, and project proposals.
                 </p>
               </div>
 
@@ -248,7 +248,7 @@ export default async function ColorPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Assignments &amp; Thesis Projects</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Color diagrams, scientific illustrations, architectural layouts, and graphical figures for university assignments.
+                  Color pages for school, college, and university assignments.
                 </p>
               </div>
 
@@ -258,7 +258,7 @@ export default async function ColorPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Official Color Forms</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Visa applications, embassy submissions, color-coded medical reports, and registration vouchers.
+                  Color printing for official forms and reports.
                 </p>
               </div>
 
@@ -268,7 +268,7 @@ export default async function ColorPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Color Photocopying</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Exact duplicate copies of colored documents, original stamps, identity cards, and colored brochures.
+                  Color copies of documents and study materials.
                 </p>
               </div>
 
@@ -278,7 +278,7 @@ export default async function ColorPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Office Materials &amp; Manuals</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Company catalogs, training handouts, procedural guidelines, and client-facing flyers.
+                  Color printing for manuals, handouts, and brochures.
                 </p>
               </div>
             </div>

@@ -17,7 +17,7 @@ import { SITE_URL, SUPABASE_URL } from "@/lib/env";
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
   const title = `Yaqoob Enterprises | Printing & Photocopy, Karachi`;
-  const description = `${settings.business_name} provides printing, photocopying, color printing, notes printing, photo printing, bulk printing and NADRA e-Sahulat services in Akhtar Colony, Karachi.`;
+  const description = `Printing, photocopying, notes, passport photos and NADRA e-Sahulat at ${settings.business_name} in Akhtar Colony, Karachi.`;
 
   return {
     title: {
@@ -54,7 +54,7 @@ export default async function HomePage() {
   const locationLabel = businessLocationLabel(settings.address);
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white pb-20 md:pb-0">
+    <div id="home-page" className="min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white pb-20 md:pb-0">
       <LocalBusinessSchema
         settings={settings}
         hours={hours}

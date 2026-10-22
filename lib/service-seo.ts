@@ -34,10 +34,10 @@ type CategoryOverride = {
 
 const categoryOverrides: Record<string, CategoryOverride> = {
   "printing-photos": {
-    heading: (location) => `Printing, Photocopy, Scanning & Photos in ${location}`,
+    heading: () => "Printing, Photocopy & Photos",
     title: (businessName) => `Printing, Copy & Photos Karachi | ${businessName}`,
-    description: (location, businessName) =>
-      `Colour and black-and-white printing, photocopy, document scanning to PDF, and passport photos at ${businessName} in ${location}. Send files via WhatsApp to request printing.`,
+    description: (location) =>
+      `Printing, photocopying, photo printing and document scanning in ${location}. Bulk notes and assignments are discounted.`,
     keywords: [
       "color print akhtar colony",
       "photocopy near me karachi",
@@ -45,13 +45,15 @@ const categoryOverrides: Record<string, CategoryOverride> = {
       "passport photos 5 minutes karachi",
       "printing shop near jamia masjid muhammadi",
       "urgent color printout akhtar colony",
+      "bulk notes and assignment printing karachi",
+      "late night printing akhtar colony",
     ],
   },
   "typing-online": {
-    heading: (location) => `Online Jobs, Forms, Typing & CV Services in ${location}`,
+    heading: () => "Online Forms, Typing & CVs",
     title: (businessName) => `Online Forms, Typing & CVs Karachi | ${businessName}`,
-    description: (location, businessName) =>
-      `Online job applications, admissions, government forms, Urdu and English typing, and CV/resume preparation at ${businessName} in ${location}. Error-free application filing.`,
+    description: (location) =>
+      `Help with job and admission forms, Urdu and English typing, and CVs in ${location}.`,
     keywords: [
       "online job apply karachi",
       "spsc fpsc form apply akhtar colony",
@@ -61,10 +63,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     ],
   },
   documents: {
-    heading: (location) => `Agreements & Legal Document Preparation in ${location}`,
+    heading: () => "Agreements & Document Typing",
     title: (businessName) => `Agreement Typing Karachi | ${businessName}`,
-    description: (location, businessName) =>
-      `Residential rent agreements, commercial contracts, vehicle sale deeds, affidavits, and legal document typing on stamp paper at ${businessName} in ${location}.`,
+    description: (location) =>
+      `Typing and formatting for rental agreements, vehicle sale documents and affidavits in ${location}.`,
     keywords: [
       "rent agreement typing akhtar colony",
       "kirayanama karachi",
@@ -74,10 +76,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     ],
   },
   biometric: {
-    heading: (location) => `NADRA e-Sahulat & Biometric Verification in ${location}`,
+    heading: () => "NADRA e-Sahulat Biometrics",
     title: (businessName) => `NADRA e-Sahulat & Biometrics Karachi | ${businessName}`,
-    description: (location, businessName) =>
-      `NADRA e-Sahulat biometric verification center in ${location}. General biometric, FBR Sales Tax, Pakistan Single Window (PSW), and Vehicle / ETO transfer biometrics at ${businessName}.`,
+    description: (location) =>
+      `Biometric verification for supported e-Sahulat, FBR, PSW and vehicle-transfer cases in ${location}.`,
     keywords: [
       "nadra e-sahulat akhtar colony",
       "biometric verification karachi",
@@ -88,10 +90,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     ],
   },
   payments: {
-    heading: (location) => `Cash Deposit, Withdrawal & Money Transfer in ${location}`,
+    heading: () => "Cash, Bills & Money Transfers",
     title: (businessName) => `Cash & Money Transfer Karachi | ${businessName}`,
-    description: (location, businessName) =>
-      `Supported cash deposit, withdrawal, utility bill payments, and domestic money transfers at ${businessName} in ${location}. Fast and secure counter service.`,
+    description: (location) =>
+      `Supported cash deposits, withdrawals, bill payments and domestic transfers in ${location}.`,
     keywords: [
       "cash deposit withdrawal akhtar colony",
       "money transfer karachi",
@@ -100,10 +102,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     ],
   },
   tickets: {
-    heading: (location) => `Railway, Bus & Airline Ticket Assistance in ${location}`,
+    heading: () => "Train, Bus & Airline Tickets",
     title: (businessName) => `Train, Bus & Air Tickets Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Pakistan Railway train tickets, intercity bus bookings (Daewoo, Faisal Movers), and airline ticket reservation assistance at ${businessName} in ${location}.`,
+      `Ticket booking assistance for train, bus and air travel at ${businessName} in ${location}.`,
     keywords: [
       "pakistan railway ticket booking karachi",
       "train ticket akhtar colony",
@@ -112,7 +114,7 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     ],
   },
   retail: {
-    heading: (location) => `Stationery & Mobile Accessories in ${location}`,
+    heading: () => "Stationery & Mobile Accessories",
     title: (businessName) => `Stationery & Mobile Accessories Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Everyday office and school stationery, registers, files, plus mobile phone chargers, data cables, and handsfree accessories at ${businessName} in ${location}.`,
@@ -135,10 +137,10 @@ const categoryOverrides: Record<string, CategoryOverride> = {
     ],
   },
   "web-development-seo": {
-    heading: (location) => `Web Development & Local SEO Services in ${location}`,
+    heading: () => "Website Development & SEO",
     title: (businessName) => `Web Development & SEO Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Professional business websites, Next.js web applications, Google Maps optimization, and local SEO services by ${businessName} in ${location}. Increase online business leads.`,
+      `Business websites, web apps, redesign, maintenance and SEO support from ${businessName} in ${location}.`,
     keywords: [
       "website developer karachi",
       "seo services karachi",
@@ -151,16 +153,17 @@ const categoryOverrides: Record<string, CategoryOverride> = {
 
 const serviceOverrides: Record<string, ServiceOverride> = {
   "colour-black-white-printing": {
-    heading: (location) => `Printing, Photocopy & Document Scanning in ${location}`,
+    heading: () => "Printing, Copies & Scanning",
     title: (businessName) => `Color & B&W Printing, Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Color and black-and-white laser printing, bulk photocopies, and document scanning to PDF at ${businessName} in ${location}. Send files via WhatsApp to request printing.`,
+      `Color and black-and-white printing, photocopying, bulk notes and assignments at discounted rates, and document scanning at ${businessName} in ${location}.`,
     intro:
-      "Handle everyday printing, photocopying, and document scanning in one local shop. Send digital files via WhatsApp before visiting, or bring physical originals for copying and scanning.",
+      "Bulk notes and assignments for schools, colleges and universities are available at discounted rates. We also print, photocopy and scan documents to PDF.",
     commonRequests: [
       "A4 and Legal black-and-white & high-resolution color laser prints",
+      "Bulk notes and assignments for schools, colleges, and universities",
       "Photocopies of CNIC, forms, certificates, and academic documents",
-      "Multi-page document scanning converted to searchable PDF",
+      "Multi-page document scans saved as PDF",
       "WhatsApp document printing requests",
     ],
     urduNote: "واٹس ایپ پر فائل پہلے بھیج دیں تاکہ دکان پر پہنچتے ہی آپ کا پرنٹ تیار ملے۔ (A4 اور لیگل سائز، کلر اور بلیک اینڈ وائٹ دستیاب ہے)",
@@ -176,15 +179,19 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "Can I send documents on WhatsApp for printing before visiting?",
-        answer: "Yes! You can WhatsApp your PDF or image files to +92 349 2568864. Tell us whether you need color or black & white, paper size (A4 or Legal), and quantity. Your printouts will be ready when you walk into the shop.",
+        answer: "Send your file, color, paper size, and quantity on WhatsApp. We will confirm the price and pickup time.",
       },
       {
         question: "What printing sizes and paper qualities are available?",
-        answer: "We support standard A4 and Legal paper sizes for both black-and-white laser prints and high-density color prints, as well as bulk photocopies.",
+        answer: "A4 and Legal sizes are available for black-and-white and color printing. Ask us to confirm paper options for your order.",
       },
       {
         question: "Where is Yaqoob Enterprises located for printing in Akhtar Colony?",
-        answer: "We are located at Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi.",
+        answer: "Find us at Plot 7, Street 1, Sector B, near Jamia Masjid Muhammadi, Akhtar Colony, Karachi.",
+      },
+      {
+        question: "Is late-night printing available?",
+        answer: "Late-night printing is available until closing. Message us on WhatsApp to confirm availability and pickup time.",
       },
     ],
   },
@@ -215,12 +222,12 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "passport-size-photos": {
-    heading: (location) => `Urgent Passport-Size Photos in ${location}`,
+    heading: () => "Passport-Size Photos",
     title: (businessName) => `Passport Photos in Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Instant 5-minute passport-size photos with white or blue backgrounds at ${businessName} in ${location}. Compliant with Pakistani passports, CNIC, driving license, and visa specs.`,
+      `Passport-size photos with white or blue backgrounds for CNICs, passports, visas and applications at ${businessName} in ${location}.`,
     intro:
-      "Get crisp, studio-lit passport-size photos taken and printed in 5 to 10 minutes. Perfect for school and college admissions, driving license, job applications, government portals, and visa applications.",
+      "Passport-size photos for admissions, licences, job forms and visas. Ask about current turnaround time.",
     commonRequests: [
       "Urgent passport-size photos with crisp white background",
       "Standard blue-background photos for admissions and government forms",
@@ -240,21 +247,21 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "How long does it take to print passport-size photos?",
-        answer: "Our standard turnaround time is just 5 to 10 minutes. Photos are captured, cropped to the required specifications, and printed on premium photo paper on the spot.",
+        answer: "Photos are usually ready in 5 to 10 minutes. We take and print them at the shop.",
       },
       {
         question: "Can I get both white and blue background photos?",
-        answer: "Yes, we provide standard white background photos (for visas and modern passports) and blue background photos (for local government forms and education boards). We also send a soft copy to your WhatsApp for online portals.",
+        answer: "White and blue backgrounds are available. Ask which suits your form; a digital copy can also be sent on WhatsApp.",
       },
     ],
   },
   "urdu-english-typing": {
-    heading: (location) => `Urdu & English Typing & CV Preparation in ${location}`,
+    heading: () => "Urdu & English Typing and CVs",
     title: (businessName) => `Urdu & English Typing, Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Professional Urdu inpage and English typing, resume and CV formatting, job application letters, and document typing at ${businessName} in ${location}.`,
+      `Urdu and English typing, document formatting, CVs and application letters at ${businessName} in ${location}.`,
     intro:
-      "Convert rough handwritten notes, drafts, or photos into neat, professionally formatted Urdu and English documents. We also create modern, ATS-friendly CVs that help you stand out in job applications.",
+      "Share your text or existing CV for typing, formatting or an update. Print and digital formats are available.",
     commonRequests: [
       "Professional CV and resume creation for local and Gulf job applications",
       "Urdu typing for official applications, notifications, and poetry",
@@ -272,22 +279,22 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
     faqs: [
       {
-        question: "Can you create a professional CV from my existing experience details?",
-        answer: "Yes! Simply share your educational qualifications, work history, and contact details (or bring your old CV). We will draft a modern, structured CV and provide both printed copies and an editable PDF.",
+        question: "Can you prepare a CV from my details?",
+        answer: "Share your education, work history and contact details, or bring your current CV. Printed and PDF copies are available.",
       },
       {
         question: "Do you type Urdu applications and official letters?",
-        answer: "Yes, we type Urdu in InPage and Unicode fonts for official department letters, legal requests, notices, and applications.",
+        answer: "Yes. We type Urdu in InPage or Unicode for letters, notices and applications.",
       },
     ],
   },
   "online-forms-applications": {
-    heading: (location) => `Online Jobs, Forms & Admissions Assistance in ${location}`,
+    heading: () => "Online Forms & Job Applications",
     title: (businessName) => `Online Forms & Applications Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Complete assistance with online job applications (STS, PTS, FPSC, SPSC), university admissions, document resizing, and fee challan generation at ${businessName} in ${location}.`,
+      `Help with job and admission forms, document resizing and fee challans at ${businessName} in ${location}.`,
     intro:
-      "Avoid errors, rejected submissions, or server timeout issues on government job portals. We assist with complete profile registration, picture and CNIC resizing, online challan generation, and final submission printouts.",
+      "We help with job and admission forms, profile details, document and photo resizing, fee challans and submission printouts.",
     commonRequests: [
       "FPSC, SPSC, STS (SIBA Testing Services), and PTS job applications",
       "College and university admissions portal submissions",
@@ -306,11 +313,11 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "What documents should I bring when applying for an online job?",
-        answer: "Please bring your original CNIC, educational certificates/degrees, experience letters (if applicable), passport photo, and an active mobile number that can receive SMS verification codes.",
+        answer: "Bring your original CNIC, education certificates, any relevant experience letters, a photo and a mobile number for SMS codes.",
       },
       {
         question: "Do you help resize photos and documents for portals?",
-        answer: "Yes, most portals require files to be under 20KB or 50KB in specific pixel ratios. We scan, crop, and compress your documents to meet the exact portal requirements without loss of clarity.",
+        answer: "Yes. We resize, crop and compress files to match the portal's stated requirements.",
       },
     ],
   },
@@ -343,12 +350,12 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     keywords: ["fbr ntn registration akhtar colony", "filer assistance karachi", "iris portal help karachi"],
   },
   "agreements-document-preparation": {
-    heading: (location) => `Rental & Sale Agreements on Stamp Paper in ${location}`,
+    heading: () => "Agreements & Document Preparation",
     title: (businessName) => `Rent Agreement Typing Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Residential rent agreements (Kirayanama), commercial shop agreements, vehicle sale deeds, affidavits (Bayan-e-Halfi), and legal document typing on stamp paper at ${businessName} in ${location}.`,
+      `Typing for rental agreements, vehicle sale documents, affidavits and related paperwork at ${businessName} in ${location}.`,
     intro:
-      "Draft standard residential and commercial tenancy agreements, vehicle sale deeds, and general legal documentation with proper formatting and page margins suitable for legal stamp paper.",
+      "We type and format rental agreements, vehicle sale documents, affidavits and other paperwork. Confirm the required format before visiting.",
     commonRequests: [
       "House, flat, and shop rental agreements (Kirayanama) in Urdu or English",
       "Car and motorcycle sale/purchase agreement typing",
@@ -367,22 +374,22 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
     faqs: [
       {
-        question: "What information is needed to draft a residential rent agreement (Kirayanama)?",
-        answer: "You will need the CNIC copies of the landlord, tenant, and two witnesses, property address, monthly rent amount, security deposit figure, and tenancy duration (usually 11 months).",
+        question: "What details are needed for a rent agreement?",
+        answer: "Bring CNIC copies for both parties and witnesses, the property address, rent, deposit and tenancy period.",
       },
       {
         question: "Can you print directly on legal stamp paper?",
-        answer: "Yes, our printers are configured for legal and stamp paper dimensions with exact top margins so the text aligns perfectly below the government revenue header.",
+        answer: "We can format documents for stamp paper. Confirm the required paper size before printing.",
       },
     ],
   },
   "general-biometric-esahulat": {
-    heading: (location) => `NADRA e-Sahulat Biometric Verifications in ${location}`,
+    heading: () => "NADRA e-Sahulat Biometric Verification",
     title: (businessName) => `NADRA Biometric Verification Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `NADRA e-Sahulat biometric verification center in ${location}. General biometric, FBR Sales Tax biometric, Pakistan Single Window (PSW), and Vehicle / ETO biometric transfer at ${businessName}.`,
+      `Biometric verification for supported general, FBR, PSW and vehicle-transfer cases at ${businessName} in ${location}.`,
     intro:
-      "We operate an authorized NADRA e-Sahulat biometric station assisting residents of Akhtar Colony, DHA, and nearby areas with electronic identity verification for vehicle transfers, FBR registrations, and trade portals.",
+      "We provide biometric verification for supported NADRA e-Sahulat cases. Confirm the case and required documents before visiting.",
     commonRequests: [
       "NADRA e-Sahulat general biometric verification",
       "Vehicle (car/motorcycle) transfer biometric for buyer and seller",
@@ -410,15 +417,15 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "What is required for vehicle transfer biometric verification?",
-        answer: "The buyer or seller whose biometric is due must visit in person with their original CNIC (or Smart Card), registered mobile number, and vehicle registration book/card details.",
+        answer: "The person whose biometric is due must visit with an original CNIC, registered mobile number and vehicle registration details.",
       },
       {
         question: "How long does a NADRA biometric verification take?",
-        answer: "Once connected to the NADRA server, the fingerprint scan takes less than 2 minutes. We provide immediate verification confirmation on the spot.",
+        answer: "When the NADRA system is available, the fingerprint scan usually takes under two minutes.",
       },
       {
         question: "Do you handle FBR Sales Tax and PSW biometrics?",
-        answer: "Yes, both FBR Sales Tax biometric verification (required within 30 days of registration) and Pakistan Single Window (PSW) subscription biometrics are fully supported at our counter.",
+        answer: "We handle supported FBR Sales Tax and PSW cases. Confirm requirements before visiting.",
       },
     ],
   },
@@ -509,12 +516,12 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "cash-deposit-withdrawal-transfer": {
-    heading: (location) => `Cash Deposit, Withdrawal & Money Transfer in ${location}`,
+    heading: () => "Cash Deposits, Withdrawals & Transfers",
     title: (businessName) => `Cash Deposit & Transfer Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Supported cash deposits, cash withdrawals, utility bill payments, and domestic money transfers at ${businessName} in ${location}. Instant printed receipts.`,
+      `Supported cash deposits, withdrawals, utility bill payments and domestic transfers at ${businessName} in ${location}.`,
     intro:
-      "Reliable counter service for supported domestic money transfers, cash deposits, and withdrawals. Complete your transactions securely with instantaneous verification and receipts.",
+      "Ask us to confirm which cash, bill-payment and domestic-transfer services are currently available.",
     commonRequests: [
       "Domestic money transfer across Pakistan",
       "Supported mobile wallet and cash deposit assistance",
@@ -532,17 +539,17 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "Can I pay my utility bills here?",
-        answer: "Yes, we accept electricity (K-Electric), SSGC gas, KWSB water, PTCL, and internet bills with instant confirmation stamp and receipts.",
+        answer: "We process supported electricity, gas, water, phone and internet bills. Ask us to confirm your biller.",
       },
     ],
   },
   "railway-airline-bus-tickets": {
-    heading: (location) => `Railway, Bus & Airline Ticket Booking in ${location}`,
+    heading: () => "Train, Bus & Airline Tickets",
     title: (businessName) => `Train, Bus & Airline Tickets Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Pakistan Railway train tickets (Green Line, Tezgam, Karakoram, Awam Express), intercity bus tickets (Daewoo, Faisal Movers), and airline ticket booking at ${businessName} in ${location}.`,
+      `Booking assistance for Pakistan Railways, intercity buses and airline tickets at ${businessName} in ${location}.`,
     intro:
-      "Find the best travel schedules, live seat availability, and confirmed ticket booking for Pakistan Railway and leading luxury intercity bus services. Get your confirmed e-ticket printed instantly.",
+      "Share your route, date, passenger count and preferred timing. We will confirm available schedules and fares.",
     commonRequests: [
       "Pakistan Railway ticket booking (AC Sleeper, AC Business, AC Standard, Economy)",
       "Intercity luxury bus booking (Faisal Movers, Daewoo Express, Kainat Travels)",
@@ -561,19 +568,19 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "What details do I need to book a Pakistan Railway train ticket?",
-        answer: "Please provide the passenger full name, CNIC number, mobile number, travel date, departure station, destination station, and preferred class (AC Business, AC Standard, Economy).",
+        answer: "Share the passenger's name, CNIC, mobile number, travel date, route and preferred class.",
       },
       {
         question: "Can you check train seat availability before booking?",
-        answer: "Yes, we can check real-time seat availability and ticket fares for any train route across Pakistan.",
+        answer: "Yes. We can check current seat availability and fares before booking.",
       },
     ],
   },
   "stationery-mobile-accessories": {
-    heading: (location) => `Stationery & Mobile Accessories in ${location}`,
+    heading: () => "Stationery & Mobile Accessories",
     title: (businessName) => `Stationery & Mobile Accessories Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Everyday office and school stationery, files, registers, pens, paper, plus high-speed mobile chargers, Type-C cables, handsfree, and phone accessories at ${businessName} in ${location}.`,
+      `School and office stationery, chargers, cables and mobile accessories at ${businessName} in ${location}.`,
     intro:
       "Pick up school and office essentials along with reliable mobile phone charging cables, fast power adapters, and audio accessories at fair neighborhood prices.",
     commonRequests: [
@@ -610,12 +617,12 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
   },
   "website-development-full-stack-seo": {
-    heading: (location) => `Website Development, Full-Stack & Local SEO Services in ${location}`,
+    heading: () => "Website Development & SEO",
     title: (businessName) => `Web Development & SEO Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Modern business websites, full-stack Next.js web applications, Google Business Profile ranking, and local SEO services by ${businessName} in ${location}. Get more local and international clients.`,
+      `Business websites, web apps, redesign, maintenance and SEO support from ${businessName} in ${location}.`,
     intro:
-      "Build a high-performance, mobile-optimized website for your shop, clinic, trading firm, or agency. We specialize in fast web development and local SEO that puts your business at the top of Google Search and Google Maps.",
+      "We build and maintain websites for businesses. Share your needs to confirm the project scope, timeline and cost.",
     commonRequests: [
       "Responsive business websites with WhatsApp ordering and inquiry forms",
       "Full-stack Next.js and Supabase web applications with secure admin portals",
@@ -634,11 +641,11 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     faqs: [
       {
         question: "How long does it take to develop a business website?",
-        answer: "A standard business website with 4 to 8 pages and WhatsApp inquiry integration is typically delivered in 5 to 7 business days.",
+        answer: "A 4 to 8 page business website with WhatsApp enquiries usually takes 5 to 7 working days.",
       },
       {
         question: "Will my website rank on Google for local searches?",
-        answer: "Yes, every website we build includes structured Schema.org markup, localized keywords, mobile optimization, and fast loading speeds to rank high for local customer searches.",
+        answer: "We include structured data, local keywords, mobile optimization and fast pages to support search visibility.",
       },
     ],
   },
@@ -699,6 +706,8 @@ export function getServiceSeo(
     heading,
     title,
     description,
+    displayDescription:
+      override?.description(location, settings.business_name) || description,
     intro,
     commonRequests: override?.commonRequests || [],
     location,

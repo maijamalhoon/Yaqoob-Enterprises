@@ -157,11 +157,11 @@ export default async function NadraEsahulatPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                NADRA e-Sahulat &amp; Biometric Verification in Akhtar Colony
+                NADRA e-Sahulat Biometrics
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Yaqoob Enterprises provides authorized local biometric verification assistance through the NADRA e-Sahulat network in Sector B, Akhtar Colony, Karachi.
+                Authorized NADRA e-Sahulat biometric assistance in Sector B, Akhtar Colony.
               </p>
 
               {/* Factual Disclaimer Banner */}
@@ -174,7 +174,7 @@ export default async function NadraEsahulatPage() {
               </div>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -207,10 +207,6 @@ export default async function NadraEsahulatPage() {
                 </TrackedLink>
               </div>
 
-              <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Counter Open: {statusText || "Open daily until 11:00 PM"}</span>
-              </div>
             </div>
           </div>
         </section>

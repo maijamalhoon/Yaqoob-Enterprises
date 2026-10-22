@@ -3,6 +3,9 @@
  */
 
 .services-directory-hero h1 { color: #fff; }
+.services-directory-hero p { color: #cbd5e1; }
+
+#services-search-input { padding-left: 3rem; }
 
 .minimal-services {
   padding: clamp(3.25rem, 5vw, 4.5rem) 0;

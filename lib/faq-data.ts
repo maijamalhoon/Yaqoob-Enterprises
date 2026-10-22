@@ -6,23 +6,23 @@ export interface FaqItem {
 export const FAQ_ITEMS: FaqItem[] = [
   {
     q: "Do you provide black-and-white and color printing?",
-    a: "Yes, we provide both high-speed black & white laser printing and sharp color printing on standard A4 and legal paper sizes. You can print single pages, reports, official documents, and graphic presentations.",
+    a: "Yes. Black-and-white and color printing are available for documents, reports, and presentations.",
   },
   {
     q: "Can I send my document through WhatsApp before visiting?",
-    a: "Yes! You can WhatsApp your PDF, Word document, or image directly to +92 349 2568864. Mention whether you need black & white or color, single-sided or double-sided, and quantity. We will have your prints ready when you arrive so you don't have to wait.",
+    a: "Send your file, print options, and quantity on WhatsApp. We will confirm the cost and pickup time.",
   },
   {
     q: "Do you handle single and bulk photocopying?",
-    a: "Yes, we provide single-page and high-volume bulk photocopying for notes, textbooks, CNIC copies, legal documents, and office records. We use crisp digital copiers for clean, smudge-free reproductions.",
+    a: "Yes. We photocopy documents, notes, IDs, and office records in single or bulk quantities.",
   },
   {
     q: "Do you print school, college, and university notes and assignments?",
-    a: "Yes, student notes and assignment printing are among our most frequent services. We print handouts, lecture slides, assignments, and research projects with neat stapling or binder formatting.",
+    a: "Yes. We print school, college, and university notes and assignments in bulk, with quality printing at discounted rates compared with market prices.",
   },
   {
-    q: "Do you handle bulk printing for offices and organizations?",
-    a: "Yes, we handle bulk printing for schools, colleges, coaching centers, corporate offices, and local organizations. For large orders, message or call us ahead on +92 349 2568864 to schedule prompt completion.",
+    q: "Do you offer discounted rates for bulk printing?",
+    a: "Yes. Bulk rates are discounted compared with market prices. Send your file and quantity on WhatsApp for a quote and pickup time.",
   },
   {
     q: "Do you provide urgent passport-size photos?",
@@ -34,7 +34,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "What are your opening hours?",
-    a: "We are open Monday through Saturday from 9:00 AM until 11:00 PM (with a brief Friday afternoon prayer break). Sunday hours are typically 4:00 PM to 10:30 PM. You can verify live status on WhatsApp.",
+    a: "Monday–Saturday, 9 AM–11 PM, with a Friday prayer break. Sunday, 4–10:30 PM. Message us to confirm late-night printing and today's hours.",
   },
   {
     q: "Do you provide NADRA e-Sahulat biometric services?",

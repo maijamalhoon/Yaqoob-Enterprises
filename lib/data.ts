@@ -249,6 +249,49 @@ export function formatBusinessHours(hour: BusinessHour) {
 }
 
 const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const displayOrder = [1, 2, 3, 4, 5, 6, 0];
+
+export function formatGroupedHours(hours: BusinessHour[] = []) {
+  if (hours.length === 0) {
+    return [
+      { label: "Monday–Thursday & Saturday", time: "9:00 AM – 11:00 PM" },
+      { label: "Friday", time: "9:00 AM – 1:00 PM & 2:30 PM – 11:00 PM" },
+      { label: "Sunday", time: "4:00 PM – 10:30 PM" },
+    ];
+  }
+
+  const byDay = new Map(hours.map((hour) => [hour.weekday, hour]));
+  const schedule = displayOrder.map((dayIdx) => {
+    const hour = byDay.get(dayIdx);
+    return {
+      dayName: weekdayNames[dayIdx],
+      formatted: hour ? formatBusinessHours(hour) : "Closed",
+    };
+  });
+
+  if (schedule.slice(0, 6).every((item) => item.formatted === schedule[0].formatted)) {
+    return [
+      { label: "Monday–Saturday", time: schedule[0].formatted },
+      { label: "Sunday", time: schedule[6].formatted },
+    ];
+  }
+
+  const groups: { label: string; time: string }[] = [];
+  let startIdx = 0;
+  for (let i = 1; i <= schedule.length; i += 1) {
+    if (i === schedule.length || schedule[i].formatted !== schedule[startIdx].formatted) {
+      groups.push({
+        label: startIdx === i - 1
+          ? schedule[startIdx].dayName
+          : `${schedule[startIdx].dayName} – ${schedule[i - 1].dayName}`,
+        time: schedule[startIdx].formatted,
+      });
+      startIdx = i;
+    }
+  }
+  return groups;
+}
+
 const weekdayShortToIndex: Record<string, number> = {
   Sun: 0,
   Mon: 1,

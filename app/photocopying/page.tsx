@@ -21,47 +21,47 @@ import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Photocopy Services in Akhtar Colony",
+  title: "Photocopy & Color Copy in Karachi",
   description:
-    "Fast, clear black & white and color photocopying in Akhtar Colony, Karachi. Single and bulk copying for students, offices, institutes, and local residents. Clean contrast on 75/80 GSM paper near Jamia Masjid Muhammadi.",
+    "Black-and-white and color photocopying in Akhtar Colony, Karachi. Bulk notes and assignments for schools, colleges, and universities at discounted rates.",
   alternates: {
     canonical: `${SITE_URL}/photocopying`,
   },
   openGraph: {
-    title: "Photocopy Services in Akhtar Colony, Karachi | Yaqoob Enterprises",
+    title: "Photocopy & Color Copy in Karachi | Yaqoob Enterprises",
     description:
-      "Sharp black & white and color photocopying in Akhtar Colony, Karachi. Bulk copying for students, offices, and residents. Walk in or inquire on WhatsApp.",
+      "Color and black-and-white copies for documents, notes, and assignments. Ask about discounted rates for bulk school, college, and university orders.",
     url: `${SITE_URL}/photocopying`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Photocopy Services in Akhtar Colony, Karachi | Yaqoob Enterprises",
+    title: "Photocopy & Color Copy in Karachi | Yaqoob Enterprises",
     description:
-      "Sharp black & white and color photocopying in Akhtar Colony, Karachi. Single and bulk copying on quality paper.",
+      "Color and black-and-white copies for documents, notes, and assignments. Ask about discounted bulk rates.",
   },
 };
 
 const PHOTOCOPY_FAQS = [
   {
     q: "Do you offer both black-and-white and color photocopying?",
-    a: "Yes. We operate high-speed digital copiers for sharp black-and-white copies (IDs, forms, study notes, book pages) as well as dedicated color copiers for certificates, color diagrams, maps, and illustrations.",
+    a: "Yes. We offer black-and-white and color photocopying.",
   },
   {
     q: "Can I get double-sided (back-to-back) photocopying?",
-    a: "Yes. We offer both single-sided and duplex (double-sided) photocopying, which reduces bulk and saves paper for books, notes, and institutional records.",
+    a: "Yes. Single-sided and double-sided photocopying are available.",
   },
   {
     q: "Do you handle high-volume bulk photocopying for schools or offices?",
-    a: "Yes. We routinely produce hundreds of copies for educational tests, coaching class notes, administrative files, and office records. We recommend contacting us in advance via WhatsApp (+92 349 2568864) for large sets so we can schedule prompt completion.",
+    a: "Yes. Bulk notes and assignments for schools, colleges, and universities are available at discounted rates. Message us with the quantity for a quote.",
   },
   {
     q: "What paper do you use for photocopying?",
-    a: "We use standard high-brightness 75 GSM and 80 GSM paper in A4 and Legal sizes, ensuring strong ink contrast with minimal bleed-through.",
+    a: "A4 and Legal paper in 75 GSM and 80 GSM is available.",
   },
   {
     q: "Can I bring original documents, books, or identity cards for instant copying?",
-    a: "Yes. Our counter operators can immediately copy your CNIC, B-form, educational certificates, utility bills, or book chapters while you wait.",
+    a: "Yes. Bring your document, ID, certificate, or book page to the counter.",
   },
 ];
 
@@ -93,7 +93,7 @@ export default async function PhotocopyingPage() {
     name: "Photocopying Services in Akhtar Colony, Karachi",
     serviceType: "Document Photocopying",
     description:
-      "Black and white and color photocopying for documents, notes, books, IDs, and office paperwork in Akhtar Colony, Karachi.",
+      "Black-and-white and color photocopying for documents, notes, and assignments in Akhtar Colony, Karachi, including discounted bulk orders.",
     url: pageUrl,
     provider: {
       "@type": "LocalBusiness",
@@ -161,15 +161,15 @@ export default async function PhotocopyingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Photocopying Services in Akhtar Colony, Karachi
+                Photocopying in Akhtar Colony
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Clean, crisp digital photocopies with sharp contrast on standard 75 and 80 GSM paper. We copy IDs, forms, school &amp; college notes, books, and multi-page office files quickly and reliably.
+                Color and black-and-white copies for documents, notes and assignments. Bulk discounts are available.
               </p>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -202,10 +202,6 @@ export default async function PhotocopyingPage() {
                 </TrackedLink>
               </div>
 
-              <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Counter Open: {statusText || "Open daily until 11:00 PM"}</span>
-              </div>
             </div>
           </div>
         </section>
@@ -221,7 +217,7 @@ export default async function PhotocopyingPage() {
                 Quality Photocopying for Every Requirement
               </h2>
               <p className="text-sm text-slate-600 mt-2">
-                We handle urgent single copies as easily as hundred-page book sets.
+                Bring an original or send your file on WhatsApp.
               </p>
             </div>
 
@@ -232,7 +228,7 @@ export default async function PhotocopyingPage() {
                   <span>Black &amp; White Photocopying</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Sharp grayscale scanning and crisp laser output for official documents, CNIC cards, utility bills, and text pages.
+                    Copies of CNICs, forms, bills, and text documents.
                 </p>
               </div>
 
@@ -242,7 +238,7 @@ export default async function PhotocopyingPage() {
                   <span>Color Photocopying</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  True-to-original color reproduction for certificates, medical reports, maps, diagrams, and project sheets.
+                    Color copies of certificates, maps, diagrams, and project pages.
                 </p>
               </div>
 
@@ -252,7 +248,7 @@ export default async function PhotocopyingPage() {
                   <span>Document Photocopying</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Legal agreements, affidavits, land records, vehicle registration books, and official correspondence.
+                    Copies of legal papers and official documents.
                 </p>
               </div>
 
@@ -262,7 +258,7 @@ export default async function PhotocopyingPage() {
                   <span>Notes Photocopying</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Fast duplication of teacher handouts, syllabus booklets, past papers, and class notes for students.
+                    School, college, and university handouts, notes, and past papers.
                 </p>
               </div>
 
@@ -272,7 +268,7 @@ export default async function PhotocopyingPage() {
                   <span>Bulk Photocopying</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  High-capacity digital copiers capable of multi-hundred runs with consistent contrast and neat collation.
+                    Bulk copying for study sets and office documents. Ask us for a quote.
                 </p>
               </div>
 
@@ -282,7 +278,7 @@ export default async function PhotocopyingPage() {
                   <span>Office Photocopying</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Batch copying of vouchers, invoices, meeting agendas, and administrative records for local firms.
+                    Copies of office forms, invoices, and records.
                 </p>
               </div>
             </div>

@@ -35,7 +35,7 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
-              <span>{statusText || "Open now · until 11:00 PM"}</span>
+              <span>{statusText || "Hours available on WhatsApp"}</span>
             </span>
             <span className="text-slate-600 hidden xs:inline">|</span>
             <span className="hidden sm:inline text-slate-400 truncate text-xs flex items-center gap-1">
@@ -162,7 +162,7 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             <a
               id="header-call-btn"
               aria-label="Call Yaqoob Enterprises"
-              className="inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-100 sm:bg-white sm:border border-slate-200/90 rounded-full hover:bg-slate-100 active:scale-95 transition"
+              className="hidden md:inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-slate-800 bg-slate-100 sm:bg-white sm:border border-slate-200/90 rounded-full hover:bg-slate-100 active:scale-95 transition"
               href={phoneLink}
             >
               <Phone className="w-4 h-4 text-slate-800" />
@@ -172,7 +172,7 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             {/* Header WhatsApp Button */}
             <a
               id="header-whatsapp-btn"
-              className="inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-slate-900 rounded-full hover:bg-slate-800 active:scale-95 transition shadow-sm"
+              className="hidden md:inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-slate-900 rounded-full hover:bg-slate-800 active:scale-95 transition shadow-sm"
               href={whatsappLink}
               rel="noopener noreferrer"
               target="_blank"
@@ -202,95 +202,16 @@ export function StitchHeader({ settings, statusText }: StitchHeaderProps) {
             className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl transition-all"
           >
             <div className="grid grid-cols-2 gap-2 font-semibold text-slate-800 text-xs sm:text-sm">
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold"
-                href="/"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold text-[#0E7490]"
-                href="/printing"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Printing
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold text-[#0E7490]"
-                href="/photocopying"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Photocopying
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
-                href="/notes-printing"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Notes Printing
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
-                href="/bulk-printing"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Bulk Printing
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
-                href="/photo-printing"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Photo Printing
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50 font-bold text-emerald-800"
-                href="/nadra-esahulat"
-                onClick={() => setDrawerOpen(false)}
-              >
-                NADRA e-Sahulat
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
-                href="/color-printing"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Color Printing
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
-                href="/office-printing"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Office Printing
-              </Link>
-              <Link
-                className="py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-50"
-                href="/about"
-                onClick={() => setDrawerOpen(false)}
-              >
-                About Yaqoob
-              </Link>
-              <Link
-                className="col-span-2 py-2.5 px-3 rounded-lg hover:bg-slate-100 bg-slate-100 font-bold text-slate-900 flex items-center justify-between"
-                href="/contact"
-                onClick={() => setDrawerOpen(false)}
-              >
-                <span>Contact &amp; Location</span>
-                <span className="text-xs text-slate-500">Shop Hours &amp; Directions →</span>
-              </Link>
-              <Link
-                className="col-span-2 py-2 px-3 text-xs text-slate-500 hover:text-slate-900"
-                href="/services"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Browse All Other Services (Online Forms, Typing, Stamp Paper, Tickets) →
-              </Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 font-bold hover:bg-slate-100" href="/" onClick={() => setDrawerOpen(false)}>Home</Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 font-bold text-[#0E7490] hover:bg-slate-100" href="/services" onClick={() => setDrawerOpen(false)}>All services</Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/printing" onClick={() => setDrawerOpen(false)}>Printing</Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/photocopying" onClick={() => setDrawerOpen(false)}>Photocopying</Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/nadra-esahulat" onClick={() => setDrawerOpen(false)}>NADRA e-Sahulat</Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/about" onClick={() => setDrawerOpen(false)}>About</Link>
+              <Link className="col-span-2 rounded-lg bg-slate-100 px-3 py-2.5 font-bold hover:bg-slate-200" href="/contact" onClick={() => setDrawerOpen(false)}>Contact &amp; directions</Link>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span className="truncate pr-2">Sector B, Near Jamia Masjid Muhammadi</span>
-              <span className="text-emerald-600 font-bold shrink-0">{statusText || "Open till 11 PM"}</span>
+            <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500">
+              <span className="truncate">Akhtar Colony, Karachi</span>
             </div>
           </div>
         )}

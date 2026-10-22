@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 const supabaseUrl = new URL(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kzikyufuyanfjlddyepo.supabase.co",
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://ienwbrrzsutbispaiymi.supabase.co",
 );
 const supabaseProtocol = supabaseUrl.protocol === "http:" ? "http" : "https";
 const supabaseOrigin = `${supabaseProtocol}://${supabaseUrl.host}`;
@@ -14,12 +14,12 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "object-src 'none'",
   "form-action 'self'",
-  `img-src 'self' data: blob: ${supabaseOrigin} https://images.unsplash.com`,
+  `img-src 'self' data: blob: ${supabaseOrigin} https://images.unsplash.com https://www.googletagmanager.com https://*.google-analytics.com`,
   `media-src 'self' ${supabaseOrigin}`,
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
-  `script-src ${scriptSources}`,
-  `connect-src 'self' ${supabaseOrigin} ${supabaseRealtimeOrigin}`,
+  `script-src ${scriptSources} https://www.googletagmanager.com`,
+  `connect-src 'self' ${supabaseOrigin} ${supabaseRealtimeOrigin} https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com`,
   "worker-src 'self' blob:",
   "manifest-src 'self'",
   "upgrade-insecure-requests",

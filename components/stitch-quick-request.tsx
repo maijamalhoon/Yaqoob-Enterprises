@@ -85,7 +85,7 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
               directly on WhatsApp.
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Select your service, fill in your name and brief requirement, and review the ready message in WhatsApp before sending. Our shop staff will respond promptly during business hours.
+              Choose a service, add a short note and review the message in WhatsApp before sending.
             </p>
             <div className="pt-2">
               <Link
@@ -93,7 +93,7 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-900 hover:text-[#0E7490] transition"
                 href="/contact"
               >
-                <span>Visit our contact &amp; directions page</span>
+                <span>Contact and directions</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -105,9 +105,9 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
                   <Check className="w-4 h-4" />
                 </span>
                 <div>
-                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">Direct Shop Response</h3>
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">Local shop team</h3>
                   <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
-                    No automated bots. You communicate directly with our shop operators in Akhtar Colony.
+                    We reply during shop hours.
                   </p>
                 </div>
               </div>

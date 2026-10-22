@@ -10,14 +10,14 @@ import { serializeJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = {
   title: "Services Directory in Akhtar Colony",
   description:
-    "All major government portal verifications, documentation, ticketing, and everyday digital services in one place. NADRA e-Sahulat, FBR tax, agreements, and urgent printing in Akhtar Colony, Karachi.",
+    "Browse printing, documents, ticketing, e-Sahulat and other services in Akhtar Colony, Karachi.",
   alternates: {
     canonical: `${SITE_URL}/services`,
   },
   openGraph: {
-    title: "What can we help with? | All Services | Yaqoob Enterprises Karachi",
+    title: "Services in Akhtar Colony | Yaqoob Enterprises",
     description:
-      "All major government portal verifications, documentation, ticketing, and everyday digital services in one place in Akhtar Colony, Karachi.",
+      "Browse printing, documents, ticketing, e-Sahulat and other services in Akhtar Colony, Karachi.",
     url: `${SITE_URL}/services`,
     type: "website",
   },
@@ -33,7 +33,7 @@ export default async function ServicesPage() {
     "@type": "ItemList",
     name: "Yaqoob Enterprises Services Directory",
     description:
-      "All major government portal verifications, documentation, ticketing, and everyday digital services in Akhtar Colony, Karachi.",
+      "Printing, documents, ticketing, e-Sahulat and other services in Akhtar Colony, Karachi.",
     url: `${SITE_URL}/services`,
     numberOfItems: services.filter((s) => s.status !== "hidden").length,
     itemListElement: services

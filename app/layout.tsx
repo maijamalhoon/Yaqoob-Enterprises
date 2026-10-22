@@ -22,7 +22,7 @@ import { SITE_URL } from "@/lib/env";
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
   const homeTitle = `Yaqoob Enterprises | Printing & Photocopy, Karachi`;
-  const description = `${settings.business_name} provides printing, photocopying, color printing, notes printing, photo printing, bulk printing and NADRA e-Sahulat services in Akhtar Colony, Karachi.`;
+  const description = `Printing, photocopying, notes, passport photos and NADRA e-Sahulat at ${settings.business_name} in Akhtar Colony, Karachi.`;
 
   return {
     metadataBase: new URL(SITE_URL),

@@ -144,6 +144,20 @@ export function AdminAnalyticsSkeleton() {
         </div>
       </section>
 
+      <section className="admin-panel admin-panel--control admin-traffic-panel admin-panel--skeleton" aria-hidden="true">
+        <div className="admin-panel__heading">
+          <div>
+            <span className="admin-panel-kicker"><span className="skeleton-block skeleton-text" style={{ width: "6rem", height: "0.8rem" }} /></span>
+            <h2><span className="skeleton-block skeleton-title" style={{ width: "10rem", height: "1.25rem" }} /></h2>
+            <p><span className="skeleton-block skeleton-text" style={{ width: "17rem", maxWidth: "100%", height: "0.8rem" }} /></p>
+          </div>
+          <span className="skeleton-block skeleton-title" style={{ width: "4rem", height: "1.5rem" }} />
+        </div>
+        <div className="admin-traffic-chart__plot admin-traffic-chart__plot--skeleton">
+          {Array.from({ length: 31 }, (_, index) => <span key={index} style={{ height: `${18 + ((index * 17) % 76)}%` }} />)}
+        </div>
+      </section>
+
       {/* 6 Analytical Insight Panels */}
       <div className="admin-two-column admin-insights-grid">
         {insightPanels.map((panel, pIdx) => (

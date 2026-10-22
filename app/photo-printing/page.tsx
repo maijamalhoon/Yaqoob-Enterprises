@@ -156,15 +156,15 @@ export default async function PhotoPrintingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Photo Printing &amp; Passport Photos in Akhtar Colony
+                Passport-Size Photos
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Standard and urgent passport-size photos with white or blue background, ready in approximately 5 minutes. Crisp, smudge-resistant photo prints for CNIC, passports, visas, licenses, job applications, and school admissions.
+                Passport photos for CNICs, passports, visas and admissions. White or blue backgrounds; usually ready in five minutes.
               </p>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -199,7 +199,7 @@ export default async function PhotoPrintingPage() {
 
               <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Photo Counter Active: {statusText || "Open daily until 11:00 PM"}</span>
+                <span>Photo Counter Active: {statusText || "Hours available on WhatsApp"}</span>
               </div>
             </div>
           </div>

@@ -20,47 +20,51 @@ import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Notes Printing in Karachi",
+  title: "Notes & Assignment Printing in Karachi",
   description:
-    "Student notes and assignment printing in Akhtar Colony, Karachi. School handouts, college syllabus notes, university research projects, and past papers. Send PDFs on WhatsApp for fast, affordable printing and stapling.",
+    "Bulk school, college, and university notes and assignment printing in Akhtar Colony, Karachi, at discounted rates. Late-night printing until closing.",
   alternates: {
     canonical: `${SITE_URL}/notes-printing`,
   },
   openGraph: {
-    title: "School, College & University Notes Printing Karachi | Yaqoob Enterprises",
+    title: "Notes & Assignment Printing in Karachi | Yaqoob Enterprises",
     description:
-      "Affordable student notes and assignment printing in Akhtar Colony, Karachi. Send your PDF on WhatsApp before visiting or ask about counter pickup.",
+      "Quality bulk notes and assignment printing for schools, colleges, and universities at discounted rates. Late-night printing until closing.",
     url: `${SITE_URL}/notes-printing`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "School, College & University Notes Printing Karachi | Yaqoob Enterprises",
+    title: "Notes & Assignment Printing in Karachi | Yaqoob Enterprises",
     description:
-      "Affordable student notes and assignment printing in Akhtar Colony, Karachi. Send your PDF on WhatsApp before visiting or ask about counter pickup.",
+      "Quality bulk notes and assignment printing for schools, colleges, and universities at discounted rates.",
   },
 };
 
 const NOTES_FAQS = [
   {
     q: "How can students send their notes or assignment PDF?",
-    a: "You can send your PDF directly from your phone to our WhatsApp at +92 349 2568864. Tell us whether you need single-sided or double-sided (back-to-back), B&W or color cover, and if you want it stapled. We'll have it ready for collection.",
+    a: "Send your PDF on WhatsApp and tell us the quantity, color, and single- or double-sided options. We will confirm the cost and pickup time.",
   },
   {
     q: "Do you offer double-sided (duplex) printing to reduce cost and weight?",
-    a: "Yes! Double-sided printing is the most popular choice for multi-page university handouts and college syllabus notes because it cuts paper weight in half and saves money.",
+    a: "Yes. Double-sided printing uses fewer sheets and can reduce cost.",
   },
   {
     q: "Can you staple or organize multi-page assignment sets?",
-    a: "Yes, we provide neat corner stapling for assignments and organized set collation for multi-chapter course packs.",
+    a: "Yes. Stapling and set collation are available for multi-page assignments.",
   },
   {
     q: "Do you also photocopy physical handwritten notes or study booklets?",
-    a: "Yes! If you have handwritten class notes, teacher handouts, or past paper booklets, bring them to our shop in Akhtar Colony for fast, clear photocopying.",
+    a: "Yes. Bring your original notes, handouts, or booklet to the shop for photocopying.",
   },
   {
     q: "Are there student discounts for large semester course packs?",
-    a: "Yes, we offer clear, student-friendly volume pricing for large batch printouts and notes sets. Message us on WhatsApp to get the exact cost before printing.",
+    a: "Yes. Bulk orders are available at discounted rates compared with market prices. Send us the page count for a quote.",
+  },
+  {
+    q: "Is late-night printing available for notes and assignments?",
+    a: "Late-night printing is available until closing. Message us on WhatsApp to confirm availability and pickup time.",
   },
 ];
 
@@ -160,15 +164,15 @@ export default async function NotesPrintingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Notes &amp; Assignment Printing in Akhtar Colony, Karachi
+                Notes &amp; Assignment Printing
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Clear, affordable printing for school handouts, college notes, university slides, and assignments. Send your PDF on WhatsApp before visiting and collect your notes at the counter.
+                Discounted printing for school, college and university notes and assignments. Open late, until closing.
               </p>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -203,7 +207,7 @@ export default async function NotesPrintingPage() {
 
               <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Ready for Student Walk-ins: {statusText || "Open daily until 11:00 PM"}</span>
+                <span>Ready for Student Walk-ins: {statusText || "Hours available on WhatsApp"}</span>
               </div>
             </div>
           </div>
@@ -217,10 +221,10 @@ export default async function NotesPrintingPage() {
                 Academic Services
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                Complete Academic Printing Solutions
+                Notes &amp; Assignments for Every Level
               </h2>
               <p className="text-sm text-slate-600 mt-2">
-                Tailored for students attending local schools, intermediate colleges, and universities across Karachi.
+                Send your file and quantity on WhatsApp for a quote.
               </p>
             </div>
 
@@ -231,7 +235,7 @@ export default async function NotesPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">School Notes &amp; Worksheets</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Daily homework worksheets, primary and secondary school syllabi, activity books, and test revisions.
+                  Notes, worksheets, and handouts for school students.
                 </p>
               </div>
 
@@ -241,7 +245,7 @@ export default async function NotesPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">College Notes &amp; Past Papers</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  First year and second year (FSc, FA, ICS, ICom) chapter-wise lecture notes, board past papers, and coaching notes.
+                  Course notes, assignments, and past papers for college students.
                 </p>
               </div>
 
@@ -251,7 +255,7 @@ export default async function NotesPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">University Handouts &amp; Slides</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  PowerPoint lecture handouts (2, 4, or 6 slides per page), professor research papers, and case studies.
+                  Lecture notes, slides, assignments, and reports for university students.
                 </p>
               </div>
 
@@ -261,7 +265,7 @@ export default async function NotesPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Assignment Printing</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Semester assignments with color title covers and neat corner stapling for direct teacher submission.
+                  Single- or double-sided assignment printing. Stapling is available.
                 </p>
               </div>
 
@@ -271,7 +275,7 @@ export default async function NotesPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Bulk Notes Photocopying</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Duplicating physical hand-written study notes or lending books for an entire study group or class.
+                  Bulk copies of class notes and study booklets.
                 </p>
               </div>
 
@@ -281,7 +285,7 @@ export default async function NotesPrintingPage() {
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Thesis &amp; Final Year Projects</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Final year project (FYP) documentation drafts, research reports, and bibliography appendices.
+                  Thesis drafts, project reports, and research documents.
                 </p>
               </div>
             </div>

@@ -22,43 +22,43 @@ import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Bulk Printing in Karachi",
+  title: "Bulk Printing & Photocopying in Karachi",
   description:
-    "High-volume bulk printing and bulk photocopying in Akhtar Colony, Karachi. For offices, schools, colleges, institutes, and organizations. Contact us ahead on WhatsApp for scheduled completion and volume quotations.",
+    "Quality bulk printing and photocopying in Akhtar Colony, Karachi. Discounted rates for school, college, and university notes and assignments.",
   alternates: {
     canonical: `${SITE_URL}/bulk-printing`,
   },
   openGraph: {
-    title: "Bulk Printing & Bulk Photocopy in Akhtar Colony, Karachi | Yaqoob Enterprises",
+    title: "Bulk Printing & Copying in Karachi | Yaqoob Enterprises",
     description:
-      "Bulk printing & bulk photocopying in Akhtar Colony, Karachi. For schools, offices, and institutes. Contact before visiting for large orders.",
+      "Bulk notes and assignment printing for schools, colleges, and universities at discounted rates compared with market prices.",
     url: `${SITE_URL}/bulk-printing`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bulk Printing & Bulk Photocopy in Akhtar Colony, Karachi | Yaqoob Enterprises",
+    title: "Bulk Printing & Copying in Karachi | Yaqoob Enterprises",
     description:
-      "Bulk printing & bulk photocopying in Akhtar Colony, Karachi. For schools, offices, and institutes.",
+      "Quality bulk printing and photocopying in Akhtar Colony, Karachi, at discounted rates.",
   },
 };
 
 const BULK_FAQS = [
   {
     q: "Why should customers contact you before visiting for bulk orders?",
-    a: "Contacting us before visiting allows us to review your page count, reserve dedicated printer capacity, confirm paper stock (A4 or Legal, 75 or 80 GSM), and schedule your job so it is ready on time without unnecessary waiting at the counter.",
+    a: "Send your file, quantity, and print options on WhatsApp. We will confirm the rate and pickup time before you visit.",
   },
   {
     q: "What counts as a bulk printing or photocopying order?",
-    a: "Orders starting from 100 to several thousand pages—such as training manuals, student syllabus packages, exam past paper books, and organizational paperwork—qualify as bulk orders.",
+    a: "Bulk orders include notes, assignments, handouts, and office documents. Send us the quantity and we will confirm the price.",
   },
   {
     q: "How do you calculate bulk pricing?",
-    a: "Our bulk rates are determined transparently based on total page volume, paper specification (75 GSM vs 80 GSM), single vs double-sided printing, and whether color pages or stapling are required. We give you a clear, fixed quote before printing begins.",
+    a: "Bulk rates are discounted compared with market prices. The final quote depends on quantity and print options; we confirm it before printing.",
   },
   {
-    q: "Can you deliver bulk printing orders within Akhtar Colony or nearby areas?",
-    a: "Yes! For large institutional orders in Akhtar Colony, Defence View, Mehmoodabad, or nearby DHA sectors, local delivery or pre-arranged pickup can be coordinated over WhatsApp.",
+    q: "How can I collect a bulk order?",
+    a: "Message us to confirm the pickup time. You can also ask whether delivery is available for your location.",
   },
 ];
 
@@ -90,7 +90,7 @@ export default async function BulkPrintingPage() {
     name: "Bulk Printing & Bulk Photocopy in Akhtar Colony, Karachi",
     serviceType: "Commercial Volume Printing",
     description:
-      "Bulk printing and bulk photocopying for offices, schools, colleges, and organizations in Akhtar Colony, Karachi.",
+      "Quality bulk printing and photocopying for schools, colleges, and universities in Akhtar Colony, Karachi, at discounted rates.",
     url: pageUrl,
     provider: {
       "@type": "LocalBusiness",
@@ -158,24 +158,24 @@ export default async function BulkPrintingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Bulk Printing &amp; Bulk Photocopying in Akhtar Colony, Karachi
+                Bulk Printing &amp; Photocopying
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Reliable, high-speed document runs for local schools, colleges, institutes, corporate offices, and organizations. Clear contrast, accurate collation, and straightforward volume pricing.
+                Bulk printing and photocopying for schools, colleges, universities and offices. Discounted rates are available.
               </p>
 
               {/* Strong Callout Notice */}
               <div className="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3 text-amber-950">
                 <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
                 <div className="text-xs sm:text-sm">
-                  <strong className="block font-bold">Contact us before visiting for larger orders.</strong>
-                  Please message or call ahead on WhatsApp so we can confirm paper availability, exact turnaround timing, and provide you with an accurate quotation.
+                  <strong className="block font-bold">Late-night printing is available until closing.</strong>
+                  Message us with your file and quantity. We will confirm the rate and pickup time.
                 </div>
               </div>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -219,7 +219,7 @@ export default async function BulkPrintingPage() {
                 Who We Serve
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                Bulk Printing Tailored for Local Organizations
+                Bulk Printing for Study and Work
               </h2>
             </div>
 
@@ -236,7 +236,7 @@ export default async function BulkPrintingPage() {
                 <GraduationCap className="w-8 h-8 text-[#0E7490] mb-3" />
                 <h3 className="font-bold text-base text-slate-900 mb-1">Schools &amp; Coaching Centers</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Monthly test papers, term examination sheets, parent notices, syllabus booklets, and student worksheets.
+                  Bulk notes, assignments, handouts, and school worksheets.
                 </p>
               </div>
 
@@ -244,7 +244,7 @@ export default async function BulkPrintingPage() {
                 <Users className="w-8 h-8 text-[#0E7490] mb-3" />
                 <h3 className="font-bold text-base text-slate-900 mb-1">Universities &amp; Colleges</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Department handouts, conference proceedings, seminar booklets, and large batch research materials.
+                  Notes, assignments, lecture handouts, and research documents.
                 </p>
               </div>
 
@@ -260,7 +260,7 @@ export default async function BulkPrintingPage() {
                 <CheckCircle2 className="w-8 h-8 text-[#0E7490] mb-3" />
                 <h3 className="font-bold text-base text-slate-900 mb-1">Students with Large Documents</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Multi-volume thesis drafts, reference book photocopies, and class course packs for study groups.
+                  Bulk thesis drafts, notes, and assignment sets for students.
                 </p>
               </div>
 
@@ -268,7 +268,7 @@ export default async function BulkPrintingPage() {
                 <Layers className="w-8 h-8 text-[#0E7490] mb-3" />
                 <h3 className="font-bold text-base text-slate-900 mb-1">Large Document Orders</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Any job over 100 pages, with consistent laser toner density and neatly organized sets.
+                  Large print and photocopy orders. Message us for a quote.
                 </p>
               </div>
             </div>

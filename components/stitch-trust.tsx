@@ -1,4 +1,4 @@
-import { Star, ExternalLink, ShieldCheck, CheckCircle2, FileCheck } from "lucide-react";
+import { ExternalLink, ShieldCheck, CheckCircle2, FileCheck } from "lucide-react";
 import type { BusinessSettings } from "@/lib/types";
 
 interface StitchTrustProps {
@@ -6,7 +6,7 @@ interface StitchTrustProps {
   statusText?: string;
 }
 
-export function StitchTrust({ settings }: StitchTrustProps) {
+export function StitchTrust({ settings, statusText }: StitchTrustProps) {
   const gbpUrl =
     settings.google_business_profile_url ||
     settings.map_url ||
@@ -51,7 +51,7 @@ export function StitchTrust({ settings }: StitchTrustProps) {
                 </div>
                 <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>Open daily until 11:00 PM (Friday break)</span>
+                  <span>{statusText || "Hours available on WhatsApp"}</span>
                 </div>
               </div>
             </div>
@@ -59,42 +59,20 @@ export function StitchTrust({ settings }: StitchTrustProps) {
             {/* Right Card: Google Profile & Reviews */}
             <div className="lg:col-span-5 flex flex-col gap-4">
               <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="flex text-amber-400">
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                  </div>
-                  <span className="text-xs font-bold text-slate-900">Google Business Profile</span>
-                </div>
-
-                <h3 className="text-base font-bold text-slate-900">
-                  Verified Local Business Listing
-                </h3>
+                <h3 className="text-base font-bold text-slate-900">Google Business Profile</h3>
                 <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                  Search for Yaqoob Enterprises on Google Maps for genuine customer directions, photos, and public reviews.
+                  Find business details and directions on Google Maps.
                 </p>
 
-                <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="mt-4 pt-4 border-t border-slate-100">
                   <a
                     href={gbpUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0E7490] hover:text-[#0b5a6f] transition"
                   >
-                    <span>Read our Google reviews</span>
+                    <span>Open Google profile</span>
                     <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-
-                  <a
-                    href={gbpUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition"
-                  >
-                    Open on Maps
                   </a>
                 </div>
               </div>
@@ -103,8 +81,8 @@ export function StitchTrust({ settings }: StitchTrustProps) {
               <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-2xl p-4 sm:p-5 flex items-start gap-3">
                 <FileCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                 <div className="text-xs text-emerald-950 leading-relaxed">
-                  <strong className="block font-bold mb-0.5">Document Privacy Guarantee</strong>
-                  Customer files and WhatsApp attachments are used strictly for printing or form filling and are promptly deleted from our systems.
+                  <strong className="block font-bold mb-0.5">Sending files on WhatsApp</strong>
+                  Files sent on WhatsApp are used to handle your request. The website form does not upload files.
                 </div>
               </div>
             </div>

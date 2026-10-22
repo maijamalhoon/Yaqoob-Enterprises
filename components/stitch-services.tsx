@@ -38,7 +38,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "printing",
     title: "Printing Services",
     shortDesc:
-      "Color and black-and-white laser printing for documents, assignments, office files, and reports. Send PDFs on WhatsApp to ask about pickup.",
+      "Color and black-and-white printing for documents, assignments and office files. Send your PDF on WhatsApp to ask about pickup.",
     url: "/printing",
     icon: Printer,
     isPrimaryFeatured: true,
@@ -50,7 +50,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "photocopying",
     title: "Photocopying Services",
     shortDesc:
-      "Crisp single and bulk black & white and color photocopying for documents, notes, books, and IDs. Sharp contrast on standard 75/80 GSM paper.",
+      "Black-and-white and color photocopies for documents, notes, books and IDs. Single and bulk orders available.",
     url: "/photocopying",
     icon: Copy,
     isPrimaryFeatured: true,
@@ -62,7 +62,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "color-printing",
     title: "Color Printing",
     shortDesc:
-      "Vibrant full-color laser printing and color photocopy for presentation slides, certificates, project covers, and graphical documents.",
+      "Color prints and photocopies for slides, certificates, project covers and other documents.",
     url: "/color-printing",
     icon: Palette,
     badge: "High Resolution",
@@ -73,7 +73,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "notes-printing",
     title: "Notes Printing",
     shortDesc:
-      "Student handouts, school, college, and university syllabus notes and assignment printing. Single or double-sided with neat stapling.",
+      "Bulk notes and assignment printing for schools, colleges and universities at discounted rates.",
     url: "/notes-printing",
     icon: BookOpen,
     badge: "Students & Institutes",
@@ -84,7 +84,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "bulk-printing",
     title: "Bulk Printing",
     shortDesc:
-      "Large-volume document printing and bulk copying for offices, schools, colleges, and organizations. Contact us ahead for scheduled completion.",
+      "Bulk printing and photocopying for schools, colleges, universities and offices. Ask about discounted rates.",
     url: "/bulk-printing",
     icon: Layers,
     badge: "Volume Orders",
@@ -95,7 +95,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "photo-printing",
     title: "Photo Printing & Passport Photos",
     shortDesc:
-      "Urgent passport-size photos with white or blue background for CNIC, passports, visas, licenses, and admissions. Ready in 5 minutes.",
+      "Passport-size photos with white or blue backgrounds for CNICs, passports, visas and admissions. Usually ready in 5 minutes.",
     url: "/photo-printing",
     icon: Camera,
     badge: "Ready in 5 Mins",
@@ -106,7 +106,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "office-printing",
     title: "Office Printing",
     shortDesc:
-      "Corporate documentation, legal agreements, official forms, proposals, meeting handouts, and institutional paperwork for local businesses.",
+      "Printing and photocopying for contracts, proposals, forms and other office documents.",
     url: "/office-printing",
     icon: Briefcase,
     badge: "Commercial / Business",
@@ -117,7 +117,7 @@ const PRIMARY_SERVICES: PrimaryService[] = [
     id: "nadra-esahulat",
     title: "NADRA e-Sahulat & Biometrics",
     shortDesc:
-      "Authorized local biometric verification for General verification, Vehicle / ETO transfers, FBR Sales Tax, and Pakistan Single Window (PSW).",
+      "Biometric verification for supported general, vehicle-transfer, FBR Sales Tax and PSW cases.",
     url: "/nadra-esahulat",
     icon: Fingerprint,
     badge: "Authorized Franchise",
@@ -148,7 +148,7 @@ export function StitchServices({}: StitchServicesProps) {
               Printing, Photocopying &amp; Biometric Center
             </h2>
             <p className="text-slate-600 mt-2 text-sm sm:text-base leading-relaxed">
-              Everyday walk-in and online document services in Sector B, Akhtar Colony, Karachi. Select any service to explore options, paper specifications, and requirements.
+              Visit our Akhtar Colony shop for printing, photocopying and biometric services. Select a service to see its options and requirements.
             </p>
           </div>
           <div className="shrink-0 flex items-center gap-2">

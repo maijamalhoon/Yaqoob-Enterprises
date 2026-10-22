@@ -213,7 +213,7 @@ export default async function PublicServicePage({
                 <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={28} /></div>
                 <span className="eyebrow">{category.title}</span>
                 <h1>{seo.heading}</h1>
-                <p>{seo.description}</p>
+                <p>{seo.displayDescription}</p>
               </div>
               <aside className="seo-service-hero__summary" aria-label="Service summary">
                 <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>
@@ -298,7 +298,7 @@ export default async function PublicServicePage({
               {seo.faqs.length > 0 && (
                 <section className="seo-content-block">
                   <span className="eyebrow">Frequently asked questions</span>
-                  <h2>Aksar Poochay Janay Walay Sawalat</h2>
+                  <h2>Frequently Asked Questions</h2>
                   <div className="space-y-3 mt-4">
                     {seo.faqs.map((faq, idx) => (
                       <details key={idx} className="group bg-slate-50 border border-slate-200 rounded-xl p-4 transition-all">

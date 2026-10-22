@@ -25,18 +25,8 @@ function refreshGallery() {
 }
 
 async function makeFeatured(supabase: Awaited<ReturnType<typeof requireAdmin>>["supabase"], id: string) {
-  const { error: clearError } = await supabase
-    .from("gallery_images")
-    .update({ is_featured: false })
-    .eq("is_featured", true)
-    .neq("id", id);
-  if (clearError) throw new Error(clearError.message);
-
-  const { error: featureError } = await supabase
-    .from("gallery_images")
-    .update({ is_featured: true, is_active: true })
-    .eq("id", id);
-  if (featureError) throw new Error(featureError.message);
+  const { error } = await supabase.rpc("admin_set_featured_gallery_image", { target_id: id });
+  if (error) throw new Error(error.message);
 }
 
 async function featureNextRealImage(
@@ -100,7 +90,12 @@ export async function updateGalleryImage(formData: FormData) {
   const isActive = bool(formData, "is_active");
   const mediaKind = text(formData, "media_kind") || "real";
   const wantsFeatured = bool(formData, "is_featured") && isActive && mediaKind === "real";
-  const { data: previous } = await supabase.from("gallery_images").select("is_featured").eq("id", id).single();
+  const { data: previous, error: lookupError } = await supabase
+    .from("gallery_images")
+    .select("is_featured")
+    .eq("id", id)
+    .single();
+  if (lookupError) throw new Error(lookupError.message);
 
   const { error } = await supabase.from("gallery_images").update({
     alt_text: text(formData, "alt_text") || "Shop image",

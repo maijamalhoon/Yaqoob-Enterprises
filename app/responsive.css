@@ -3,6 +3,8 @@
  * Keep structural/product styling in design-system.css and global-polish.css.
  */
 
+#home-page #top-operating-banner { display: none; }
+
 html {
   scroll-padding-top: calc(var(--header-h) + 0.75rem);
   -webkit-text-size-adjust: 100%;
@@ -110,6 +112,38 @@ textarea {
 
   .minimal-footer__contact {
     grid-column: auto;
+  }
+}
+
+@media (max-width: 48rem) {
+  .mobile-hero-actions > a:first-child,
+  .mobile-hero-actions > a:last-child {
+    display: none;
+  }
+
+  .mobile-hero-actions > a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #topbar-phone-link {
+    display: none;
+  }
+
+  #mobileMenuBtn {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  #mobileDrawer {
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+  }
+
+  #mobileDrawer a {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
   }
 }
 

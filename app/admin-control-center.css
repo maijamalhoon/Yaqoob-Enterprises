@@ -937,7 +937,7 @@
   .admin-nav nav::-webkit-scrollbar { display: none; }
 
   .admin-nav nav a {
-    flex: 0 0 4.15rem;
+    flex: 1 1 0;
     min-width: 0;
     display: grid;
     place-items: center;
@@ -1135,6 +1135,16 @@
     flex-direction: column;
     gap: 0.18rem;
   }
+}
+
+@media (max-width: 30rem) {
+  .admin-nav nav { gap: 0; }
+  .admin-nav nav a { padding-inline: 0.1rem; }
+  .admin-nav nav a span { font-size: 0.52rem; }
+}
+
+@media (max-width: 22rem) {
+  .admin-nav nav a span { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

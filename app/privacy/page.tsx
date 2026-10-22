@@ -36,15 +36,15 @@ export default async function PrivacyPage() {
     <>
       <SiteHeader settings={settings} statusText={getCurrentBusinessStatus(hours)} />
       <main id="main-content">
-        <section className="page-hero"><div className="container"><span className="eyebrow">Privacy</span><h1>Plain-language privacy information.</h1><p>What the website stores, what it does not store and how third-party services are used.</p></div></section>
+        <section className="page-hero"><div className="container"><span className="eyebrow">Privacy</span><h1>Privacy &amp; data use</h1><p>How this website handles forms, analytics and external services.</p></div></section>
         <section className="section"><article className="container prose-page">
-          <h2>Service request form</h2><p>The contact form prepares a WhatsApp message on your device. It does not upload files or store the form fields in the website database.</p>
-          <h2>Website analytics</h2><p>The website records page views and contact-action clicks for aggregate operational reporting. It may record approximate city or country information supplied by the hosting platform. Exact GPS location, full IP addresses, passwords, PINs and one-time codes are not stored in the analytics table.</p>
-          <h2>Analytics cookies</h2><p>When analytics is allowed, the website may set a first-party <code>ye_session</code> cookie containing a random identifier. It expires after up to 12 months and is converted to a one-way hash before analytics is stored. When a campaign link is used, first-party source, medium and campaign cookies may also be kept for up to 30 days so later contact actions can be attributed to that campaign. These cookies do not contain your name, phone number or email.</p>
-          <h2>Privacy signals and retention</h2><p>Analytics is skipped for signed-in administrators, recognised automated bots, browsers sending Do Not Track, and browsers using the Global Privacy Control signal. The website does not use advertising trackers. Analytics events are kept for operational reporting and may be deleted during maintenance; no customer request-form content is included in those records.</p>
-          <h2>WhatsApp, phone and maps</h2><p>WhatsApp, telephone services and Google Maps are operated by their respective providers. Their terms and privacy policies apply when you use those services.</p>
-          <h2>Sensitive information</h2><p>Never send passwords, PINs or one-time verification codes. Identification documents should only be shared when genuinely required and after confirming the service process.</p>
-          <h2>Admin access</h2><p>The admin centre uses Supabase authentication and is restricted to explicitly authorised email addresses.</p>
+          <h2>Service request form</h2><p>The form prepares a WhatsApp message on your device. It does not upload files or save form details to the website database.</p>
+          <h2>Website analytics</h2><p>Page views and contact clicks are recorded for aggregate reporting. Google Analytics 4 measures public visits. Hosting may provide an approximate city or country. The website analytics table does not store exact GPS locations, full IP addresses, passwords, PINs or one-time codes.</p>
+          <h2>Analytics cookies</h2><p>First-party analytics may use a random <code>ye_session</code> cookie for up to 12 months; its value is one-way hashed before storage. Campaign cookies may last up to 30 days. Google Analytics may set its own cookies. These cookies do not contain your name, phone number or email.</p>
+          <h2>Privacy signals and retention</h2><p>First-party analytics skips signed-in administrators, recognised bots and browsers with Do Not Track or Global Privacy Control enabled. Google Analytics runs on public production pages, not admin routes, and also skips those signals. We do not use advertising trackers. Analytics events may be deleted during maintenance; they do not include request-form content.</p>
+          <h2>WhatsApp, phone, maps and analytics</h2><p>Google Analytics, WhatsApp, phone providers and Google Maps have their own terms and privacy policies.</p>
+          <h2>Sensitive information</h2><p>Do not send passwords, PINs or one-time codes. Share ID documents only when required, after confirming the service process.</p>
+          <h2>Admin access</h2><p>Supabase authentication limits admin access to authorised email addresses.</p>
         </article></section>
       </main>
       <SiteFooter settings={settings} categories={categories} />

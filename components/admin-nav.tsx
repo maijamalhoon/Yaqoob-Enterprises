@@ -30,6 +30,7 @@ export function AdminNav() {
               href={href}
               className={active ? "is-active" : undefined}
               aria-current={active ? "page" : undefined}
+              aria-label={label}
               title={label}
             >
               <Icon size={18} aria-hidden="true" />

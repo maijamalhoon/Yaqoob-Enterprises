@@ -18,16 +18,16 @@ import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Printing Services in Akhtar Colony",
+  title: "Printing Services in Akhtar Colony, Karachi",
   description:
-    "Laser printing in Akhtar Colony, Karachi. Black-and-white and color prints for assignments, notes, office documents, and bulk orders. Send your PDF on WhatsApp before visiting.",
+    "Black-and-white and color printing in Akhtar Colony, Karachi. Bulk school, college, and university notes and assignments at discounted rates.",
   alternates: {
     canonical: `${SITE_URL}/printing`,
   },
   openGraph: {
     title: "Printing Services in Akhtar Colony, Karachi | Yaqoob Enterprises",
     description:
-      "High-speed laser printing in Akhtar Colony, Karachi. B&W and color printing for assignments, office documents, and study notes. Send documents on WhatsApp.",
+      "Print notes and assignments for schools, colleges, and universities. Ask about discounted bulk rates and late-night printing until closing.",
     url: `${SITE_URL}/printing`,
     type: "website",
   },
@@ -35,30 +35,30 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Printing Services in Akhtar Colony, Karachi | Yaqoob Enterprises",
     description:
-      "High-speed laser printing in Akhtar Colony, Karachi. B&W and color printing for assignments, office documents, and study notes.",
+      "Print notes and assignments for schools, colleges, and universities. Ask about discounted bulk rates and late-night printing until closing.",
   },
 };
 
 const PRINTING_FAQS = [
   {
     q: "Can I send my documents on WhatsApp before visiting?",
-    a: "Send your PDF, Word file, or images to +92 349 2568864. Tell us whether you need black-and-white or color, single- or double-sided printing, and how many copies. We will confirm the pickup time.",
+    a: "Send your file, print options, and quantity on WhatsApp. We will confirm the cost and pickup time.",
   },
   {
     q: "What paper sizes and weights do you support?",
-    a: "We standardly stock premium 75 GSM and 80 GSM paper in A4 and Legal sizes. These provide clean, jam-free, professional results for legal documents, academic submissions, and corporate reports.",
+    a: "A4 and Legal paper in 75 GSM and 80 GSM is available.",
   },
   {
     q: "Do you offer both black & white and color printing?",
-    a: "Yes. We have high-capacity monochrome laser printers for fast, economical black-and-white printouts and dedicated color laser printers for presentations, certificates, project covers, and graphs.",
+    a: "Yes. We offer black-and-white and color printing.",
   },
   {
-    q: "Do you handle student assignment and university thesis printing?",
-    a: "Yes. Many students from nearby schools, colleges, and Karachi universities print their semester assignments, slides, and project documentation with us. We also offer neat corner stapling and document clipping.",
+    q: "Do you print notes and assignments for schools, colleges, and universities?",
+    a: "Yes. We print school, college, and university notes and assignments in bulk, with quality printing at discounted rates compared with market prices. Send your file and quantity for a quote.",
   },
   {
-    q: "Do you provide bulk printing discounts for offices or institutes?",
-    a: "Yes. For larger orders (e.g. hundreds of pages of training manuals, syllabus handouts, or organizational paperwork), we provide clear volume rates. Message us on WhatsApp before visiting so we can schedule the run.",
+    q: "Is late-night printing available?",
+    a: "Late-night printing is available until closing. Message us on WhatsApp to confirm availability and pickup time.",
   },
 ];
 
@@ -90,7 +90,7 @@ export default async function PrintingPage() {
     name: "Printing Services in Akhtar Colony, Karachi",
     serviceType: "Laser Printing Services",
     description:
-      "Black & white and color laser document printing, student assignment printing, university notes, and bulk printing in Akhtar Colony, Karachi.",
+      "Black-and-white and color printing, plus quality bulk notes and assignment printing at discounted rates in Akhtar Colony, Karachi.",
     url: pageUrl,
     provider: {
       "@type": "LocalBusiness",
@@ -159,15 +159,15 @@ export default async function PrintingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Printing Services in Akhtar Colony, Karachi
+                Printing in Akhtar Colony
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Clean, high-speed digital laser printing for students, businesses, and local residents. From single-page urgent printouts to multi-hundred page documents and university notes.
+                Color and black-and-white prints for school, study and office documents. Bulk discounts are available.
               </p>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
@@ -185,7 +185,7 @@ export default async function PrintingPage() {
                   className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  <span>SEND DOCUMENT ON WHATSAPP</span>
+                  <span>SEND ON WHATSAPP</span>
                 </TrackedLink>
 
                 <TrackedLink
@@ -200,11 +200,6 @@ export default async function PrintingPage() {
                 </TrackedLink>
               </div>
 
-              {/* Status Note */}
-              <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Counter Open: {statusText || "Open daily until 11:00 PM"}</span>
-              </div>
             </div>
           </div>
         </section>
@@ -214,10 +209,10 @@ export default async function PrintingPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10">
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">
-                Save Time: Send Your Document on WhatsApp Before Visiting
+                Send Your File Before You Visit
               </h2>
               <p className="text-sm text-slate-600 max-w-2xl leading-relaxed mb-6">
-                Avoid standing in line or waiting for files to download in the shop. Follow these 3 simple steps:
+                Send your file and print options on WhatsApp. We will confirm the cost and pickup time.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -225,9 +220,9 @@ export default async function PrintingPage() {
                   <span className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center mb-3">
                     01
                   </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">WhatsApp Your File</h3>
+                  <h3 className="font-bold text-slate-900 text-sm mb-1">Send Your File</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Send your PDF, Word document, or image to <strong>+92 349 2568864</strong>.
+                    WhatsApp your PDF, Word file, or image to <strong>+92 349 2568864</strong>.
                   </p>
                 </div>
 
@@ -235,9 +230,9 @@ export default async function PrintingPage() {
                   <span className="w-8 h-8 rounded-full bg-[#0E7490] text-white font-bold text-xs flex items-center justify-center mb-3">
                     02
                   </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">Specify Your Options</h3>
+                  <h3 className="font-bold text-slate-900 text-sm mb-1">Choose Print Options</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Tell us: Black &amp; White or Color, Single-sided or Back-to-back, and number of copies.
+                    Tell us color or black-and-white, single- or double-sided, and how many copies.
                   </p>
                 </div>
 
@@ -245,9 +240,9 @@ export default async function PrintingPage() {
                   <span className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center mb-3">
                     03
                   </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">Collect at the Counter</h3>
+                  <h3 className="font-bold text-slate-900 text-sm mb-1">Confirm &amp; Collect</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Walk in to Plot 7, Street 1, Sector B (Near Jamia Masjid Muhammadi) and collect your printed pages.
+                    We will confirm the pickup time and shop location.
                   </p>
                 </div>
               </div>
@@ -263,10 +258,10 @@ export default async function PrintingPage() {
                 Printing Services Covered
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                Everything We Print at Our Akhtar Colony Counter
+                Printing for Study, Work &amp; Everyday Needs
               </h2>
               <p className="text-sm text-slate-600 mt-2">
-                We handle everyday personal documents, institutional requirements, and student projects.
+                Black-and-white, color, notes, assignments, and bulk printing.
               </p>
             </div>
 
@@ -277,7 +272,7 @@ export default async function PrintingPage() {
                   <span>Black &amp; White Laser Printing</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Fast monochrome printing on crisp white 75/80 GSM paper. Ideal for text documents, legal papers, forms, and general receipts.
+                  Black-and-white prints for forms, records, and everyday documents.
                 </p>
               </div>
 
@@ -287,7 +282,7 @@ export default async function PrintingPage() {
                   <span>Color Printing</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Vibrant laser color printouts for project title pages, charts, certificates, slides, and graphical documents.
+                  Color prints for slides, charts, certificates, and covers.
                 </p>
                 <Link href="/color-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Color printing details</span>
@@ -301,7 +296,7 @@ export default async function PrintingPage() {
                   <span>School, College &amp; University Notes</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Complete semester notes, lecture handouts, past papers, and university assignments printed neatly with stapling.
+                  School, college, and university notes and assignments in bulk at discounted rates.
                 </p>
                 <Link href="/notes-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Student notes guide</span>
@@ -315,7 +310,7 @@ export default async function PrintingPage() {
                   <span>Assignment &amp; Project Printing</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Single or double-sided formatting for university submissions, presentations, research proposals, and thesis drafts.
+                  Single- or double-sided printing for assignments and projects.
                 </p>
               </div>
 
@@ -325,7 +320,7 @@ export default async function PrintingPage() {
                   <span>Office &amp; Organizational Printing</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Commercial documentation, company profiles, agreements, employee lists, and official forms for local businesses.
+                  Documents and forms for local businesses.
                 </p>
                 <Link href="/office-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Office printing details</span>
@@ -339,7 +334,7 @@ export default async function PrintingPage() {
                   <span>Bulk Document Orders</span>
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Hundreds or thousands of pages for coaching centers, institutes, or office archives, completed promptly with volume rates.
+                  Quality bulk printing at rates discounted compared with market prices. Message us for a quote.
                 </p>
                 <Link href="/bulk-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Bulk printing details</span>
@@ -358,7 +353,7 @@ export default async function PrintingPage() {
                 Frequently Asked Questions About Printing
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                Common questions from customers visiting Yaqoob Enterprises in Akhtar Colony.
+              Clear answers about print options and bulk orders.
               </p>
             </div>
 

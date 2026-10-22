@@ -70,6 +70,10 @@ html, body {
 }
 
 /* Specific Dark CTA Buttons Text Color Guarantee */
+#main-content a[class~="text-white"] {
+  color: #ffffff;
+}
+
 #hero-whatsapp-cta,
 #header-whatsapp-btn,
 #mobile-bottom-whatsapp-btn,

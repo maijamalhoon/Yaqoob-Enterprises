@@ -10,28 +10,27 @@ import {
   Printer,
   Copy,
   Fingerprint,
-  Star,
   ExternalLink,
 } from "lucide-react";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
-import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
+import { formatGroupedHours, getCurrentBusinessStatus, getHourPeriods, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: "About the Shop | Printing & Biometrics",
   description:
-    "Learn about Yaqoob Enterprises, an established physical print, photocopy, and NADRA e-Sahulat biometric shop located at Plot 7, Street 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi.",
+    "About Yaqoob Enterprises, a printing, photocopy and NADRA e-Sahulat shop in Akhtar Colony, Karachi.",
   alternates: {
     canonical: `${SITE_URL}/about`,
   },
   openGraph: {
     title: "About Yaqoob Enterprises | Print, Copy & Biometrics in Akhtar Colony, Karachi",
     description:
-      "Physical shop details, services, equipment, and location of Yaqoob Enterprises in Akhtar Colony, Karachi.",
+      "Printing, photocopy and NADRA e-Sahulat services at Yaqoob Enterprises in Akhtar Colony, Karachi.",
     url: `${SITE_URL}/about`,
     type: "website",
   },
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About Yaqoob Enterprises | Print, Copy & Biometrics in Akhtar Colony, Karachi",
     description:
-      "Physical shop details, services, equipment, and location of Yaqoob Enterprises in Akhtar Colony, Karachi.",
+      "Printing, photocopy and NADRA e-Sahulat services at Yaqoob Enterprises in Akhtar Colony, Karachi.",
   },
 };
 
@@ -59,6 +58,16 @@ export default async function AboutPage() {
     settings.map_url ||
     "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
   const pageUrl = `${SITE_URL}/about`;
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const groupedHours = formatGroupedHours(hours);
+  const openingHoursSpecification = hours.flatMap((hour) =>
+    getHourPeriods(hour).map((period) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: `https://schema.org/${dayNames[hour.weekday]}`,
+      opens: period.opens_at,
+      closes: period.closes_at,
+    })),
+  );
 
   const breadcrumbsSchema = {
     "@context": "https://schema.org",
@@ -88,7 +97,7 @@ export default async function AboutPage() {
       latitude: 24.8427,
       longitude: 67.0735,
     },
-    openingHours: "Mo-Sa 09:00-23:00, Su 16:00-22:30",
+    openingHoursSpecification,
   };
 
   return (
@@ -121,22 +130,22 @@ export default async function AboutPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                About Yaqoob Enterprises
+                About {settings.business_name}
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Yaqoob Enterprises is a walk-in local business located in Sector B, Akhtar Colony, Karachi, dedicated to providing high-speed printing, clear photocopying, urgent passport photography, and authorized NADRA e-Sahulat biometric verification.
+                Visit our Sector B shop for printing, photocopying, passport photos and NADRA e-Sahulat.
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}
                   className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
                 >
                   <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>CALL: +92 349 2568864</span>
+                  <span>CALL: {settings.phone_display}</span>
                 </TrackedLink>
 
                 <TrackedLink
@@ -175,16 +184,16 @@ export default async function AboutPage() {
                     Our Shop &amp; Operations
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                    Serving Akhtar Colony and Surrounding Karachi Areas
+                    Serving Akhtar Colony
                   </h2>
                 </div>
 
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  Located steps away from Jamia Masjid Muhammadi on Street 1 in Sector B, Yaqoob Enterprises was established to bring dependable everyday digital and documentation services into our neighborhood.
+                  Find us on Street 1 in Sector B, near Jamia Masjid Muhammadi. We provide everyday printing and document services for the neighbourhood.
                 </p>
 
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  Rather than traveling across town for a simple document print, vehicle transfer biometric, or passport photo, local students, parents, and business owners have an accessible, professional counter right in their community.
+                  Students, families and local businesses can visit for document printing, passport photos and supported biometric services.
                 </p>
 
                 <div className="space-y-3 pt-2">
@@ -230,16 +239,16 @@ export default async function AboutPage() {
 
                   <div className="text-xs sm:text-sm text-slate-700 space-y-2 leading-relaxed">
                     <p>
-                      <strong>Business Name:</strong> Yaqoob Enterprises
+                      <strong>Business Name:</strong> {settings.business_name}
                     </p>
                     <p>
-                      <strong>Address:</strong> Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi, Pakistan.
+                      <strong>Address:</strong> {settings.address}
                     </p>
                     <p>
-                      <strong>Phone / WhatsApp:</strong> +92 349 2568864
+                      <strong>Phone / WhatsApp:</strong> {settings.phone_display}
                     </p>
                     <p>
-                      <strong>Operating Hours:</strong> Monday – Saturday: 9:00 AM – 11:00 PM (Friday prayer break) • Sunday: 4:00 PM – 10:30 PM
+                      <strong>Operating Hours:</strong> {groupedHours.map(({ label, time }) => `${label}: ${time}`).join(" · ")}
                     </p>
                   </div>
 
@@ -266,19 +275,6 @@ export default async function AboutPage() {
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                  <div className="flex items-center gap-2 text-amber-500 mb-1">
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900">Neighborhood Reputation</h4>
-                  <p className="text-xs text-slate-600 mt-1">
-                    Trusted daily by students, families, and neighborhood offices for straightforward, reliable service.
-                  </p>
-                </div>
               </div>
             </div>
           </div>

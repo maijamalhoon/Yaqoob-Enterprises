@@ -21,43 +21,43 @@ import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Office Printing in Karachi",
+  title: "Office & Institutional Printing in Karachi",
   description:
-    "Corporate and organizational document printing in Akhtar Colony, Karachi. Official paperwork, contracts, forms, meeting folders, proposals, and bulk photocopying for local commercial businesses and institutions.",
+    "Bulk office printing and photocopying in Akhtar Colony, Karachi. Discounted rates for schools, colleges, universities, and business orders.",
   alternates: {
     canonical: `${SITE_URL}/office-printing`,
   },
   openGraph: {
-    title: "Office & Organizational Document Printing Karachi | Yaqoob Enterprises",
+    title: "Office & Institutional Printing in Karachi | Yaqoob Enterprises",
     description:
-      "Office paperwork, proposals, employee forms, and commercial printing in Akhtar Colony, Karachi. Direct WhatsApp business inquiries.",
+      "Office documents, notes, and assignments printed in bulk for local organizations at discounted rates.",
     url: `${SITE_URL}/office-printing`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Office & Organizational Document Printing Karachi | Yaqoob Enterprises",
+    title: "Office & Institutional Printing in Karachi | Yaqoob Enterprises",
     description:
-      "Office paperwork, proposals, employee forms, and commercial printing in Akhtar Colony, Karachi.",
+      "Bulk printing for schools, colleges, universities, and offices in Akhtar Colony, Karachi.",
   },
 };
 
 const OFFICE_FAQS = [
   {
     q: "Can businesses establish ongoing printing and photocopy accounts?",
-    a: "Yes. For local businesses, educational centers, clinics, and property agencies in Akhtar Colony and surrounding areas, we can coordinate scheduled weekly or monthly document printing runs with itemized billing.",
+    a: "Message us to discuss repeat printing or photocopying orders and confirm the schedule and rate.",
   },
   {
-    q: "How fast can you fulfill a 200–500 page office paperwork order?",
-    a: "Standard office document sets of 200–500 pages are typically completed within a few hours when sent ahead via WhatsApp or email. We will confirm the exact ready time as soon as you share the files.",
+    q: "How soon can I collect a large office order?",
+    a: "Send the file and quantity on WhatsApp. We will confirm the estimated pickup time before printing.",
   },
   {
-    q: "Can you print confidential legal agreements and employee records securely?",
-    a: "Yes. We respect customer confidentiality. All commercial files, employment records, and legal drafts sent to us are handled strictly for output and are promptly cleared from our print station buffers.",
+    q: "Can you print legal and business documents?",
+    a: "Yes. Send the document and quantity on WhatsApp, and we will confirm the print options and rate.",
   },
   {
     q: "Do you supply both standard A4 and Legal size paper for office documents?",
-    a: "Yes. We keep ample stock of both A4 and Legal size papers in standard 75 GSM and premium 80 GSM, which are standard for Pakistani court, legal, corporate, and governmental filings.",
+    a: "Yes. A4 and Legal paper in 75 GSM and 80 GSM is available.",
   },
 ];
 
@@ -89,7 +89,7 @@ export default async function OfficePrintingPage() {
     name: "Office & Organizational Printing in Akhtar Colony, Karachi",
     serviceType: "Corporate Document Printing",
     description:
-      "Office paperwork, business proposals, contracts, forms, and bulk documentation printing in Akhtar Colony, Karachi.",
+      "Bulk printing and photocopying for local offices, schools, colleges, and universities in Akhtar Colony, Karachi.",
     url: pageUrl,
     provider: {
       "@type": "LocalBusiness",
@@ -157,15 +157,15 @@ export default async function OfficePrintingPage() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Office &amp; Organizational Printing in Akhtar Colony, Karachi
+                Office &amp; Institutional Printing
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Reliable printing and photocopying partner for local businesses, schools, clinics, real estate offices, and corporate branches. We produce clean, smudge-free official paperwork, forms, proposals, and vouchers on schedule.
+                Printing and photocopying for business documents, forms and reports. Bulk discounts are available.
               </p>
 
               {/* 3 Prominent CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-6">
+              <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
                   href={callUrl}

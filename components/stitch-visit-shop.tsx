@@ -1,67 +1,12 @@
 import { MapPin, Phone, Clock, Landmark, ShieldCheck } from "lucide-react";
 import { TrackedLink } from "@/components/tracked-link";
-import { formatBusinessHours } from "@/lib/data";
+import { formatGroupedHours } from "@/lib/data";
 import type { BusinessHour, BusinessSettings } from "@/lib/types";
 
 interface StitchVisitShopProps {
   settings: BusinessSettings;
   statusText: string;
   hours?: BusinessHour[];
-}
-
-const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-// Mon-Sun order: [1, 2, 3, 4, 5, 6, 0]
-const displayOrder = [1, 2, 3, 4, 5, 6, 0];
-
-function formatGroupedHours(hours?: BusinessHour[]) {
-  if (!hours || hours.length === 0) {
-    return [
-      { label: "Monday – Saturday", time: "9:00 AM – 11:00 PM" },
-      { label: "Sunday", time: "4:00 PM – 10:30 PM" },
-    ];
-  }
-
-  const byDay = new Map(hours.map((h) => [h.weekday, h]));
-  const schedule = displayOrder.map((dayIdx) => {
-    const hour = byDay.get(dayIdx);
-    return {
-      dayIdx,
-      dayName: weekdayNames[dayIdx],
-      formatted: hour ? formatBusinessHours(hour) : "Closed",
-    };
-  });
-
-  // Check if Mon-Sat (first 6 items) have identical hours
-  const monSatSame = schedule
-    .slice(0, 6)
-    .every((item) => item.formatted === schedule[0].formatted);
-
-  if (monSatSame) {
-    return [
-      { label: "Monday – Saturday", time: schedule[0].formatted },
-      { label: "Sunday", time: schedule[6].formatted },
-    ];
-  }
-
-  // Otherwise group consecutive days with identical hours
-  const groups: { label: string; time: string }[] = [];
-  let startIdx = 0;
-
-  for (let i = 1; i <= schedule.length; i++) {
-    if (i === schedule.length || schedule[i].formatted !== schedule[startIdx].formatted) {
-      const label =
-        startIdx === i - 1
-          ? schedule[startIdx].dayName
-          : `${schedule[startIdx].dayName} – ${schedule[i - 1].dayName}`;
-      groups.push({
-        label,
-        time: schedule[startIdx].formatted,
-      });
-      startIdx = i;
-    }
-  }
-
-  return groups;
 }
 
 export function StitchVisitShop({ settings, statusText, hours }: StitchVisitShopProps) {
@@ -95,7 +40,7 @@ export function StitchVisitShop({ settings, statusText, hours }: StitchVisitShop
           </p>
           <div className="mt-4 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200">
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>{statusText || "Open now · until 11:00 PM"}</span>
+            <span>{statusText || "Hours available on WhatsApp"}</span>
           </div>
         </div>
 

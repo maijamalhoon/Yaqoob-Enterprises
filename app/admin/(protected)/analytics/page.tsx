@@ -9,6 +9,23 @@ const contactLabels: Record<string, string> = {
   call_click: "Calls",
   directions_click: "Directions",
 };
+const analyticsDayFormatter = new Intl.DateTimeFormat("en-US", {
+  calendar: "gregory",
+  day: "2-digit",
+  month: "2-digit",
+  timeZone: "Asia/Karachi",
+  year: "numeric",
+});
+const analyticsTickFormatter = new Intl.DateTimeFormat("en-PK", {
+  day: "numeric",
+  month: "short",
+  timeZone: "UTC",
+});
+
+function analyticsDayKey(date: Date) {
+  const parts = Object.fromEntries(analyticsDayFormatter.formatToParts(date).map(({ type, value }) => [type, value]));
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
 
 function decodeLabel(value: string | null | undefined, fallback: string) {
   if (!value) return fallback;
@@ -77,6 +94,20 @@ export default async function AdminAnalyticsPage() {
     return path !== "/admin" && !path.startsWith("/admin/");
   });
   const pageViewRows = rows.filter((event) => event.event_name === "page_view");
+  const [year, month, day] = analyticsDayKey(new Date()).split("-").map(Number);
+  const dailyPageViews = Array.from({ length: 31 }, (_, index) => {
+    const date = new Date(Date.UTC(year, month - 1, day + index - 30));
+    const key = date.toISOString().slice(0, 10);
+    return { key, label: analyticsTickFormatter.format(date), count: 0 };
+  });
+  const dailyPageViewsByDay = new Map(dailyPageViews.map((entry) => [entry.key, entry]));
+  for (const event of pageViewRows) {
+    const entry = dailyPageViewsByDay.get(analyticsDayKey(new Date(event.created_at)));
+    if (entry) entry.count += 1;
+  }
+  const dailyViewsTotal = dailyPageViews.reduce((total, entry) => total + entry.count, 0);
+  const busiestDay = dailyPageViews.reduce((busiest, entry) => entry.count > busiest.count ? entry : busiest);
+  const dailyViewsMax = Math.max(1, ...dailyPageViews.map((entry) => entry.count));
   const contactRows = rows.filter((event) => contactEvents.has(event.event_name));
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
   const pageViews = pageViewRows.length;
@@ -149,6 +180,22 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
+
+      <section className="admin-panel admin-panel--control admin-traffic-panel">
+        <div className="admin-panel__heading">
+          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the last 30 days, grouped by Pakistan time.</p></div>
+          <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
+        </div>
+        <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views over the last 30 days. ${dailyViewsTotal.toLocaleString("en-PK")} total; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
+          <div className="admin-traffic-chart__scale" aria-hidden="true"><span>{dailyViewsMax.toLocaleString("en-PK")}</span><span>{(dailyViewsMax / 2).toLocaleString("en-PK", { maximumFractionDigits: 1 })}</span><span>0</span></div>
+          <div className="admin-traffic-chart__plot">
+            {dailyPageViews.map((entry) => <span key={entry.key} title={`${entry.label}: ${entry.count.toLocaleString("en-PK")} page views`} style={{ height: `${entry.count ? Math.max(4, (entry.count / dailyViewsMax) * 100) : 0}%` }} />)}
+            {dailyViewsTotal === 0 && <p>No page views recorded during this period.</p>}
+          </div>
+        </div>
+        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[30].label}</span></div>
+        {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
+      </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
         <div className="admin-panel__heading">

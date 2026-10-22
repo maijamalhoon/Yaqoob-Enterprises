@@ -14,7 +14,7 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { StitchQuickRequest } from "@/components/stitch-quick-request";
 import { CopyableAddress } from "@/components/copyable-address";
 import { TrackedLink } from "@/components/tracked-link";
-import { formatBusinessHours, getCurrentBusinessStatus, getSiteData } from "@/lib/data";
+import { formatBusinessHours, getCurrentBusinessStatus, getHourPeriods, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
@@ -52,8 +52,16 @@ export default async function ContactPage() {
     settings.map_url ||
     "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
 
-  const exactAddress =
-    "Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi, Pakistan";
+  const exactAddress = settings.address || "Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi, Pakistan";
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const openingHoursSpecification = hours.flatMap((hour) =>
+    getHourPeriods(hour).map((period) => ({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: `https://schema.org/${dayNames[hour.weekday]}`,
+      opens: period.opens_at,
+      closes: period.closes_at,
+    })),
+  );
 
   const breadcrumbsSchema = {
     "@context": "https://schema.org",
@@ -71,6 +79,7 @@ export default async function ContactPage() {
     telephone: phone,
     url: `${SITE_URL}/contact`,
     hasMap: directionsUrl,
+    openingHoursSpecification,
     address: {
       "@type": "PostalAddress",
       streetAddress: exactAddress,
@@ -120,7 +129,7 @@ export default async function ContactPage() {
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-2 leading-relaxed">
-                Visit our physical shop in Sector B, Akhtar Colony, call our counter directly, or send documents in advance on WhatsApp.
+                Visit our Akhtar Colony counter, call us, or send documents on WhatsApp.
               </p>
             </div>
           </div>
@@ -137,20 +146,12 @@ export default async function ContactPage() {
                   <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490] block mb-1">
                     Physical Address
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    Yaqoob Enterprises
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+                    {settings.business_name}
                   </h2>
 
                   <div className="mt-3 text-sm text-slate-700 leading-relaxed">
-                    <p className="font-semibold text-slate-900">
-                      Plot No. 7, Street No. 1, Sector B,
-                    </p>
-                    <p className="text-slate-700">
-                      Near Jamia Masjid Muhammadi,
-                    </p>
-                    <p className="text-slate-700">
-                      Akhtar Colony, Karachi, Pakistan
-                    </p>
+                    <p className="text-slate-700">{exactAddress}</p>
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
@@ -161,7 +162,7 @@ export default async function ContactPage() {
                   </div>
 
                   {/* 3 Prominent CTAs: CALL NOW, WHATSAPP, GET DIRECTIONS */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 mt-4 border-t border-slate-200">
+                  <div className="mobile-hero-actions grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 mt-4 border-t border-slate-200">
                     <TrackedLink
                       eventName="call_click"
                       href={callUrl}
@@ -202,8 +203,8 @@ export default async function ContactPage() {
                       <Clock className="w-5 h-5 text-[#0E7490]" />
                       <span>Opening Hours</span>
                     </h3>
-                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                      {statusText || "Open daily until 11:00 PM"}
+                    <span className={`text-xs font-bold px-3 py-1 rounded-full border ${statusText.startsWith("Open now") ? "text-emerald-700 bg-emerald-50 border-emerald-200" : "text-slate-700 bg-slate-100 border-slate-200"}`}>
+                      {statusText || "Hours available on WhatsApp"}
                     </span>
                   </div>
 
@@ -218,7 +219,7 @@ export default async function ContactPage() {
                     ) : (
                       <>
                         <div className="py-2.5 flex justify-between">
-                          <span className="font-semibold text-slate-800">Monday – Saturday</span>
+                          <span className="font-semibold text-slate-800">Monday–Thursday &amp; Saturday</span>
                           <span className="font-bold text-slate-900">9:00 AM – 11:00 PM</span>
                         </div>
                         <div className="py-2.5 flex justify-between">
@@ -282,7 +283,7 @@ export default async function ContactPage() {
                     <span>How to Reach Us</span>
                   </h3>
                   <p>
-                    • <strong>By Motorcycle / Car:</strong> Enter Akhtar Colony from Korangi Road or Defence View. Head toward Jamia Masjid Muhammadi in Sector B. Street 1 is immediately adjacent with street parking.
+                    • <strong>By car or motorcycle:</strong> Enter Akhtar Colony from Korangi Road or Defence View. Head to Jamia Masjid Muhammadi in Sector B; Street 1 is nearby.
                   </p>
                   <p>
                     • <strong>On Foot:</strong> Ask anyone near Jamia Masjid Muhammadi for Yaqoob Enterprises (Plot No. 7, Street 1).
