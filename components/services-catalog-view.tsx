@@ -7,12 +7,7 @@ import {
   X,
   ArrowRight,
   ShieldCheck,
-  Store,
-  Truck,
   CheckCircle2,
-  Clock,
-  Sparkles,
-  HelpCircle,
   FileCheck2,
   FileText,
   Printer,
@@ -149,11 +144,7 @@ export function ServicesCatalogView({
   return (
     <div className="w-full pb-20">
       {/* Hero Header Section */}
-      <section className="services-directory-hero bg-gradient-to-b from-slate-900 via-[#0B192C] to-slate-900 text-white pt-12 sm:pt-16 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800 relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-600/10 rounded-full blur-3xl pointer-events-none" />
-
+      <section className="services-directory-hero bg-slate-900 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6" aria-label="Breadcrumb">
@@ -164,33 +155,20 @@ export function ServicesCatalogView({
             <span className="text-teal-400 font-semibold">Services</span>
           </nav>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-300 text-xs font-semibold tracking-wide uppercase mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Service Directory</span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight max-w-3xl">
-            What can we help with?
+            Services
           </h1>
 
-          <p className="mt-4 text-base sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
-            Government services, paperwork, ticketing, and everyday support in one place.
+          <p className="mt-2 text-base text-slate-300 max-w-3xl leading-relaxed">
+            Printing, e-Sahulat and business services in Akhtar Colony, Karachi.
           </p>
 
-          {/* Quick stats pills */}
-          <div className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-emerald-400 font-medium">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Authorized e-Sahulat Franchise</span>
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-300">
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+              Authorized e-Sahulat franchise
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-cyan-300 font-medium">
-              <Store className="w-4 h-4 text-cyan-400" />
-              <span>Counter in Akhtar Colony, Karachi</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700/80 text-slate-300 font-medium">
-              <Clock className="w-4 h-4 text-amber-400" />
-              <span>{statusText || "Open Today · Walk-ins Welcome"}</span>
-            </span>
+            {statusText && <span>{statusText}</span>}
           </div>
 
           {/* Search Box */}
@@ -204,13 +182,13 @@ export function ServicesCatalogView({
                 aria-label="Search services"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search services..."
-                className="w-full bg-slate-800/95 border border-slate-700 text-white placeholder-slate-400 text-sm sm:text-base rounded-2xl pl-12 pr-11 py-3.5 sm:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/80 focus:border-cyan-500 transition shadow-lg"
+                className="w-full bg-slate-800/95 border border-slate-700 text-white placeholder-slate-400 text-sm sm:text-base rounded-xl pl-12 pr-14 py-3.5 sm:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/80 focus:border-cyan-500 transition shadow-none"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition"
+                  className="absolute right-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition"
                   aria-label="Clear search"
                 >
                   <X className="w-4 h-4" />
@@ -218,22 +196,6 @@ export function ServicesCatalogView({
               )}
             </div>
 
-            {/* Quick search tags */}
-            <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-slate-400">
-              <span className="text-slate-500">Popular:</span>
-              {["NADRA Biometric", "Passport Photos", "FBR Tax", "Railway Tickets", "Rental Agreement", "Urdu Typing", "Job Forms"].map(
-                (tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => setSearchQuery(tag)}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800/60 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60 transition"
-                  >
-                    {tag}
-                  </button>
-                )
-              )}
-            </div>
           </div>
         </div>
       </section>
@@ -244,13 +206,12 @@ export function ServicesCatalogView({
         <div className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-sm mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             {/* Category Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none" role="tablist">
+            <div role="group" aria-label="Filter by category" className="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
               <button
                 type="button"
-                role="tab"
-                aria-selected={selectedCategoryId === "all"}
+                aria-pressed={selectedCategoryId === "all"}
                 onClick={() => setSelectedCategoryId("all")}
-                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shrink-0 transition ${
+                className={`min-h-11 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shrink-0 transition ${
                   selectedCategoryId === "all"
                     ? "bg-slate-900 text-white shadow-sm"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -267,10 +228,9 @@ export function ServicesCatalogView({
                   <button
                     key={cat.id}
                     type="button"
-                    role="tab"
-                    aria-selected={selectedCategoryId === cat.id}
+                    aria-pressed={selectedCategoryId === cat.id}
                     onClick={() => setSelectedCategoryId(cat.id)}
-                    className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shrink-0 transition ${
+                    className={`min-h-11 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shrink-0 transition ${
                       selectedCategoryId === cat.id
                         ? "bg-slate-900 text-white shadow-sm"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -284,19 +244,20 @@ export function ServicesCatalogView({
 
             {/* Mode / Fulfillment Filter */}
             <div className="flex items-center gap-2 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Fulfillment:
-              </span>
+              <label htmlFor="service-mode-filter" className="text-xs font-bold text-slate-500">
+                Available via
+              </label>
               <select
+                id="service-mode-filter"
                 value={selectedMode}
                 onChange={(e) => setSelectedMode(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="min-h-11 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
               >
-                <option value="all">All Methods</option>
-                <option value="shop">At Shop Counter</option>
-                <option value="whatsapp">WhatsApp Remote</option>
-                <option value="doorstep">Doorstep / Home Visit</option>
-                <option value="delivery">Local Delivery</option>
+                <option value="all">All options</option>
+                <option value="shop">At shop</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="doorstep">Home visit</option>
+                <option value="delivery">Delivery</option>
               </select>
             </div>
           </div>
@@ -320,7 +281,7 @@ export function ServicesCatalogView({
                   setSelectedCategoryId("all");
                   setSelectedMode("all");
                 }}
-                className="text-cyan-700 hover:text-cyan-900 font-semibold hover:underline"
+                className="inline-flex min-h-11 items-center px-2 text-cyan-700 hover:text-cyan-900 font-semibold hover:underline"
               >
                 Reset all filters
               </button>
@@ -331,14 +292,13 @@ export function ServicesCatalogView({
         {/* Empty state if no match */}
         {filteredServices.length === 0 && (
           <div className="bg-slate-50 border border-dashed border-slate-300 rounded-3xl p-10 sm:p-16 text-center max-w-2xl mx-auto my-12">
-            <div className="w-14 h-14 mx-auto bg-slate-200 rounded-2xl flex items-center justify-center text-slate-500 mb-4">
-              <HelpCircle className="w-7 h-7" />
-            </div>
             <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-              No matching service found for &ldquo;{searchQuery}&rdquo;
+              {searchQuery
+                ? <>No services match &ldquo;{searchQuery}&rdquo;</>
+                : "No services match these filters"}
             </h3>
             <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
-              We handle hundreds of specialized portals, forms, and custom government paperwork that may not be listed under this exact keyword.
+              Try another search or ask us about your request.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <button
@@ -348,7 +308,7 @@ export function ServicesCatalogView({
                   setSelectedCategoryId("all");
                   setSelectedMode("all");
                 }}
-                className="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 transition"
+                className="min-h-11 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 transition"
               >
                 View all services
               </button>
@@ -359,7 +319,7 @@ export function ServicesCatalogView({
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-500 transition"
+                className="min-h-11 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-500 transition"
               >
                 Ask on WhatsApp
               </a>
@@ -370,7 +330,6 @@ export function ServicesCatalogView({
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {filteredServices.map((service) => {
-            const cat = categoryMap.get(service.category_id);
             const statusInfo = getStatusBadge(service.status);
             const IconComponent = getServiceIconComponent(service.title);
             const detailUrl = getServiceUrl(service);
@@ -384,11 +343,7 @@ export function ServicesCatalogView({
               >
                 <div>
                   {/* Card Header: Category badge + Status */}
-                  <div className="flex items-center justify-between gap-2 mb-3.5">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-800 bg-cyan-50 px-2.5 py-1 rounded-md border border-cyan-200/70">
-                      {cat?.title || "Everyday Service"}
-                    </span>
-
+                  <div className="flex items-center justify-end gap-2 mb-3.5">
                     <span
                       className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${statusInfo.className}`}
                     >
@@ -401,8 +356,8 @@ export function ServicesCatalogView({
                     <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 text-slate-800 group-hover:bg-[#0B192C] group-hover:text-teal-400 transition-colors">
                       <IconComponent className="w-5 h-5" />
                     </div>
-                    <div>
-                      <h2 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-cyan-800 transition-colors leading-snug">
+                    <div className="min-w-0">
+                      <h2 className="min-w-0 break-words text-base sm:text-lg font-bold text-slate-900 group-hover:text-cyan-800 transition-colors leading-snug">
                         <Link href={detailUrl} className="focus:outline-none">
                           {service.title}
                         </Link>
@@ -417,16 +372,16 @@ export function ServicesCatalogView({
 
                   {/* Requirements Preview (if available) */}
                   {service.requirements && service.requirements.length > 0 && (
-                    <div className="mb-4 bg-slate-50/80 rounded-xl p-3 border border-slate-100">
+                    <div className="mb-4">
                       <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Key Requirements:</span>
+                        <span>Requirements</span>
                       </div>
-                      <ul className="text-xs text-slate-600 space-y-1">
+                      <ul className="text-xs text-slate-600 space-y-1.5">
                         {service.requirements.slice(0, 2).map((req, idx) => (
-                          <li key={idx} className="flex items-start gap-1.5 truncate">
-                            <span className="text-slate-400">•</span>
-                            <span className="truncate">{req}</span>
+                          <li key={idx} className="flex items-start gap-1.5 leading-snug">
+                            <span className="text-emerald-700" aria-hidden="true">•</span>
+                            <span className="min-w-0">{req}</span>
                           </li>
                         ))}
                         {service.requirements.length > 2 && (
@@ -438,39 +393,21 @@ export function ServicesCatalogView({
                     </div>
                   )}
 
-                  {/* Fulfillment Badges */}
-                  <div className="flex flex-wrap items-center gap-1.5 mb-5 text-[11px] text-slate-500 font-medium">
-                    {service.available_at_shop && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-700">
-                        <Store className="w-3 h-3 text-slate-500" /> Shop Counter
-                      </span>
-                    )}
-                    {service.whatsapp_request && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-800">
-                        WhatsApp Request
-                      </span>
-                    )}
-                    {service.doorstep_available && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-800">
-                        Doorstep Biometric
-                      </span>
-                    )}
-                    {service.delivery_available && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-50 text-purple-800">
-                        <Truck className="w-3 h-3 text-purple-600" /> Rider Delivery
-                      </span>
-                    )}
-                  </div>
+                  <p className="mb-4 text-xs text-slate-600">
+                    {[service.available_at_shop && "At shop", service.whatsapp_request && "WhatsApp", service.doorstep_available && "Doorstep service", service.delivery_available && "Delivery"]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
                 </div>
 
-                {/* Explicit Click Actions: "See more about service" + WhatsApp */}
+                {/* The title opens details; WhatsApp starts an inquiry. */}
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                   <Link
                     href={detailUrl}
-                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-900 group-hover:text-cyan-700 hover:text-cyan-800 transition"
-                    aria-label={`See more about ${service.title}`}
+                    className="inline-flex min-h-11 items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-900 group-hover:text-cyan-700 hover:text-cyan-800 transition"
+                    aria-label={`View details for ${service.title}`}
                   >
-                    <span>See more about service</span>
+                    <span>Details</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
 
@@ -478,7 +415,7 @@ export function ServicesCatalogView({
                     href={waLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-emerald-800 bg-emerald-100/70 hover:bg-emerald-100 rounded-lg transition"
+                    className="inline-flex min-h-11 items-center gap-1 px-3 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition"
                     title="Inquire on WhatsApp"
                   >
                     <span>WhatsApp</span>
@@ -489,82 +426,41 @@ export function ServicesCatalogView({
           })}
         </div>
 
-        {/* Categories Overview Pillar Showcase */}
-        <section className="mt-16 sm:mt-24 pt-12 border-t border-slate-200">
-          <div className="max-w-3xl mb-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-700">
-              Core Service Pillars
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-              Browse by category
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base mt-2">
-              Government, legal, ticketing, printing, and digital support.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.map((category) => {
-              const catServices = services.filter(
-                (s) => s.category_id === category.id && s.status !== "hidden"
-              );
-              return (
-                <div
-                  key={category.id}
-                  className="bg-slate-50 border border-slate-200/90 rounded-2xl p-5 hover:border-slate-300 transition"
+        <section className="mt-12 border-t border-slate-200 pt-8">
+          <h2 className="mb-3 text-xl sm:text-2xl font-bold text-slate-900">
+            Browse service categories
+          </h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
+            {categories.map((category) => (
+              <li key={category.id} className="border-b border-slate-200">
+                <Link
+                  href={`/services/${category.slug}`}
+                  className="flex min-h-16 items-center justify-between gap-4 py-3 text-slate-900 hover:text-cyan-800"
                 >
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-bold text-slate-900">
-                      {category.title}
-                    </h3>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">
-                      {catServices.length} {catServices.length === 1 ? "service" : "services"}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-slate-600 mb-4 line-clamp-2">
-                    {category.description}
-                  </p>
-
-                  <ul className="space-y-2 mb-5">
-                    {catServices.slice(0, 4).map((srv) => (
-                      <li key={srv.id}>
-                        <Link
-                          href={`/services/${category.slug}/${srv.slug}`}
-                          className="text-xs font-semibold text-slate-800 hover:text-cyan-700 flex items-center justify-between group/link"
-                        >
-                          <span className="truncate pr-2">• {srv.title}</span>
-                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/link:text-cyan-700 group-hover/link:translate-x-0.5 transition shrink-0" />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href={`/services/${category.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-800 hover:text-cyan-900 hover:underline"
-                  >
-                    <span>View all {category.title} services</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{category.title}</span>
+                    {category.description && (
+                      <span className="mt-0.5 block text-sm text-slate-600 line-clamp-1">
+                        {category.description}
+                      </span>
+                    )}
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* Assisted Request Help Box */}
-        <section className="mt-16 bg-gradient-to-r from-[#0B192C] to-slate-900 rounded-3xl p-6 sm:p-10 text-white border border-slate-800 shadow-xl">
+        <section className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-7">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <span className="text-xs font-bold uppercase tracking-widest text-teal-400">
-                Custom Paperwork &amp; Portals
-              </span>
-              <h2 className="text-xl sm:text-2xl font-black text-white">
-                Don&apos;t see the exact form, portal, or verification you need?
+            <div className="max-w-2xl">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                Need help with another service?
               </h2>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                We assist with specialized Sindh Government portals, university challans, job registries, embassy appointment booking, and urgent stamp papers. Send your requirements directly on WhatsApp or visit our shop counter in Akhtar Colony.
+              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+                Tell us what you need. We’ll confirm availability and next steps.
               </p>
             </div>
 
@@ -576,17 +472,17 @@ export function ServicesCatalogView({
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-sm transition shadow-md"
+                className="min-h-11 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition"
               >
-                <span>Chat on WhatsApp</span>
+                <span>Ask on WhatsApp</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <Link
                 href="/contact"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition"
+                className="min-h-11 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-semibold text-sm border border-slate-300 transition"
               >
-                <span>Guided Online Request</span>
+                <span>Contact and directions</span>
               </Link>
             </div>
           </div>

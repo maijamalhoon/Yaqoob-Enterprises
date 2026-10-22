@@ -51,7 +51,7 @@ export default async function ServicesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white flex flex-col">
+    <div className="public-site min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}

@@ -8,7 +8,6 @@ import { StitchHero } from "@/components/stitch-hero";
 import { StitchHowItWorks } from "@/components/stitch-how-it-works";
 import { StitchQuickRequest } from "@/components/stitch-quick-request";
 import { StitchServices } from "@/components/stitch-services";
-import { StitchTrust } from "@/components/stitch-trust";
 import { StitchVisitShop } from "@/components/stitch-visit-shop";
 import { businessLocationLabel } from "@/lib/business-display";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
@@ -54,7 +53,7 @@ export default async function HomePage() {
   const locationLabel = businessLocationLabel(settings.address);
 
   return (
-    <div id="home-page" className="min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white pb-20 md:pb-0">
+    <div id="home-page" className="public-site min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white pb-20 md:pb-0">
       <LocalBusinessSchema
         settings={settings}
         hours={hours}
@@ -72,9 +71,8 @@ export default async function HomePage() {
           locationLabel={locationLabel}
           gallery={gallery}
         />
-        <StitchServices services={services} categories={categories} />
+        <StitchServices categories={categories} whatsappNumber={settings.whatsapp_e164} />
         <StitchHowItWorks />
-        <StitchTrust settings={settings} statusText={hoursText} />
         <StitchQuickRequest settings={settings} services={services} />
         <StitchVisitShop settings={settings} statusText={hoursText} hours={hours} />
         <StitchFAQ />
