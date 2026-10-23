@@ -15,6 +15,17 @@ updates:
         update-types:
           - minor
           - patch
+    ignore:
+      # Major toolchain changes require a deliberate compatibility review.
+      # Security updates remain eligible; this only filters version-update PRs.
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+    ignore:
+      # Review GitHub Actions major upgrades deliberately; continue accepting security updates.
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
     labels:
       - dependencies
 
