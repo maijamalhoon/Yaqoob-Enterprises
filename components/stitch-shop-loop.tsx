@@ -188,14 +188,14 @@ export function StitchShopLoop({ galleryImages, locationLabel, whatsappLink }: S
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition shadow-sm"
                 style={{ color: "#ffffff" }}
               >
                 <span>WhatsApp</span>
               </a>
               <a
                 href="#visit-shop"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow-sm"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold transition shadow-sm"
                 style={{ color: "#ffffff" }}
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />

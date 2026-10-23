@@ -855,6 +855,19 @@ textarea:focus {
   color: rgba(255, 255, 255, 0.86);
   background: var(--ink-strong);
 }
+
+#site-footer p {
+  color: #cbd5e1;
+}
+
+#site-footer p[class~="text-white/90"] {
+  color: #fff;
+}
+
+#site-footer .text-slate-400,
+#site-footer .text-slate-500 {
+  color: #cbd5e1;
+}
 .minimal-footer__top {
   display: grid;
   grid-template-columns: minmax(15rem, 1.2fr) 0.7fr 0.8fr;
