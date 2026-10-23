@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Phone,
-  MessageCircle,
   Navigation,
   CheckCircle2,
   ArrowRight,
@@ -12,6 +11,7 @@ import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
+import { BrandIcon } from "@/components/brand-icon";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -146,39 +146,25 @@ export default async function PrintingPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               {/* Breadcrumb text */}
-              <nav className="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-slate-900">Home</Link>
-                <span>/</span>
-                <span className="text-[#0E7490]">Printing</span>
-              </nav>
-
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+<h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Printing in Akhtar Colony
               </h1>
-
-              <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Color and black-and-white prints for school, study and office documents. Bulk discounts are available.
-              </p>
 
               {/* 3 Prominent CTAs */}
               <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
-                  href={callUrl}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
+                  href={callUrl} className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
                   <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>CALL NOW</span>
+                  <span>{settings.phone_display || phone}</span>
                 </TrackedLink>
 
                 <TrackedLink
                   eventName="whatsapp_click"
                   href={whatsappUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
-                  <MessageCircle className="w-4 h-4" />
+                  target="_blank" className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
+                  <BrandIcon name="whatsapp" size={16} badge={false} />
                   <span>SEND ON WHATSAPP</span>
                 </TrackedLink>
 
@@ -186,60 +172,12 @@ export default async function PrintingPage() {
                   eventName="directions_click"
                   href={directionsUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95"
-                >
+                  target="_blank" className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95">
                   <Navigation className="w-4 h-4 text-[#0E7490]" />
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
               </div>
 
-            </div>
-          </div>
-        </section>
-
-        {/* WhatsApp Pre-order Workflow */}
-        <section className="py-12 bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-10">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">
-                Send Your File Before You Visit
-              </h2>
-              <p className="text-sm text-slate-600 max-w-2xl leading-relaxed mb-6">
-                Send your file and print options on WhatsApp. We will confirm the cost and pickup time.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <span className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center mb-3">
-                    01
-                  </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">Send Your File</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    WhatsApp your PDF, Word file, or image to <strong>+92 349 2568864</strong>.
-                  </p>
-                </div>
-
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <span className="w-8 h-8 rounded-full bg-[#0E7490] text-white font-bold text-xs flex items-center justify-center mb-3">
-                    02
-                  </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">Choose Print Options</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Tell us color or black-and-white, single- or double-sided, and how many copies.
-                  </p>
-                </div>
-
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                  <span className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center mb-3">
-                    03
-                  </span>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1">Confirm &amp; Collect</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    We will confirm the pickup time and shop location.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -251,9 +189,6 @@ export default async function PrintingPage() {
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Printing for Study, Work &amp; Everyday Needs
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Black-and-white, color, notes, assignments, and bulk printing.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -262,9 +197,6 @@ export default async function PrintingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Black &amp; White Laser Printing</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Black-and-white prints for forms, records, and everyday documents.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -272,9 +204,6 @@ export default async function PrintingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Color Printing</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Color prints for slides, charts, certificates, and covers.
-                </p>
                 <Link href="/color-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Color printing details</span>
                   <ArrowRight className="w-3 h-3" />
@@ -286,9 +215,6 @@ export default async function PrintingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>School, College &amp; University Notes</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  School, college, and university notes and assignments in bulk at discounted rates.
-                </p>
                 <Link href="/notes-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Student notes guide</span>
                   <ArrowRight className="w-3 h-3" />
@@ -300,9 +226,6 @@ export default async function PrintingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Assignment &amp; Project Printing</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Single- or double-sided printing for assignments and projects.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -310,9 +233,6 @@ export default async function PrintingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Office &amp; Organizational Printing</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Documents and forms for local businesses.
-                </p>
                 <Link href="/office-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Office printing details</span>
                   <ArrowRight className="w-3 h-3" />
@@ -324,9 +244,6 @@ export default async function PrintingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Bulk Document Orders</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Quality bulk printing at rates discounted compared with market prices. Message us for a quote.
-                </p>
                 <Link href="/bulk-printing" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E7490] mt-2 hover:underline">
                   <span>Bulk printing details</span>
                   <ArrowRight className="w-3 h-3" />
@@ -343,9 +260,6 @@ export default async function PrintingPage() {
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
                 Frequently Asked Questions About Printing
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1">
-              Clear answers about print options and bulk orders.
-              </p>
             </div>
 
             <div className="space-y-3">
@@ -365,35 +279,6 @@ export default async function PrintingPage() {
                   </p>
                 </details>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contextual Internal Links Section */}
-        <section className="py-10 bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-              Related Services in Akhtar Colony
-            </h3>
-            <div className="flex flex-wrap gap-2.5 text-xs font-semibold">
-              <Link href="/photocopying" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Photocopying Services →
-              </Link>
-              <Link href="/notes-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Notes &amp; Assignment Printing →
-              </Link>
-              <Link href="/color-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Color Laser Printing →
-              </Link>
-              <Link href="/bulk-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Bulk Printing &amp; Copying →
-              </Link>
-              <Link href="/photo-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Passport Size Photos →
-              </Link>
-              <Link href="/contact" className="px-3.5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl transition">
-                Shop Location &amp; Contact →
-              </Link>
             </div>
           </div>
         </section>

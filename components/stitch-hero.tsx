@@ -20,39 +20,36 @@ export function StitchHero({ settings, statusText, locationLabel, gallery }: Sti
   const directionsUrl =
     settings.map_url ||
     "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const isOpen = statusText.startsWith("Open now");
 
   return (
     <section id="hero-section" className="relative bg-white pt-5 sm:pt-10 pb-10 sm:pb-16 overflow-hidden border-b border-slate-100" data-purpose="hero">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={hasGallery ? "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center" : "grid grid-cols-1 gap-8 items-center"}>
           {/* Left Hero Content */}
-          <div className={"flex flex-col items-start space-y-4 sm:space-y-5 " + (hasGallery ? "lg:col-span-7" : "max-w-4xl")}>
+          <div className={"flex flex-col items-start gap-6 sm:gap-7 " + (hasGallery ? "lg:col-span-7" : "max-w-4xl")}>
             {/* Neighborhood Location & Status Pill */}
             <div
               id="hero-location-pill"
-              className="inline-flex flex-wrap items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200/90 shadow-sm"
+              className="hero-location-pill"
             >
-              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-              <span className="text-emerald-700 font-bold">{statusText || "Hours available on WhatsApp"}</span>
-              <span className="text-slate-300">|</span>
-              <span className="text-slate-700 flex items-center gap-1 font-medium truncate max-w-[240px] xs:max-w-none">
-                <MapPin className="w-3.5 h-3.5 text-[#0E7490] inline shrink-0" />
+              <span className={`hero-location-pill__status${isOpen ? " is-open" : ""}`}>
+                <span className="hero-location-pill__dot" aria-hidden="true" />
+                <span>{statusText || "Hours available on WhatsApp"}</span>
+              </span>
+              <span className="hero-location-pill__location">
+                <MapPin size={15} aria-hidden="true" />
                 <span>{locationLabel}</span>
               </span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.12]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-[-0.035em] leading-[1.14]">
               Printing, Photocopy &amp; NADRA e-Sahulat
             </h1>
 
-            {/* Value Proposition */}
-            <p className="text-sm sm:text-base text-slate-600 max-w-2xl font-normal leading-relaxed">
-              Visit our Akhtar Colony shop or send a file on WhatsApp before you come.
-            </p>
-
             {/* Primary & Secondary CTAs */}
-            <div className="mobile-hero-actions flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto pt-1">
+            <div className="mobile-hero-actions flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               {/* Call Now */}
               <TrackedLink
                 id="hero-call-btn"

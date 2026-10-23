@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   Camera,
   Phone,
-  MessageCircle,
   Navigation,
   CheckCircle2,
-  Clock,
   Image as ImageIcon,
   Sparkles,
   ChevronDown,
@@ -15,6 +12,7 @@ import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
+import { BrandIcon } from "@/components/brand-icon";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -22,14 +20,14 @@ import { serializeJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = {
   title: "Passport Photos in Karachi",
   description:
-    "Urgent passport-size photos (white or blue background) ready in 5 minutes in Akhtar Colony, Karachi. High-resolution photo prints for CNIC, passports, visas, licenses, and school admissions.",
+    "Passport-size photos with white or blue backgrounds in Akhtar Colony, Karachi. Photo printing for forms, documents, and personal use.",
   alternates: {
     canonical: `${SITE_URL}/photo-printing`,
   },
   openGraph: {
     title: "Photo Printing & Passport Size Photos Karachi | Yaqoob Enterprises",
     description:
-      "5-minute urgent passport-size photos with white or blue background in Akhtar Colony, Karachi. Standard high-resolution photo prints.",
+      "Passport-size photos with white or blue backgrounds and standard photo prints in Akhtar Colony, Karachi.",
     url: `${SITE_URL}/photo-printing`,
     type: "website",
   },
@@ -37,14 +35,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Photo Printing & Passport Size Photos Karachi | Yaqoob Enterprises",
     description:
-      "5-minute urgent passport-size photos with white or blue background in Akhtar Colony, Karachi.",
+      "Passport-size photos with white or blue backgrounds in Akhtar Colony, Karachi.",
   },
 };
 
 const PHOTO_FAQS = [
   {
-    q: "How fast can I get my passport-size photos?",
-    a: "Standard sets of passport-size photos are typically ready in approximately 5 minutes. You can either take a fresh photograph at our shop counter or WhatsApp an existing clear portrait for background adjustment and printing.",
+    q: "Can I send an existing portrait on WhatsApp?",
+    a: "Send a clear portrait and the required size on WhatsApp. Ask us to confirm the photo and timing before visiting.",
   },
   {
     q: "Do you provide both white and blue background options?",
@@ -144,39 +142,25 @@ export default async function PhotoPrintingPage() {
         <section className="bg-slate-50 border-b border-slate-200 py-10 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <nav className="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-slate-900">Home</Link>
-                <span>/</span>
-                <span className="text-[#0E7490]">Photo Printing</span>
-              </nav>
-
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+<h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Passport-Size Photos
               </h1>
-
-              <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Passport photos for CNICs, passports, visas and admissions. White or blue backgrounds; usually ready in five minutes.
-              </p>
 
               {/* 3 Prominent CTAs */}
               <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
-                  href={callUrl}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
+                  href={callUrl} className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
                   <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>CALL NOW</span>
+                  <span>{settings.phone_display || phone}</span>
                 </TrackedLink>
 
                 <TrackedLink
                   eventName="whatsapp_click"
                   href={whatsappUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
-                  <MessageCircle className="w-4 h-4" />
+                  target="_blank" className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
+                  <BrandIcon name="whatsapp" size={16} badge={false} />
                   <span>WHATSAPP INQUIRY</span>
                 </TrackedLink>
 
@@ -184,9 +168,7 @@ export default async function PhotoPrintingPage() {
                   eventName="directions_click"
                   href={directionsUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95"
-                >
+                  target="_blank" className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95">
                   <Navigation className="w-4 h-4 text-[#0E7490]" />
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
@@ -210,9 +192,6 @@ export default async function PhotoPrintingPage() {
                   <Camera className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Passport-Size Photos (White BG)</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Clean white background formatted for Pakistani passport renewal, CNIC/NICOP updates, and international visa applications.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -220,19 +199,6 @@ export default async function PhotoPrintingPage() {
                   <Camera className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Passport-Size Photos (Blue BG)</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Standard blue background for local school, college, university admissions, government recruitment forms, and driving licenses.
-                </p>
-              </div>
-
-              <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 text-[#0E7490] flex items-center justify-center mb-3">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-base text-slate-900 mb-1">5-Minute Urgent Service</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Fast counter processing, cropping, and instant drying photographic prints while you wait.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -240,9 +206,6 @@ export default async function PhotoPrintingPage() {
                   <ImageIcon className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Standard Photo Prints</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  High-resolution photo printing on glossy photo paper for family pictures, project presentations, and photo albums.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -250,9 +213,6 @@ export default async function PhotoPrintingPage() {
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Digital Background Editing</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Send your smartphone photo over WhatsApp; we clean shadows, set the official background, and print ready sheets.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -260,9 +220,6 @@ export default async function PhotoPrintingPage() {
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Multiple Size Sheets</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Available in sets of 4, 8, or 12 photos per sheet to fulfill multi-application requirements cost-effectively.
-                </p>
               </div>
             </div>
           </div>
@@ -294,29 +251,6 @@ export default async function PhotoPrintingPage() {
                   </p>
                 </details>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contextual Links */}
-        <section className="py-10 bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-              Related Services
-            </h3>
-            <div className="flex flex-wrap gap-2.5 text-xs font-semibold">
-              <Link href="/color-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Color Document Printing →
-              </Link>
-              <Link href="/printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Black &amp; White Printing →
-              </Link>
-              <Link href="/nadra-esahulat" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                NADRA e-Sahulat Biometrics →
-              </Link>
-              <Link href="/contact" className="px-3.5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl transition">
-                Visit Counter &amp; Map →
-              </Link>
             </div>
           </div>
         </section>

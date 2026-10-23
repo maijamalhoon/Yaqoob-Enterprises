@@ -40,7 +40,7 @@ async function assertHomepage(page, label, { mobileNav }) {
   await openHealthy(page, "/");
   await assertNoHorizontalOverflow(page, `${label} homepage`);
 
-  const serviceCards = page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item");
+  const serviceCards = page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item, #services .home-service-list > li");
   const count = await serviceCards.count();
   assert(count >= 8, `${label}: expected at least 8 main services, found ${count}.`);
 
@@ -99,10 +99,10 @@ try {
   const catalogServices = catalogCategories.flatMap((category) => category?.itemListElement || []);
   assert(catalogCategories.length >= 8, `Expected at least 8 service categories in OfferCatalog; found ${catalogCategories.length}.`);
   assert(catalogServices.length >= 10, `Expected at least 10 public services in OfferCatalog; found ${catalogServices.length}.`);
-  assert((await page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item").count()) >= 8, "Homepage must show main services.");
+  assert((await page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item, #services .home-service-list > li").count()) >= 8, "Homepage must show main services.");
   assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
   const visibleBusinessName = normalizeText(businessData.name).replace(/\s+/g, "");
-  const visibleBrandText = normalizeText(await page.locator('header a[aria-label*="Home"]').first().innerText()).replace(/\s+/g, "");
+  const visibleBrandText = normalizeText(await page.locator('header a[aria-label*="home" i]').first().innerText()).replace(/\s+/g, "");
   assert(visibleBusinessName && visibleBrandText.includes(visibleBusinessName), "Homepage header is missing the configured LocalBusiness name.");
   await assertNoHorizontalOverflow(page, "Desktop homepage");
 
@@ -132,16 +132,23 @@ try {
   await assertNoHorizontalOverflow(page, "Desktop contact page");
   const contactHeading = await page.locator("h1").first().innerText();
   assert(contactHeading.toLowerCase().includes("contact"), "Contact page heading is missing: " + contactHeading + " at " + page.url());
+  assert((await page.locator('main a[href^="tel:"]').count()) > 0, "Contact page is missing its phone link.");
+  assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Contact page is missing its WhatsApp link.");
+  assert((await page.locator('main a[href*="maps.app.goo.gl"]').count()) > 0, "Contact page is missing its directions link.");
+
+  await openHealthy(page, "/");
+  await page.locator("#quick-request").scrollIntoViewIfNeeded();
   assert((await page.locator("#userName").getAttribute("maxlength")) === "100", "Name input boundary is missing.");
   assert((await page.locator("#userRequirement").getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
-  const serviceOptions = await page.locator("#userService option").allTextContents();
+  await page.locator("#userService").click();
+  const serviceOptions = await page.locator('[role="option"]').allTextContents();
   assert(serviceOptions.some((label) => label.toLowerCase().includes("printing")), "Quick request lost its printing option.");
   assert(serviceOptions.some((label) => label.toLowerCase().includes("photocopy")), "Quick request lost its photocopying option.");
   assert(serviceOptions.some((label) => label.toLowerCase().includes("nadra")), "Quick request lost its NADRA e-Sahulat option.");
   const photocopyOption = serviceOptions.find((label) => label.toLowerCase().includes("photocopy"));
   assert(photocopyOption, "Quick request photocopy option is missing.");
-  await page.locator("#userService").selectOption({ label: photocopyOption });
-  assert((await page.locator("#userService").inputValue()) === photocopyOption, "Quick request service selection is not working.");
+  await page.getByRole("option", { name: photocopyOption.trim(), exact: true }).click();
+  assert(normalizeText(await page.locator("#userService").innerText()).includes("photocopy"), "Quick request service selection is not working.");
 
   const whatsappRequests = [];
   await page.route("https://wa.me/**", async (route) => {
@@ -172,7 +179,13 @@ try {
   await openHealthy(page, "/services/printing-photos/colour-black-white-printing");
   await assertNoHorizontalOverflow(page, "Desktop printing SEO page");
   assert((await page.locator("h1").first().innerText()).includes("Printing"), "Printing detail page lost its search heading.");
-  assert((await page.locator("main").innerText()).includes("Common requests we handle"), "Printing detail page is missing search-intent content.");
+  const printingSearchIntentText = normalizeText(await page.locator("main").innerText()).toLowerCase();
+  assert(
+    printingSearchIntentText.includes("black-and-white") &&
+      printingSearchIntentText.includes("photocopies") &&
+      printingSearchIntentText.includes("document scans"),
+    "Printing detail page is missing search-intent content.",
+  );
 
   await openHealthy(page, "/services/biometric/general-biometric-esahulat");
   await assertNoHorizontalOverflow(page, "Desktop biometric SEO page");
@@ -243,10 +256,19 @@ try {
     const viewportPage = await context.newPage();
     await assertHomepage(viewportPage, viewport.label, viewport);
     if (viewport.width <= 430) {
-      await openHealthy(viewportPage, "/contact");
-      await assertNoHorizontalOverflow(viewportPage, `${viewport.label} contact page`);
-      const formFontSize = await viewportPage.locator("#userService").evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
-      assert(formFontSize >= 16, `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom.`);
+      await openHealthy(viewportPage, "/");
+      await viewportPage.locator("#quick-request").scrollIntoViewIfNeeded();
+      await assertNoHorizontalOverflow(viewportPage, `${viewport.label} quick request`);
+      const mobileFormFontSizes = await viewportPage
+        .locator("#userName, #userService, #userRequirement")
+        .evaluateAll((nodes) => nodes.map((node) => ({
+          id: node.id,
+          size: parseFloat(getComputedStyle(node).fontSize),
+        })));
+      assert(
+        mobileFormFontSizes.length === 3 && mobileFormFontSizes.every((control) => control.size >= 16),
+        `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom (actual: ${mobileFormFontSizes.map((control) => `${control.id}=${control.size}px`).join(", ")}).`,
+      );
 
       await openHealthy(viewportPage, "/services/biometric/general-biometric-esahulat");
       await assertNoHorizontalOverflow(viewportPage, `${viewport.label} biometric SEO page`);

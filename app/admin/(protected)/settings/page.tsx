@@ -32,7 +32,6 @@ export default async function AdminSettingsPage() {
           </div>
           <form className="admin-form-grid admin-form-grid--focused" action={updateBusinessIdentity}>
             <label>Business name<input name="business_name" defaultValue={settings?.business_name} maxLength={80} required /></label>
-            <label>Tagline<input name="tagline" defaultValue={settings?.tagline} maxLength={120} /></label>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save identity</AdminSubmitButton><AdminCancelButton /></div>
           </form>
         </section>

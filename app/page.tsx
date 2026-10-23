@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
-import { StitchFAQ } from "@/components/stitch-faq";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchHero } from "@/components/stitch-hero";
-import { StitchHowItWorks } from "@/components/stitch-how-it-works";
 import { StitchQuickRequest } from "@/components/stitch-quick-request";
 import { StitchServices } from "@/components/stitch-services";
 import { StitchVisitShop } from "@/components/stitch-visit-shop";
@@ -71,11 +69,9 @@ export default async function HomePage() {
           locationLabel={locationLabel}
           gallery={gallery}
         />
-        <StitchServices categories={categories} whatsappNumber={settings.whatsapp_e164} />
-        <StitchHowItWorks />
+        <StitchServices categories={categories} />
         <StitchQuickRequest settings={settings} services={services} />
         <StitchVisitShop settings={settings} statusText={hoursText} hours={hours} />
-        <StitchFAQ />
       </main>
 
       <StitchFooter settings={settings} statusText={hoursText} />

@@ -26,7 +26,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Do you provide urgent passport-size photos?",
-    a: "White and blue backgrounds are available. Photos are usually ready in 5 minutes; confirm the required size before visiting.",
+    a: "White and blue backgrounds are available. Confirm the required size before visiting.",
   },
   {
     q: "Where is Yaqoob Enterprises in Karachi?",
@@ -34,7 +34,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "What are your opening hours?",
-    a: "See the schedule in the Visit our shop section above. Confirm today's hours before travelling.",
+    a: "See the schedule in the Visit the shop section. Confirm today's hours before travelling.",
   },
   {
     q: "Do you provide NADRA e-Sahulat biometric services?",

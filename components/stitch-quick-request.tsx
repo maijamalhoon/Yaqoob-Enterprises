@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
+import { CustomSelect } from "@/components/custom-select";
 import type { BusinessSettings, Service } from "@/lib/types";
 
 interface StitchQuickRequestProps {
@@ -74,9 +75,6 @@ export function StitchQuickRequest({ settings, services = [] }: StitchQuickReque
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
               Request on WhatsApp
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed mt-2">
-              Add your name, choose a service and describe what you need. Review the message before sending.
-            </p>
           </div>
 
           <div className="lg:col-span-7">
@@ -95,8 +93,7 @@ export function StitchQuickRequest({ settings, services = [] }: StitchQuickReque
                       name="name"
                       autoComplete="name"
                       maxLength={100}
-                      className="w-full min-h-12 rounded-xl border border-slate-300 text-base text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] px-3.5 transition"
-                      placeholder="Your name"
+                      className="quick-request-field"
                       required
                       type="text"
                       value={userName}
@@ -106,25 +103,22 @@ export function StitchQuickRequest({ settings, services = [] }: StitchQuickReque
 
                   <div>
                     <label
+                      id="userService-label"
                       className="block text-sm font-semibold text-slate-800 mb-1.5"
                       htmlFor="userService"
                     >
                       Service
                     </label>
-                    <select
+                    <CustomSelect
                       id="userService"
                       name="service"
-                      className="w-full min-h-12 rounded-xl border border-slate-300 text-base text-slate-900 bg-white focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] px-3.5 transition cursor-pointer"
+                      triggerClassName="quick-request-field"
+                      labelledBy="userService-label"
                       required
                       value={selectedService}
-                      onChange={(event) => setUserService(event.target.value)}
-                    >
-                      {options.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
+                      options={options.map((option) => ({ value: option, label: option }))}
+                      onChange={setUserService}
+                    />
                   </div>
                 </div>
 
@@ -139,16 +133,12 @@ export function StitchQuickRequest({ settings, services = [] }: StitchQuickReque
                     id="userRequirement"
                     name="requirement"
                     maxLength={1600}
-                    className="w-full min-h-32 rounded-xl border border-slate-300 text-base text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] p-3.5 transition resize-y"
-                    placeholder="Add the quantity, deadline or other useful details."
+                    className="quick-request-field quick-request-field--textarea"
                     required
                     rows={4}
                     value={userRequirement}
                     onChange={(event) => setUserRequirement(event.target.value)}
                   />
-                  <p className="text-xs text-slate-600 mt-2">
-                    Attach files in WhatsApp. This form does not upload files.
-                  </p>
                 </div>
 
                 <button

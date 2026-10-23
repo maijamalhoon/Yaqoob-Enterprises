@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   Phone,
-  MessageCircle,
   Navigation,
   Clock,
 } from "lucide-react";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
-import { StitchQuickRequest } from "@/components/stitch-quick-request";
 import { CopyableAddress } from "@/components/copyable-address";
 import { TrackedLink } from "@/components/tracked-link";
+import { BrandIcon } from "@/components/brand-icon";
 import { formatBusinessHours, getCurrentBusinessStatus, getHourPeriods, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -39,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const { settings, hours, services } = await getSiteData();
+  const { settings, hours } = await getSiteData();
   const statusText = getCurrentBusinessStatus(hours);
   const phone = settings.phone_e164 || "+923492568864";
   const callUrl = `tel:${phone}`;
@@ -111,19 +109,10 @@ export default async function ContactPage() {
         <section className="bg-slate-50 border-b border-slate-200 py-10 sm:py-14">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <nav className="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-slate-900">Home</Link>
-                <span>/</span>
-                <span className="text-[#0E7490]">Contact &amp; Location</span>
-              </nav>
-
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+<h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Contact and directions
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 mt-2 leading-relaxed">
-                Visit our Akhtar Colony shop or contact us by phone or WhatsApp.
-              </p>
             </div>
           </div>
         </section>
@@ -155,21 +144,17 @@ export default async function ContactPage() {
                   <div className="mobile-hero-actions grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 mt-4 border-t border-slate-200">
                     <TrackedLink
                       eventName="call_click"
-                      href={callUrl}
-                      className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95 text-center"
-                    >
+                      href={callUrl} className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95 text-center">
                       <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                        <span>Call</span>
+                        <span>{settings.phone_display || phone}</span>
                     </TrackedLink>
 
                     <TrackedLink
                       eventName="whatsapp_click"
                       href={whatsappUrl}
                       rel="noopener noreferrer"
-                      target="_blank"
-                      className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95 text-center"
-                    >
-                      <MessageCircle className="w-4 h-4 shrink-0" />
+                      target="_blank" className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95 text-center">
+                      <BrandIcon name="whatsapp" size={16} badge={false} />
                         <span>WhatsApp</span>
                     </TrackedLink>
 
@@ -177,9 +162,7 @@ export default async function ContactPage() {
                       eventName="directions_click"
                       href={directionsUrl}
                       rel="noopener noreferrer"
-                      target="_blank"
-                      className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95 text-center"
-                    >
+                      target="_blank" className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95 text-center">
                       <Navigation className="w-4 h-4 text-[#0E7490] shrink-0" />
                         <span>Directions</span>
                     </TrackedLink>
@@ -219,8 +202,6 @@ export default async function ContactPage() {
           </div>
         </section>
 
-        {/* Guided WhatsApp Request Component */}
-        <StitchQuickRequest settings={settings} services={services} />
       </main>
 
       <StitchFooter settings={settings} statusText={statusText} />

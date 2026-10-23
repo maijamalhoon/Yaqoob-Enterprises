@@ -13,11 +13,7 @@ export function Logo({
   href = "/",
   businessName = "Yaqoob Enterprises",
 }: LogoProps) {
-  const src = compact
-    ? inverse
-      ? "/brand/logo-icon-white.svg"
-      : "/brand/logo-icon.svg"
-    : "/brand/logo-horizontal.svg";
+  const src = compact ? "/brand/logo-icon.svg" : "/brand/logo-horizontal.svg";
 
   return (
     <Link
@@ -30,8 +26,8 @@ export function Logo({
       <img
         className="brand-logo__image"
         src={src}
-        width={compact ? 468 : 940}
-        height={compact ? 290 : 250}
+        width={compact ? 1076 : 2740}
+        height={compact ? 668 : 740}
         alt={businessName}
       />
     </Link>

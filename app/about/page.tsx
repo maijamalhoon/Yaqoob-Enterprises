@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   Phone,
-  MessageCircle,
   Navigation,
   CheckCircle2,
   MapPin,
-  Printer,
-  Copy,
-  Fingerprint,
   ExternalLink,
 } from "lucide-react";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
+import { BrandIcon } from "@/components/brand-icon";
 import { formatGroupedHours, getCurrentBusinessStatus, getHourPeriods, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -114,39 +110,25 @@ export default async function AboutPage() {
         <section className="bg-slate-50 border-b border-slate-200 py-10 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <nav className="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-slate-900">Home</Link>
-                <span>/</span>
-                <span className="text-[#0E7490]">About</span>
-              </nav>
-
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+<h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 About {settings.business_name}
               </h1>
-
-              <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Printing, photocopying, passport photos and supported NADRA e-Sahulat at our Akhtar Colony shop.
-              </p>
 
               {/* CTAs */}
               <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
-                  href={callUrl}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
+                  href={callUrl} className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
                   <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>CALL: {settings.phone_display}</span>
+                  <span>{settings.phone_display || phone}</span>
                 </TrackedLink>
 
                 <TrackedLink
                   eventName="whatsapp_click"
                   href={whatsappUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
-                  <MessageCircle className="w-4 h-4" />
+                  target="_blank" className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
+                  <BrandIcon name="whatsapp" size={16} badge={false} />
                   <span>CHAT ON WHATSAPP</span>
                 </TrackedLink>
 
@@ -154,9 +136,7 @@ export default async function AboutPage() {
                   eventName="directions_click"
                   href={directionsUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95"
-                >
+                  target="_blank" className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95">
                   <Navigation className="w-4 h-4 text-[#0E7490]" />
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
@@ -176,18 +156,11 @@ export default async function AboutPage() {
                   </h2>
                 </div>
 
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  Find us on Street 1 in Sector B, near Jamia Masjid Muhammadi. We offer walk-in document services and supported biometric verification.
-                </p>
-
                 <div className="space-y-3 pt-2">
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
                       <strong className="block text-sm font-bold text-slate-900">Printing equipment</strong>
-                      <span className="text-xs sm:text-sm text-slate-600">
-                        Laser printers and digital copiers for everyday documents on 75/80 GSM paper.
-                      </span>
                     </div>
                   </div>
 
@@ -195,21 +168,9 @@ export default async function AboutPage() {
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
                       <strong className="block text-sm font-bold text-slate-900">NADRA e-Sahulat terminal</strong>
-                      <span className="text-xs sm:text-sm text-slate-600">
-                        Supported general, vehicle-transfer, FBR Sales Tax and PSW biometric cases.
-                      </span>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="block text-sm font-bold text-slate-900">Send files on WhatsApp</strong>
-                      <span className="text-xs sm:text-sm text-slate-600">
-                        Send a PDF or request before visiting and confirm the details with us.
-                      </span>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -266,40 +227,6 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        {/* Quick Navigation to Services */}
-        <section className="py-12 bg-slate-50 border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-6 text-center">
-              Explore What We Offer
-            </h2>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
-              <Link href="/printing" className="bg-white p-4 rounded-xl border border-slate-200 hover:border-slate-300 shadow-sm transition">
-                <Printer className="w-5 h-5 text-[#0E7490] mx-auto mb-2" />
-                <strong className="block text-xs sm:text-sm font-bold text-slate-900">Printing</strong>
-                <span className="text-[11px] text-slate-500">Laser B&amp;W and Color</span>
-              </Link>
-
-              <Link href="/photocopying" className="bg-white p-4 rounded-xl border border-slate-200 hover:border-slate-300 shadow-sm transition">
-                <Copy className="w-5 h-5 text-[#0E7490] mx-auto mb-2" />
-                <strong className="block text-xs sm:text-sm font-bold text-slate-900">Photocopying</strong>
-                <span className="text-[11px] text-slate-500">Single and Bulk Sets</span>
-              </Link>
-
-              <Link href="/notes-printing" className="bg-white p-4 rounded-xl border border-slate-200 hover:border-slate-300 shadow-sm transition">
-                <CheckCircle2 className="w-5 h-5 text-[#0E7490] mx-auto mb-2" />
-                <strong className="block text-xs sm:text-sm font-bold text-slate-900">Notes Printing</strong>
-                <span className="text-[11px] text-slate-500">School &amp; University</span>
-              </Link>
-
-              <Link href="/nadra-esahulat" className="bg-white p-4 rounded-xl border border-slate-200 hover:border-slate-300 shadow-sm transition">
-                <Fingerprint className="w-5 h-5 text-emerald-600 mx-auto mb-2" />
-                <strong className="block text-xs sm:text-sm font-bold text-slate-900">NADRA e-Sahulat</strong>
-                <span className="text-[11px] text-slate-500">Biometric Verification</span>
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
 
       <StitchFooter settings={settings} statusText={statusText} />

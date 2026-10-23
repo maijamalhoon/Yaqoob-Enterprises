@@ -33,9 +33,6 @@ export default async function OpenGraphImage() {
           <div style={{ display: "flex", marginTop: 30, fontSize: 66, fontWeight: 800, lineHeight: 1.05 }}>
             {settings.business_name}
           </div>
-          <div style={{ display: "flex", marginTop: 18, fontSize: 34, fontWeight: 600, color: "#dce8ee" }}>
-            {settings.tagline}
-          </div>
           <div style={{ display: "flex", marginTop: 26, fontSize: 25, lineHeight: 1.35, color: "#c9dae2" }}>
             {serviceLine || "Local services"}
           </div>

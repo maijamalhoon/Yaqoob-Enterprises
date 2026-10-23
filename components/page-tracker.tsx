@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { SITE_URL } from "@/lib/env";
 
 declare global {
   interface Window {
@@ -36,12 +35,14 @@ export function PageTracker() {
     });
 
     const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-KKW7GFWCYG";
-    const siteHost = new URL(SITE_URL).hostname;
+    const deploymentEnv = process.env.NEXT_PUBLIC_DEPLOYMENT_ENV;
+    const isProductionDeployment = deploymentEnv
+      ? deploymentEnv === "production"
+      : process.env.NODE_ENV === "production";
     const privacySignals = navigator as Navigator & { globalPrivacyControl?: boolean };
     if (
       !measurementId ||
-      process.env.NODE_ENV !== "production" ||
-      window.location.hostname !== siteHost ||
+      !isProductionDeployment ||
       navigator.doNotTrack === "1" ||
       window.doNotTrack === "1" ||
       privacySignals.globalPrivacyControl

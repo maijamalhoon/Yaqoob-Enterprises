@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   BookOpen,
   Phone,
-  MessageCircle,
   Navigation,
   CheckCircle2,
   GraduationCap,
@@ -15,6 +13,7 @@ import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
+import { BrandIcon } from "@/components/brand-icon";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -152,39 +151,25 @@ export default async function NotesPrintingPage() {
         <section className="bg-slate-50 border-b border-slate-200 py-10 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <nav className="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-slate-900">Home</Link>
-                <span>/</span>
-                <span className="text-[#0E7490]">Notes Printing</span>
-              </nav>
-
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+<h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Notes &amp; Assignment Printing
               </h1>
-
-              <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Discounted printing for school, college and university notes and assignments. Open late, until closing.
-              </p>
 
               {/* 3 Prominent CTAs */}
               <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
-                  href={callUrl}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
+                  href={callUrl} className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
                   <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>CALL NOW</span>
+                  <span>{settings.phone_display || phone}</span>
                 </TrackedLink>
 
                 <TrackedLink
                   eventName="whatsapp_click"
                   href={whatsappUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
-                  <MessageCircle className="w-4 h-4" />
+                  target="_blank" className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
+                  <BrandIcon name="whatsapp" size={16} badge={false} />
                   <span>SEND PDF ON WHATSAPP</span>
                 </TrackedLink>
 
@@ -192,9 +177,7 @@ export default async function NotesPrintingPage() {
                   eventName="directions_click"
                   href={directionsUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95"
-                >
+                  target="_blank" className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95">
                   <Navigation className="w-4 h-4 text-[#0E7490]" />
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
@@ -210,9 +193,6 @@ export default async function NotesPrintingPage() {
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Notes &amp; Assignments for Every Level
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Send your file and quantity on WhatsApp for a quote.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -221,9 +201,6 @@ export default async function NotesPrintingPage() {
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">School Notes &amp; Worksheets</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Notes, worksheets, and handouts for school students.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -231,9 +208,6 @@ export default async function NotesPrintingPage() {
                   <GraduationCap className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">College Notes &amp; Past Papers</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Course notes, assignments, and past papers for college students.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -241,9 +215,6 @@ export default async function NotesPrintingPage() {
                   <FileText className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">University Handouts &amp; Slides</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Lecture notes, slides, assignments, and reports for university students.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -251,9 +222,6 @@ export default async function NotesPrintingPage() {
                   <Paperclip className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Assignment Printing</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Single- or double-sided assignment printing. Stapling is available.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -261,9 +229,6 @@ export default async function NotesPrintingPage() {
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Bulk Notes Photocopying</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Bulk copies of class notes and study booklets.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -271,9 +236,6 @@ export default async function NotesPrintingPage() {
                   <FileText className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-base text-slate-900 mb-1">Thesis &amp; Final Year Projects</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Thesis drafts, project reports, and research documents.
-                </p>
               </div>
             </div>
           </div>
@@ -305,32 +267,6 @@ export default async function NotesPrintingPage() {
                   </p>
                 </details>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contextual Links */}
-        <section className="py-10 bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-              Related Services for Students
-            </h3>
-            <div className="flex flex-wrap gap-2.5 text-xs font-semibold">
-              <Link href="/printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Printing Services →
-              </Link>
-              <Link href="/photocopying" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Photocopying Services →
-              </Link>
-              <Link href="/color-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Color Cover &amp; Graph Printing →
-              </Link>
-              <Link href="/bulk-printing" className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
-                Bulk Printing for Class Sets →
-              </Link>
-              <Link href="/contact" className="px-3.5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl transition">
-                Shop Location &amp; Map →
-              </Link>
             </div>
           </div>
         </section>

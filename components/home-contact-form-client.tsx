@@ -1,8 +1,9 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { BrandIcon } from "@/components/brand-icon";
+import { CustomSelect } from "@/components/custom-select";
 import styles from "./home-contact-form.module.css";
 
 type HomeContactCategory = {
@@ -20,8 +21,18 @@ export function HomeContactFormClient({
   whatsappNumber: string;
   businessName: string;
 }) {
+  const [serviceSlug, setServiceSlug] = useState("");
+  const [serviceInvalid, setServiceInvalid] = useState(false);
+
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!serviceSlug) {
+      setServiceInvalid(true);
+      const form = event.currentTarget;
+      window.requestAnimationFrame(() => form.querySelector<HTMLButtonElement>(".custom-select__trigger")?.focus());
+      return;
+    }
+    setServiceInvalid(false);
     const data = new FormData(event.currentTarget);
     const categorySlug = String(data.get("service") || "");
     const selectedCategory = categories.find((category) => category.slug === categorySlug);
@@ -56,18 +67,28 @@ export function HomeContactFormClient({
       <div className={styles.row}>
         <label className={styles.field}>
           <span>Your name</span>
-          <input name="name" autoComplete="name" maxLength={100} placeholder="Your name" required />
+          <input name="name" autoComplete="name" maxLength={100} required />
         </label>
-        <label className={styles.field}>
-          <span>Service</span>
-          <select name="service" defaultValue="" required>
-            <option value="" disabled>Choose a service</option>
-            <option value="__unsure__">I’m not sure — guide me</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.slug}>{category.title}</option>
-            ))}
-          </select>
-        </label>
+        <div className={styles.field}>
+          <span id="home-contact-service-label">Service</span>
+          <CustomSelect
+            id="home-contact-service"
+            name="service"
+            value={serviceSlug}
+            labelledBy="home-contact-service-label"
+            placeholder="Choose a service"
+            required
+            invalid={serviceInvalid}
+            onChange={(value) => {
+              setServiceSlug(value);
+              setServiceInvalid(false);
+            }}
+            options={[
+              { value: "__unsure__", label: "I’m not sure — guide me" },
+              ...categories.map((category) => ({ value: category.slug, label: category.title })),
+            ]}
+          />
+        </div>
       </div>
 
       <label className={styles.field}>
@@ -75,7 +96,6 @@ export function HomeContactFormClient({
         <textarea
           name="details"
           maxLength={1200}
-          placeholder="Tell us briefly what you need, quantity or deadline."
           required
         />
       </label>
