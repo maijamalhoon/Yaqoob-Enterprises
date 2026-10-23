@@ -207,11 +207,15 @@ try {
   const adminLoginResponse = await openHealthy(page, "/admin/login");
   await assertNoHorizontalOverflow(page, "Desktop admin login");
   assert(adminLoginResponse.status() < 400, "Admin login route is unavailable.");
+  assert((await page.locator('input[type="email"]').count()) === 1, "Admin email input is missing.");
+  assert((await page.locator('input[type="password"]').count()) === 1, "Admin must use password authentication, not a magic link.");
+  assert(!(await page.locator("main").innerText()).toLowerCase().includes("login link"), "Admin login must not offer magic-link sign-in.");
   for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history", "/admin/settings"]) {
     await page.goto(baseUrl + protectedPath, { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => window.location.pathname === "/admin/login", null, { timeout: 15_000 });
     await page.locator('input[type="email"]').waitFor({ state: "visible", timeout: 10_000 });
-    assert((await page.locator('input[type="email"]').count()) > 0, "Protected route did not show OTP login for " + protectedPath + ".");
+    assert((await page.locator('input[type="email"]').count()) > 0, "Protected route did not show the admin email input for " + protectedPath + ".");
+    assert((await page.locator('input[type="password"]').count()) > 0, "Protected route did not show the admin password input for " + protectedPath + ".");
   }
 
   assert(pageErrors.length === 0, `Browser page errors detected: ${pageErrors.join(" | ")}`);
