@@ -33,14 +33,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Install application dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci --no-audit --no-fund
-          else
-            npm install --no-audit --no-fund
-          fi
+        run: npm ci --no-audit --no-fund
 
       - name: Install pinned Playwright runner
         run: npm install --no-save --no-audit --no-fund --ignore-scripts playwright@1.62.0
@@ -52,12 +48,14 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+          VERCEL: "1"
         run: npm run build
 
       - name: Start pull request production server
         if: github.event_name == 'pull_request'
         env:
           NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+          VERCEL: "1"
         run: |
           nohup npm start > /tmp/yaqoob-next.log 2>&1 &
           echo $! > /tmp/yaqoob-next.pid
