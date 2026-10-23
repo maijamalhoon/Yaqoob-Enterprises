@@ -11,6 +11,7 @@ const scriptSources = ["'self'", "'unsafe-inline'", ...(isDevelopment ? ["'unsaf
 
 const contentSecurityPolicy = [
   "default-src 'self'",
+  "frame-src 'self' https://www.google.com",
   "base-uri 'self'",
   "object-src 'none'",
   "form-action 'self'",
