@@ -138,7 +138,7 @@ export function StitchQuickRequest({ settings, services = [] }: StitchQuickReque
                   <textarea
                     id="userRequirement"
                     name="requirement"
-                    maxLength={1200}
+                    maxLength={1600}
                     className="w-full min-h-32 rounded-xl border border-slate-300 text-base text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] p-3.5 transition resize-y"
                     placeholder="Add the quantity, deadline or other useful details."
                     required
