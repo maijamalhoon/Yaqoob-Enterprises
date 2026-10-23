@@ -138,8 +138,10 @@ try {
   assert(serviceOptions.some((label) => label.toLowerCase().includes("printing")), "Quick request lost its printing option.");
   assert(serviceOptions.some((label) => label.toLowerCase().includes("photocopy")), "Quick request lost its photocopying option.");
   assert(serviceOptions.some((label) => label.toLowerCase().includes("nadra")), "Quick request lost its NADRA e-Sahulat option.");
-  await page.locator("#userService").selectOption("Photocopying");
-  assert((await page.locator("#userService").inputValue()) === "Photocopying", "Quick request service selection is not working.");
+  const photocopyOption = serviceOptions.find((label) => label.toLowerCase().includes("photocopy"));
+  assert(photocopyOption, "Quick request photocopy option is missing.");
+  await page.locator("#userService").selectOption({ label: photocopyOption });
+  assert((await page.locator("#userService").inputValue()) === photocopyOption, "Quick request service selection is not working.");
 
   const whatsappRequests = [];
   await page.route("https://wa.me/**", async (route) => {
