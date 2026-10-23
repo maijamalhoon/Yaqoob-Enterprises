@@ -99,7 +99,7 @@ try {
   const catalogServices = catalogCategories.flatMap((category) => category?.itemListElement || []);
   assert(catalogCategories.length >= 8, `Expected at least 8 service categories in OfferCatalog; found ${catalogCategories.length}.`);
   assert(catalogServices.length >= 10, `Expected at least 10 public services in OfferCatalog; found ${catalogServices.length}.`);
-  assert((await page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item").count()) >= 8, "Homepage must show main services.");
+  assert((await page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item, #services .home-service-list > li").count()) >= 8, "Homepage must show main services.");
   assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
   const visibleBusinessName = normalizeText(businessData.name).replace(/\s+/g, "");
   const visibleBrandText = normalizeText(await page.locator('header a[aria-label*="Home"]').first().innerText()).replace(/\s+/g, "");
