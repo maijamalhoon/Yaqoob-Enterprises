@@ -164,7 +164,7 @@ try {
 
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
-  assert((await page.locator("main").innerText()).includes("campaign"), "Privacy page must disclose campaign attribution cookies.");
+  assert((await page.locator("main").innerText()).toLowerCase().includes("campaign"), "Privacy page must disclose campaign attribution cookies.");
 
   const adminLoginResponse = await openHealthy(page, "/admin/login");
   await assertNoHorizontalOverflow(page, "Desktop admin login");
