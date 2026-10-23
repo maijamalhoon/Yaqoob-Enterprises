@@ -89,7 +89,8 @@ try {
   assert(catalogServices.length >= 10, `Expected at least 10 public services in OfferCatalog; found ${catalogServices.length}.`);
   assert((await page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item").count()) >= 8, "Homepage must show main services.");
   assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
-  assert((await page.locator("body").innerText()).includes(websiteData.name), "Homepage is missing the configured business identity.");
+  const normalizedBodyText = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+  assert(normalizedBodyText.includes(websiteData.name), "Homepage is missing the configured business identity.");
   await assertNoHorizontalOverflow(page, "Desktop homepage");
 
   const sitemapResponse = await page.request.get(`${baseUrl}/sitemap.xml`);
