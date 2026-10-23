@@ -15,6 +15,7 @@ import "./admin-control-center.css";
 import "./admin-safety-analytics.css";
 import "./skeleton.css";
 import "./stitch.css";
+import "./public-site.css";
 import { PageTracker } from "@/components/page-tracker";
 import { getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";

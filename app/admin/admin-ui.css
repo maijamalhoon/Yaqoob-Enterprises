@@ -202,9 +202,10 @@
   padding: 24px 16px calc(40px + env(safe-area-inset-bottom));
 }
 
-.admin-root .admin-page-heading,
-.admin-root .admin-page-heading--control {
+.admin-root .admin-page-heading.admin-page-heading,
+.admin-root .admin-page-heading--control.admin-page-heading--control {
   display: flex;
+  flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--admin-space-4);
@@ -1497,6 +1498,8 @@
   min-height: 100vh;
   min-height: 100dvh;
   padding: calc(24px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+  color: var(--admin-ink);
+  background: var(--admin-page);
 }
 
 .admin-root .admin-login-page > div {
@@ -1575,7 +1578,7 @@
   min-height: 44px;
   padding: 7px 12px;
   border-radius: var(--admin-radius-sm);
-  color: var(--admin-text);
+  color: var(--admin-ink);
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
@@ -1958,8 +1961,8 @@
     gap: 16px;
   }
 
-  .admin-root .admin-page-heading,
-  .admin-root .admin-page-heading--control {
+  .admin-root .admin-page-heading.admin-page-heading,
+  .admin-root .admin-page-heading--control.admin-page-heading--control {
     align-items: flex-start;
     flex-direction: column;
   }
@@ -2041,6 +2044,28 @@
 }
 
 @media (max-width: 560px) {
+  .admin-root .admin-service-group__head {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .admin-root .admin-service-group__icon {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .admin-root .admin-service-group__title {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .admin-root .admin-service-group .admin-inline-editor {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0;
+  }
+
   .admin-root .admin-topbar {
     gap: 8px;
     padding-right: 8px;

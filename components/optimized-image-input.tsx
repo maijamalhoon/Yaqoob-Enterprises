@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const MAX_SOURCE_BYTES = 20 * 1024 * 1024;
 const MAX_DIMENSION = 1920;
 const WEBP_QUALITY = 0.82;
 const SUPPORTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const DEFAULT_STATUS = "JPG, PNG or WebP · optimized to max 1920px before upload";
 
 function webpName(name: string) {
   const base = name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "shop-photo";
-  return `${base}.webp`;
+  return base + ".webp";
 }
 
 async function optimizeImage(file: File) {
@@ -44,12 +45,29 @@ async function optimizeImage(file: File) {
 }
 
 export function OptimizedImageInput() {
-  const [status, setStatus] = useState("JPG, PNG or WebP · optimized to max 1920px before upload");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const requestIdRef = useRef(0);
+  const [status, setStatus] = useState(DEFAULT_STATUS);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    const form = inputRef.current?.form;
+    if (!form) return;
+
+    function resetImageInput() {
+      requestIdRef.current += 1;
+      setBusy(false);
+      setStatus(DEFAULT_STATUS);
+    }
+
+    form.addEventListener("reset", resetImageInput);
+    return () => form.removeEventListener("reset", resetImageInput);
+  }, []);
 
   return (
     <div>
       <input
+        ref={inputRef}
         type="file"
         name="file"
         accept="image/jpeg,image/png,image/webp"
@@ -60,11 +78,13 @@ export function OptimizedImageInput() {
           const source = input.files?.[0];
           if (!source) return;
 
+          const requestId = ++requestIdRef.current;
           input.value = "";
           setBusy(true);
           setStatus("Preparing image…");
           try {
             const optimized = await optimizeImage(source);
+            if (requestId !== requestIdRef.current) return;
             const transfer = new DataTransfer();
             transfer.items.add(optimized);
             input.files = transfer.files;
@@ -72,13 +92,15 @@ export function OptimizedImageInput() {
             const savedPercent = source.size > 0 ? Math.round((saved / source.size) * 100) : 0;
             setStatus(
               optimized === source
-                ? `Ready · ${(optimized.size / 1024 / 1024).toFixed(1)} MB · already efficient`
-                : `Ready · ${(optimized.size / 1024 / 1024).toFixed(1)} MB · ${savedPercent}% smaller`,
+                ? "Ready · " + (optimized.size / 1024 / 1024).toFixed(1) + " MB · already efficient"
+                : "Ready · " + (optimized.size / 1024 / 1024).toFixed(1) + " MB · " + savedPercent + "% smaller",
             );
           } catch (error) {
-            setStatus(error instanceof Error ? error.message : "Could not prepare this image.");
+            if (requestId === requestIdRef.current) {
+              setStatus(error instanceof Error ? error.message : "Could not prepare this image.");
+            }
           } finally {
-            setBusy(false);
+            if (requestId === requestIdRef.current) setBusy(false);
           }
         }}
       />

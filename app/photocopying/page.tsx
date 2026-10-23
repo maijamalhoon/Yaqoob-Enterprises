@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  Copy,
   Phone,
   MessageCircle,
   Navigation,
@@ -128,7 +127,7 @@ export default async function PhotocopyingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
+    <div className="public-site public-site--service-landing min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
@@ -154,11 +153,6 @@ export default async function PhotocopyingPage() {
                 <span>/</span>
                 <span className="text-[#0E7490]">Photocopying</span>
               </nav>
-
-              <div className="inline-flex items-center gap-2 text-[#0E7490] font-bold text-xs uppercase tracking-wider mb-2">
-                <Copy className="w-4 h-4" />
-                <span>Walk-in Counter • Sector B, Akhtar Colony</span>
-              </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Photocopying in Akhtar Colony
@@ -210,9 +204,6 @@ export default async function PhotocopyingPage() {
         <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mb-10">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490]">
-                Photocopy Solutions
-              </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Quality Photocopying for Every Requirement
               </h2>

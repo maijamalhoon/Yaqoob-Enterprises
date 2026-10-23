@@ -5,43 +5,43 @@ export interface FaqItem {
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
-    q: "Do you provide black-and-white and color printing?",
-    a: "Yes. Black-and-white and color printing are available for documents, reports, and presentations.",
+    q: "Do you provide black-and-white and colour printing?",
+    a: "Yes. Both options are available for documents, reports and presentations.",
   },
   {
     q: "Can I send my document through WhatsApp before visiting?",
-    a: "Send your file, print options, and quantity on WhatsApp. We will confirm the cost and pickup time.",
+    a: "Send the file, print settings and quantity. Confirm the cost and pickup time before work starts.",
   },
   {
     q: "Do you handle single and bulk photocopying?",
-    a: "Yes. We photocopy documents, notes, IDs, and office records in single or bulk quantities.",
+    a: "Yes. Single and bulk photocopying is available for documents, notes, IDs and office records.",
   },
   {
-    q: "Do you print school, college, and university notes and assignments?",
-    a: "Yes. We print school, college, and university notes and assignments in bulk, with quality printing at discounted rates compared with market prices.",
+    q: "Do you print school, college and university notes?",
+    a: "Yes. Send the file and quantity to ask about bulk rates.",
   },
   {
     q: "Do you offer discounted rates for bulk printing?",
-    a: "Yes. Bulk rates are discounted compared with market prices. Send your file and quantity on WhatsApp for a quote and pickup time.",
+    a: "Rates depend on the job. Send the file and quantity for a quote.",
   },
   {
     q: "Do you provide urgent passport-size photos?",
-    a: "Yes, we prepare passport-size photos with white or blue backgrounds in approximately 5 minutes. These are suitable for CNIC, passport renewal, visa applications, school admissions, and job forms.",
+    a: "White and blue backgrounds are available. Photos are usually ready in 5 minutes; confirm the required size before visiting.",
   },
   {
-    q: "Where is Yaqoob Enterprises located in Karachi?",
-    a: "We are located at Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi, Pakistan. The shop is easily accessible by motorcycle, car, or on foot with street parking.",
+    q: "Where is Yaqoob Enterprises in Karachi?",
+    a: "Plot No. 7, Street No. 1, Sector B, near Jamia Masjid Muhammadi, Akhtar Colony, Karachi.",
   },
   {
     q: "What are your opening hours?",
-    a: "Monday–Saturday, 9 AM–11 PM, with a Friday prayer break. Sunday, 4–10:30 PM. Message us to confirm late-night printing and today's hours.",
+    a: "See the schedule in the Visit our shop section above. Confirm today's hours before travelling.",
   },
   {
     q: "Do you provide NADRA e-Sahulat biometric services?",
-    a: "Yes, we are an authorized local NADRA e-Sahulat franchise counter providing biometric verification for General verification, Vehicle / ETO biometric transfers, FBR Sales Tax biometric, and Pakistan Single Window (PSW).",
+    a: "We handle supported general, vehicle/ETO, FBR Sales Tax and Pakistan Single Window (PSW) cases. Confirm your case and system availability before visiting.",
   },
   {
     q: "What documents should I bring for biometric services?",
-    a: "Always bring your original CNIC or Smart Card in good condition, along with the active mobile phone registered to your account for SMS verification. For vehicle or tax biometrics, also bring the relevant registration or transaction number.",
+    a: "Bring your original CNIC or Smart Card, the phone registered to your account, and relevant vehicle or tax reference details.",
   },
 ];

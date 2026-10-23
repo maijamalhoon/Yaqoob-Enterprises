@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Eye, EyeOff, ImagePlus, Star } from "lucide-react";
-import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { OptimizedImageInput } from "@/components/optimized-image-input";
 import { requireAdmin } from "@/lib/admin";
 import { SUPABASE_URL } from "@/lib/env";
@@ -37,7 +37,7 @@ export default async function AdminGalleryPage() {
           <label>Horizontal focus<input type="number" min="0" max="100" name="focal_x" defaultValue="50" /></label>
           <label>Vertical focus<input type="number" min="0" max="100" name="focal_y" defaultValue="50" /></label>
           <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={!featuredImage} /> Use as homepage hero image</label>
-          <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Upload image</AdminSubmitButton></div>
+          <div className="admin-form-actions admin-span-2"><AdminSubmitButton pendingLabel="Uploading image…">Upload image</AdminSubmitButton><AdminCancelButton /></div>
         </form>
       </details>
 
@@ -77,7 +77,7 @@ export default async function AdminGalleryPage() {
                     <label><input type="checkbox" name="is_featured" defaultChecked={image.is_featured} /> Homepage image</label>
                     <label><input type="checkbox" name="is_active" defaultChecked={image.is_active} /> Active</label>
                   </div>
-                  <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save image</AdminSubmitButton></div>
+                  <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save image</AdminSubmitButton><AdminCancelButton /></div>
                 </form>
                 <form className="admin-destructive-row" action={deleteGalleryImage}>
                   <input type="hidden" name="id" value={image.id} />

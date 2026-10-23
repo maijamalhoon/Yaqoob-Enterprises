@@ -1,5 +1,19 @@
 import Link from "next/link";
-import { Activity, ArrowRight, BarChart3, CheckCircle2, History, ImageIcon, MapPin, MousePointerClick, Phone, Settings2, ShieldCheck, TriangleAlert, Wrench } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  BarChart3,
+  CheckCircle2,
+  History,
+  ImageIcon,
+  MapPin,
+  Megaphone,
+  MousePointerClick,
+  Settings2,
+  ShieldCheck,
+  TriangleAlert,
+  Wrench,
+} from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 
@@ -20,111 +34,162 @@ export default async function AdminDashboardPage() {
   ]);
 
   const activeCategoryIds = new Set((categories.data || []).filter((category) => category.is_active).map((category) => category.id));
-  const publicServiceCount = (services.data || []).filter((service) => service.status !== "hidden" && activeCategoryIds.has(service.category_id)).length;
-  const categoryCount = activeCategoryIds.size;
-  const featuredReady = Boolean(featured.data?.id);
+  const publicServiceCount = services.error || categories.error
+    ? null
+    : (services.data || []).filter((service) => service.status !== "hidden" && activeCategoryIds.has(service.category_id)).length;
+  const categoryCount = categories.error ? null : activeCategoryIds.size;
+  const featuredReady = featured.error ? null : Boolean(featured.data?.id);
   const settingsData = settings.data;
   const location = businessLocationLabel(settingsData?.address || "");
-  const hoursReady = (hours.data || []).length === 7 && (hours.data || []).every((hour) =>
+  const hoursReady = hours.error ? null : (hours.data || []).length === 7 && (hours.data || []).every((hour) =>
     hour.is_closed || (Array.isArray(hour.periods) && hour.periods.length > 0),
   );
 
   const healthChecks = [
-    ["Contact", Boolean(settingsData?.phone_e164 && settingsData?.whatsapp_e164), "/admin/settings"],
-    ["Location", Boolean(settingsData?.address && settingsData?.map_url), "/admin/settings"],
+    ["Contact", settings.error ? null : Boolean(settingsData?.phone_e164 && settingsData?.whatsapp_e164), "/admin/settings"],
+    ["Location", settings.error ? null : Boolean(settingsData?.address && settingsData?.map_url), "/admin/settings"],
     ["Opening hours", hoursReady, "/admin/settings"],
-    ["Public services", publicServiceCount > 0 && categoryCount > 0, "/admin/services"],
+    ["Public services", publicServiceCount === null || categoryCount === null ? null : publicServiceCount > 0 && categoryCount > 0, "/admin/services"],
     ["Homepage image", featuredReady, "/admin/gallery"],
-    ["Google Business", Boolean(settingsData?.google_business_profile_url), "/admin/analytics"],
-    ["Backup", Boolean(latestBackup.data?.id), "/admin/history"],
+    ["Google Business", settings.error ? null : Boolean(settingsData?.google_business_profile_url), "/admin/analytics"],
+    ["Backup", latestBackup.error ? null : Boolean(latestBackup.data?.id), "/admin/history"],
   ] as const;
   const healthyCount = healthChecks.filter(([, ready]) => ready).length;
+  const checkedCount = healthChecks.filter(([, ready]) => ready !== null).length;
+  const activityRows = recent.data || [];
 
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
         <div>
           <span className="eyebrow">Control centre</span>
-          <h1>{settingsData?.business_name || "Website admin"}</h1>
-          <p>Manage the information customers see on the public website.</p>
+          <h1>Overview</h1>
+          <p>Manage the information {settingsData?.business_name || "your business"} shows on the public website.</p>
         </div>
         <div className="admin-heading-metrics">
-          <span className={healthyCount === healthChecks.length ? "is-good" : "is-warning"}><strong>{healthyCount}/{healthChecks.length}</strong> health checks</span>
+          <span className={healthyCount === healthChecks.length ? "is-good" : "is-warning"}>
+            <strong>{healthyCount}/{checkedCount}</strong> checks ready
+          </span>
         </div>
       </div>
 
-      <div className="admin-stats admin-stats--control">
-        <article><span><Wrench size={19} /></span><strong>{publicServiceCount}</strong><p>Public services</p></article>
-        <article><span><Settings2 size={19} /></span><strong>{categoryCount}</strong><p>Categories</p></article>
-        <article className={featuredReady ? "is-ready" : "is-warning"}><span><ImageIcon size={19} /></span><strong>{featuredReady ? "Ready" : "Missing"}</strong><p>Homepage image</p></article>
-        <article><span><Activity size={19} /></span><strong>{events.count || 0}</strong><p>30-day events</p></article>
-      </div>
+      <section className="admin-stats admin-stats--control" aria-label="Website summary">
+        <article>
+          <span><Wrench size={18} aria-hidden="true" /></span>
+          <strong>{publicServiceCount?.toLocaleString("en-PK") ?? "—"}</strong>
+          <p>Public services</p>
+        </article>
+        <article>
+          <span><Settings2 size={18} aria-hidden="true" /></span>
+          <strong>{categoryCount?.toLocaleString("en-PK") ?? "—"}</strong>
+          <p>Active categories</p>
+        </article>
+        <article className={featuredReady === null ? "is-warning" : featuredReady ? "is-ready" : "is-warning"}>
+          <span><ImageIcon size={18} aria-hidden="true" /></span>
+          <strong>{featuredReady === null ? "—" : featuredReady ? "Ready" : "Missing"}</strong>
+          <p>Homepage image</p>
+        </article>
+        <article>
+          <span><Activity size={18} aria-hidden="true" /></span>
+          <strong>{events.error ? "—" : (events.count || 0).toLocaleString("en-PK")}</strong>
+          <p>Events · last 30 days</p>
+        </article>
+      </section>
 
-      <section className="admin-panel admin-panel--control admin-health-panel">
+      <section className="admin-panel admin-panel--control admin-health-panel" aria-labelledby="admin-health-title">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><ShieldCheck size={15} /> Health</span><h2>Website readiness</h2></div>
+          <div>
+            <span className="admin-panel-kicker"><ShieldCheck size={15} aria-hidden="true" /> Readiness</span>
+            <h2 id="admin-health-title">Website checks</h2>
+          </div>
         </div>
         <div className="admin-health-grid">
           {healthChecks.map(([label, ready, href]) => (
             <Link className={ready ? "is-ready" : "is-warning"} href={href} key={label}>
-              {ready ? <CheckCircle2 size={16} /> : <TriangleAlert size={16} />}
+              {ready === true
+                ? <CheckCircle2 size={16} aria-hidden="true" />
+                : <TriangleAlert size={16} aria-hidden="true" />}
               <span>{label}</span>
-              <small>{ready ? "Ready" : "Check"}</small>
+              <small>{ready === null ? "Unavailable" : ready ? "Ready" : "Review"}</small>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="admin-control-links" aria-label="Website controls">
-        <Link className="admin-control-link" href="/admin/settings">
-          <span className="admin-control-link__icon"><Settings2 size={20} /></span>
-          <span><strong>Business details</strong><small>{settingsData?.phone_display || "Set phone"} · {location || "Set location"}</small></span>
-          <ArrowRight size={17} />
-        </Link>
-        <Link className="admin-control-link" href="/admin/services">
-          <span className="admin-control-link__icon"><Wrench size={20} /></span>
-          <span><strong>Services</strong><small>{publicServiceCount} public across {categoryCount} categories</small></span>
-          <ArrowRight size={17} />
-        </Link>
-        <Link className="admin-control-link" href="/admin/gallery">
-          <span className="admin-control-link__icon"><ImageIcon size={20} /></span>
-          <span><strong>Homepage image</strong><small>{featuredReady ? featured.data?.alt_text || "Featured image selected" : "Choose a featured shop photo"}</small></span>
-          <ArrowRight size={17} />
-        </Link>
-        <Link className="admin-control-link" href="/admin/coverage">
-          <span className="admin-control-link__icon"><MapPin size={20} /></span>
-          <span><strong>Service coverage</strong><small>Delivery and home-visit areas</small></span>
-          <ArrowRight size={17} />
-        </Link>
-        <Link className="admin-control-link" href="/admin/analytics">
-          <span className="admin-control-link__icon"><BarChart3 size={20} /></span>
-          <span><strong>Analytics</strong><small>Traffic, contact actions and Google Business attribution</small></span>
-          <ArrowRight size={17} />
-        </Link>
-        <Link className="admin-control-link" href="/admin/history">
-          <span className="admin-control-link__icon"><History size={20} /></span>
-          <span><strong>History & backups</strong><small>{latestBackup.data?.id ? `Latest backup ${new Date(latestBackup.data.created_at).toLocaleDateString("en-PK", { timeZone: "Asia/Karachi" })}` : "Create your first backup"}</small></span>
-          <ArrowRight size={17} />
-        </Link>
-      </section>
-
-      <section className="admin-panel admin-panel--control admin-activity-panel">
+      <section className="admin-panel admin-panel--control" aria-labelledby="admin-controls-title">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><MousePointerClick size={15} /> Activity</span><h2>Recent website activity</h2></div>
-          <Link className="admin-inline-link" href="/admin/analytics">Full analytics <ArrowRight size={14} /></Link>
+          <div>
+            <span className="admin-panel-kicker"><Settings2 size={15} aria-hidden="true" /> Manage</span>
+            <h2 id="admin-controls-title">Website content</h2>
+          </div>
         </div>
-        <div className="admin-table-wrap">
-          <table><thead><tr><th>Event</th><th>Page</th><th>City</th><th>Device</th><th>Time</th></tr></thead><tbody>
-            {(recent.data || []).map((event, index) => <tr key={`${event.created_at}-${index}`}><td>{event.event_name.replaceAll("_", " ")}</td><td>{event.page_path}</td><td>{event.city_name || "Unknown"}</td><td>{event.device_type || "Unknown"}</td><td>{new Date(event.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</td></tr>)}
-            {(recent.data || []).length === 0 && <tr><td colSpan={5}>No activity recorded yet.</td></tr>}
-          </tbody></table>
+        <div className="admin-control-links">
+          <Link className="admin-control-link" href="/admin/settings">
+            <span className="admin-control-link__icon"><Settings2 size={18} aria-hidden="true" /></span>
+            <span><strong>Business details</strong><small>{settingsData?.phone_display || "Set phone"} · {location || "Set location"}</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <Link className="admin-control-link" href="/admin/services">
+            <span className="admin-control-link__icon"><Wrench size={18} aria-hidden="true" /></span>
+            <span><strong>Services</strong><small>{publicServiceCount === null || categoryCount === null ? "Service data unavailable" : `${publicServiceCount} public in ${categoryCount} active categories`}</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <Link className="admin-control-link" href="/admin/gallery">
+            <span className="admin-control-link__icon"><ImageIcon size={18} aria-hidden="true" /></span>
+            <span><strong>Gallery</strong><small>{featuredReady === null ? "Image data unavailable" : featuredReady ? featured.data?.alt_text || "Featured image selected" : "Choose a homepage image"}</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <Link className="admin-control-link" href="/admin/coverage">
+            <span className="admin-control-link__icon"><MapPin size={18} aria-hidden="true" /></span>
+            <span><strong>Coverage</strong><small>Delivery, pickup and home visit areas</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <Link className="admin-control-link" href="/admin/announcements">
+            <span className="admin-control-link__icon"><Megaphone size={18} aria-hidden="true" /></span>
+            <span><strong>Announcements</strong><small>Notices for the public website</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <Link className="admin-control-link" href="/admin/analytics">
+            <span className="admin-control-link__icon"><BarChart3 size={18} aria-hidden="true" /></span>
+            <span><strong>Analytics</strong><small>Traffic, contact actions and Google attribution</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <Link className="admin-control-link" href="/admin/history">
+            <span className="admin-control-link__icon"><History size={18} aria-hidden="true" /></span>
+            <span><strong>History & backups</strong><small>{latestBackup.error ? "Backup data unavailable" : latestBackup.data?.id ? "Latest backup " + new Date(latestBackup.data.created_at).toLocaleDateString("en-PK", { timeZone: "Asia/Karachi" }) : "Create your first backup"}</small></span>
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
         </div>
       </section>
 
-      <div className="admin-dashboard-contact" aria-label="Current public contact">
-        <Phone size={15} /> <span>{settingsData?.phone_display || "Phone not set"}</span>
-        <MapPin size={15} /> <span>{location || "Location not set"}</span>
-      </div>
+      <section className="admin-panel admin-panel--control admin-activity-panel" aria-labelledby="admin-activity-title">
+        <div className="admin-panel__heading">
+          <div>
+            <span className="admin-panel-kicker"><MousePointerClick size={15} aria-hidden="true" /> Activity</span>
+            <h2 id="admin-activity-title">Recent website activity</h2>
+          </div>
+          <Link className="admin-inline-link" href="/admin/analytics">Full analytics <ArrowRight size={14} aria-hidden="true" /></Link>
+        </div>
+        <div className="admin-table-wrap" role="region" aria-label="Recent website activity" tabIndex={0}>
+          <table>
+            <thead>
+              <tr><th scope="col">Event</th><th scope="col">Page</th><th scope="col">City</th><th scope="col">Device</th><th scope="col">Time</th></tr>
+            </thead>
+            <tbody>
+              {activityRows.map((event, index) => (
+                <tr key={event.created_at + "-" + index}>
+                  <td>{event.event_name.replaceAll("_", " ")}</td>
+                  <td>{event.page_path}</td>
+                  <td>{event.city_name || "Unknown"}</td>
+                  <td>{event.device_type || "Unknown"}</td>
+                  <td>{new Date(event.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</td>
+                </tr>
+              ))}
+              {activityRows.length === 0 && <tr><td colSpan={5}>{recent.error ? "Activity could not be loaded." : "No activity has been recorded yet."}</td></tr>}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
