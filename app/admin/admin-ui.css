@@ -215,6 +215,7 @@
 
 .admin-root .admin-page-heading > div:first-child {
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .admin-root .admin-page-heading .eyebrow {
@@ -247,6 +248,8 @@
 .admin-root .admin-heading-metrics {
   display: flex;
   flex: 0 0 auto;
+  width: fit-content;
+  max-width: 100%;
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
