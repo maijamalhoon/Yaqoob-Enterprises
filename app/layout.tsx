@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import "./brand.css";
 import "./design-system.css";
@@ -16,9 +17,23 @@ import "./admin-safety-analytics.css";
 import "./skeleton.css";
 import "./stitch.css";
 import "./public-site.css";
+import "./minimal-redesign.css";
+import "./typography.css";
 import { PageTracker } from "@/components/page-tracker";
 import { getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+
+const bodyFont = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+});
+
+const headingFont = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heading",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getSiteData();
@@ -78,6 +93,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: homeTitle,
       description,
     },
+    manifest: "/manifest.webmanifest",
     icons: { icon: "/icon.svg" },
   };
 }
@@ -85,7 +101,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>
+      <body id="page-top" className={`${bodyFont.variable} ${headingFont.variable}`}>
         <PageTracker />
         {children}
       </body>

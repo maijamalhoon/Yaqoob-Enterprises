@@ -9,7 +9,7 @@
   width: 3.2rem;
 }
 
-.brand-logo--inverse:not(.brand-logo--compact) .brand-logo__image {
+.brand-logo--inverse .brand-logo__image {
   filter: brightness(0) invert(1);
 }
 

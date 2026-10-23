@@ -7,7 +7,6 @@ export type ServiceStatus =
 
 export type BusinessSettings = {
   business_name: string;
-  tagline: string;
   phone_display: string;
   phone_e164: string;
   whatsapp_e164: string;

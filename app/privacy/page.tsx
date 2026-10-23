@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
+import { StitchFooter } from "@/components/stitch-footer";
+import { StitchHeader } from "@/components/stitch-header";
+import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,12 +32,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PrivacyPage() {
-  const { settings, categories, hours } = await getSiteData();
+  const { settings, hours } = await getSiteData();
   return (
     <div className="public-site public-site--text-page">
-      <SiteHeader settings={settings} statusText={getCurrentBusinessStatus(hours)} />
+      <StitchHeader settings={settings} statusText={getCurrentBusinessStatus(hours)} />
       <main id="main-content">
-        <section className="page-hero"><div className="container"><span className="eyebrow">Privacy</span><h1>Privacy &amp; data use</h1><p>How this website handles forms, analytics and external services.</p></div></section>
+        <section className="page-hero"><div className="container"><span className="eyebrow">Privacy</span><h1>Privacy &amp; data use</h1></div></section>
         <section className="section"><article className="container prose-page">
           <h2>Service request form</h2><p>The form prepares a WhatsApp message on your device. It does not upload files or save form details to the website database.</p>
           <h2>Website analytics</h2><p>Page views and contact clicks are recorded for aggregate reporting. Google Analytics 4 measures public visits. Hosting may provide an approximate city or country. The website analytics table does not store exact GPS locations, full IP addresses, passwords, PINs or one-time codes.</p>
@@ -47,7 +48,8 @@ export default async function PrivacyPage() {
           <h2>Admin access</h2><p>Supabase authentication limits admin access to authorised email addresses.</p>
         </article></section>
       </main>
-      <SiteFooter settings={settings} categories={categories} />
+      <StitchFooter settings={settings} statusText={getCurrentBusinessStatus(hours)} />
+      <StitchFloatingActions settings={settings} />
     </div>
   );
 }

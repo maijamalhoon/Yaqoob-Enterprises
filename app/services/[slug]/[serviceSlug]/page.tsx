@@ -12,18 +12,16 @@ import {
   Store,
   Truck,
 } from "lucide-react";
-import { BrandIcon } from "@/components/brand-icon";
 import { ServiceIcon } from "@/components/service-icon";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { TrackedLink } from "@/components/tracked-link";
+import { StitchFooter } from "@/components/stitch-footer";
+import { StitchHeader } from "@/components/stitch-header";
+import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { businessCity } from "@/lib/business-display";
 import {
   getCurrentBusinessStatus,
   getPublicServicePaths,
   getServiceBySlugs,
   getSiteData,
-  whatsappUrl,
 } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { getCustomerServiceModes } from "@/lib/service-availability";
@@ -41,30 +39,25 @@ function statusLabel(status: string) {
 function serviceAction(status: string, title: string, businessName: string) {
   if (status === "active") {
     return {
-      label: "Ask about this service",
       message: `Hello ${businessName}, I want to ask about ${title}. My requirement is: `,
     };
   }
   if (status === "appointment_only") {
     return {
-      label: "Book or confirm first",
       message: `Hello ${businessName}, I want to book or confirm ${title}. `,
     };
   }
   if (status === "coming_soon") {
     return {
-      label: "Ask when it starts",
       message: `Hello ${businessName}, please tell me when ${title} will be available. `,
     };
   }
   if (status === "temporarily_unavailable") {
     return {
-      label: "Ask when available",
       message: `Hello ${businessName}, please tell me when ${title} will be available again. `,
     };
   }
   return {
-    label: "Check availability",
     message: `Hello ${businessName}, please confirm the current availability of ${title}. `,
   };
 }
@@ -196,34 +189,19 @@ export default async function PublicServicePage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceData) }} />
       {faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />}
-      <SiteHeader settings={site.settings} statusText={statusText} />
+      <StitchHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">
         <section className="seo-service-hero">
           <div className="container">
-            <nav className="seo-breadcrumbs" aria-label="Breadcrumb">
-              <Link href="/">Home</Link><span aria-hidden="true">/</span>
-              <Link href={`/services/${category.slug}`}>{category.title}</Link><span aria-hidden="true">/</span>
-              <span aria-current="page">{service.title}</span>
-            </nav>
-
-            <div className="seo-service-hero__grid">
+<div className="seo-service-hero__grid">
               <div className="seo-service-hero__copy">
                 <Link className="back-link" href={`/services/${category.slug}`}><ArrowLeft size={16} /> Back to {category.title}</Link>
                 <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={28} /></div>
-                <span className="eyebrow">{category.title}</span>
                 <h1>{seo.heading}</h1>
-                <p>{seo.displayDescription}</p>
               </div>
               <aside className="seo-service-hero__summary" aria-label="Service summary">
-                <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>
+                {service.status !== "active" && <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>}
                 <strong>{seo.location}</strong>
-                <small>{statusText}</small>
-                <div className="seo-summary-modes">
-                  {modes.includes("Visit the shop") && <span><Store size={14} /> Shop</span>}
-                  {modes.includes("Delivery") && <span><Truck size={14} /> Delivery</span>}
-                  {modes.includes("Doorstep appointment") && <span><MapPin size={14} /> Home visit</span>}
-                  {service.appointment_required && <span><Clock3 size={14} /> Book first</span>}
-                </div>
               </aside>
             </div>
           </div>
@@ -232,22 +210,16 @@ export default async function PublicServicePage({
         <section className="seo-service-body">
           <div className="container seo-service-layout">
             <article className="seo-service-main">
-              <section className="seo-content-block">
-                <h2>What this service covers</h2>
-                <p>{seo.intro}</p>
-                {service.detailed_description && service.detailed_description !== seo.intro && <p>{service.detailed_description}</p>}
-              </section>
-
               {seo.commonRequests.length > 0 && (
                 <section className="seo-content-block seo-requirements">
-                  <h2><ListChecks size={20} /> Common requests we handle</h2>
+                  <h2><ListChecks size={20} /> What we do</h2>
                   <ul>{seo.commonRequests.map((item) => <li key={item}><Check size={16} /> <span>{item}</span></li>)}</ul>
                 </section>
               )}
 
               {modes.length > 0 && (
                 <section className="seo-content-block">
-                  <h2>Available service options</h2>
+                  <h2>Service options</h2>
                   <div className="mode-pills mode-pills--premium">
                     {modes.includes("Visit the shop") && <span><Store size={15} /> At the shop</span>}
                     {modes.includes("Shop pickup") && <span><Check size={15} /> Pickup</span>}
@@ -260,7 +232,7 @@ export default async function PublicServicePage({
 
               {service.requirements?.length > 0 && (
                 <section className="seo-content-block seo-requirements">
-                  <h2><ListChecks size={20} /> What to bring or prepare</h2>
+                  <h2><ListChecks size={20} /> Bring</h2>
                   <ul>{service.requirements.map((item) => <li key={item}><Check size={16} /> <span>{item}</span></li>)}</ul>
                 </section>
               )}
@@ -277,15 +249,13 @@ export default async function PublicServicePage({
 
               {service.important_note && (
                 <section className="seo-content-block">
-                  <h2>Before you visit</h2>
                   <div className="important-note"><strong>Please note:</strong> {service.important_note}</div>
-                  <p>Send the service name and your case details on WhatsApp first if you are unsure about eligibility, documents or current system availability.</p>
                 </section>
               )}
 
               {seo.faqs.length > 0 && (
                 <section className="seo-content-block">
-                  <h2>Frequently Asked Questions</h2>
+                  <h2>Questions</h2>
                   <div className="space-y-3 mt-4">
                     {seo.faqs.map((faq, idx) => (
                       <details key={idx} className="group border-b border-slate-200 py-3 transition-all">
@@ -306,12 +276,11 @@ export default async function PublicServicePage({
 
               {relatedServices.length > 0 && (
                 <section className="seo-related-services">
-                  <div className="seo-related-services__heading"><h2>More {category.title} services</h2></div>
+                  <div className="seo-related-services__heading"><h2>Related services</h2></div>
                   <div className="seo-related-services__grid">
                     {relatedServices.map((item) => (
                       <Link key={item.id} href={`/services/${category.slug}/${item.slug}`}>
                         <strong>{item.title}</strong>
-                        <small>{item.short_description}</small>
                       </Link>
                     ))}
                   </div>
@@ -319,23 +288,11 @@ export default async function PublicServicePage({
               )}
             </article>
 
-            <aside className="seo-service-cta">
-              <h2>Contact and directions</h2>
-              <p>{site.settings.address}</p>
-              <TrackedLink className="button button--primary" href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                <BrandIcon name="whatsapp" size={17} /> {action.label}
-              </TrackedLink>
-              <TrackedLink className="seo-service-cta__link" href={`tel:${site.settings.phone_e164}`} eventName="call_click">
-                <BrandIcon name="phone" size={15} /> {site.settings.phone_display}
-              </TrackedLink>
-              <TrackedLink className="seo-service-cta__link" href={site.settings.map_url} target="_blank" rel="noopener noreferrer" eventName="directions_click">
-                <BrandIcon name="location" size={15} /> Directions
-              </TrackedLink>
-            </aside>
           </div>
         </section>
       </main>
-      <SiteFooter settings={site.settings} categories={site.categories} />
+      <StitchFooter settings={site.settings} statusText={statusText} />
+      <StitchFloatingActions settings={site.settings} whatsappMessage={action.message} />
     </div>
   );
 }

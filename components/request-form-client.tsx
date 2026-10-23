@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { BrandIcon } from "@/components/brand-icon";
+import { CustomSelect } from "@/components/custom-select";
 import { getCustomerServiceModes, serviceNeedsAvailabilityConfirmation } from "@/lib/service-availability";
 import type { RequestFormCategory } from "@/lib/client-data";
 
@@ -38,6 +39,7 @@ export function RequestFormClient({
   const [categorySlug, setCategorySlug] = useState("");
   const [serviceSlug, setServiceSlug] = useState("");
   const [mode, setMode] = useState("");
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const isUnsureCategory = categorySlug === unsureCategoryValue;
   const selectedCategory = useMemo(
     () => categories.find((category) => category.slug === categorySlug),
@@ -55,6 +57,15 @@ export function RequestFormClient({
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!categorySlug || (selectedCategory && !serviceSlug) || !mode) {
+      setSubmitAttempted(true);
+      const form = event.currentTarget;
+      window.requestAnimationFrame(() => {
+        form.querySelector<HTMLButtonElement>('.custom-select__trigger[aria-invalid="true"]')?.focus();
+      });
+      return;
+    }
+    setSubmitAttempted(false);
     const data = new FormData(event.currentTarget);
     const lines = [
       `Hello ${businessName},`,
@@ -108,48 +119,63 @@ export function RequestFormClient({
   return (
     <form className="request-form request-form--guided" onSubmit={submit}>
       <p style={visuallyHiddenStyle} role="status" aria-live="polite" aria-atomic="true">{dynamicUpdate}</p>
-      <label>
-        <span className="field-label">Service</span>
-        <select
+      <div className="request-form__field">
+        <span className="field-label" id="request-category-label">Service</span>
+        <CustomSelect
+          id="request-category"
           name="category"
+          labelledBy="request-category-label"
+          placeholder="Choose a service"
+          required
+          invalid={submitAttempted && !categorySlug}
           value={categorySlug}
-          onChange={(event) => {
-            setCategorySlug(event.target.value);
+          onChange={(value) => {
+            setCategorySlug(value);
             setServiceSlug("");
             setMode("");
           }}
-          required
-        >
-          <option value="">Choose a service</option>
-          <option value={unsureCategoryValue}>I’m not sure which service I need</option>
-          {categories.map((category) => <option key={category.id} value={category.slug}>{category.title}</option>)}
-        </select>
-      </label>
+          options={[
+            { value: unsureCategoryValue, label: "I’m not sure which service I need" },
+            ...categories.map((category) => ({ value: category.slug, label: category.title })),
+          ]}
+        />
+      </div>
       {selectedCategory && (
-        <label>
-          <span className="field-label">Exact service</span>
-          <select
+        <div className="request-form__field">
+          <span className="field-label" id="request-service-label">Exact service</span>
+          <CustomSelect
+            id="request-service"
             name="service"
+            labelledBy="request-service-label"
+            placeholder="Choose exact service"
+            required
+            invalid={submitAttempted && !serviceSlug}
             value={serviceSlug}
-            onChange={(event) => {
-              setServiceSlug(event.target.value);
+            onChange={(value) => {
+              setServiceSlug(value);
               setMode("");
             }}
-            required
-          >
-            <option value="">Choose exact service</option>
-            <option value={unsureServiceValue}>I’m not sure — please guide me</option>
-            {selectedCategory.services?.map((service) => <option key={service.id} value={service.slug}>{service.title}</option>)}
-          </select>
-        </label>
+            options={[
+              { value: unsureServiceValue, label: "I’m not sure — please guide me" },
+              ...(selectedCategory.services || []).map((service) => ({ value: service.slug, label: service.title })),
+            ]}
+          />
+        </div>
       )}
-      <label>
-        <span className="field-label">Service option</span>
-        <select name="mode" value={mode} onChange={(event) => setMode(event.target.value)} required>
-          <option value="">Choose an option</option>
-          {availableModes.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-        </select>
-      </label>
+      <div className="request-form__field">
+        <span className="field-label" id="request-mode-label">Service option</span>
+        <CustomSelect
+          id="request-mode"
+          name="mode"
+          labelledBy="request-mode-label"
+          placeholder="Choose an option"
+          required
+          invalid={submitAttempted && !mode}
+          value={mode}
+          onChange={setMode}
+          options={availableModes}
+        />
+      </div>
       {locationRequired && (
         <>
           <label>
@@ -158,7 +184,6 @@ export function RequestFormClient({
               name="location"
               autoComplete="address-level2"
               enterKeyHint="next"
-              placeholder="Your area"
               maxLength={requestLimits.location}
               required
               aria-describedby="location-requirement"
@@ -172,7 +197,6 @@ export function RequestFormClient({
         <textarea
           name="details"
           enterKeyHint="next"
-          placeholder="Quantity, deadline or useful details"
           maxLength={requestLimits.details}
           required
         />
@@ -184,7 +208,6 @@ export function RequestFormClient({
           name="name"
           autoComplete="name"
           enterKeyHint="send"
-          placeholder="Your name"
           maxLength={requestLimits.name}
           required
         />

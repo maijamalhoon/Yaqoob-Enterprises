@@ -17,7 +17,6 @@ type ServiceOverride = {
   heading: (location: string) => string;
   title: (businessName: string) => string;
   description: (location: string, businessName: string) => string;
-  intro: string;
   commonRequests?: string[];
   officialContext?: OfficialContext;
   keywords?: string[];
@@ -41,7 +40,6 @@ const categoryOverrides: Record<string, CategoryOverride> = {
       "color print akhtar colony",
       "photocopy near me karachi",
       "document scan pdf karachi",
-      "passport photos 5 minutes karachi",
       "printing shop near jamia masjid muhammadi",
       "urgent color printout akhtar colony",
       "bulk notes and assignment printing karachi",
@@ -156,8 +154,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Color & B&W Printing, Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Color and black-and-white printing, photocopying, bulk notes and assignments at discounted rates, and document scanning at ${businessName} in ${location}.`,
-    intro:
-      "Bulk notes and assignments for schools, colleges and universities are available at discounted rates. We also print, photocopy and scan documents to PDF.",
     commonRequests: [
       "A4 and Legal black-and-white & high-resolution color laser prints",
       "Bulk notes and assignments for schools, colleges, and universities",
@@ -198,8 +194,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Photocopy & Scanning Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Photocopy and document scanning services at ${businessName} in ${location}. Clear double-sided copies and PDF conversion delivered via WhatsApp or email.`,
-    intro:
-      "Fast, high-contrast photocopying and crystal-clear document scanning for all your official, business, and educational records.",
     commonRequests: [
       "Clear CNIC and document photocopies",
       "High-resolution multi-page PDF scanning",
@@ -224,8 +218,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Passport Photos in Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Passport-size photos with white or blue backgrounds for CNICs, passports, visas and applications at ${businessName} in ${location}.`,
-    intro:
-      "Passport-size photos for admissions, licences, job forms and visas. Ask about current turnaround time.",
     commonRequests: [
       "Urgent passport-size photos with crisp white background",
       "Standard blue-background photos for admissions and government forms",
@@ -243,8 +235,8 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     ],
     faqs: [
       {
-        question: "How long does it take to print passport-size photos?",
-        answer: "Photos are usually ready in 5 to 10 minutes. We take and print them at the shop.",
+        question: "Can I send a portrait before visiting?",
+        answer: "Send a clear portrait and required size on WhatsApp. Confirm the photo and timing before visiting.",
       },
       {
         question: "Can I get both white and blue background photos?",
@@ -257,8 +249,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Urdu & English Typing, Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Urdu and English typing, document formatting, CVs and application letters at ${businessName} in ${location}.`,
-    intro:
-      "Share your text or existing CV for typing, formatting or an update. Print and digital formats are available.",
     commonRequests: [
       "Professional CV and resume creation for local and Gulf job applications",
       "Urdu typing for official applications, notifications, and poetry",
@@ -289,8 +279,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Online Forms & Applications Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Help with job and admission forms, document resizing and fee challans at ${businessName} in ${location}.`,
-    intro:
-      "We help with job and admission forms, profile details, document and photo resizing, fee challans and submission printouts.",
     commonRequests: [
       "FPSC, SPSC, STS, NTS and PTS job applications",
       "Original CNIC and relevant certificates for job applications",
@@ -322,8 +310,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `CV Preparation in Karachi | ${businessName}`,
     description: (location, businessName) =>
       `CV preparation, resume formatting, and modern template design at ${businessName} in ${location}. Clean, job-ready CVs printed and shared via WhatsApp.`,
-    intro:
-      "Create a persuasive, well-structured CV tailored to your target job role. Available in print and digital PDF formats.",
     commonRequests: [
       "New CV creation for fresh graduates and experienced professionals",
       "Updating existing CV with new job history and contact info",
@@ -336,8 +322,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `FBR NTN & Filer Help Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Assistance with FBR NTN registration, Iris portal guidance, and tax filing documentation support at ${businessName} in ${location}.`,
-    intro:
-      "Get guided assistance with official FBR Iris portal procedures, NTN registration documents, and verification requirements.",
     commonRequests: [
       "FBR NTN registration assistance",
       "Iris portal login guidance",
@@ -350,8 +334,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Rent Agreement Typing Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Typing for rental agreements, vehicle sale documents, affidavits and related paperwork at ${businessName} in ${location}.`,
-    intro:
-      "We type and format rental agreements, vehicle sale documents, affidavits and other paperwork. Confirm the required format before visiting.",
     commonRequests: [
       "House, flat, and shop rental agreements (Kirayanama) in Urdu or English",
       "Car and motorcycle sale/purchase agreement typing",
@@ -383,8 +365,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `NADRA Biometric Verification Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Biometric verification for supported general, FBR, PSW and vehicle-transfer cases at ${businessName} in ${location}.`,
-    intro:
-      "We provide biometric verification for supported NADRA e-Sahulat cases. Confirm the case and required documents before visiting.",
     commonRequests: [
       "NADRA e-Sahulat general biometric verification",
       "Vehicle (car/motorcycle) transfer biometric for buyer and seller",
@@ -428,8 +408,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `FBR Sales Tax Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `FBR Sales Tax biometric verification support at ${businessName} in ${location}. Complete your mandatory 30-day post-registration biometric verification at our NADRA e-Sahulat counter.`,
-    intro:
-      "Under FBR rules, businesses and individuals registered for Sales Tax via Iris must complete biometric verification within 30 days at an authorized NADRA e-Sahulat franchise.",
     commonRequests: [
       "FBR Sales Tax 30-day biometric compliance",
       "NADRA e-Sahulat biometric verification for Iris registration",
@@ -459,8 +437,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `PSW Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Pakistan Single Window (PSW) subscription and renewal biometric verification at ${businessName} in ${location}. Fast e-Sahulat counter verification.`,
-    intro:
-      "Complete the final subscription step for Pakistan Single Window (PSW) with verified biometric authentication via our NADRA e-Sahulat terminal.",
     commonRequests: [
       "PSW subscriber biometric verification",
       "Pakistan Single Window account renewal biometric",
@@ -480,8 +456,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Vehicle Transfer Biometrics Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Car and motorcycle transfer biometric verification for buyer and seller at ${businessName} in ${location}. Authorized NADRA e-Sahulat system verification.`,
-    intro:
-      "Electronic biometric verification for vehicle ownership transfer in Sindh and Punjab. Buyer or seller visits with original CNIC and registration information.",
     commonRequests: [
       "Car transfer biometric verification",
       "Motorcycle ownership transfer biometric",
@@ -512,8 +486,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Cash Deposit & Transfer Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Supported cash deposits, withdrawals, utility bill payments and domestic transfers at ${businessName} in ${location}.`,
-    intro:
-      "Ask us to confirm which cash, bill-payment and domestic-transfer services are currently available.",
     commonRequests: [
       "Domestic money transfer across Pakistan",
       "Supported mobile wallet and cash deposit assistance",
@@ -539,8 +511,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Train, Bus & Airline Tickets Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Booking assistance for Pakistan Railways, intercity buses and airline tickets at ${businessName} in ${location}.`,
-    intro:
-      "Share your route, date, passenger count and preferred timing. We will confirm available schedules and fares.",
     commonRequests: [
       "Pakistan Railway ticket booking (AC Sleeper, AC Business, AC Standard, Economy)",
       "Intercity luxury bus booking (Faisal Movers, Daewoo Express, Kainat Travels)",
@@ -571,8 +541,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Stationery & Mobile Accessories Karachi | ${businessName}`,
     description: (location, businessName) =>
       `School and office stationery, chargers, cables and mobile accessories at ${businessName} in ${location}.`,
-    intro:
-      "Pick up school and office essentials along with reliable mobile phone charging cables, fast power adapters, and audio accessories at fair neighborhood prices.",
     commonRequests: [
       "Office stationery: box files, clear bags, clip files, staplers, registers",
       "A4 printing paper reams and envelopes",
@@ -591,8 +559,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Windows & Laptop Setup Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Clean Windows 10/11 installation, hardware driver updates, MS Office setup, and basic laptop software troubleshooting at ${businessName} in ${location}.`,
-    intro:
-      "Get prompt, practical help resolving slow laptop performance, operating system corruption, missing Wi-Fi/audio drivers, and essential software installations.",
     commonRequests: [
       "Clean Windows 10 and Windows 11 installation and activation",
       "Display, Wi-Fi, audio, and printer driver installations",
@@ -611,8 +577,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     title: (businessName) => `Web Development & SEO Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Business websites, web apps, redesign, maintenance and SEO support from ${businessName} in ${location}.`,
-    intro:
-      "We build and maintain websites for businesses. Share your needs to confirm the project scope, timeline and cost.",
     commonRequests: [
       "Responsive business websites with WhatsApp ordering and inquiry forms",
       "Full-stack Next.js and Supabase web applications with secure admin portals",
@@ -680,8 +644,6 @@ export function getServiceSeo(
     customDescription ||
     override?.description(location, settings.business_name) ||
     `${service.short_description} Available from ${settings.business_name} in ${location}. Check requirements, current availability and service options before visiting.`;
-  const intro = override?.intro || service.detailed_description || service.short_description;
-
   const defaultKeywords = [
     `${service.title.toLowerCase()} akhtar colony`,
     `${service.title.toLowerCase()} karachi`,
@@ -695,9 +657,6 @@ export function getServiceSeo(
     heading,
     title,
     description,
-    displayDescription:
-      override?.description(location, settings.business_name) || description,
-    intro,
     commonRequests: override?.commonRequests || [],
     location,
     officialContext: override?.officialContext || null,

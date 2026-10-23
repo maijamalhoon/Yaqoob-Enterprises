@@ -1,71 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  ChevronDown,
-  Clock3,
-  Grid2X2,
-  ListChecks,
-  MapPin,
-  Send,
-  ShieldCheck,
-  Store,
-  Truck,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ServiceIcon } from "@/components/service-icon";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { TrackedLink } from "@/components/tracked-link";
-import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
+import { StitchFooter } from "@/components/stitch-footer";
+import { StitchHeader } from "@/components/stitch-header";
+import { StitchFloatingActions } from "@/components/stitch-floating-actions";
+import { getCategoryBySlug, getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { getActiveServiceCategorySlugs } from "@/lib/public-category-slugs";
-import { getCustomerServiceModes } from "@/lib/service-availability";
 import { getCategorySeo } from "@/lib/service-seo";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
-
-function serviceAction(status: string, title: string, businessName: string) {
-  if (status === "active") {
-    return {
-      label: "Send this requirement",
-      message: `Hello ${businessName}, I want to ask about ${title}. My requirement is: `,
-      note: null,
-      className: "button button--primary",
-    };
-  }
-  if (status === "appointment_only") {
-    return {
-      label: "Book or confirm first",
-      message: `Hello ${businessName}, I want to book or confirm ${title}. `,
-      note: "This service needs confirmation or an appointment before you visit.",
-      className: "button button--primary",
-    };
-  }
-  if (status === "coming_soon") {
-    return {
-      label: "Ask when it starts",
-      message: `Hello ${businessName}, please tell me when ${title} will be available. `,
-      note: "This service is coming soon. Ask for the expected start date before visiting.",
-      className: "button button--secondary",
-    };
-  }
-  if (status === "temporarily_unavailable") {
-    return {
-      label: "Ask when available",
-      message: `Hello ${businessName}, please tell me when ${title} will be available again. `,
-      note: "This service is temporarily paused. Confirm before sending documents or travelling.",
-      className: "button button--secondary",
-    };
-  }
-  return {
-    label: "Check availability",
-    message: `Hello ${businessName}, please confirm the current availability of ${title}. `,
-    note: "Availability may be limited. Confirm the current status before visiting.",
-    className: "button button--secondary",
-  };
-}
 
 function statusLabel(status: string) {
   if (status === "active") return "Available";
@@ -119,7 +64,6 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   const { slug } = await params;
   const [category, site] = await Promise.all([getCategoryBySlug(slug), getSiteData()]);
   if (!category) notFound();
-  const serviceCount = category.services?.length || 0;
   const statusText = getCurrentBusinessStatus(site.hours);
   const seo = getCategorySeo(category, site.settings);
   const siteUrl = SITE_URL.replace(/\/$/, "");
@@ -158,123 +102,51 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListData) }}
       />
-      <SiteHeader settings={site.settings} statusText={statusText} />
+      <StitchHeader settings={site.settings} statusText={statusText} />
       <main id="main-content">
         <section className="page-hero page-hero--service">
           <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid">
             <div className="page-hero__content">
-              <Link className="back-link" href="/services"><ArrowLeft size={16} /> All services</Link>
+              <Link className="back-link service-back-link" href="/services">
+                <ArrowLeft className="service-back-link__icon" size={18} aria-hidden="true" />
+                <span>All services</span>
+              </Link>
               <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={30} /></div>
               <h1>{seo.heading}</h1>
-              <p>{category.description}</p>
             </div>
-            <aside className="page-hero__summary" aria-label="Category summary">
-              <span className="page-hero__summary-icon"><Grid2X2 size={22} /></span>
-              <strong>{serviceCount}</strong>
-              <span>{serviceCount === 1 ? "service option" : "service options"}</span>
-            </aside>
           </div>
         </section>
 
         <section className="section section--service-list">
           <div className="container service-detail-grid service-detail-grid--premium">
-            <details className="mobile-category-switcher mobile-category-switcher--final">
-              <summary>
-                <span className="mobile-switcher-icon"><ServiceIcon iconKey={category.icon_key} size={19} /></span>
-                <span className="mobile-switcher-copy"><small>Current category</small><strong>{category.title}</strong></span>
-                <ChevronDown className="mobile-switcher-chevron" size={19} />
-              </summary>
-              <nav aria-label="Service categories">
-                {site.categories.map((item) => (
-                  <Link
-                    className={item.slug === slug ? "active" : ""}
-                    aria-current={item.slug === slug ? "page" : undefined}
-                    key={item.id}
-                    href={`/services/${item.slug}`}
-                  >
-                    <ServiceIcon iconKey={item.icon_key} size={17} />
-                    <span>{item.title}</span>
-                    <ArrowRight size={15} />
-                  </Link>
-                ))}
-              </nav>
-            </details>
-
             <div className="service-list service-list--premium">
               <div className="service-list__intro">
                 <h2>Available services</h2>
               </div>
 
               {category.services?.map((service) => {
-                const action = serviceAction(service.status, service.title, site.settings.business_name);
-                const customerModes = getCustomerServiceModes(service);
                 return (
                   <article className="service-detail-card service-detail-card--premium" key={service.id}>
-                    <div className="service-card-accent" aria-hidden="true" />
                     <div className="service-detail-card__head service-detail-card__head--premium">
                       <div>
-                        <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>
+                        {service.status !== "active" && <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>}
                         <h2>{service.title}</h2>
-                        <p>{service.detailed_description || service.short_description}</p>
                       </div>
                     </div>
-
-                    {customerModes.length > 0 && (
-                      <div className="mode-pills mode-pills--premium" aria-label="Available service options">
-                        {customerModes.includes("Visit the shop") && <span><Store size={15} /> At the shop</span>}
-                        {customerModes.includes("Shop pickup") && <span><Check size={15} /> Pickup</span>}
-                        {customerModes.includes("Delivery") && <span><Truck size={15} /> Delivery</span>}
-                        {customerModes.includes("Doorstep appointment") && <span><MapPin size={15} /> Home visit</span>}
-                        {service.appointment_required && <span><Clock3 size={15} /> Book first</span>}
-                      </div>
-                    )}
-
-                    {service.requirements?.length > 0 && (
-                      <div className="requirements requirements--premium">
-                        <h3><ListChecks size={18} /> What to bring or send</h3>
-                        <ul>{service.requirements.map((item) => <li key={item}><Check size={15} /> {item}</li>)}</ul>
-                      </div>
-                    )}
-
-                    {service.important_note && <div className="important-note"><strong>Please note:</strong> {service.important_note}</div>}
-                    {action.note && <p className="service-status-note"><ShieldCheck size={16} /> {action.note}</p>}
-
                     <Link className="service-detail-link" href={`/services/${category.slug}/${service.slug}`}>
                       Full service details <ArrowRight size={14} />
                     </Link>
-                    <TrackedLink className={`${action.className} service-card-action`} href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
-                      <Send size={17} /> {action.label} <ArrowRight size={16} />
-                    </TrackedLink>
                   </article>
                 );
               })}
             </div>
 
-            <aside className="category-sidebar category-sidebar--premium category-sidebar--final">
-              <div className="category-sidebar__heading">
-                <Grid2X2 size={20} />
-                <div><span>Other services</span><h2>Switch category</h2></div>
-              </div>
-              <nav aria-label="Other service categories">
-                {site.categories.map((item, index) => (
-                  <Link
-                    className={item.slug === slug ? "active" : ""}
-                    aria-current={item.slug === slug ? "page" : undefined}
-                    key={item.id}
-                    href={`/services/${item.slug}`}
-                  >
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    {item.title}
-                    <ArrowRight size={15} />
-                  </Link>
-                ))}
-              </nav>
-            </aside>
           </div>
         </section>
       </main>
-      <SiteFooter settings={site.settings} categories={site.categories} />
+      <StitchFooter settings={site.settings} statusText={statusText} />
+      <StitchFloatingActions settings={site.settings} />
     </div>
   );
 }

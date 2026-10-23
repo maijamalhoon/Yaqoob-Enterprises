@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   Phone,
-  MessageCircle,
   Navigation,
   CheckCircle2,
-  Users,
-  Building2,
-  GraduationCap,
-  Home,
   ChevronDown,
 } from "lucide-react";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { TrackedLink } from "@/components/tracked-link";
+import { BrandIcon } from "@/components/brand-icon";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -148,39 +143,25 @@ export default async function PhotocopyingPage() {
         <section className="bg-slate-50 border-b border-slate-200 py-10 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <nav className="text-xs text-slate-500 font-semibold mb-3 flex items-center gap-1.5" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-slate-900">Home</Link>
-                <span>/</span>
-                <span className="text-[#0E7490]">Photocopying</span>
-              </nav>
-
-              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+<h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Photocopying in Akhtar Colony
               </h1>
-
-              <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Color and black-and-white copies for documents, notes and assignments. Bulk discounts are available.
-              </p>
 
               {/* 3 Prominent CTAs */}
               <div className="mobile-hero-actions flex flex-wrap items-center gap-3 pt-6">
                 <TrackedLink
                   eventName="call_click"
-                  href={callUrl}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
+                  href={callUrl} className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
                   <Phone className="w-4 h-4 text-emerald-400" />
-                  <span>CALL NOW</span>
+                  <span>{settings.phone_display || phone}</span>
                 </TrackedLink>
 
                 <TrackedLink
                   eventName="whatsapp_click"
                   href={whatsappUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95"
-                >
-                  <MessageCircle className="w-4 h-4" />
+                  target="_blank" className="inline-flex items-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm transition active:scale-95">
+                  <BrandIcon name="whatsapp" size={16} badge={false} />
                   <span>SEND ON WHATSAPP</span>
                 </TrackedLink>
 
@@ -188,9 +169,7 @@ export default async function PhotocopyingPage() {
                   eventName="directions_click"
                   href={directionsUrl}
                   rel="noopener noreferrer"
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95"
-                >
+                  target="_blank" className="inline-flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-100 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95">
                   <Navigation className="w-4 h-4 text-[#0E7490]" />
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
@@ -207,9 +186,6 @@ export default async function PhotocopyingPage() {
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Quality Photocopying for Every Requirement
               </h2>
-              <p className="text-sm text-slate-600 mt-2">
-                Bring an original or send your file on WhatsApp.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -218,9 +194,6 @@ export default async function PhotocopyingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Black &amp; White Photocopying</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    Copies of CNICs, forms, bills, and text documents.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -228,9 +201,6 @@ export default async function PhotocopyingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Color Photocopying</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    Color copies of certificates, maps, diagrams, and project pages.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -238,9 +208,6 @@ export default async function PhotocopyingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Document Photocopying</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    Copies of legal papers and official documents.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -248,9 +215,6 @@ export default async function PhotocopyingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Notes Photocopying</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    School, college, and university handouts, notes, and past papers.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -258,9 +222,6 @@ export default async function PhotocopyingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Bulk Photocopying</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    Bulk copying for study sets and office documents. Ask us for a quote.
-                </p>
               </div>
 
               <div className="border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition">
@@ -268,60 +229,6 @@ export default async function PhotocopyingPage() {
                   <CheckCircle2 className="w-4 h-4 text-[#0E7490]" />
                   <span>Office Photocopying</span>
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                    Copies of office forms, invoices, and records.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Who This Service Is For */}
-        <section className="py-12 bg-slate-50 border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-6 text-center">
-              Who We Serve in Akhtar Colony &amp; Nearby Areas
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <div className="w-10 h-10 rounded-full bg-slate-100 text-[#0E7490] flex items-center justify-center mx-auto mb-3">
-                  <GraduationCap className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-sm text-slate-900 mb-1">Students</h3>
-                <p className="text-xs text-slate-600">
-                  School, college, and university students copying past papers, syllabus notes, and assignment sheets.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <div className="w-10 h-10 rounded-full bg-slate-100 text-[#0E7490] flex items-center justify-center mx-auto mb-3">
-                  <Building2 className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-sm text-slate-900 mb-1">Offices &amp; Businesses</h3>
-                <p className="text-xs text-slate-600">
-                  Local commercial firms copying customer forms, financial records, vouchers, and contracts.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <div className="w-10 h-10 rounded-full bg-slate-100 text-[#0E7490] flex items-center justify-center mx-auto mb-3">
-                  <Users className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-sm text-slate-900 mb-1">Organizations</h3>
-                <p className="text-xs text-slate-600">
-                  Institutes, clinics, welfare trusts, and schools needing batch copies of notices and booklets.
-                </p>
-              </div>
-
-              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center">
-                <div className="w-10 h-10 rounded-full bg-slate-100 text-[#0E7490] flex items-center justify-center mx-auto mb-3">
-                  <Home className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-sm text-slate-900 mb-1">Local Residents</h3>
-                <p className="text-xs text-slate-600">
-                  Neighborhood families copying CNICs, utility bills, birth certificates, and government applications.
-                </p>
               </div>
             </div>
           </div>
@@ -334,9 +241,6 @@ export default async function PhotocopyingPage() {
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
                 Photocopying Questions &amp; Answers
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                Helpful details about photocopying at Yaqoob Enterprises.
-              </p>
             </div>
 
             <div className="space-y-3">
@@ -356,32 +260,6 @@ export default async function PhotocopyingPage() {
                   </p>
                 </details>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contextual Links */}
-        <section className="py-10 bg-slate-50 border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
-              Explore Related Services
-            </h3>
-            <div className="flex flex-wrap gap-2.5 text-xs font-semibold">
-              <Link href="/printing" className="px-3.5 py-2 bg-white hover:bg-slate-200 text-slate-800 rounded-xl border border-slate-200 transition">
-                Laser Printing (B&amp;W &amp; Color) →
-              </Link>
-              <Link href="/notes-printing" className="px-3.5 py-2 bg-white hover:bg-slate-200 text-slate-800 rounded-xl border border-slate-200 transition">
-                Notes Printing &amp; Copying →
-              </Link>
-              <Link href="/bulk-printing" className="px-3.5 py-2 bg-white hover:bg-slate-200 text-slate-800 rounded-xl border border-slate-200 transition">
-                Bulk Orders &amp; Discounts →
-              </Link>
-              <Link href="/office-printing" className="px-3.5 py-2 bg-white hover:bg-slate-200 text-slate-800 rounded-xl border border-slate-200 transition">
-                Office &amp; Legal Printing →
-              </Link>
-              <Link href="/contact" className="px-3.5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl transition">
-                Directions &amp; Hours →
-              </Link>
             </div>
           </div>
         </section>

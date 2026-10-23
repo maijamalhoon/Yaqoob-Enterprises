@@ -65,7 +65,6 @@ export function ServiceShowcase({
               <span className="minimal-service-item__icon"><ServiceIcon iconKey={category.icon_key} size={20} /></span>
               <span className="minimal-service-item__copy">
                 <strong>{service.title}</strong>
-                <small>{service.short_description}</small>
               </span>
               <span className="minimal-service-item__meta">{shortCategoryTitles[category.slug] || category.title}</span>
               <ArrowRight className="minimal-service-item__arrow" size={18} />

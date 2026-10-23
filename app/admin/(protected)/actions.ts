@@ -127,7 +127,6 @@ export async function updateSettings(formData: FormData) {
   const { supabase } = await requireAdmin();
   const { error } = await supabase.from("business_settings").update({
     business_name: text(formData, "business_name"),
-    tagline: text(formData, "tagline"),
     phone_display: text(formData, "phone_display"),
     phone_e164: text(formData, "phone_e164"),
     whatsapp_e164: text(formData, "whatsapp_e164"),

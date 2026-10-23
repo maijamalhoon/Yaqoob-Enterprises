@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
     supabase.from("services").select("id,category_id,status"),
     supabase.from("service_categories").select("id,is_active"),
     supabase.from("gallery_images").select("id,alt_text").eq("is_active", true).eq("is_featured", true).eq("media_kind", "real").limit(1).maybeSingle(),
-    supabase.from("business_settings").select("business_name,tagline,phone_display,phone_e164,whatsapp_e164,address,map_url,google_business_profile_url").eq("id", true).single(),
+    supabase.from("business_settings").select("business_name,phone_display,phone_e164,whatsapp_e164,address,map_url,google_business_profile_url").eq("id", true).single(),
     supabase.from("business_hours").select("id,is_closed,periods").order("display_order"),
     supabase.from("analytics_events").select("id", { count: "exact", head: true }).gte("created_at", since),
     supabase.from("analytics_events").select("event_name,page_path,city_name,device_type,created_at").order("created_at", { ascending: false }).limit(8),

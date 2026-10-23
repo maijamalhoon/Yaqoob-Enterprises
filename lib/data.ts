@@ -13,7 +13,6 @@ import type {
 
 const fallbackSettings: BusinessSettings = {
   business_name: "Yaqoob Enterprises",
-  tagline: "Everyday Services, Made Easier",
   phone_display: "+92 349 2568864",
   phone_e164: "+923492568864",
   whatsapp_e164: "+923492568864",
@@ -27,7 +26,6 @@ const fallbackSettings: BusinessSettings = {
 
 const businessSettingsColumns = [
   "business_name",
-  "tagline",
   "phone_display",
   "phone_e164",
   "whatsapp_e164",

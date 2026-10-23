@@ -65,7 +65,6 @@ export async function updateBusinessIdentity(formData: FormData) {
 
   const { error } = await supabase.from("business_settings").update({
     business_name: businessName,
-    tagline: text(formData, "tagline"),
   }).eq("id", true);
 
   if (error) throw new Error(error.message);
