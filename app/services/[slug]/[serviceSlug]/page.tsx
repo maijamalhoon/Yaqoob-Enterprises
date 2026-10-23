@@ -198,6 +198,7 @@ export default async function PublicServicePage({
                 <Link className="back-link" href={`/services/${category.slug}`}><ArrowLeft size={16} /> Back to {category.title}</Link>
                 <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={28} /></div>
                 <h1>{seo.heading}</h1>
+                <p>{service.short_description || seo.description}</p>
               </div>
               <aside className="seo-service-hero__summary" aria-label="Service summary">
                 {service.status !== "active" && <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>}
