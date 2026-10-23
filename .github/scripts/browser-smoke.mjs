@@ -40,7 +40,7 @@ async function assertHomepage(page, label, { mobileNav }) {
   await openHealthy(page, "/");
   await assertNoHorizontalOverflow(page, `${label} homepage`);
 
-  const serviceCards = page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item");
+  const serviceCards = page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item, #services .home-service-list > li");
   const count = await serviceCards.count();
   assert(count >= 8, `${label}: expected at least 8 main services, found ${count}.`);
 
