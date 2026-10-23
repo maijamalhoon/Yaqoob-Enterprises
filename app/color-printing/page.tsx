@@ -124,7 +124,7 @@ export default async function ColorPrintingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
+    <div className="public-site public-site--service-landing min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
@@ -150,11 +150,6 @@ export default async function ColorPrintingPage() {
                 <span>/</span>
                 <span className="text-[#0E7490]">Color Printing</span>
               </nav>
-
-              <div className="inline-flex items-center gap-2 text-[#0E7490] font-bold text-xs uppercase tracking-wider mb-2">
-                <Palette className="w-4 h-4" />
-                <span>Laser Color Center • Sector B, Akhtar Colony</span>
-              </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Color Printing &amp; Copies
@@ -197,11 +192,6 @@ export default async function ColorPrintingPage() {
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
               </div>
-
-              <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Open for Walk-ins: {statusText || "Hours available on WhatsApp"}</span>
-              </div>
             </div>
           </div>
         </section>
@@ -210,9 +200,6 @@ export default async function ColorPrintingPage() {
         <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mb-10">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490]">
-                Applications
-              </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Real Use Cases for Color Printing &amp; Copying
               </h2>

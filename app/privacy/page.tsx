@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivacyPage() {
   const { settings, categories, hours } = await getSiteData();
   return (
-    <>
+    <div className="public-site public-site--text-page">
       <SiteHeader settings={settings} statusText={getCurrentBusinessStatus(hours)} />
       <main id="main-content">
         <section className="page-hero"><div className="container"><span className="eyebrow">Privacy</span><h1>Privacy &amp; data use</h1><p>How this website handles forms, analytics and external services.</p></div></section>
@@ -48,6 +48,6 @@ export default async function PrivacyPage() {
         </article></section>
       </main>
       <SiteFooter settings={settings} categories={categories} />
-    </>
+    </div>
   );
 }

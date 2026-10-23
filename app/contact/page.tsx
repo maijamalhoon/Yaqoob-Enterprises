@@ -4,9 +4,7 @@ import {
   Phone,
   MessageCircle,
   Navigation,
-  MapPin,
   Clock,
-  Store,
 } from "lucide-react";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFooter } from "@/components/stitch-footer";
@@ -96,7 +94,7 @@ export default async function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
+    <div className="public-site min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
@@ -119,17 +117,12 @@ export default async function ContactPage() {
                 <span className="text-[#0E7490]">Contact &amp; Location</span>
               </nav>
 
-              <div className="inline-flex items-center gap-2 text-[#0E7490] font-bold text-xs uppercase tracking-wider mb-2">
-                <Store className="w-4 h-4" />
-                <span>Shop Counter &amp; Direct Assistance</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Contact Yaqoob Enterprises
+                Contact and directions
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-2 leading-relaxed">
-                Visit our Akhtar Colony counter, call us, or send documents on WhatsApp.
+                Visit our Akhtar Colony shop or contact us by phone or WhatsApp.
               </p>
             </div>
           </div>
@@ -137,10 +130,10 @@ export default async function ContactPage() {
 
         {/* Primary Contact Cards Grid */}
         <section className="py-12 bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 gap-6 items-start">
               {/* Left Column: Business Details & CTAs */}
-              <div className="lg:col-span-6 space-y-6">
+              <div className="space-y-6">
                 {/* Physical Location Card */}
                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490] block mb-1">
@@ -156,9 +149,6 @@ export default async function ContactPage() {
 
                   <div className="mt-4 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
                     <CopyableAddress address={exactAddress} />
-                    <span className="text-xs text-slate-500 font-medium">
-                      Landmark: Jamia Masjid Muhammadi
-                    </span>
                   </div>
 
                   {/* 3 Prominent CTAs: CALL NOW, WHATSAPP, GET DIRECTIONS */}
@@ -169,7 +159,7 @@ export default async function ContactPage() {
                       className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95 text-center"
                     >
                       <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>CALL NOW</span>
+                        <span>Call</span>
                     </TrackedLink>
 
                     <TrackedLink
@@ -180,7 +170,7 @@ export default async function ContactPage() {
                       className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition active:scale-95 text-center"
                     >
                       <MessageCircle className="w-4 h-4 shrink-0" />
-                      <span>WHATSAPP</span>
+                        <span>WhatsApp</span>
                     </TrackedLink>
 
                     <TrackedLink
@@ -191,7 +181,7 @@ export default async function ContactPage() {
                       className="inline-flex items-center justify-center gap-2 py-3.5 px-4 bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm rounded-xl border border-slate-300 shadow-sm transition active:scale-95 text-center"
                     >
                       <Navigation className="w-4 h-4 text-[#0E7490] shrink-0" />
-                      <span>GET DIRECTIONS</span>
+                        <span>Directions</span>
                     </TrackedLink>
                   </div>
                 </div>
@@ -217,79 +207,14 @@ export default async function ContactPage() {
                         </div>
                       ))
                     ) : (
-                      <>
-                        <div className="py-2.5 flex justify-between">
-                          <span className="font-semibold text-slate-800">Monday–Thursday &amp; Saturday</span>
-                          <span className="font-bold text-slate-900">9:00 AM – 11:00 PM</span>
-                        </div>
-                        <div className="py-2.5 flex justify-between">
-                          <span className="font-semibold text-slate-800">Friday Prayer Break</span>
-                          <span className="text-slate-600">1:00 PM – 2:30 PM</span>
-                        </div>
-                        <div className="py-2.5 flex justify-between">
-                          <span className="font-semibold text-slate-800">Sunday</span>
-                          <span className="font-bold text-slate-900">4:00 PM – 10:30 PM</span>
-                        </div>
-                      </>
+                      <p className="py-2.5 text-slate-600">
+                        Please message us to confirm today’s hours.
+                      </p>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Interactive Map & Landmark Guide */}
-              <div className="lg:col-span-6 space-y-6">
-                {/* Map Embed Frame */}
-                <div className="bg-slate-100 border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
-                  <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
-                    <div>
-                      <strong className="text-xs sm:text-sm font-bold text-slate-900 block">
-                        Interactive Google Maps Location
-                      </strong>
-                      <span className="text-[11px] text-slate-500">
-                        Sector B, Street 1, Akhtar Colony, Karachi
-                      </span>
-                    </div>
-                    <a
-                      href={directionsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-bold text-[#0E7490] hover:underline flex items-center gap-1"
-                    >
-                      <span>Full Map</span>
-                      <Navigation className="w-3 h-3" />
-                    </a>
-                  </div>
-
-                  {/* Embedded Map iframe */}
-                  <div className="relative w-full h-[320px] sm:h-[380px] bg-slate-200">
-                    <iframe
-                      title="Yaqoob Enterprises Map Location"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.480062491223!2d67.0735!3d24.8427!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33c66f7f6f147%3A0x8e8c897f1f9e8a8a!2sYaqoob%20Enterprises!5e0!3m2!1sen!2spk!4v1700000000000!5m2!1sen!2spk"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="w-full h-full"
-                    />
-                  </div>
-                </div>
-
-                {/* Helpful Directions Tips */}
-                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-xs sm:text-sm text-slate-700 space-y-2">
-                  <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#0E7490]" />
-                    <span>How to Reach Us</span>
-                  </h3>
-                  <p>
-                    • <strong>By car or motorcycle:</strong> Enter Akhtar Colony from Korangi Road or Defence View. Head to Jamia Masjid Muhammadi in Sector B; Street 1 is nearby.
-                  </p>
-                  <p>
-                    • <strong>On Foot:</strong> Ask anyone near Jamia Masjid Muhammadi for Yaqoob Enterprises (Plot No. 7, Street 1).
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </section>

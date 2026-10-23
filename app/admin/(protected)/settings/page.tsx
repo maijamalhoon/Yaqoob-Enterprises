@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Clock3, ExternalLink, ImageIcon, Info, MapPin, Phone, Store, Type } from "lucide-react";
-import { AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminCancelButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 import { formatBusinessHours, getHourPeriods } from "@/lib/data";
@@ -33,7 +33,7 @@ export default async function AdminSettingsPage() {
           <form className="admin-form-grid admin-form-grid--focused" action={updateBusinessIdentity}>
             <label>Business name<input name="business_name" defaultValue={settings?.business_name} maxLength={80} required /></label>
             <label>Tagline<input name="tagline" defaultValue={settings?.tagline} maxLength={120} /></label>
-            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save identity</AdminSubmitButton></div>
+            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save identity</AdminSubmitButton><AdminCancelButton /></div>
           </form>
         </section>
 
@@ -49,6 +49,7 @@ export default async function AdminSettingsPage() {
             <label className="admin-span-2">Google Business Profile <small>Used for admin analysis</small><input name="google_business_profile_url" type="url" defaultValue={settings?.google_business_profile_url || ""} placeholder="https://share.google/..." /></label>
             <div className="admin-form-actions admin-form-actions--split admin-span-2">
               <AdminSubmitButton>Save contact & location</AdminSubmitButton>
+              <AdminCancelButton />
               <div className="admin-settings-preview-links">
                 {settings?.map_url && <a className="admin-inline-link" href={settings.map_url} target="_blank" rel="noopener noreferrer"><MapPin size={15} /> {location || "Map"}<ExternalLink size={13} /></a>}
                 {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Google profile <ExternalLink size={13} /></a>}
@@ -64,7 +65,7 @@ export default async function AdminSettingsPage() {
           <form className="admin-form-grid admin-form-grid--focused" action={updateNoticesAndPolicies}>
             <label className="admin-span-2">Pricing notice <small>e.g., government fee confirmation</small><textarea name="pricing_message" defaultValue={settings?.pricing_message || ""} rows={2} placeholder="Prices and government fees depend on the exact service, document type and requirements." /></label>
             <label className="admin-span-2">Concept image notice <small>shown when illustration placeholder is active</small><textarea name="concept_image_notice" defaultValue={settings?.concept_image_notice || ""} rows={2} placeholder="Representative visualization. Actual shop facilities and service counters are located in Akhtar Colony, Karachi." /></label>
-            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save customer notices</AdminSubmitButton></div>
+            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save customer notices</AdminSubmitButton><AdminCancelButton /></div>
           </form>
         </section>
       </div>
@@ -90,7 +91,7 @@ export default async function AdminSettingsPage() {
                   <label>Reopens <small>optional</small><input type="time" name="second_opens_at" defaultValue={periods[1]?.opens_at} /></label>
                   <label>Final close <small>optional</small><input type="time" name="second_closes_at" defaultValue={periods[1]?.closes_at} /></label>
                   <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_closed" defaultChecked={hour.is_closed} /> Closed all day</label>
-                  <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save {hour.label}</AdminSubmitButton></div>
+                  <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save {hour.label}</AdminSubmitButton><AdminCancelButton /></div>
                 </form>
               </details>
             );

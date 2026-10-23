@@ -1,5 +1,5 @@
 import { MapPinned, Plus } from "lucide-react";
-import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
 import { createCoverageArea, deleteCoverageArea, updateCoverageArea } from "../actions";
 
@@ -31,7 +31,7 @@ export default async function AdminCoveragePage() {
             <label><input type="checkbox" name="doorstep_biometric_available" defaultChecked /> Home biometric</label>
             <label><input type="checkbox" name="extra_charge_may_apply" defaultChecked /> Extra charge may apply</label>
           </div>
-          <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add area</AdminSubmitButton></div>
+          <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add area</AdminSubmitButton><AdminCancelButton /></div>
         </form>
       </details>
 
@@ -59,7 +59,7 @@ export default async function AdminCoveragePage() {
                     <label><input type="checkbox" name="extra_charge_may_apply" defaultChecked={area.extra_charge_may_apply} /> Extra charge</label>
                     <label><input type="checkbox" name="is_active" defaultChecked={area.is_active} /> Active</label>
                   </div>
-                  <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save area</AdminSubmitButton></div>
+                  <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save area</AdminSubmitButton><AdminCancelButton /></div>
                 </form>
                 <form className="admin-destructive-row" action={deleteCoverageArea}>
                   <input type="hidden" name="id" value={area.id} />

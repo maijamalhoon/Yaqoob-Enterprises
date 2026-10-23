@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { requireAdmin } from "@/lib/admin";
@@ -62,7 +63,7 @@ function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMe
       {rows.map(([label, count]) => {
         const width = Math.round((count / max) * 100);
         return (
-          <div key={label} style={{ background: `linear-gradient(90deg, #e5f1f2 ${width}%, #f8fafb ${width}%)` }}>
+          <div key={label} style={{ "--rank-fill": width + "%" } as CSSProperties}>
             <span>{label}</span><strong>{count}</strong>
           </div>
         );

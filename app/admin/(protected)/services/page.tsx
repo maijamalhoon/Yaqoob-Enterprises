@@ -1,5 +1,5 @@
 import { Eye, EyeOff, Plus, Wrench } from "lucide-react";
-import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { ServiceIcon } from "@/components/service-icon";
 import { requireAdmin } from "@/lib/admin";
 import { createCategory, createService, deleteService, updateCategory, updateService } from "./actions";
@@ -92,7 +92,7 @@ export default async function AdminServicesPage() {
               <label><input type="checkbox" name="doorstep_available" /> Home visit</label>
               <label><input type="checkbox" name="appointment_required" /> Appointment</label>
             </div>
-            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add service</AdminSubmitButton></div>
+            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add service</AdminSubmitButton><AdminCancelButton /></div>
           </form>
         </details>
 
@@ -104,7 +104,7 @@ export default async function AdminServicesPage() {
             <label>Icon<select name="icon_key" defaultValue="briefcase">{iconOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             <label>Order<input type="number" min="0" name="display_order" defaultValue={categoryList.length} /></label>
             <label className="admin-span-2">Description<textarea name="description" rows={2} required /></label>
-            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add category</AdminSubmitButton></div>
+            <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add category</AdminSubmitButton><AdminCancelButton /></div>
           </form>
         </details>
       </section>
@@ -129,7 +129,7 @@ export default async function AdminServicesPage() {
                     <label>Order<input type="number" min="0" name="display_order" defaultValue={category.display_order} /></label>
                     <label className="admin-span-2">Description<textarea name="description" rows={2} defaultValue={category.description} /></label>
                     <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_active" defaultChecked={category.is_active} /> Enable this category when it has public services</label>
-                    <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save category</AdminSubmitButton></div>
+                    <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save category</AdminSubmitButton><AdminCancelButton /></div>
                   </form>
                 </details>
               </div>
@@ -172,7 +172,7 @@ export default async function AdminServicesPage() {
                             <label><input type="checkbox" name="doorstep_available" defaultChecked={service.doorstep_available} /> Home visit</label>
                             <label><input type="checkbox" name="appointment_required" defaultChecked={service.appointment_required} /> Appointment</label>
                           </div>
-                          <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save service</AdminSubmitButton></div>
+                          <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save service</AdminSubmitButton><AdminCancelButton /></div>
                         </form>
                         <form className="admin-destructive-row" action={deleteService}>
                           <input type="hidden" name="id" value={service.id} />

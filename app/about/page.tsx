@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  Building2,
   Phone,
   MessageCircle,
   Navigation,
@@ -53,13 +52,10 @@ export default async function AboutPage() {
   const directionsUrl =
     settings.map_url ||
     "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
-  const gbpUrl =
-    settings.google_business_profile_url ||
-    settings.map_url ||
-    "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const gbpUrl = settings.google_business_profile_url;
   const pageUrl = `${SITE_URL}/about`;
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const groupedHours = formatGroupedHours(hours);
+  const groupedHours = hours.length > 0 ? formatGroupedHours(hours) : [];
   const openingHoursSpecification = hours.flatMap((hour) =>
     getHourPeriods(hour).map((period) => ({
       "@type": "OpeningHoursSpecification",
@@ -101,7 +97,7 @@ export default async function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
+    <div className="public-site min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
@@ -124,17 +120,12 @@ export default async function AboutPage() {
                 <span className="text-[#0E7490]">About</span>
               </nav>
 
-              <div className="inline-flex items-center gap-2 text-[#0E7490] font-bold text-xs uppercase tracking-wider mb-2">
-                <Building2 className="w-4 h-4" />
-                <span>Local Business Profile • Akhtar Colony, Karachi</span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 About {settings.business_name}
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-                Visit our Sector B shop for printing, photocopying, passport photos and NADRA e-Sahulat.
+                Printing, photocopying, passport photos and supported NADRA e-Sahulat at our Akhtar Colony shop.
               </p>
 
               {/* CTAs */}
@@ -180,29 +171,22 @@ export default async function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
               <div className="lg:col-span-7 space-y-6">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490]">
-                    Our Shop &amp; Operations
-                  </span>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                    Serving Akhtar Colony
+                    Printing and e-Sahulat in Akhtar Colony
                   </h2>
                 </div>
 
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  Find us on Street 1 in Sector B, near Jamia Masjid Muhammadi. We provide everyday printing and document services for the neighbourhood.
-                </p>
-
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  Students, families and local businesses can visit for document printing, passport photos and supported biometric services.
+                  Find us on Street 1 in Sector B, near Jamia Masjid Muhammadi. We offer walk-in document services and supported biometric verification.
                 </p>
 
                 <div className="space-y-3 pt-2">
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="block text-sm font-bold text-slate-900">Modern Digital Equipment</strong>
+                      <strong className="block text-sm font-bold text-slate-900">Printing equipment</strong>
                       <span className="text-xs sm:text-sm text-slate-600">
-                        High-capacity laser printers and digital copiers delivering crisp text and durable prints on 75/80 GSM paper.
+                        Laser printers and digital copiers for everyday documents on 75/80 GSM paper.
                       </span>
                     </div>
                   </div>
@@ -210,9 +194,9 @@ export default async function AboutPage() {
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="block text-sm font-bold text-slate-900">Verified NADRA e-Sahulat Terminal</strong>
+                      <strong className="block text-sm font-bold text-slate-900">NADRA e-Sahulat terminal</strong>
                       <span className="text-xs sm:text-sm text-slate-600">
-                        Official biometric terminal for verified excise vehicle transfers, FBR registrations, and PSW trader verifications.
+                        Supported general, vehicle-transfer, FBR Sales Tax and PSW biometric cases.
                       </span>
                     </div>
                   </div>
@@ -220,9 +204,9 @@ export default async function AboutPage() {
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                     <div>
-                      <strong className="block text-sm font-bold text-slate-900">Pre-Order WhatsApp Convenience</strong>
+                      <strong className="block text-sm font-bold text-slate-900">Send files on WhatsApp</strong>
                       <span className="text-xs sm:text-sm text-slate-600">
-                        Send PDFs or requirements on WhatsApp before leaving home so prints are prepared and ready when you walk into the shop.
+                        Send a PDF or request before visiting and confirm the details with us.
                       </span>
                     </div>
                   </div>
@@ -234,13 +218,10 @@ export default async function AboutPage() {
                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-7 shadow-sm">
                   <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-[#0E7490]" />
-                    <span>Exact Physical Location</span>
+                    <span>Shop details</span>
                   </h3>
 
                   <div className="text-xs sm:text-sm text-slate-700 space-y-2 leading-relaxed">
-                    <p>
-                      <strong>Business Name:</strong> {settings.business_name}
-                    </p>
                     <p>
                       <strong>Address:</strong> {settings.address}
                     </p>
@@ -248,7 +229,10 @@ export default async function AboutPage() {
                       <strong>Phone / WhatsApp:</strong> {settings.phone_display}
                     </p>
                     <p>
-                      <strong>Operating Hours:</strong> {groupedHours.map(({ label, time }) => `${label}: ${time}`).join(" · ")}
+                      <strong>Operating hours:</strong>{" "}
+                      {groupedHours.length > 0
+                        ? groupedHours.map((group) => group.label + ": " + group.time).join(" · ")
+                        : "Confirm today's hours before visiting."}
                     </p>
                   </div>
 
@@ -263,15 +247,17 @@ export default async function AboutPage() {
                       <span>Open on Google Maps</span>
                     </a>
 
-                    <a
-                      href={gbpUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 hover:text-slate-900"
-                    >
-                      <span>Google Reviews</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                    {gbpUrl && (
+                      <a
+                        href={gbpUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 hover:text-slate-900"
+                      >
+                        <span>Google Business Profile</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
                   </div>
                 </div>
 

@@ -149,7 +149,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
   };
 
   return (
-    <>
+    <div className="public-site public-site--cms-service">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
@@ -164,9 +164,8 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
           <div className="page-hero__pattern" aria-hidden="true" />
           <div className="container page-hero__grid">
             <div className="page-hero__content">
-              <Link className="back-link" href="/#services"><ArrowLeft size={16} /> All services</Link>
+              <Link className="back-link" href="/services"><ArrowLeft size={16} /> All services</Link>
               <div className="page-hero__icon"><ServiceIcon iconKey={category.icon_key} size={30} /></div>
-              <span className="eyebrow">Service category</span>
               <h1>{seo.heading}</h1>
               <p>{category.description}</p>
             </div>
@@ -174,7 +173,6 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
               <span className="page-hero__summary-icon"><Grid2X2 size={22} /></span>
               <strong>{serviceCount}</strong>
               <span>{serviceCount === 1 ? "service option" : "service options"}</span>
-              <small>Choose an option to see what to bring, where it is available and what to do next.</small>
             </aside>
           </div>
         </section>
@@ -205,21 +203,16 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
 
             <div className="service-list service-list--premium">
               <div className="service-list__intro">
-                <div>
-                  <span className="eyebrow">Choose your task</span>
-                  <h2>Pick the option that matches what you need.</h2>
-                </div>
-                <p>Every card shows the requirement, service method and the correct next action.</p>
+                <h2>Available services</h2>
               </div>
 
-              {category.services?.map((service, index) => {
+              {category.services?.map((service) => {
                 const action = serviceAction(service.status, service.title, site.settings.business_name);
                 const customerModes = getCustomerServiceModes(service);
                 return (
                   <article className="service-detail-card service-detail-card--premium" key={service.id}>
                     <div className="service-card-accent" aria-hidden="true" />
                     <div className="service-detail-card__head service-detail-card__head--premium">
-                      <span className="service-number">{String(index + 1).padStart(2, "0")}</span>
                       <div>
                         <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>
                         <h2>{service.title}</h2>
@@ -282,6 +275,6 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
         </section>
       </main>
       <SiteFooter settings={site.settings} categories={site.categories} />
-    </>
+    </div>
   );
 }
