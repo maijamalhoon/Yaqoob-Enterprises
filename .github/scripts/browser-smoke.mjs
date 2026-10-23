@@ -6,12 +6,19 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function normalizeText(value) {
+  return String(value || "").replace(/\s+/g, " ").trim().toLowerCase();
+}
+
 async function openHealthy(page, path) {
   let lastError;
   for (let attempt = 0; attempt < 12; attempt += 1) {
     try {
       const response = await page.goto(`${baseUrl}${path}`, { waitUntil: "domcontentloaded", timeout: 20_000 });
-      if (response && response.status() < 400) return response;
+      if (response && response.status() < 400) {
+        await page.waitForFunction(() => Boolean(document.querySelector("h1")?.textContent?.trim()), null, { timeout: 10_000 });
+        return response;
+      }
       lastError = new Error(`${path} returned ${response?.status() ?? "no response"}`);
     } catch (error) {
       lastError = error;
@@ -41,7 +48,7 @@ async function assertHomepage(page, label, { mobileNav }) {
   assert((await page.locator("footer").count()) === 1, `${label}: homepage footer is missing.`);
 
   if (mobileNav) {
-    const mobileToggle = page.locator("#mobile-menu-toggle");
+    const mobileToggle = page.locator("#mobileMenuBtn");
     assert((await mobileToggle.count()) >= 1, `${label}: mobile navigation toggle should be available.`);
   } else {
     const whatsapp = page.locator("#header-whatsapp-btn, .header-text-action--primary");
@@ -59,6 +66,11 @@ try {
   const page = await desktop.newPage();
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.route("**/api/analytics", async (route) => {
+    await route.fulfill({ status: 204, body: "" });
+  });
+  await page.route("https://www.googletagmanager.com/**", (route) => route.abort());
+  await page.route(/https:\/\/[^/]*google-analytics\.com\/.*/, (route) => route.abort());
 
   const homepageResponse = await openHealthy(page, "/");
   const csp = homepageResponse.headers()["content-security-policy"] || "";
@@ -89,7 +101,9 @@ try {
   assert(catalogServices.length >= 10, `Expected at least 10 public services in OfferCatalog; found ${catalogServices.length}.`);
   assert((await page.locator("#services article, #services [id^='service-card-'], #services .minimal-service-item").count()) >= 8, "Homepage must show main services.");
   assert((await page.title()).includes(websiteData.name), "Homepage title should follow the configured business identity.");
-  assert((await page.locator("body").innerText()).includes(websiteData.name), "Homepage is missing the configured business identity.");
+  const visibleBusinessName = normalizeText(businessData.name).replace(/\s+/g, "");
+  const visibleBrandText = normalizeText(await page.locator('header a[aria-label*="Home"]').first().innerText()).replace(/\s+/g, "");
+  assert(visibleBusinessName && visibleBrandText.includes(visibleBusinessName), "Homepage header is missing the configured LocalBusiness name.");
   await assertNoHorizontalOverflow(page, "Desktop homepage");
 
   const sitemapResponse = await page.request.get(`${baseUrl}/sitemap.xml`);
@@ -115,15 +129,37 @@ try {
 
   await openHealthy(page, "/contact");
   await assertNoHorizontalOverflow(page, "Desktop contact page");
-  assert((await page.locator("h1").first().innerText()).includes("Tell us what you need"), "Contact heading changed unexpectedly.");
-  assert((await page.locator('input[name="name"]').getAttribute("maxlength")) === "100", "Name input boundary is missing.");
-  assert((await page.locator('textarea[name="details"]').getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
-  const categoryLabels = await page.locator('select[name="category"] option').allTextContents();
-  assert(categoryLabels.some((label) => label.includes("not sure which service")), "Guided request lost its top-level service guidance option.");
-  await page.locator('select[name="category"]').selectOption("printing-photos");
-  const modeLabels = await page.locator('select[name="mode"] option').allTextContents();
-  assert(modeLabels.some((label) => label.includes("Visit the shop")), "Guided request lost the shop-visit option.");
-  assert(modeLabels.some((label) => label.includes("Not sure")), "Guided request lost the fallback guidance option.");
+  const contactHeading = await page.locator("h1").first().innerText();
+  assert(contactHeading.toLowerCase().includes("contact"), "Contact page heading is missing: " + contactHeading + " at " + page.url());
+  assert((await page.locator("#userName").getAttribute("maxlength")) === "100", "Name input boundary is missing.");
+  assert((await page.locator("#userRequirement").getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
+  const serviceOptions = await page.locator("#userService option").allTextContents();
+  assert(serviceOptions.some((label) => label.toLowerCase().includes("printing")), "Quick request lost its printing option.");
+  assert(serviceOptions.some((label) => label.toLowerCase().includes("photocopy")), "Quick request lost its photocopying option.");
+  assert(serviceOptions.some((label) => label.toLowerCase().includes("nadra")), "Quick request lost its NADRA e-Sahulat option.");
+  await page.locator("#userService").selectOption("Photocopying");
+  assert((await page.locator("#userService").inputValue()) === "Photocopying", "Quick request service selection is not working.");
+
+  const whatsappRequests = [];
+  await page.route("https://wa.me/**", async (route) => {
+    whatsappRequests.push(route.request().url());
+    await route.fulfill({ status: 200, contentType: "text/html", body: "<title>Intercepted WhatsApp request</title>" });
+  });
+  const requestForm = page.locator("#whatsappForm");
+  assert(!(await requestForm.evaluate((form) => form.checkValidity())), "Empty request form should fail required-field validation.");
+  await page.locator("#whatsapp-form-submit-btn").click();
+  assert(whatsappRequests.length === 0, "Invalid request form must not open WhatsApp.");
+  await page.locator("#userName").fill("Codex QA Test");
+  await page.locator("#userRequirement").fill("Automated QA request test.");
+  assert(await requestForm.evaluate((form) => form.checkValidity()), "Complete request form should pass required-field validation.");
+  const whatsappRequestPromise = page.waitForRequest((request) => request.url().startsWith("https://wa.me/"), { timeout: 5_000 });
+  const analyticsRequestPromise = page.waitForRequest((request) => request.url().endsWith("/api/analytics") && (request.postData() || "").includes("whatsapp_click"), { timeout: 5_000 });
+  await page.locator("#whatsapp-form-submit-btn").click();
+  const [whatsappRequest, analyticsRequest] = await Promise.all([whatsappRequestPromise, analyticsRequestPromise]);
+  assert((analyticsRequest.postData() || "").includes("whatsapp_click"), "Request submission analytics event was not sent.");
+  const whatsappMessage = new URL(whatsappRequest.url()).searchParams.get("text") || "";
+  assert(whatsappMessage.includes("Name: Codex QA Test"), "WhatsApp request omitted the submitted name.");
+  assert(whatsappMessage.includes("Requirement: Automated QA request test."), "WhatsApp request omitted the submitted requirement.");
 
   await openHealthy(page, "/services/printing-photos");
   await assertNoHorizontalOverflow(page, "Desktop printing category page");
@@ -163,14 +199,15 @@ try {
 
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
-  assert((await page.locator("main").innerText()).includes("campaign"), "Privacy page must disclose campaign attribution cookies.");
+  assert((await page.locator("main").innerText()).toLowerCase().includes("campaign"), "Privacy page must disclose campaign attribution cookies.");
 
   const adminLoginResponse = await openHealthy(page, "/admin/login");
   await assertNoHorizontalOverflow(page, "Desktop admin login");
   assert(adminLoginResponse.status() < 400, "Admin login route is unavailable.");
-  for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history"]) {
-    const response = await page.request.get(`${baseUrl}${protectedPath}`, { maxRedirects: 0 });
-    assert([302, 303, 307, 308].includes(response.status()), `${protectedPath} must remain protected for signed-out visitors.`);
+  for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history", "/admin/settings"]) {
+    await page.goto(baseUrl + protectedPath, { waitUntil: "domcontentloaded" });
+    await page.waitForURL((url) => url.pathname === "/admin/login", { timeout: 5_000 });
+    assert((await page.locator('input[type="email"]').count()) > 0, "Protected route did not show OTP login for " + protectedPath + ".");
   }
 
   assert(pageErrors.length === 0, `Browser page errors detected: ${pageErrors.join(" | ")}`);
@@ -200,7 +237,7 @@ try {
     if (viewport.width <= 430) {
       await openHealthy(viewportPage, "/contact");
       await assertNoHorizontalOverflow(viewportPage, `${viewport.label} contact page`);
-      const formFontSize = await viewportPage.locator('select[name="category"]').evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
+      const formFontSize = await viewportPage.locator("#userService").evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
       assert(formFontSize >= 16, `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom.`);
 
       await openHealthy(viewportPage, "/services/biometric/general-biometric-esahulat");

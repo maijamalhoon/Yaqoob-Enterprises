@@ -110,8 +110,8 @@ export function StitchHero({ settings, statusText, locationLabel, gallery }: Sti
                 <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">Verified e-Sahulat</p>
               </div>
               <div className="bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-200/70">
-                <p className="text-[11px] text-slate-500 font-semibold uppercase">Timing</p>
-                <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">Daily till 11 PM</p>
+                <p className="text-[11px] text-slate-500 font-semibold uppercase">Opening hours</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">See full schedule below</p>
               </div>
             </div>
           </div>

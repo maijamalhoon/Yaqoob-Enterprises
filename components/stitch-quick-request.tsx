@@ -129,9 +129,10 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
                     </label>
                     <input
                       id="userName"
-                      className="w-full rounded-xl border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] py-3 px-3.5 transition outline-none"
+                      className="w-full rounded-xl border border-slate-300 text-base text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] py-3 px-3.5 transition outline-none"
                       placeholder="e.g. Ahmed Raza"
                       required
+                      maxLength={100}
                       type="text"
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
@@ -148,7 +149,7 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
                     </label>
                     <select
                       id="userService"
-                      className="w-full rounded-xl border border-slate-300 text-sm text-slate-900 bg-white focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] py-3 px-3.5 transition outline-none cursor-pointer"
+                      className="w-full rounded-xl border border-slate-300 text-base text-slate-900 bg-white focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] py-3 px-3.5 transition outline-none cursor-pointer"
                       required
                       value={userService}
                       onChange={(e) => setUserService(e.target.value)}
@@ -172,9 +173,10 @@ export function StitchQuickRequest({ settings }: StitchQuickRequestProps) {
                   </label>
                   <textarea
                     id="userRequirement"
-                    className="w-full rounded-xl border border-slate-300 text-sm text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] p-3.5 transition resize-y outline-none"
+                    className="w-full rounded-xl border border-slate-300 text-base text-slate-900 bg-white placeholder:text-slate-400 focus:border-[#0E7490] focus:ring-1 focus:ring-[#0E7490] p-3.5 transition resize-y outline-none"
                     placeholder="e.g. 120 pages, PDF attached, need double sided B&W print"
                     required
+                    maxLength={1600}
                     rows={3}
                     value={userRequirement}
                     onChange={(e) => setUserRequirement(e.target.value)}
