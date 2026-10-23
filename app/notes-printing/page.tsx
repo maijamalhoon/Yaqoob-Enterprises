@@ -131,7 +131,7 @@ export default async function NotesPrintingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
+    <div className="public-site public-site--service-landing min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
@@ -157,11 +157,6 @@ export default async function NotesPrintingPage() {
                 <span>/</span>
                 <span className="text-[#0E7490]">Notes Printing</span>
               </nav>
-
-              <div className="inline-flex items-center gap-2 text-[#0E7490] font-bold text-xs uppercase tracking-wider mb-2">
-                <GraduationCap className="w-4 h-4" />
-                <span>Student Printing Hub • Sector B, Akhtar Colony</span>
-              </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 Notes &amp; Assignment Printing
@@ -204,11 +199,6 @@ export default async function NotesPrintingPage() {
                   <span>GET DIRECTIONS</span>
                 </TrackedLink>
               </div>
-
-              <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Ready for Student Walk-ins: {statusText || "Hours available on WhatsApp"}</span>
-              </div>
             </div>
           </div>
         </section>
@@ -217,9 +207,6 @@ export default async function NotesPrintingPage() {
         <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mb-10">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490]">
-                Academic Services
-              </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Notes &amp; Assignments for Every Level
               </h2>

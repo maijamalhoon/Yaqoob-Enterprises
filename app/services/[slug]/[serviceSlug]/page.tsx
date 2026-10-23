@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
-  ArrowRight,
   Check,
   Clock3,
   ExternalLink,
@@ -193,7 +192,7 @@ export default async function PublicServicePage({
       : null;
 
   return (
-    <>
+    <div className="public-site public-site--cms-service">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceData) }} />
       {faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />}
@@ -234,20 +233,9 @@ export default async function PublicServicePage({
           <div className="container seo-service-layout">
             <article className="seo-service-main">
               <section className="seo-content-block">
-                <span className="eyebrow">Service overview</span>
                 <h2>What this service covers</h2>
                 <p>{seo.intro}</p>
                 {service.detailed_description && service.detailed_description !== seo.intro && <p>{service.detailed_description}</p>}
-                {seo.urduNote && (
-                  <div className="mt-4 p-4 rounded-xl bg-amber-50/90 border border-amber-200 text-amber-950 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                    <span className="shrink-0 font-bold text-xs bg-amber-200 text-amber-900 px-2.5 py-1 rounded-md uppercase tracking-wide">
-                      ضروری رہنمائی
-                    </span>
-                    <p className="text-xs sm:text-sm font-medium leading-relaxed">
-                      {seo.urduNote}
-                    </p>
-                  </div>
-                )}
               </section>
 
               {seo.commonRequests.length > 0 && (
@@ -297,12 +285,11 @@ export default async function PublicServicePage({
 
               {seo.faqs.length > 0 && (
                 <section className="seo-content-block">
-                  <span className="eyebrow">Frequently asked questions</span>
                   <h2>Frequently Asked Questions</h2>
                   <div className="space-y-3 mt-4">
                     {seo.faqs.map((faq, idx) => (
-                      <details key={idx} className="group bg-slate-50 border border-slate-200 rounded-xl p-4 transition-all">
-                        <summary className="font-bold text-sm text-slate-900 cursor-pointer flex items-center justify-between list-none select-none">
+                      <details key={idx} className="group border-b border-slate-200 py-3 transition-all">
+                        <summary className="min-h-11 font-bold text-sm text-slate-900 cursor-pointer flex items-center justify-between list-none select-none">
                           <span>{faq.question}</span>
                           <span className="ml-2 text-xs text-slate-500 group-open:text-slate-900 group-open:font-bold">
                             +
@@ -319,13 +306,12 @@ export default async function PublicServicePage({
 
               {relatedServices.length > 0 && (
                 <section className="seo-related-services">
-                  <div className="seo-related-services__heading"><span className="eyebrow">Related services</span><h2>Other options in {category.title}</h2></div>
+                  <div className="seo-related-services__heading"><h2>More {category.title} services</h2></div>
                   <div className="seo-related-services__grid">
                     {relatedServices.map((item) => (
                       <Link key={item.id} href={`/services/${category.slug}/${item.slug}`}>
                         <strong>{item.title}</strong>
                         <small>{item.short_description}</small>
-                        <span>View service <ArrowRight size={14} /></span>
                       </Link>
                     ))}
                   </div>
@@ -334,8 +320,7 @@ export default async function PublicServicePage({
             </article>
 
             <aside className="seo-service-cta">
-              <span className="eyebrow">Confirm before travelling</span>
-              <h2>{service.title}</h2>
+              <h2>Contact and directions</h2>
               <p>{site.settings.address}</p>
               <TrackedLink className="button button--primary" href={whatsappUrl(site.settings.whatsapp_e164, action.message)} target="_blank" rel="noopener noreferrer" eventName="whatsapp_click">
                 <BrandIcon name="whatsapp" size={17} /> {action.label}
@@ -351,6 +336,6 @@ export default async function PublicServicePage({
         </section>
       </main>
       <SiteFooter settings={site.settings} categories={site.categories} />
-    </>
+    </div>
   );
 }

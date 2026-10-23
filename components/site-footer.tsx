@@ -15,12 +15,12 @@ export function SiteFooter({ settings }: { settings: BusinessSettings; categorie
       <div className="container minimal-footer__top">
         <div className="minimal-footer__brand">
           <Logo inverse businessName={settings.business_name} />
-          <p>{settings.tagline} · {locationLabel}.</p>
+          <p>Printing, photocopying and e-Sahulat services in {locationLabel}.</p>
         </div>
 
         <nav className="minimal-footer__nav" aria-label="Footer navigation">
-          <Link href="/#services">Services</Link>
-          <Link href="/contact">Guided request</Link>
+          <Link href="/services">Services</Link>
+          <Link href="/contact">Contact</Link>
           <Link href="/privacy">Privacy</Link>
         </nav>
 

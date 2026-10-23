@@ -20,7 +20,6 @@ type ServiceOverride = {
   intro: string;
   commonRequests?: string[];
   officialContext?: OfficialContext;
-  urduNote?: string;
   keywords?: string[];
   faqs?: ServiceFaq[];
 };
@@ -166,7 +165,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Multi-page document scans saved as PDF",
       "WhatsApp document printing requests",
     ],
-    urduNote: "واٹس ایپ پر فائل پہلے بھیج دیں تاکہ دکان پر پہنچتے ہی آپ کا پرنٹ تیار ملے۔ (A4 اور لیگل سائز، کلر اور بلیک اینڈ وائٹ دستیاب ہے)",
     keywords: [
       "color print akhtar colony",
       "photocopy shop akhtar colony karachi",
@@ -234,7 +232,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Digital soft copy sent to WhatsApp or email for online job portals",
       "Multiple photo sets (4, 8, or 12 copies) printed on photo paper",
     ],
-    urduNote: "ارجنٹ پاسپورٹ سائز فوٹو صرف 5 سے 10 منٹ میں تیار۔ سفید اور نیلا بیک گراؤنڈ، پاسپورٹ اور فارمز کے لیے دستیاب۔",
     keywords: [
       "passport size photo akhtar colony",
       "urgent passport photo karachi",
@@ -268,7 +265,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "English formal letter, complaint, and application drafting",
       "Print-ready PDF delivery and editable file sharing",
     ],
-    urduNote: "اردو اور انگلش ٹائپنگ، نئی اور جدید سی وی (CV) بنوانے کی سہولت۔ پرانی سی وی کو اپڈیٹ بھی کیا جاتا ہے۔",
     keywords: [
       "urdu typing service akhtar colony",
       "cv maker akhtar colony karachi",
@@ -296,12 +292,12 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     intro:
       "We help with job and admission forms, profile details, document and photo resizing, fee challans and submission printouts.",
     commonRequests: [
-      "FPSC, SPSC, STS (SIBA Testing Services), and PTS job applications",
+      "FPSC, SPSC, STS, NTS and PTS job applications",
+      "Original CNIC and relevant certificates for job applications",
       "College and university admissions portal submissions",
       "Document, signature, and photograph resizing to exact pixel/KB limits",
       "Fee challan generation, online payment assistance, and slip printing",
     ],
-    urduNote: "سرکاری و پرائیویٹ ملازمتوں کے آن لائن فارم بھرنے کی مکمل سہولت (FPSC, SPSC, STS, NTS)۔ اصل شناختی کارڈ اور اسناد ساتھ لائیں۔",
     keywords: [
       "online job application apply akhtar colony",
       "sts sindh jobs form fill karachi",
@@ -362,7 +358,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Affidavits, undertakings, and Bayan-e-Halfi drafting",
       "Direct printing on official stamp paper with correct margins",
     ],
-    urduNote: "کرایہ نامہ (رہائشی و کمرشل)، گاڑی اور موٹرسائیکل خرید و فروخت کا اقرار نامہ، اور بیان حلفی اسٹامپ پیپر پر ٹائپ کروانے کی سہولت۔",
     keywords: [
       "rent agreement typing akhtar colony",
       "kirayanama karachi akhtar colony",
@@ -403,7 +398,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
         "NADRA describes biometric verification as electronic identity verification using biometric data and states that biometric verification services are extended through the e-Sahulat franchise network.",
       url: "https://www.nadra.gov.pk/verification",
     },
-    urduNote: "نادرا ای سہولت بائیو میٹرک: گاڑی ٹرانسفر، FBR سیلز ٹیکس، اور PSW بائیو میٹرک دستیاب ہے۔ برائے مہربانی اصل شناختی کارڈ اور رجسٹرڈ موبائل ساتھ لائیں۔",
     keywords: [
       "nadra e-sahulat akhtar colony",
       "nadra biometric verification karachi",
@@ -446,9 +440,8 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       title: "FBR Sales Tax biometric requirement",
       body:
         "FBR states that a person registered for Sales Tax through Iris is required to visit a NADRA e-Sahulat Centre within 30 days for biometric verification.",
-      url: "https://www.fbr.gov.pk/categ/check-active-taxpayer/51149/50848/101152",
+      url: "https://www.fbr.gov.pk/categ/sales-tax-payment/51147/50848/101152",
     },
-    urduNote: "FBR سیلز ٹیکس بائیو میٹرک: رجسٹریشن کے بعد 30 دن کے اندر نادرا ای سہولت سے تصدیق کروانا لازمی ہے۔ اصل شناختی کارڈ ساتھ لائیں۔",
     keywords: [
       "fbr sales tax biometric karachi",
       "sales tax biometric verification akhtar colony",
@@ -501,7 +494,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
         "NADRA lists biometric verification for vehicle transfer among the services supported through its Multi Biometric Verification System.",
       url: "https://www.nadra.gov.pk/registrationServicesOP",
     },
-    urduNote: "گاڑی اور بائیک ٹرانسفر بائیو میٹرک: خریدار یا فروخت کنندہ کا اصل شناختی کارڈ اور گاڑی کی تفصیلات لے کر تشریف لائیں۔",
     keywords: [
       "vehicle transfer biometric karachi",
       "car transfer biometric akhtar colony",
@@ -528,7 +520,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Electricity, gas, water, and internet utility bill payments",
       "Instant computerized receipt for every transaction",
     ],
-    urduNote: "کیش ڈپازٹ، رقم کی منتقلی اور تمام یوٹیلیٹی بلز (بجلی، گیس، پانی، انٹرنیٹ) جمع کروانے کی تیز ترین سہولت۔",
     keywords: [
       "cash deposit withdrawal akhtar colony",
       "money transfer shop akhtar colony karachi",
@@ -556,7 +547,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Domestic flight ticket inquiries and e-ticket printouts",
       "Live schedule, train timing, and fare verification",
     ],
-    urduNote: "پاکستان ریلویز، فیصل موورز، ڈائیوو ایکسپریس کے تصدیق شدہ ٹکٹ اور ای ٹکٹ پرنٹ کی فوری سہولت۔",
     keywords: [
       "pakistan railway ticket booking karachi",
       "train ticket booking akhtar colony",
@@ -629,7 +619,6 @@ const serviceOverrides: Record<string, ServiceOverride> = {
       "Google Maps and Google Business Profile verification and ranking optimization",
       "Technical SEO, fast page speed, and schema markup integration",
     ],
-    urduNote: "اپنی دکان یا کاروبار کے لیے جدید ویب سائٹ اور گوگل پر ٹاپ رینکنگ (SEO) حاصل کرنے کے لیے رابطہ کریں۔",
     keywords: [
       "website development karachi",
       "local seo services karachi",
@@ -714,7 +703,6 @@ export function getServiceSeo(
     officialContext: override?.officialContext || null,
     isBiometric: category.slug === "biometric",
     canonicalPath: `/services/${category.slug}/${service.slug}`,
-    urduNote: override?.urduNote || null,
     keywords: override?.keywords || defaultKeywords,
     faqs: override?.faqs || [],
   };

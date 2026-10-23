@@ -1,5 +1,5 @@
-import { AdminAnalyticsSkeleton } from "@/components/admin-analytics-skeleton";
+import { AdminLoadingState } from "@/components/admin-loading-state";
 
-export default function AdminAnalyticsLoading() {
-  return <AdminAnalyticsSkeleton />;
+export default function AnalyticsLoading() {
+  return <AdminLoadingState label="Loading analytics" />;
 }

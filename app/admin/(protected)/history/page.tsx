@@ -1,5 +1,5 @@
 import { DatabaseBackup, History, RotateCcw, ShieldCheck } from "lucide-react";
-import { AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
 import { createAdminSnapshot, deleteAdminSnapshot, restoreAdminSnapshot, rollbackAuditEntry } from "./actions";
 
@@ -110,7 +110,7 @@ export default async function AdminHistoryPage() {
 
         <form className="admin-backup-create" action={createAdminSnapshot}>
           <label>Backup name<input name="label" maxLength={100} placeholder="Before major changes" /></label>
-          <AdminSubmitButton pendingLabel="Creating…">Create backup</AdminSubmitButton>
+          <div className="admin-form-actions"><AdminSubmitButton pendingLabel="Creating…">Create backup</AdminSubmitButton><AdminCancelButton /></div>
         </form>
 
         <div className="admin-backup-list">

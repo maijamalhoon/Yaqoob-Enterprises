@@ -124,7 +124,7 @@ export default async function NadraEsahulatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
+    <div className="public-site public-site--service-landing min-h-screen bg-white text-slate-900 pb-20 md:pb-0">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbsSchema) }}
@@ -150,11 +150,6 @@ export default async function NadraEsahulatPage() {
                 <span>/</span>
                 <span className="text-[#0E7490]">NADRA e-Sahulat</span>
               </nav>
-
-              <div className="inline-flex items-center gap-2 text-emerald-800 font-bold text-xs uppercase tracking-wider mb-2">
-                <Fingerprint className="w-4 h-4 text-emerald-700" />
-                <span>Authorized e-Sahulat Franchise Counter • Akhtar Colony</span>
-              </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
                 NADRA e-Sahulat Biometrics
@@ -215,9 +210,6 @@ export default async function NadraEsahulatPage() {
         <section className="py-12 sm:py-16 bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mb-10">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#0E7490]">
-                Supported Services
-              </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                 Biometric Verifications Offered
               </h2>

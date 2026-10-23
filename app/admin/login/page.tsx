@@ -15,7 +15,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
   return (
     <main className="admin-login-page">
       <div>
-        {error === "not-authorised" && <p className="admin-error">This email is not authorised for the admin centre.</p>}
+        {error === "not-authorised" && <p className="admin-error" role="alert">This email is not authorised for the admin centre.</p>}
         <AdminLoginForm />
         <Link className="admin-back-link" href="/">← Return to website</Link>
       </div>
