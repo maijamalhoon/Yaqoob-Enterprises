@@ -2,34 +2,58 @@
 
 Production-oriented Next.js website and Supabase-backed admin centre for Yaqoob Enterprises in Akhtar Colony, Karachi.
 
-## Included
+## Project overview
 
-- Responsive customer-facing website
-- Eight service-category pages with service modes and requirements
-- WhatsApp request builder with service-aware delivery options
-- Coverage, pricing, hours and contact content from Supabase
-- Passwordless admin authentication restricted by an email allowlist
-- Service, category, coverage, gallery, settings, announcements and analytics management
-- Privacy-conscious page-view and contact-action analytics
-- Supabase Storage gallery with image focal-point controls
-- Temporary storefront concept image clearly labelled until real photos are uploaded
+- Responsive customer-facing website and service-category pages.
+- Service-aware WhatsApp request flow.
+- Business hours, pricing, coverage and contact content managed through Supabase.
+- Admin centre for managing services, categories, coverage, gallery, settings, announcements and analytics.
+- Supabase Storage gallery with image focal-point controls.
+- Privacy-conscious page-view and contact-action analytics.
+- Server-side admin authorization backed by Supabase Auth and the `admin_profiles` table.
 
-## Environment
+## Technology
 
-Public Supabase values have safe defaults in `lib/env.ts`, and may be overridden using `.env.local`:
+- Next.js 16, React 19 and TypeScript.
+- Tailwind CSS 4.
+- Supabase Auth, Postgres and Storage.
+- GitHub Actions for type-checking, linting, production builds, browser smoke checks and security automation.
+- Vercel for production hosting.
 
-```bash
-cp .env.example .env.local
-```
+## Requirements
 
-## Development
+- Node.js 22 (the same major version used in CI).
+- npm.
+- A Supabase project for the CMS/admin functionality.
 
-```bash
-npm install
-npm run dev
-```
+## Local development
+
+1. Clone this repository and enter the project directory.
+2. Install dependencies:
+
+   ```bash
+   npm ci
+   ```
+
+3. Copy the example environment file to `.env.local` and review the values. In PowerShell:
+
+   ```powershell
+   Copy-Item .env.example .env.local
+   ```
+
+   Public Supabase URL and publishable-key values are used by the app and may have safe project defaults. Set `NEXT_PUBLIC_SITE_URL` to your local URL when needed. Never put a Supabase service-role key, database password, access token or other server secret in a `NEXT_PUBLIC_*` variable or commit real secrets.
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Then open http://localhost:3000.
 
 ## Validation
+
+Run these locally before opening a pull request:
 
 ```bash
 npm run typecheck
@@ -37,10 +61,29 @@ npm run lint
 npm run build
 ```
 
+Pull requests targeting `main` also run the Quality Gate and browser smoke checks through GitHub Actions. Scheduled workflows check dependency advisories and run CodeQL analysis. CI passing is necessary but does not replace testing critical changes against a safe preview environment.
+
 ## Admin access
 
-The owner email is allowlisted in Supabase. The login page sends a passwordless email link. Configure Supabase Auth redirect URLs for the production domain and Vercel previews before final launch.
+The admin login uses **email and password** through Supabase Auth. A successful sign-in alone is not sufficient: protected admin routes independently require an authorized row in `admin_profiles`. Use an already-authorized admin account and make sure a password is configured for that account in Supabase Auth. Do not share credentials or place them in repository files, screenshots, issues or pull requests.
 
-## Preview deployment
+If access fails, check the Supabase Auth account, the admin-profile authorization record and the production environment configuration. Never bypass the `requireAdmin` guard to troubleshoot access.
 
-Preview deployments are verified before this branch is merged into production. A fresh commit may be used to refresh Vercel preview routing without changing application behaviour.
+## Database and deployment safety
+
+- SQL changes belong in timestamped, reviewed files under `supabase/migrations/`.
+- Review every migration for destructive operations, permissions and Row Level Security (RLS) effects before applying it.
+- Do not reset, truncate or reseed production data as a troubleshooting shortcut.
+- Test database changes against a non-production/staging project where available and verify a backup/restore path before high-impact changes.
+- Configure the required environment variables in Vercel for each environment. Keep service-role credentials server-side only.
+- Verify the Vercel preview and production deployment after a merge; a green GitHub run alone does not prove the deployed site or live authentication flow works end to end.
+
+## Contributing
+
+Use a short-lived branch such as `feat/...`, `fix/...` or `chore/...`; open a pull request into `main`; explain the reason for the change; and include test evidence. Avoid direct pushes to `main`. Keep pull requests focused, review database/security changes carefully, and update documentation whenever product behaviour or setup changes.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the pull-request checklist and [SECURITY.md](SECURITY.md) for responsible vulnerability reporting.
+
+## Repository license
+
+No license file is currently included. Do not assume that public visibility grants permission to reuse, redistribute or commercialize this project's code or assets.
