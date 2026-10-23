@@ -132,16 +132,23 @@ try {
   await assertNoHorizontalOverflow(page, "Desktop contact page");
   const contactHeading = await page.locator("h1").first().innerText();
   assert(contactHeading.toLowerCase().includes("contact"), "Contact page heading is missing: " + contactHeading + " at " + page.url());
+  assert((await page.locator('main a[href^="tel:"]').count()) > 0, "Contact page is missing its phone link.");
+  assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Contact page is missing its WhatsApp link.");
+  assert((await page.locator('main a[href*="maps.app.goo.gl"]').count()) > 0, "Contact page is missing its directions link.");
+
+  await openHealthy(page, "/");
+  await page.locator("#quick-request").scrollIntoViewIfNeeded();
   assert((await page.locator("#userName").getAttribute("maxlength")) === "100", "Name input boundary is missing.");
   assert((await page.locator("#userRequirement").getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
-  const serviceOptions = await page.locator("#userService option").allTextContents();
+  await page.locator("#userService").click();
+  const serviceOptions = await page.locator('[role="option"]').allTextContents();
   assert(serviceOptions.some((label) => label.toLowerCase().includes("printing")), "Quick request lost its printing option.");
   assert(serviceOptions.some((label) => label.toLowerCase().includes("photocopy")), "Quick request lost its photocopying option.");
   assert(serviceOptions.some((label) => label.toLowerCase().includes("nadra")), "Quick request lost its NADRA e-Sahulat option.");
   const photocopyOption = serviceOptions.find((label) => label.toLowerCase().includes("photocopy"));
   assert(photocopyOption, "Quick request photocopy option is missing.");
-  await page.locator("#userService").selectOption({ label: photocopyOption });
-  assert((await page.locator("#userService").inputValue()) === photocopyOption, "Quick request service selection is not working.");
+  await page.getByRole("option", { name: photocopyOption.trim(), exact: true }).click();
+  assert(normalizeText(await page.locator("#userService").innerText()).includes("photocopy"), "Quick request service selection is not working.");
 
   const whatsappRequests = [];
   await page.route("https://wa.me/**", async (route) => {
@@ -243,8 +250,9 @@ try {
     const viewportPage = await context.newPage();
     await assertHomepage(viewportPage, viewport.label, viewport);
     if (viewport.width <= 430) {
-      await openHealthy(viewportPage, "/contact");
-      await assertNoHorizontalOverflow(viewportPage, `${viewport.label} contact page`);
+      await openHealthy(viewportPage, "/");
+      await viewportPage.locator("#quick-request").scrollIntoViewIfNeeded();
+      await assertNoHorizontalOverflow(viewportPage, `${viewport.label} quick request`);
       const formFontSize = await viewportPage.locator("#userService").evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
       assert(formFontSize >= 16, `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom.`);
 
