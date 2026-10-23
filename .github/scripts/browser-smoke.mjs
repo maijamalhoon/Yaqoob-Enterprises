@@ -179,7 +179,13 @@ try {
   await openHealthy(page, "/services/printing-photos/colour-black-white-printing");
   await assertNoHorizontalOverflow(page, "Desktop printing SEO page");
   assert((await page.locator("h1").first().innerText()).includes("Printing"), "Printing detail page lost its search heading.");
-  assert((await page.locator("main").innerText()).includes("Common requests we handle"), "Printing detail page is missing search-intent content.");
+  const printingSearchIntentText = normalizeText(await page.locator("main").innerText()).toLowerCase();
+  assert(
+    printingSearchIntentText.includes("black-and-white") &&
+      printingSearchIntentText.includes("photocopies") &&
+      printingSearchIntentText.includes("document scans"),
+    "Printing detail page is missing search-intent content.",
+  );
 
   await openHealthy(page, "/services/biometric/general-biometric-esahulat");
   await assertNoHorizontalOverflow(page, "Desktop biometric SEO page");
