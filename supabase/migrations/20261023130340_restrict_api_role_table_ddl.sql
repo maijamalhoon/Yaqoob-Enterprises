@@ -1,4 +1,4 @@
-﻿-- Remove table-maintenance and DDL privileges from Data API roles.
+-- Remove table-maintenance and DDL privileges from Data API roles.
 -- Row-level CRUD grants and policies are unchanged.
 revoke truncate, references, trigger, maintain
   on all tables in schema public
