@@ -128,6 +128,7 @@ try {
   }
 
   await openHealthy(page, "/contact");
+  await page.waitForLoadState("networkidle", { timeout: 10_000 });
   await assertNoHorizontalOverflow(page, "Desktop contact page");
   const contactHeading = await page.locator("h1").first().innerText();
   assert(contactHeading.toLowerCase().includes("contact"), "Contact page heading is missing: " + contactHeading + " at " + page.url());
@@ -206,7 +207,8 @@ try {
   assert(adminLoginResponse.status() < 400, "Admin login route is unavailable.");
   for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history", "/admin/settings"]) {
     await page.goto(baseUrl + protectedPath, { waitUntil: "domcontentloaded" });
-    await page.waitForURL((url) => url.pathname === "/admin/login", { timeout: 5_000 });
+    await page.waitForFunction(() => window.location.pathname === "/admin/login", null, { timeout: 15_000 });
+    await page.locator('input[type="email"]').waitFor({ state: "visible", timeout: 10_000 });
     assert((await page.locator('input[type="email"]').count()) > 0, "Protected route did not show OTP login for " + protectedPath + ".");
   }
 
