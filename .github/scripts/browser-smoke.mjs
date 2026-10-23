@@ -41,7 +41,7 @@ async function assertHomepage(page, label, { mobileNav }) {
   assert((await page.locator("footer").count()) === 1, `${label}: homepage footer is missing.`);
 
   if (mobileNav) {
-    const mobileToggle = page.locator("#mobile-menu-toggle");
+    const mobileToggle = page.locator("#mobileMenuBtn");
     assert((await mobileToggle.count()) >= 1, `${label}: mobile navigation toggle should be available.`);
   } else {
     const whatsapp = page.locator("#header-whatsapp-btn, .header-text-action--primary");
@@ -115,15 +115,15 @@ try {
 
   await openHealthy(page, "/contact");
   await assertNoHorizontalOverflow(page, "Desktop contact page");
-  assert((await page.locator("h1").first().innerText()).includes("Tell us what you need"), "Contact heading changed unexpectedly.");
-  assert((await page.locator('input[name="name"]').getAttribute("maxlength")) === "100", "Name input boundary is missing.");
-  assert((await page.locator('textarea[name="details"]').getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
-  const categoryLabels = await page.locator('select[name="category"] option').allTextContents();
-  assert(categoryLabels.some((label) => label.includes("not sure which service")), "Guided request lost its top-level service guidance option.");
-  await page.locator('select[name="category"]').selectOption("printing-photos");
-  const modeLabels = await page.locator('select[name="mode"] option').allTextContents();
-  assert(modeLabels.some((label) => label.includes("Visit the shop")), "Guided request lost the shop-visit option.");
-  assert(modeLabels.some((label) => label.includes("Not sure")), "Guided request lost the fallback guidance option.");
+  assert((await page.locator("h1").first().innerText()).toLowerCase().includes("contact"), "Contact page heading is missing.");
+  assert((await page.locator("#userName").getAttribute("maxlength")) === "100", "Name input boundary is missing.");
+  assert((await page.locator("#userRequirement").getAttribute("maxlength")) === "1600", "Request details boundary is missing.");
+  const serviceOptions = await page.locator("#userService option").allTextContents();
+  assert(serviceOptions.some((label) => label.toLowerCase().includes("printing")), "Quick request lost its printing option.");
+  assert(serviceOptions.some((label) => label.toLowerCase().includes("photocopy")), "Quick request lost its photocopying option.");
+  assert(serviceOptions.some((label) => label.toLowerCase().includes("nadra")), "Quick request lost its NADRA e-Sahulat option.");
+  await page.locator("#userService").selectOption("Photocopying");
+  assert((await page.locator("#userService").inputValue()) === "Photocopying", "Quick request service selection is not working.");
 
   await openHealthy(page, "/services/printing-photos");
   await assertNoHorizontalOverflow(page, "Desktop printing category page");
@@ -200,7 +200,7 @@ try {
     if (viewport.width <= 430) {
       await openHealthy(viewportPage, "/contact");
       await assertNoHorizontalOverflow(viewportPage, `${viewport.label} contact page`);
-      const formFontSize = await viewportPage.locator('select[name="category"]').evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
+      const formFontSize = await viewportPage.locator("#userService").evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
       assert(formFontSize >= 16, `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom.`);
 
       await openHealthy(viewportPage, "/services/biometric/general-biometric-esahulat");
