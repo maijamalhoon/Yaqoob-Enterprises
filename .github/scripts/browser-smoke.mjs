@@ -259,8 +259,16 @@ try {
       await openHealthy(viewportPage, "/");
       await viewportPage.locator("#quick-request").scrollIntoViewIfNeeded();
       await assertNoHorizontalOverflow(viewportPage, `${viewport.label} quick request`);
-      const formFontSize = await viewportPage.locator("#userService").evaluate((node) => parseFloat(getComputedStyle(node).fontSize));
-      assert(formFontSize >= 16, `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom.`);
+      const mobileFormFontSizes = await viewportPage
+        .locator("#userName, #userService, #userRequirement")
+        .evaluateAll((nodes) => nodes.map((node) => ({
+          id: node.id,
+          size: parseFloat(getComputedStyle(node).fontSize),
+        })));
+      assert(
+        mobileFormFontSizes.length === 3 && mobileFormFontSizes.every((control) => control.size >= 16),
+        `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom (actual: ${mobileFormFontSizes.map((control) => `${control.id}=${control.size}px`).join(", ")}).`,
+      );
 
       await openHealthy(viewportPage, "/services/biometric/general-biometric-esahulat");
       await assertNoHorizontalOverflow(viewportPage, `${viewport.label} biometric SEO page`);
