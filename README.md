@@ -82,7 +82,7 @@ If access fails, check the Supabase Auth account, the admin-profile authorizatio
 
 Use a short-lived branch such as `feat/...`, `fix/...` or `chore/...`; open a pull request into `main`; explain the reason for the change; and include test evidence. Avoid direct pushes to `main`. Keep pull requests focused, review database/security changes carefully, and update documentation whenever product behaviour or setup changes.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the pull-request checklist and [SECURITY.md](SECURITY.md) for responsible vulnerability reporting.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the pull-request checklist, [SECURITY.md](SECURITY.md) for responsible vulnerability reporting, and [dependency security notes](docs/dependency-security-notes.md) for the current upstream advisory exception.
 
 ## Repository license
 
