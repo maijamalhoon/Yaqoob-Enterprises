@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
+import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Search, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminWorldMap } from "@/components/admin-world-map";
 import { AdminTrafficChart } from "@/components/admin-traffic-chart";
