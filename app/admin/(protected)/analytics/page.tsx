@@ -117,7 +117,6 @@ export default async function AdminAnalyticsPage({
     if (entry) entry.count += 1;
   }
   const dailyViewsTotal = dailyPageViews.reduce((total, entry) => total + entry.count, 0);
-  const busiestDay = dailyPageViews.reduce((busiest, entry) => entry.count > busiest.count ? entry : busiest);
   const dailyViewsMax = Math.max(1, ...dailyPageViews.map((entry) => entry.count));
   const contactRows = rows.filter((event) => contactEvents.has(event.event_name));
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
@@ -220,7 +219,7 @@ export default async function AdminAnalyticsPage({
 
       <section className="admin-panel admin-panel--control admin-traffic-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the the selected period, grouped by Pakistan time.</p></div>
+          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the selected period, grouped by Pakistan time.</p></div>
           <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
         </div>
         <AdminTrafficChart data={dailyPageViews} maximum={dailyViewsMax} rangeDays={rangeDays} />
@@ -229,11 +228,11 @@ export default async function AdminAnalyticsPage({
 
       <section className="admin-panel admin-panel--control admin-global-panel" aria-labelledby="admin-global-title">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Visitor geography</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
+          <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Traffic by country</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
           <span className="admin-traffic-total"><strong>{countryViewsTotal.toLocaleString("en-PK")}</strong><small>located views</small></span>
         </div>
         <AdminWorldMap countries={countries} />
-        <p className="admin-map-attribution">Map artwork: Al MacDonald and Fritz Lekschas, based on ISO country boundaries. Licensed under CC BY-SA 3.0.</p>
+        <p className="admin-map-attribution">Map artwork by Al MacDonald and Fritz Lekschas · <a href="https://github.com/flekschas/simple-world-map" target="_blank" rel="noopener noreferrer">Simple World Map</a> · CC BY-SA 3.0.</p>
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
