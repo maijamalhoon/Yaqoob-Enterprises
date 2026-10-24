@@ -95,7 +95,7 @@ function DonutBreakdown({ title, description, rows, emptyMessage }: {
   const total = allRows.reduce((sum, [, count]) => sum + count, 0);
   const topRows = allRows.slice(0, 4);
   const otherTotal = allRows.slice(4).reduce((sum, [, count]) => sum + count, 0);
-  const chartRows: [string, number][] = otherTotal > 0 ? [...topRows, ["Other", otherTotal]] : topRows;
+  const chartRows: [string, number][] = otherTotal > 0 ? [...topRows, ["Other", otherTotal] as [string, number]] : topRows;
   const circumference = 2 * Math.PI * 41;
   let cursor = 0;
   const segments = chartRows.map(([label, count], index) => {
