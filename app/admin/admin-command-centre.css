@@ -1169,35 +1169,56 @@
 .admin-root .admin-traffic-chart__scale,
 .admin-root .admin-traffic-chart__dates,
 .admin-root .admin-traffic-note { color: var(--admin-muted); font-size: .72rem; }
-.admin-root .admin-traffic-chart { display: grid; grid-template-columns: 42px minmax(0, 1fr); align-items: stretch; gap: 9px; min-width: 0; }
-.admin-root .admin-traffic-chart__scale {
-  display: flex; flex-direction: column; justify-content: space-between; padding-block: 3px;
-  text-align: right; font-variant-numeric: tabular-nums;
+.admin-root .admin-traffic-visual { display: grid; gap: 7px; min-width: 0; }
+.admin-root .admin-line-chart { display: block; width: 100%; height: auto; overflow: visible; }
+.admin-root .admin-line-chart__grid {
+  stroke: var(--admin-border);
+  stroke-width: 1;
+  stroke-dasharray: 3 6;
 }
-.admin-root .admin-traffic-chart__plot {
-  position: relative; display: flex; align-items: end; gap: clamp(2px, .32vw, 5px);
-  min-width: 0; height: 205px; padding: 8px 2px 0;
-  border-bottom: 1px solid var(--admin-border-strong);
-  border-radius: 13px 13px 0 0;
-  background:
-    linear-gradient(to bottom, var(--admin-border) 1px, transparent 1px) 0 0 / 100% 25%,
-    linear-gradient(to bottom, color-mix(in srgb, var(--admin-border) 75%, transparent) 1px, transparent 1px) 0 0 / 100% 50%;
+.admin-root .admin-line-chart__vertical-grid {
+  stroke: var(--admin-border);
+  stroke-width: 1;
+  stroke-dasharray: 2 7;
+  opacity: .72;
 }
-.admin-root .admin-traffic-chart__plot > span {
-  z-index: 1; flex: 1 1 0; min-width: 2px;
-  border: 1px solid color-mix(in srgb, var(--admin-accent) 14%, transparent);
-  border-bottom: 0; border-radius: 5px 5px 1px 1px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--admin-accent) 54%, #ffffff), var(--admin-accent));
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--admin-accent) 12%, transparent);
-  transition: filter 150ms ease, opacity 150ms ease;
+.admin-root .admin-line-chart__tick {
+  fill: var(--admin-muted);
+  font-family: inherit;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
 }
-.admin-root .admin-traffic-chart__plot > span:hover { filter: brightness(1.1); }
-.admin-root .admin-traffic-chart__plot > p {
-  position: absolute; inset: 50% 4px auto; margin: 0; color: var(--admin-muted);
-  font-size: .82rem; text-align: center; transform: translateY(-50%);
+.admin-root .admin-line-chart__area { fill: url(#admin-traffic-area); }
+.admin-root .admin-line-chart__line {
+  fill: none;
+  stroke: var(--admin-accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
-.admin-root .admin-traffic-chart__dates { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 0 51px; }
-.admin-root .admin-traffic-note { margin: 10px 0 0; }
+.admin-root .admin-line-chart__point circle {
+  fill: var(--admin-surface);
+  stroke: var(--admin-accent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transition: r 140ms ease, fill 140ms ease, stroke-width 140ms ease;
+}
+.admin-root .admin-line-chart__point:hover circle {
+  r: 5;
+  fill: var(--admin-accent);
+  stroke: var(--admin-surface);
+  stroke-width: 2.5;
+}
+.admin-root .admin-line-chart__dates {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 1.5% 0 6.2%;
+  color: var(--admin-muted);
+  font-size: .72rem;
+}
+.admin-root .admin-traffic-note { margin: 9px 0 0; color: var(--admin-muted); font-size: .72rem; }
 .admin-root .admin-google-panel { display: grid; gap: 13px; }
 .admin-root .admin-google-metrics {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
