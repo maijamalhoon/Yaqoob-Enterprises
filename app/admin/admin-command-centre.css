@@ -1704,3 +1704,60 @@
     transition-duration: .01ms !important;
   }
 }
+
+/* Live Google Business Profile insights */
+.admin-root .admin-gbp-panel { gap: 18px; }
+.admin-root .admin-gbp-actions { display: flex; align-items: center; gap: 10px; }
+.admin-root .admin-gbp-panel .admin-icon-button { display: inline-grid; place-items: center; min-width: 40px; min-height: 40px; border: 1px solid var(--admin-border); border-radius: 11px; color: var(--admin-text); background: var(--admin-surface); cursor: pointer; }
+.admin-root .admin-gbp-panel .admin-icon-button:disabled { opacity: .55; cursor: wait; }
+.admin-root .admin-gbp-spin { animation: admin-gbp-spin .8s linear infinite; }
+@keyframes admin-gbp-spin { to { transform: rotate(360deg); } }
+.admin-root .admin-gbp-state { padding: 16px 18px; border: 1px solid var(--admin-border); border-radius: 14px; color: var(--admin-text); background: var(--admin-surface-muted); font-size: .9rem; line-height: 1.55; }
+.admin-root .admin-gbp-state strong { display: block; margin-bottom: 4px; color: var(--admin-ink); }
+.admin-root .admin-gbp-state p { margin: 4px 0 0; }
+.admin-root .admin-gbp-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.admin-root .admin-gbp-metrics article { display: grid; align-content: start; gap: 7px; min-width: 0; padding: 15px; border: 1px solid var(--admin-border); border-radius: 14px; background: var(--admin-surface); }
+.admin-root .admin-gbp-metrics article > span { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; color: var(--admin-accent); background: var(--admin-accent-soft); }
+.admin-root .admin-gbp-metrics article strong { color: var(--admin-ink); font-size: clamp(1.35rem, 2.2vw, 1.8rem); line-height: 1.1; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.admin-root .admin-gbp-metrics article small { color: var(--admin-muted); font-size: .78rem; font-weight: 700; }
+.admin-root .admin-gbp-columns { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 14px; align-items: start; }
+.admin-root .admin-gbp-subpanel { min-width: 0; padding: 16px; border: 1px solid var(--admin-border); border-radius: 15px; background: var(--admin-surface-muted); }
+.admin-root .admin-gbp-subheading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.admin-root .admin-gbp-subheading h3 { margin: 0; color: var(--admin-ink); font-size: .98rem; font-weight: 800; }
+.admin-root .admin-gbp-subheading > span { color: var(--admin-muted); font-size: .72rem; }
+.admin-root .admin-gbp-keywords { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.admin-root .admin-gbp-keywords li { display: flex; justify-content: space-between; align-items: start; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--admin-border); }
+.admin-root .admin-gbp-keywords li:last-child { border-bottom: 0; }
+.admin-root .admin-gbp-keywords li > span { min-width: 0; color: var(--admin-text); font-size: .83rem; overflow-wrap: anywhere; }
+.admin-root .admin-gbp-keywords li > strong { flex: 0 0 auto; color: var(--admin-ink); font-size: .83rem; font-variant-numeric: tabular-nums; }
+.admin-root .admin-gbp-rating { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; padding: 12px; border-radius: 12px; background: var(--admin-surface); }
+.admin-root .admin-gbp-rating > strong { color: var(--admin-ink); font-size: 1.8rem; font-variant-numeric: tabular-nums; }
+.admin-root .admin-gbp-rating > span { display: inline-flex; align-items: center; gap: 5px; color: var(--admin-amber); font-size: .8rem; font-weight: 800; }
+.admin-root .admin-gbp-rating > small { width: 100%; color: var(--admin-muted); font-size: .75rem; }
+.admin-root .admin-gbp-reviews { display: grid; gap: 10px; margin-top: 12px; }
+.admin-root .admin-gbp-reviews article { min-width: 0; padding: 12px; border: 1px solid var(--admin-border); border-radius: 12px; background: var(--admin-surface); }
+.admin-root .admin-gbp-review-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.admin-root .admin-gbp-review-meta strong { min-width: 0; color: var(--admin-ink); font-size: .82rem; overflow-wrap: anywhere; }
+.admin-root .admin-gbp-review-meta span { display: inline-flex; align-items: center; gap: 4px; flex: 0 0 auto; color: var(--admin-amber); font-size: .75rem; font-weight: 800; }
+.admin-root .admin-gbp-reviews article p { margin: 8px 0 0; color: var(--admin-text); font-size: .82rem; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.admin-root .admin-gbp-reply { display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--admin-border); color: var(--admin-muted); font-size: .75rem; line-height: 1.5; overflow-wrap: anywhere; }
+.admin-root .admin-gbp-empty { color: var(--admin-muted); font-size: .82rem; line-height: 1.55; }
+.admin-root .admin-gbp-notice { margin: 8px 0 0; color: var(--admin-muted); font-size: .76rem; line-height: 1.5; }
+.admin-root .admin-range-form input[type="date"] { min-width: 0; min-height: 42px; width: 142px; padding: 7px 9px; border: 1px solid var(--admin-border-strong); border-radius: 12px; color: var(--admin-ink); background: var(--admin-surface); font: inherit; font-size: .78rem; }
+@media (max-width: 760px) {
+  .admin-root .admin-gbp-columns { grid-template-columns: minmax(0, 1fr); }
+  .admin-root .admin-gbp-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-root .admin-range-form { flex-wrap: wrap; width: 100%; }
+  .admin-root .admin-range-form select { flex: 1 1 100%; width: 100%; }
+  .admin-root .admin-range-form input[type="date"] { flex: 1 1 40%; width: 0; }
+  .admin-root .admin-analytics-actions { align-items: stretch; flex-direction: column; width: 100%; }
+}
+@media (max-width: 360px) {
+  .admin-root .admin-gbp-metrics { gap: 7px; }
+  .admin-root .admin-gbp-metrics article { padding: 11px; }
+  .admin-root .admin-gbp-metrics article strong { font-size: 1.25rem; }
+  .admin-root .admin-gbp-subpanel { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-root .admin-gbp-spin { animation: none; }
+}
