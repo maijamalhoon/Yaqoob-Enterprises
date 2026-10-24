@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
+import { AdminWorldMap } from "@/components/admin-world-map";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
@@ -73,11 +74,19 @@ function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMe
   );
 }
 
-export default async function AdminAnalyticsPage() {
+export default async function AdminAnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const requestedRange = Array.isArray(params.range) ? params.range[0] : params.range;
+  const rangeDays = requestedRange === "7d" ? 7 : requestedRange === "90d" ? 90 : 30;
+  const rangeKey = rangeDays === 7 ? "7d" : rangeDays === 90 ? "90d" : "30d";
   const { supabase } = await requireAdmin();
   // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
   // eslint-disable-next-line react-hooks/purity
-  const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const start = new Date(Date.now() - (rangeDays - 1) * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: events }, { data: settings }, { data: categories }] = await Promise.all([
     supabase
       .from("analytics_events")
@@ -96,8 +105,8 @@ export default async function AdminAnalyticsPage() {
   });
   const pageViewRows = rows.filter((event) => event.event_name === "page_view");
   const [year, month, day] = analyticsDayKey(new Date()).split("-").map(Number);
-  const dailyPageViews = Array.from({ length: 31 }, (_, index) => {
-    const date = new Date(Date.UTC(year, month - 1, day + index - 30));
+  const dailyPageViews = Array.from({ length: rangeDays }, (_, index) => {
+    const date = new Date(Date.UTC(year, month - 1, day + index - (rangeDays - 1)));
     const key = date.toISOString().slice(0, 10);
     return { key, label: analyticsTickFormatter.format(date), count: 0 };
   });
@@ -146,6 +155,21 @@ export default async function AdminAnalyticsPage() {
     return acc;
   }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
+  const countryViews = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
+    const code = event.country_code?.trim().toUpperCase();
+    if (!code || !/^[A-Z]{2}$/.test(code) || code === "ZZ") return acc;
+    acc[code] = (acc[code] || 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]);
+  const countryViewsTotal = countryViews.reduce((total, [, count]) => total + count, 0);
+  const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
+  const countries = countryViews.slice(0, 10).map(([code, views]) => ({
+    code,
+    name: countryNames.of(code) || code,
+    views,
+    share: countryViewsTotal > 0 ? Math.round((views / countryViewsTotal) * 100) : 0,
+  }));
+
   const pages = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
     const path = String(event.page_path || "/");
     acc[path] = (acc[path] || 0) + 1;
@@ -176,15 +200,26 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity from the last 30 days.</p></div>
-        <AnalyticsRefreshButton />
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity · last {rangeDays} days.</p></div>
+        <div className="admin-analytics-actions">
+          <form className="admin-range-form" action="/admin/analytics" method="get">
+            <label className="admin-visually-hidden" htmlFor="admin-analytics-range">Analytics date range</label>
+            <select id="admin-analytics-range" name="range" defaultValue={rangeKey}>
+              <option value="7d">Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+            </select>
+            <button type="submit">Apply</button>
+          </form>
+          <AnalyticsRefreshButton />
+        </div>
       </div>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
 
       <section className="admin-panel admin-panel--control admin-traffic-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the last 30 days, grouped by Pakistan time.</p></div>
+          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the the selected period, grouped by Pakistan time.</p></div>
           <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
         </div>
         <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views over the last 30 days. ${dailyViewsTotal.toLocaleString("en-PK")} total; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
@@ -196,6 +231,14 @@ export default async function AdminAnalyticsPage() {
         </div>
         <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[30].label}</span></div>
         {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
+      </section>
+
+      <section className="admin-panel admin-panel--control admin-global-panel" aria-labelledby="admin-global-title">
+        <div className="admin-panel__heading">
+          <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Visitor geography</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
+          <span className="admin-traffic-total"><strong>{countryViewsTotal.toLocaleString("en-PK")}</strong><small>located views</small></span>
+        </div>
+        <AdminWorldMap countries={countries} />
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
