@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Search, Users } from "lucide-react";
+import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MousePointerClick, Search, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminWorldMap } from "@/components/admin-world-map";
 import { AdminTrafficChart } from "@/components/admin-traffic-chart";
@@ -97,19 +97,20 @@ function DonutBreakdown({ title, description, rows, emptyMessage }: {
   const otherTotal = allRows.slice(4).reduce((sum, [, count]) => sum + count, 0);
   const chartRows: [string, number][] = otherTotal > 0 ? [...topRows, ["Other", otherTotal] as [string, number]] : topRows;
   const circumference = 2 * Math.PI * 41;
-  let cursor = 0;
   const segments = chartRows.map(([label, count], index) => {
     const length = total > 0 ? (count / total) * circumference : 0;
-    const segment = {
+    const offset = chartRows.slice(0, index).reduce(
+      (sum, [, previousCount]) => sum + (total > 0 ? (previousCount / total) * circumference : 0),
+      0,
+    );
+    return {
       label,
       count,
       color: donutColors[index % donutColors.length],
-      offset: cursor,
+      offset,
       length,
       share: total > 0 ? Math.round((count / total) * 100) : 0,
     };
-    cursor += length;
-    return segment;
   });
 
   return (
