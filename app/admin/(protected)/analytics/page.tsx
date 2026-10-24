@@ -87,7 +87,7 @@ export default async function AdminAnalyticsPage({
   const requestedFrom = first(params.from);
   const requestedTo = first(params.to);
   const isDateOnly = (value: string | undefined): value is string =>
-    Boolean(value && /^\\d{4}-\\d{2}-\\d{2}$/.test(value)
+    Boolean(value && /^\d{4}-\d{2}-\d{2}$/.test(value)
       && !Number.isNaN(Date.parse(value))
       && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value);
   const validCustomRange = isDateOnly(requestedFrom) && isDateOnly(requestedTo)
@@ -164,8 +164,8 @@ export default async function AdminAnalyticsPage({
     .filter((event) => event.event_name === "service_view" && String(event.page_path || "").startsWith("/__analytics/search?"))
     .reduce<Record<string, number>>((acc, event) => {
       const queryString = String(event.page_path || "").split("?")[1] || "";
-      const query = new URLSearchParams(queryString).get("q")?.trim().replace(/\\s+/g, " ").slice(0, 80);
-      if (!query || /@/.test(query) || /\\d{7,}/.test(query)) return acc;
+      const query = new URLSearchParams(queryString).get("q")?.trim().replace(/\s+/g, " ").slice(0, 80);
+      if (!query || /@/.test(query) || /\d{7,}/.test(query)) return acc;
       acc[query] = (acc[query] || 0) + 1;
       return acc;
     }, {}))
