@@ -78,21 +78,40 @@ function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMe
 export default async function AdminAnalyticsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ range?: string | string[] }>;
+  searchParams: Promise<{ range?: string | string[]; from?: string | string[]; to?: string | string[] }>;
 }) {
   const params = await searchParams;
-  const requestedRange = Array.isArray(params.range) ? params.range[0] : params.range;
-  const rangeDays = requestedRange === "7d" ? 7 : requestedRange === "90d" ? 90 : 30;
-  const rangeKey = rangeDays === 7 ? "7d" : rangeDays === 90 ? "90d" : "30d";
+  const first = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
+  const requestedRange = first(params.range);
+  const requestedFrom = first(params.from);
+  const requestedTo = first(params.to);
+  const isDateOnly = (value: string | undefined): value is string =>
+    Boolean(value && /^\\d{4}-\\d{2}-\\d{2}$/.test(value)
+      && !Number.isNaN(Date.parse(value))
+      && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value);
+  const validCustomRange = isDateOnly(requestedFrom) && isDateOnly(requestedTo)
+    && requestedTo >= requestedFrom
+    && (Date.parse(requestedTo) - Date.parse(requestedFrom)) / 86_400_000 <= 364;
+  const [todayYear, todayMonth, todayDay] = analyticsDayKey(new Date()).split("-").map(Number);
+  const todayKey = `${todayYear}-${String(todayMonth).padStart(2, "0")}-${String(todayDay).padStart(2, "0")}`;
+  const rangeDays = validCustomRange
+    ? Math.round((Date.parse(requestedTo) - Date.parse(requestedFrom)) / 86_400_000) + 1
+    : requestedRange === "today" ? 1 : requestedRange === "7d" ? 7 : requestedRange === "90d" ? 90 : 30;
+  const rangeKey = validCustomRange ? "custom" : rangeDays === 1 ? "today" : rangeDays === 7 ? "7d" : rangeDays === 90 ? "90d" : "30d";
+  const fromKey = validCustomRange
+    ? requestedFrom
+    : new Date(Date.UTC(todayYear, todayMonth - 1, todayDay - (rangeDays - 1))).toISOString().slice(0, 10);
+  const toKey = validCustomRange ? requestedTo : todayKey;
+  const exclusiveEndKey = new Date(Date.parse(`${toKey}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10);
+  const start = new Date(`${fromKey}T00:00:00+05:00`).toISOString();
+  const end = new Date(`${exclusiveEndKey}T00:00:00+05:00`).toISOString();
   const { supabase } = await requireAdmin();
-  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
-  // eslint-disable-next-line react-hooks/purity
-  const start = new Date(Date.now() - (rangeDays - 1) * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: events }, { data: settings }, { data: categories }] = await Promise.all([
     supabase
       .from("analytics_events")
       .select("event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at")
       .gte("created_at", start)
+      .lt("created_at", end)
       .order("created_at", { ascending: false })
       .limit(5000),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
@@ -105,9 +124,9 @@ export default async function AdminAnalyticsPage({
     return path !== "/admin" && !path.startsWith("/admin/");
   });
   const pageViewRows = rows.filter((event) => event.event_name === "page_view");
-  const [year, month, day] = analyticsDayKey(new Date()).split("-").map(Number);
+  const [year, month, day] = fromKey.split("-").map(Number);
   const dailyPageViews = Array.from({ length: rangeDays }, (_, index) => {
-    const date = new Date(Date.UTC(year, month - 1, day + index - (rangeDays - 1)));
+    const date = new Date(Date.UTC(year, month - 1, day + index));
     const key = date.toISOString().slice(0, 10);
     return { key, label: analyticsTickFormatter.format(date), count: 0 };
   });
@@ -139,6 +158,18 @@ export default async function AdminAnalyticsPage({
     acc[label] = (acc[label] || 0) + 1;
     return acc;
   }, {})).sort((a, b) => b[1] - a[1]);
+
+  const searchQueries = Object.entries(rows
+    .filter((event) => event.event_name === "service_view" && String(event.page_path || "").startsWith("/__analytics/search?"))
+    .reduce<Record<string, number>>((acc, event) => {
+      const queryString = String(event.page_path || "").split("?")[1] || "";
+      const query = new URLSearchParams(queryString).get("q")?.trim().replace(/\\s+/g, " ").slice(0, 80);
+      if (!query || /@/.test(query) || /\\d{7,}/.test(query)) return acc;
+      acc[query] = (acc[query] || 0) + 1;
+      return acc;
+    }, {}))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
 
   const serviceInterest = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
     const path = String(event.page_path || "");
@@ -200,15 +231,21 @@ export default async function AdminAnalyticsPage({
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity · last {rangeDays} days.</p></div>
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity · {fromKey} to {toKey}.</p></div>
         <div className="admin-analytics-actions">
           <form className="admin-range-form" action="/admin/analytics" method="get">
             <label className="admin-visually-hidden" htmlFor="admin-analytics-range">Analytics date range</label>
             <select id="admin-analytics-range" name="range" defaultValue={rangeKey}>
+              <option value="today">Today</option>
               <option value="7d">Last 7 days</option>
               <option value="30d">Last 30 days</option>
               <option value="90d">Last 90 days</option>
+              <option value="custom">Custom range</option>
             </select>
+            <label className="admin-visually-hidden" htmlFor="admin-analytics-from">Start date</label>
+            <input id="admin-analytics-from" name="from" type="date" defaultValue={fromKey} />
+            <label className="admin-visually-hidden" htmlFor="admin-analytics-to">End date</label>
+            <input id="admin-analytics-to" name="to" type="date" defaultValue={toKey} />
             <button type="submit">Apply</button>
           </form>
           <AnalyticsRefreshButton />
@@ -254,6 +291,7 @@ export default async function AdminAnalyticsPage({
       </section>
 
       <div className="admin-two-column admin-insights-grid">
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Search size={15} /> Search</span><h2>Top service searches</h2></div></div><InsightBars rows={searchQueries} emptyMessage="No tracked service searches yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><InsightBars rows={contactActions} emptyMessage="No contact actions yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><InsightBars rows={serviceInterest} emptyMessage="No service-page views yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><InsightBars rows={sources} emptyMessage="No source data yet." /></section>
