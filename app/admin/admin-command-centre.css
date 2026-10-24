@@ -731,3 +731,41 @@
   .admin-root .admin-loading__line,
   .admin-root .admin-loading__card { animation: none; }
 }
+
+
+.admin-root .admin-analytics-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.admin-root .admin-country-empty {
+  align-self: center;
+  margin: 0;
+  padding: 14px;
+  border: 1px dashed var(--admin-border-strong);
+  border-radius: 12px;
+  color: var(--admin-muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+.admin-root .admin-global-panel { overflow: hidden; }
+.admin-root .admin-world-map-card { min-width: 0; }
+.admin-root .admin-range-form button {
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+}
+.admin-root .admin-range-form button:focus-visible {
+  outline: 3px solid var(--admin-focus);
+  outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  .admin-root .admin-analytics-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 560px) {
+  .admin-root .admin-analytics-actions { gap: 8px; }
+  .admin-root .admin-range-form button { padding-inline: 11px; }
+}
