@@ -12,7 +12,7 @@ interface StitchHeroProps {
 
 export function StitchHero({ settings, statusText, locationLabel, gallery }: StitchHeroProps) {
   const phone = settings.phone_e164 || "+923492568864";
-  const hasGallery = gallery.some((image) => image.is_active);
+  const hasGallery = gallery.some((image) => image.is_active && image.media_kind === "real");
   const callUrl = `tel:${phone}`;
   const whatsappLink = `https://wa.me/${phone.replace(/\+/g, "")}?text=${encodeURIComponent(
     `Hello ${settings.business_name}, I want to send a document or inquire about a service. My requirement is: `

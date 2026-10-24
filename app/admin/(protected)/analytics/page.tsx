@@ -1,6 +1,10 @@
 import type { CSSProperties } from "react";
-import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
+import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MousePointerClick, Search, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
+import { AdminWorldMap } from "@/components/admin-world-map";
+import { AdminTrafficChart } from "@/components/admin-traffic-chart";
+import { AdminGoogleBusinessInsights } from "@/components/admin-google-business-insights";
+import { AdminSearchConsoleInsights } from "@/components/admin-search-console-insights";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
@@ -73,16 +77,132 @@ function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMe
   );
 }
 
-export default async function AdminAnalyticsPage() {
+const donutColors = [
+  "var(--admin-accent)",
+  "var(--admin-indigo)",
+  "var(--admin-amber)",
+  "var(--admin-success)",
+  "var(--admin-navy)",
+];
+
+function DonutBreakdown({ title, description, rows, emptyMessage }: {
+  title: string;
+  description: string;
+  rows: [string, number][];
+  emptyMessage: string;
+}) {
+  const allRows = rows.filter(([, count]) => count > 0);
+  const total = allRows.reduce((sum, [, count]) => sum + count, 0);
+  const topRows = allRows.slice(0, 4);
+  const otherTotal = allRows.slice(4).reduce((sum, [, count]) => sum + count, 0);
+  const chartRows: [string, number][] = otherTotal > 0 ? [...topRows, ["Other", otherTotal] as [string, number]] : topRows;
+  const circumference = 2 * Math.PI * 41;
+  const segments = chartRows.map(([label, count], index) => {
+    const length = total > 0 ? (count / total) * circumference : 0;
+    const offset = chartRows.slice(0, index).reduce(
+      (sum, [, previousCount]) => sum + (total > 0 ? (previousCount / total) * circumference : 0),
+      0,
+    );
+    return {
+      label,
+      count,
+      color: donutColors[index % donutColors.length],
+      offset,
+      length,
+      share: total > 0 ? Math.round((count / total) * 100) : 0,
+    };
+  });
+
+  return (
+    <section className="admin-panel admin-panel--control admin-donut-panel">
+      <div className="admin-panel__heading">
+        <div>
+          <span className="admin-panel-kicker"><BarChart3 size={15} /> Audience breakdown</span>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+        {total > 0 && <span className="admin-traffic-total"><strong>{total.toLocaleString("en-PK")}</strong><small>tracked views</small></span>}
+      </div>
+      {total === 0 ? (
+        <p className="admin-chart-empty">{emptyMessage}</p>
+      ) : (
+        <div className="admin-donut-layout">
+          <div className="admin-donut-graphic">
+            <svg viewBox="0 0 120 120" role="img" aria-label={`${title}: ${total.toLocaleString("en-PK")} tracked views`}>
+              <circle cx="60" cy="60" r="41" fill="none" stroke="var(--admin-border)" strokeWidth="13" />
+              <g transform="rotate(-90 60 60)">
+                {segments.map((segment) => (
+                  <circle
+                    key={segment.label}
+                    cx="60"
+                    cy="60"
+                    r="41"
+                    fill="none"
+                    stroke={segment.color}
+                    strokeWidth="13"
+                    strokeLinecap="butt"
+                    strokeDasharray={`${segment.length} ${circumference - segment.length}`}
+                    strokeDashoffset={-segment.offset}
+                  />
+                ))}
+              </g>
+              <text className="admin-donut-total" x="60" y="57" textAnchor="middle">{total.toLocaleString("en-PK")}</text>
+              <text className="admin-donut-caption" x="60" y="72" textAnchor="middle">total views</text>
+            </svg>
+          </div>
+          <ul className="admin-donut-legend">
+            {segments.map((segment) => (
+              <li key={segment.label}>
+                <span className="admin-donut-swatch" style={{ "--donut-color": segment.color } as CSSProperties} aria-hidden="true" />
+                <span className="admin-donut-label" title={segment.label}>{segment.label}</span>
+                <strong>{segment.count.toLocaleString("en-PK")}</strong>
+                <small>{segment.share}%</small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export default async function AdminAnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string | string[]; from?: string | string[]; to?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const first = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] : value;
+  const requestedRange = first(params.range);
+  const requestedFrom = first(params.from);
+  const requestedTo = first(params.to);
+  const isDateOnly = (value: string | undefined): value is string =>
+    Boolean(value && /^\d{4}-\d{2}-\d{2}$/.test(value)
+      && !Number.isNaN(Date.parse(value))
+      && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value);
+  const validCustomRange = isDateOnly(requestedFrom) && isDateOnly(requestedTo)
+    && requestedTo >= requestedFrom
+    && (Date.parse(requestedTo) - Date.parse(requestedFrom)) / 86_400_000 <= 364;
+  const [todayYear, todayMonth, todayDay] = analyticsDayKey(new Date()).split("-").map(Number);
+  const todayKey = `${todayYear}-${String(todayMonth).padStart(2, "0")}-${String(todayDay).padStart(2, "0")}`;
+  const rangeDays = validCustomRange
+    ? Math.round((Date.parse(requestedTo) - Date.parse(requestedFrom)) / 86_400_000) + 1
+    : requestedRange === "today" ? 1 : requestedRange === "7d" ? 7 : requestedRange === "90d" ? 90 : 30;
+  const rangeKey = validCustomRange ? "custom" : rangeDays === 1 ? "today" : rangeDays === 7 ? "7d" : rangeDays === 90 ? "90d" : "30d";
+  const fromKey = validCustomRange
+    ? requestedFrom
+    : new Date(Date.UTC(todayYear, todayMonth - 1, todayDay - (rangeDays - 1))).toISOString().slice(0, 10);
+  const toKey = validCustomRange ? requestedTo : todayKey;
+  const exclusiveEndKey = new Date(Date.parse(`${toKey}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10);
+  const start = new Date(`${fromKey}T00:00:00+05:00`).toISOString();
+  const end = new Date(`${exclusiveEndKey}T00:00:00+05:00`).toISOString();
   const { supabase } = await requireAdmin();
-  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
-  // eslint-disable-next-line react-hooks/purity
-  const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: events }, { data: settings }, { data: categories }] = await Promise.all([
     supabase
       .from("analytics_events")
       .select("event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at")
       .gte("created_at", start)
+      .lt("created_at", end)
       .order("created_at", { ascending: false })
       .limit(5000),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
@@ -95,9 +215,9 @@ export default async function AdminAnalyticsPage() {
     return path !== "/admin" && !path.startsWith("/admin/");
   });
   const pageViewRows = rows.filter((event) => event.event_name === "page_view");
-  const [year, month, day] = analyticsDayKey(new Date()).split("-").map(Number);
-  const dailyPageViews = Array.from({ length: 31 }, (_, index) => {
-    const date = new Date(Date.UTC(year, month - 1, day + index - 30));
+  const [year, month, day] = fromKey.split("-").map(Number);
+  const dailyPageViews = Array.from({ length: rangeDays }, (_, index) => {
+    const date = new Date(Date.UTC(year, month - 1, day + index));
     const key = date.toISOString().slice(0, 10);
     return { key, label: analyticsTickFormatter.format(date), count: 0 };
   });
@@ -107,7 +227,6 @@ export default async function AdminAnalyticsPage() {
     if (entry) entry.count += 1;
   }
   const dailyViewsTotal = dailyPageViews.reduce((total, entry) => total + entry.count, 0);
-  const busiestDay = dailyPageViews.reduce((busiest, entry) => entry.count > busiest.count ? entry : busiest);
   const dailyViewsMax = Math.max(1, ...dailyPageViews.map((entry) => entry.count));
   const contactRows = rows.filter((event) => contactEvents.has(event.event_name));
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
@@ -131,6 +250,18 @@ export default async function AdminAnalyticsPage() {
     return acc;
   }, {})).sort((a, b) => b[1] - a[1]);
 
+  const searchQueries = Object.entries(rows
+    .filter((event) => event.event_name === "service_view" && String(event.page_path || "").startsWith("/__analytics/search?"))
+    .reduce<Record<string, number>>((acc, event) => {
+      const queryString = String(event.page_path || "").split("?")[1] || "";
+      const query = new URLSearchParams(queryString).get("q")?.trim().replace(/\s+/g, " ").slice(0, 80);
+      if (!query || /@/.test(query) || /\d{7,}/.test(query)) return acc;
+      acc[query] = (acc[query] || 0) + 1;
+      return acc;
+    }, {}))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+
   const serviceInterest = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
     const path = String(event.page_path || "");
     if (!path.startsWith("/services/")) return acc;
@@ -145,6 +276,21 @@ export default async function AdminAnalyticsPage() {
     acc[city] = (acc[city] || 0) + 1;
     return acc;
   }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+  const countryViews = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
+    const code = event.country_code?.trim().toUpperCase();
+    if (!code || !/^[A-Z]{2}$/.test(code) || code === "ZZ") return acc;
+    acc[code] = (acc[code] || 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b[1] - a[1]);
+  const countryViewsTotal = countryViews.reduce((total, [, count]) => total + count, 0);
+  const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
+  const countries = countryViews.slice(0, 10).map(([code, views]) => ({
+    code,
+    name: countryNames.of(code) || code,
+    views,
+    share: countryViewsTotal > 0 ? Math.round((views / countryViewsTotal) * 100) : 0,
+  }));
 
   const pages = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
     const path = String(event.page_path || "/");
@@ -162,7 +308,7 @@ export default async function AdminAnalyticsPage() {
     const source = sourceLabel(event);
     acc[source] = (acc[source] || 0) + 1;
     return acc;
-  }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  }, {})).sort((a, b) => b[1] - a[1]);
 
   const cards = [
     ["Visitors", visitors, Users],
@@ -176,31 +322,68 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity from the last 30 days.</p></div>
-        <AnalyticsRefreshButton />
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Traffic, discovery and contact performance · {fromKey} to {toKey}.</p></div>
+        <div className="admin-analytics-actions">
+          <form className="admin-range-form" action="/admin/analytics" method="get">
+            <label className="admin-visually-hidden" htmlFor="admin-analytics-range">Analytics date range</label>
+            <select id="admin-analytics-range" name="range" defaultValue={rangeKey}>
+              <option value="today">Today</option>
+              <option value="7d">Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+              <option value="custom">Custom range</option>
+            </select>
+            <label className="admin-visually-hidden" htmlFor="admin-analytics-from">Start date</label>
+            <input id="admin-analytics-from" name="from" type="date" defaultValue={fromKey} />
+            <label className="admin-visually-hidden" htmlFor="admin-analytics-to">End date</label>
+            <input id="admin-analytics-to" name="to" type="date" defaultValue={toKey} />
+            <button type="submit">Apply</button>
+          </form>
+          <AnalyticsRefreshButton />
+        </div>
       </div>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
 
       <section className="admin-panel admin-panel--control admin-traffic-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the last 30 days, grouped by Pakistan time.</p></div>
+          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the selected period, grouped by Pakistan time.</p></div>
           <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
         </div>
-        <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views over the last 30 days. ${dailyViewsTotal.toLocaleString("en-PK")} total; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
-          <div className="admin-traffic-chart__scale" aria-hidden="true"><span>{dailyViewsMax.toLocaleString("en-PK")}</span><span>{(dailyViewsMax / 2).toLocaleString("en-PK", { maximumFractionDigits: 1 })}</span><span>0</span></div>
-          <div className="admin-traffic-chart__plot">
-            {dailyPageViews.map((entry) => <span key={entry.key} title={`${entry.label}: ${entry.count.toLocaleString("en-PK")} page views`} style={{ height: `${entry.count ? Math.max(4, (entry.count / dailyViewsMax) * 100) : 0}%` }} />)}
-            {dailyViewsTotal === 0 && <p>No page views recorded during this period.</p>}
-          </div>
-        </div>
-        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[30].label}</span></div>
+        <AdminTrafficChart data={dailyPageViews} maximum={dailyViewsMax} rangeDays={rangeDays} />
         {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
+      </section>
+
+      <div className="admin-insights-visual-grid">
+        <DonutBreakdown
+          title="Traffic sources"
+          description="Where visitors came from, based on tracked landing-page events."
+          rows={sources}
+          emptyMessage="Traffic source breakdown will appear after public visits are recorded."
+        />
+        <DonutBreakdown
+          title="Device mix"
+          description="The device categories used by visitors during this period."
+          rows={devices}
+          emptyMessage="Device breakdown will appear after public page views are recorded."
+        />
+      </div>
+
+      <AdminSearchConsoleInsights />
+      <AdminGoogleBusinessInsights profileUrl={settings?.google_business_profile_url} />
+
+      <section className="admin-panel admin-panel--control admin-global-panel" aria-labelledby="admin-global-title">
+        <div className="admin-panel__heading">
+          <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Traffic by country</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
+          <span className="admin-traffic-total"><strong>{countryViewsTotal.toLocaleString("en-PK")}</strong><small>views with country data</small></span>
+        </div>
+        <AdminWorldMap countries={countries} />
+        <p className="admin-map-attribution">Map artwork by Al MacDonald and Fritz Lekschas · <a href="https://github.com/flekschas/simple-world-map" target="_blank" rel="noopener noreferrer">Simple World Map</a> · CC BY-SA 3.0.</p>
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><Building2 size={15} /> Google Business</span><h2>{settings?.business_name || "Business profile"}</h2><p>Website traffic attributed to your Google Business Profile.</p></div>
+          <div><span className="admin-panel-kicker"><Building2 size={15} /> Website attribution</span><h2>{settings?.business_name || "Business profile"}</h2><p>Website visits attributed to the tracked Google Business Profile link. These are not Google Search or Maps impression counts.</p></div>
           {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Open profile <ExternalLink size={13} /></a>}
         </div>
         <div className="admin-google-metrics">
@@ -217,12 +400,11 @@ export default async function AdminAnalyticsPage() {
       </section>
 
       <div className="admin-two-column admin-insights-grid">
+        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Search size={15} /> Search</span><h2>Top service searches</h2></div></div><InsightBars rows={searchQueries} emptyMessage="No tracked service searches yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><InsightBars rows={contactActions} emptyMessage="No contact actions yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><InsightBars rows={serviceInterest} emptyMessage="No service-page views yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><InsightBars rows={sources} emptyMessage="No source data yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><InsightBars rows={pages} emptyMessage="No public data yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><InsightBars rows={cities} emptyMessage="No location data yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MonitorSmartphone size={15} /> Devices</span><h2>Device mix</h2></div></div><InsightBars rows={devices} emptyMessage="No device data yet." /></section>
       </div>
     </div>
   );

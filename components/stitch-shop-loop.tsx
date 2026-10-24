@@ -12,7 +12,9 @@ interface StitchShopLoopProps {
 }
 
 export function StitchShopLoop({ galleryImages, locationLabel }: StitchShopLoopProps) {
-  const slides = galleryImages.filter((image) => image.is_active);
+  const slides = galleryImages
+    .filter((image) => image.is_active && image.media_kind === "real")
+    .sort((a, b) => Number(b.is_featured) - Number(a.is_featured) || a.display_order - b.display_order);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (slides.length === 0) return null;

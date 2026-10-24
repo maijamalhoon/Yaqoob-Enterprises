@@ -18,8 +18,8 @@ export default async function AdminGalleryPage() {
       <div className="admin-page-heading admin-page-heading--control">
         <div>
           <span className="eyebrow">Website media</span>
-          <h1>Homepage image</h1>
-          <p>Upload shop photos and choose exactly which image appears in the homepage hero.</p>
+          <h1>Hero images</h1>
+          <p>Upload multiple shop photos, set the cover image, reorder slides, and control the crop on mobile and desktop.</p>
         </div>
         <div className="admin-heading-metrics">
           <span><strong>{activeImages.length}</strong> active</span>
@@ -36,7 +36,7 @@ export default async function AdminGalleryPage() {
           <label className="admin-span-2">Alt text<input name="alt_text" required placeholder="Short description of the photo" /></label>
           <label>Horizontal focus<input type="number" min="0" max="100" name="focal_x" defaultValue="50" /></label>
           <label>Vertical focus<input type="number" min="0" max="100" name="focal_y" defaultValue="50" /></label>
-          <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={!featuredImage} /> Use as homepage hero image</label>
+          <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_featured" defaultChecked={!featuredImage} /> Set as hero cover image</label>
           <div className="admin-form-actions admin-span-2"><AdminSubmitButton pendingLabel="Uploading image…">Upload image</AdminSubmitButton><AdminCancelButton /></div>
         </form>
       </details>
@@ -87,7 +87,7 @@ export default async function AdminGalleryPage() {
             </article>
           );
         })}
-        {imageList.length === 0 && <div className="admin-empty-state"><ImagePlus size={28} /><h2>No shop images yet</h2><p>Upload one image and mark it as the homepage image.</p></div>}
+        {imageList.length === 0 && <div className="admin-empty-state"><ImagePlus size={28} /><h2>No hero images yet</h2><p>Upload one or more real shop photos. Active photos appear in the homepage carousel.</p></div>}
       </section>
     </div>
   );

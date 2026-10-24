@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { AdminThemeToggle } from "@/components/admin-theme-toggle";
 
 const navigationGroups = [
   {
@@ -141,6 +142,7 @@ export function AdminNav({
           <p>{currentTitle}</p>
         </div>
         <div className="admin-topbar__actions">
+          <AdminThemeToggle />
           <span className="admin-account-name">{displayName}</span>
           <Link href="/" target="_blank" rel="noopener noreferrer" aria-label="View website in a new tab">
             <ExternalLink size={17} strokeWidth={1.9} aria-hidden="true" />
