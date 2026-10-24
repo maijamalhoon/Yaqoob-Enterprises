@@ -4,6 +4,7 @@ import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminWorldMap } from "@/components/admin-world-map";
 import { AdminTrafficChart } from "@/components/admin-traffic-chart";
 import { AdminGoogleBusinessInsights } from "@/components/admin-google-business-insights";
+import { AdminSearchConsoleInsights } from "@/components/admin-search-console-insights";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
@@ -274,6 +275,7 @@ export default async function AdminAnalyticsPage({
       </section>
 
       <AdminGoogleBusinessInsights profileUrl={settings?.google_business_profile_url} />
+      <AdminSearchConsoleInsights />
 
       <section className="admin-panel admin-panel--control admin-google-panel">
         <div className="admin-panel__heading">
