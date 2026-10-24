@@ -229,7 +229,7 @@ export default async function AdminAnalyticsPage({
       <section className="admin-panel admin-panel--control admin-global-panel" aria-labelledby="admin-global-title">
         <div className="admin-panel__heading">
           <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Traffic by country</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
-          <span className="admin-traffic-total"><strong>{countryViewsTotal.toLocaleString("en-PK")}</strong><small>located views</small></span>
+          <span className="admin-traffic-total"><strong>{countryViewsTotal.toLocaleString("en-PK")}</strong><small>views with country data</small></span>
         </div>
         <AdminWorldMap countries={countries} />
         <p className="admin-map-attribution">Map artwork by Al MacDonald and Fritz Lekschas · <a href="https://github.com/flekschas/simple-world-map" target="_blank" rel="noopener noreferrer">Simple World Map</a> · CC BY-SA 3.0.</p>
