@@ -77,6 +77,94 @@ function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMe
   );
 }
 
+const donutColors = [
+  "var(--admin-accent)",
+  "var(--admin-indigo)",
+  "var(--admin-amber)",
+  "var(--admin-success)",
+  "var(--admin-navy)",
+];
+
+function DonutBreakdown({ title, description, rows, emptyMessage }: {
+  title: string;
+  description: string;
+  rows: [string, number][];
+  emptyMessage: string;
+}) {
+  const allRows = rows.filter(([, count]) => count > 0);
+  const total = allRows.reduce((sum, [, count]) => sum + count, 0);
+  const topRows = allRows.slice(0, 4);
+  const otherTotal = allRows.slice(4).reduce((sum, [, count]) => sum + count, 0);
+  const chartRows: [string, number][] = otherTotal > 0 ? [...topRows, ["Other", otherTotal]] : topRows;
+  const circumference = 2 * Math.PI * 41;
+  let cursor = 0;
+  const segments = chartRows.map(([label, count], index) => {
+    const length = total > 0 ? (count / total) * circumference : 0;
+    const segment = {
+      label,
+      count,
+      color: donutColors[index % donutColors.length],
+      offset: cursor,
+      length,
+      share: total > 0 ? Math.round((count / total) * 100) : 0,
+    };
+    cursor += length;
+    return segment;
+  });
+
+  return (
+    <section className="admin-panel admin-panel--control admin-donut-panel">
+      <div className="admin-panel__heading">
+        <div>
+          <span className="admin-panel-kicker"><BarChart3 size={15} /> Audience breakdown</span>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+        {total > 0 && <span className="admin-traffic-total"><strong>{total.toLocaleString("en-PK")}</strong><small>tracked views</small></span>}
+      </div>
+      {total === 0 ? (
+        <p className="admin-chart-empty">{emptyMessage}</p>
+      ) : (
+        <div className="admin-donut-layout">
+          <div className="admin-donut-graphic">
+            <svg viewBox="0 0 120 120" role="img" aria-label={`${title}: ${total.toLocaleString("en-PK")} tracked views`}>
+              <circle cx="60" cy="60" r="41" fill="none" stroke="var(--admin-border)" strokeWidth="13" />
+              <g transform="rotate(-90 60 60)">
+                {segments.map((segment) => (
+                  <circle
+                    key={segment.label}
+                    cx="60"
+                    cy="60"
+                    r="41"
+                    fill="none"
+                    stroke={segment.color}
+                    strokeWidth="13"
+                    strokeLinecap="butt"
+                    strokeDasharray={`${segment.length} ${circumference - segment.length}`}
+                    strokeDashoffset={-segment.offset}
+                  />
+                ))}
+              </g>
+              <text className="admin-donut-total" x="60" y="57" textAnchor="middle">{total.toLocaleString("en-PK")}</text>
+              <text className="admin-donut-caption" x="60" y="72" textAnchor="middle">total views</text>
+            </svg>
+          </div>
+          <ul className="admin-donut-legend">
+            {segments.map((segment) => (
+              <li key={segment.label}>
+                <span className="admin-donut-swatch" style={{ "--donut-color": segment.color } as CSSProperties} aria-hidden="true" />
+                <span className="admin-donut-label" title={segment.label}>{segment.label}</span>
+                <strong>{segment.count.toLocaleString("en-PK")}</strong>
+                <small>{segment.share}%</small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default async function AdminAnalyticsPage({
   searchParams,
 }: {
@@ -219,7 +307,7 @@ export default async function AdminAnalyticsPage({
     const source = sourceLabel(event);
     acc[source] = (acc[source] || 0) + 1;
     return acc;
-  }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  }, {})).sort((a, b) => b[1] - a[1]);
 
   const cards = [
     ["Visitors", visitors, Users],
@@ -265,6 +353,21 @@ export default async function AdminAnalyticsPage({
         {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
       </section>
 
+      <div className="admin-insights-visual-grid">
+        <DonutBreakdown
+          title="Traffic sources"
+          description="Where visitors came from, based on tracked landing-page events."
+          rows={sources}
+          emptyMessage="Traffic source breakdown will appear after public visits are recorded."
+        />
+        <DonutBreakdown
+          title="Device mix"
+          description="The device categories used by visitors during this period."
+          rows={devices}
+          emptyMessage="Device breakdown will appear after public page views are recorded."
+        />
+      </div>
+
       <section className="admin-panel admin-panel--control admin-global-panel" aria-labelledby="admin-global-title">
         <div className="admin-panel__heading">
           <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Traffic by country</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
@@ -299,10 +402,8 @@ export default async function AdminAnalyticsPage({
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Search size={15} /> Search</span><h2>Top service searches</h2></div></div><InsightBars rows={searchQueries} emptyMessage="No tracked service searches yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><InsightBars rows={contactActions} emptyMessage="No contact actions yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><InsightBars rows={serviceInterest} emptyMessage="No service-page views yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><InsightBars rows={sources} emptyMessage="No source data yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><InsightBars rows={pages} emptyMessage="No public data yet." /></section>
         <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><InsightBars rows={cities} emptyMessage="No location data yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MonitorSmartphone size={15} /> Devices</span><h2>Device mix</h2></div></div><InsightBars rows={devices} emptyMessage="No device data yet." /></section>
       </div>
     </div>
   );
