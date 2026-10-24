@@ -7,6 +7,10 @@ type AdminTheme = "light" | "dark";
 const THEME_KEY = "yaqoob-admin-theme-v2";
 const THEME_EVENT = "yaqoob-admin-theme-change";
 
+function getServerTheme(): AdminTheme {
+  return "light";
+}
+
 function readTheme(): AdminTheme {
   if (typeof window === "undefined") return "light";
   try {
@@ -30,7 +34,7 @@ function applyTheme(theme: AdminTheme) {
 }
 
 export function AdminThemeToggle() {
-  const theme = useSyncExternalStore(subscribeToTheme, readTheme, () => "light");
+  const theme = useSyncExternalStore(subscribeToTheme, readTheme, getServerTheme);
 
   useEffect(() => {
     applyTheme(theme);
