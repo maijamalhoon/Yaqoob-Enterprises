@@ -1846,3 +1846,12 @@
   .admin-root .admin-donut-legend small { display: none; }
   .admin-root .admin-donut-legend strong { font-size: .74rem; }
 }
+
+
+/* Search Console performance cards use a balanced four-column desktop layout. */
+.admin-root .admin-search-console-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.admin-root .admin-search-console-metrics article { min-width: 0; }
+.admin-root .admin-search-console-metrics article small { line-height: 1.4; }
+@media (max-width: 760px) {
+  .admin-root .admin-search-console-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
