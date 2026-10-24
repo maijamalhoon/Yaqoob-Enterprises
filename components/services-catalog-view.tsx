@@ -38,8 +38,8 @@ export function ServicesCatalogView({
   // Track only settled, non-identifying search terms. The analytics endpoint already
   // honours Do Not Track / Global Privacy Control and excludes authenticated admins.
   useEffect(() => {
-    const query = searchQuery.trim().replace(/\\s+/g, " ").slice(0, 80);
-    if (query.length < 2 || /@/.test(query) || /\\d{7,}/.test(query)) return;
+    const query = searchQuery.trim().replace(/\s+/g, " ").slice(0, 80);
+    if (query.length < 2 || /@/.test(query) || /\d{7,}/.test(query)) return;
 
     const timeout = window.setTimeout(() => {
       void fetch("/api/analytics", {
