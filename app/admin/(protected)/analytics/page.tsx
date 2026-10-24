@@ -322,7 +322,7 @@ export default async function AdminAnalyticsPage({
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity · {fromKey} to {toKey}.</p></div>
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Traffic, discovery and contact performance · {fromKey} to {toKey}.</p></div>
         <div className="admin-analytics-actions">
           <form className="admin-range-form" action="/admin/analytics" method="get">
             <label className="admin-visually-hidden" htmlFor="admin-analytics-range">Analytics date range</label>
@@ -369,6 +369,9 @@ export default async function AdminAnalyticsPage({
         />
       </div>
 
+      <AdminSearchConsoleInsights />
+      <AdminGoogleBusinessInsights profileUrl={settings?.google_business_profile_url} />
+
       <section className="admin-panel admin-panel--control admin-global-panel" aria-labelledby="admin-global-title">
         <div className="admin-panel__heading">
           <div><span className="admin-panel-kicker"><Globe2 size={15} /> Global reach</span><h2 id="admin-global-title">Traffic by country</h2><p>Approximate country-level locations derived from tracked page views, not precise GPS.</p></div>
@@ -377,9 +380,6 @@ export default async function AdminAnalyticsPage({
         <AdminWorldMap countries={countries} />
         <p className="admin-map-attribution">Map artwork by Al MacDonald and Fritz Lekschas · <a href="https://github.com/flekschas/simple-world-map" target="_blank" rel="noopener noreferrer">Simple World Map</a> · CC BY-SA 3.0.</p>
       </section>
-
-      <AdminGoogleBusinessInsights profileUrl={settings?.google_business_profile_url} />
-      <AdminSearchConsoleInsights />
 
       <section className="admin-panel admin-panel--control admin-google-panel">
         <div className="admin-panel__heading">
