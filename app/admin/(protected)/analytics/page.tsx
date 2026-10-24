@@ -229,7 +229,7 @@ export default async function AdminAnalyticsPage({
             {dailyViewsTotal === 0 && <p>No page views recorded during this period.</p>}
           </div>
         </div>
-        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[30].label}</span></div>
+        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0]?.label || "—"}</span><span>{dailyPageViews[Math.floor((dailyPageViews.length - 1) / 2)]?.label || "—"}</span><span>{dailyPageViews[dailyPageViews.length - 1]?.label || "—"}</span></div>
         {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
       </section>
 
