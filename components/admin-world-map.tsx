@@ -1,5 +1,3 @@
-"use client";
-
 export type AdminCountryMetric = {
   code: string;
   name: string;
