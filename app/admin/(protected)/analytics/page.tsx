@@ -3,6 +3,7 @@ import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmart
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminWorldMap } from "@/components/admin-world-map";
 import { AdminTrafficChart } from "@/components/admin-traffic-chart";
+import { AdminGoogleBusinessInsights } from "@/components/admin-google-business-insights";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
@@ -272,9 +273,11 @@ export default async function AdminAnalyticsPage({
         <p className="admin-map-attribution">Map artwork by Al MacDonald and Fritz Lekschas · <a href="https://github.com/flekschas/simple-world-map" target="_blank" rel="noopener noreferrer">Simple World Map</a> · CC BY-SA 3.0.</p>
       </section>
 
+      <AdminGoogleBusinessInsights profileUrl={settings?.google_business_profile_url} />
+
       <section className="admin-panel admin-panel--control admin-google-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><Building2 size={15} /> Google Business</span><h2>{settings?.business_name || "Business profile"}</h2><p>Website traffic attributed to your Google Business Profile.</p></div>
+          <div><span className="admin-panel-kicker"><Building2 size={15} /> Website attribution</span><h2>{settings?.business_name || "Business profile"}</h2><p>Website visits attributed to the tracked Google Business Profile link. These are not Google Search or Maps impression counts.</p></div>
           {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Open profile <ExternalLink size={13} /></a>}
         </div>
         <div className="admin-google-metrics">
