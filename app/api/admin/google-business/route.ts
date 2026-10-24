@@ -198,7 +198,7 @@ export async function GET() {
       "WEBSITE_CLICKS",
       "MESSAGING_CLICKS",
     ]) metricParams.append("dailyMetrics", metric);
-    for (const [key, value] of Object.entries({ startDate: from, endDate: to })) {
+    for (const [key, value] of Object.entries({ start_date: from, end_date: to })) {
       for (const [part, partValue] of Object.entries(value)) {
         metricParams.set(`dailyRange.${key}.${part}`, partValue);
       }
@@ -207,10 +207,10 @@ export async function GET() {
     const keywordStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1));
     const keywordEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
     const keywordParams = new URLSearchParams({
-      "monthlyRange.startMonth.year": String(keywordStart.getUTCFullYear()),
-      "monthlyRange.startMonth.month": String(keywordStart.getUTCMonth() + 1),
-      "monthlyRange.endMonth.year": String(keywordEnd.getUTCFullYear()),
-      "monthlyRange.endMonth.month": String(keywordEnd.getUTCMonth() + 1),
+      "monthlyRange.start_month.year": String(keywordStart.getUTCFullYear()),
+      "monthlyRange.start_month.month": String(keywordStart.getUTCMonth() + 1),
+      "monthlyRange.end_month.year": String(keywordEnd.getUTCFullYear()),
+      "monthlyRange.end_month.month": String(keywordEnd.getUTCMonth() + 1),
       pageSize: "100",
     });
 
