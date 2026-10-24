@@ -1171,8 +1171,6 @@
 .admin-root .admin-traffic-total { display: grid; flex: 0 0 auto; gap: 3px; text-align: right; }
 .admin-root .admin-traffic-total strong { color: var(--admin-ink); font-size: 1.4rem; font-weight: 820; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .admin-root .admin-traffic-total small,
-.admin-root .admin-traffic-chart__scale,
-.admin-root .admin-traffic-chart__dates,
 .admin-root .admin-traffic-note { color: var(--admin-muted); font-size: .72rem; }
 .admin-root .admin-traffic-visual { display: grid; gap: 8px; min-width: 0; }
 .admin-root .admin-line-chart__layout {
@@ -1456,7 +1454,7 @@
   .admin-health-grid > a, .admin-google-metrics > span, .admin-tracking-link, .admin-empty-state,
   .admin-range-form select, .admin-range-form button, .admin-country-list__rank,
   .admin-control-link__icon, .admin-service-group__icon, .admin-history-row__icon,
-  .admin-stats article > span, .admin-traffic-chart__plot, .admin-create-panel > summary:hover,
+  .admin-create-panel > summary:hover,
   .admin-edit-card > summary:hover, .admin-inline-editor > summary:hover
 ) {
   border-color: var(--admin-border);
@@ -1480,8 +1478,8 @@
   .admin-service-group__title p, .admin-media-card__caption small, .admin-backup-row small,
   .admin-history-row__copy small, .admin-history-row__meta small, .admin-announcement-row small,
   .admin-google-metrics small, .admin-tracking-link small, .admin-country-panel__heading p,
-  .admin-country-list__value small, .admin-country-empty, .admin-traffic-chart__scale,
-  .admin-traffic-chart__dates, .admin-traffic-note, .admin-login-card > p, .admin-confirm-dialog p,
+  .admin-country-list__value small, .admin-country-empty, .admin-stats article p,
+  .admin-traffic-note, .admin-login-card > p, .admin-confirm-dialog p,
   .admin-empty-state p, .admin-empty-state, .admin-form-grid label > small
 ) { color: var(--admin-muted); }
 .admin-root[data-admin-theme="dark"] :is(
@@ -1498,6 +1496,14 @@
   .admin-form-grid input::placeholder, .admin-form-grid textarea::placeholder,
   .admin-login-card input::placeholder
 ) { color: #91a2bd; }
+.admin-root[data-admin-theme="dark"] .admin-stats article > span,
+.admin-root[data-admin-theme="dark"] .admin-control-link__icon,
+.admin-root[data-admin-theme="dark"] .admin-service-group__icon,
+.admin-root[data-admin-theme="dark"] .admin-history-row__icon {
+  border-color: color-mix(in srgb, var(--tile-accent, var(--admin-accent)) 25%, var(--admin-border));
+  color: var(--tile-accent, var(--admin-accent));
+  background: color-mix(in srgb, var(--tile-accent, var(--admin-accent)) 12%, var(--admin-surface-muted));
+}
 .admin-root[data-admin-theme="dark"] .admin-media-badge--featured {
   border-color: var(--admin-border);
   color: var(--admin-accent);
