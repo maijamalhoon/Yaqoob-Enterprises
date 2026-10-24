@@ -1169,24 +1169,37 @@
 .admin-root .admin-traffic-chart__scale,
 .admin-root .admin-traffic-chart__dates,
 .admin-root .admin-traffic-note { color: var(--admin-muted); font-size: .72rem; }
-.admin-root .admin-traffic-visual { display: grid; gap: 7px; min-width: 0; }
-.admin-root .admin-line-chart { display: block; width: 100%; height: auto; overflow: visible; }
+.admin-root .admin-traffic-visual { display: grid; gap: 8px; min-width: 0; }
+.admin-root .admin-line-chart__layout {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 9px;
+  min-width: 0;
+}
+.admin-root .admin-line-chart__scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px 0 3px;
+  color: var(--admin-muted);
+  font-size: .7rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.admin-root .admin-line-chart { display: block; width: 100%; height: 205px; overflow: visible; }
 .admin-root .admin-line-chart__grid {
   stroke: var(--admin-border);
   stroke-width: 1;
   stroke-dasharray: 3 6;
+  vector-effect: non-scaling-stroke;
 }
 .admin-root .admin-line-chart__vertical-grid {
   stroke: var(--admin-border);
   stroke-width: 1;
   stroke-dasharray: 2 7;
   opacity: .72;
-}
-.admin-root .admin-line-chart__tick {
-  fill: var(--admin-muted);
-  font-family: inherit;
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
+  vector-effect: non-scaling-stroke;
 }
 .admin-root .admin-line-chart__area { fill: url(#admin-traffic-area); }
 .admin-root .admin-line-chart__line {
@@ -1214,7 +1227,7 @@
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  padding: 0 1.5% 0 6.2%;
+  margin-left: 51px;
   color: var(--admin-muted);
   font-size: .72rem;
 }
@@ -1513,16 +1526,9 @@
 .admin-root[data-admin-theme="dark"] .rank-list.admin-bar-chart > div::before {
   background: color-mix(in srgb, var(--admin-accent) 15%, var(--admin-surface-muted));
 }
-.admin-root[data-admin-theme="dark"] .admin-traffic-chart__plot {
-  background:
-    linear-gradient(to bottom, var(--admin-border) 1px, transparent 1px) 0 0 / 100% 25%,
-    linear-gradient(to bottom, color-mix(in srgb, var(--admin-border) 75%, transparent) 1px, transparent 1px) 0 0 / 100% 50%;
-}
-.admin-root[data-admin-theme="dark"] .admin-traffic-chart__plot > span {
-  border-color: color-mix(in srgb, var(--admin-accent) 24%, transparent);
-  background: linear-gradient(180deg, #77e8dc, #169f95);
-  box-shadow: 0 4px 12px rgb(75 214 198 / 10%);
-}
+.admin-root[data-admin-theme="dark"] .admin-line-chart__grid,
+.admin-root[data-admin-theme="dark"] .admin-line-chart__vertical-grid { stroke: var(--admin-border); }
+.admin-root[data-admin-theme="dark"] .admin-line-chart__point circle { fill: var(--admin-surface); stroke: var(--admin-accent); }
 .admin-root[data-admin-theme="dark"] .admin-world-map-frame {
   border-color: var(--admin-border);
   background:
@@ -1640,8 +1646,8 @@
   .admin-root .admin-tracking-link code,
   .admin-root .admin-tracking-link > a { grid-column: 1; grid-row: auto; }
   .admin-root .admin-country-list { grid-template-columns: minmax(0, 1fr); }
-  .admin-root .admin-traffic-chart__plot { height: 155px; gap: 2px; }
-  .admin-root .admin-traffic-chart__dates { margin-left: 48px; }
+  .admin-root .admin-line-chart { height: 166px; }
+  .admin-root .admin-line-chart__dates { margin-left: 48px; }
   .admin-root .admin-country-panel { gap: 11px; }
   .admin-root .admin-login-card { padding: 21px; }
 }
