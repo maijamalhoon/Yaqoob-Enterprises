@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminWorldMap } from "@/components/admin-world-map";
+import { AdminTrafficChart } from "@/components/admin-traffic-chart";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 
@@ -222,14 +223,7 @@ export default async function AdminAnalyticsPage({
           <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the the selected period, grouped by Pakistan time.</p></div>
           <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
         </div>
-        <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views over the last 30 days. ${dailyViewsTotal.toLocaleString("en-PK")} total; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
-          <div className="admin-traffic-chart__scale" aria-hidden="true"><span>{dailyViewsMax.toLocaleString("en-PK")}</span><span>{(dailyViewsMax / 2).toLocaleString("en-PK", { maximumFractionDigits: 1 })}</span><span>0</span></div>
-          <div className="admin-traffic-chart__plot">
-            {dailyPageViews.map((entry) => <span key={entry.key} title={`${entry.label}: ${entry.count.toLocaleString("en-PK")} page views`} style={{ height: `${entry.count ? Math.max(4, (entry.count / dailyViewsMax) * 100) : 0}%` }} />)}
-            {dailyViewsTotal === 0 && <p>No page views recorded during this period.</p>}
-          </div>
-        </div>
-        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0]?.label || "—"}</span><span>{dailyPageViews[Math.floor((dailyPageViews.length - 1) / 2)]?.label || "—"}</span><span>{dailyPageViews[dailyPageViews.length - 1]?.label || "—"}</span></div>
+        <AdminTrafficChart data={dailyPageViews} maximum={dailyViewsMax} rangeDays={rangeDays} />
         {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
       </section>
 
@@ -239,6 +233,7 @@ export default async function AdminAnalyticsPage({
           <span className="admin-traffic-total"><strong>{countryViewsTotal.toLocaleString("en-PK")}</strong><small>located views</small></span>
         </div>
         <AdminWorldMap countries={countries} />
+        <p className="admin-map-attribution">Map artwork: Al MacDonald and Fritz Lekschas, based on ISO country boundaries. Licensed under CC BY-SA 3.0.</p>
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
