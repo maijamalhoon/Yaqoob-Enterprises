@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -34,6 +34,27 @@ export function ServicesCatalogView({
   statusText,
 }: ServicesCatalogViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Track only settled, non-identifying search terms. The analytics endpoint already
+  // honours Do Not Track / Global Privacy Control and excludes authenticated admins.
+  useEffect(() => {
+    const query = searchQuery.trim().replace(/\\s+/g, " ").slice(0, 80);
+    if (query.length < 2 || /@/.test(query) || /\\d{7,}/.test(query)) return;
+
+    const timeout = window.setTimeout(() => {
+      void fetch("/api/analytics", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          eventName: "service_view",
+          pagePath: "/__analytics/search?q=" + encodeURIComponent(query),
+        }),
+        keepalive: true,
+      }).catch(() => undefined);
+    }, 700);
+
+    return () => window.clearTimeout(timeout);
+  }, [searchQuery]);
 
   // Map each service to its category for URL generation
   const categoryMap = useMemo(() => {
