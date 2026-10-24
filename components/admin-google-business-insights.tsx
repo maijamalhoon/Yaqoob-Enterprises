@@ -56,8 +56,8 @@ export function AdminGoogleBusinessInsights({ profileUrl }: { profileUrl?: strin
   const cards = totals ? [
     { label: "Search views", value: totals.searchViews, Icon: Search },
     { label: "Maps views", value: totals.mapsViews, Icon: Store },
-    { label: "Calls", value: totals.calls, Icon: Phone },
-    { label: "Directions", value: totals.directions, Icon: MapPinned },
+    { label: "Call clicks", value: totals.calls, Icon: Phone },
+    { label: "Direction requests", value: totals.directions, Icon: MapPinned },
     { label: "Website clicks", value: totals.websiteClicks, Icon: ExternalLink },
     { label: "Message clicks", value: totals.messages, Icon: MessageCircle },
   ] : [];
