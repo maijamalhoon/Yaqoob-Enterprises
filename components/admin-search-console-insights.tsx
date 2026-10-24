@@ -49,7 +49,6 @@ export function AdminSearchConsoleInsights() {
 
   const load = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true);
-    else setLoading(true);
     try {
       const response = await fetch("/api/admin/search-console", { cache: "no-store" });
       setData(await response.json() as Payload);
@@ -61,7 +60,17 @@ export function AdminSearchConsoleInsights() {
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    let active = true;
+    void fetch("/api/admin/search-console", { cache: "no-store" })
+      .then(async (response) => await response.json() as Payload)
+      .then((payload) => { if (active) setData(payload); })
+      .catch(() => {
+        if (active) setData({ configured: true, error: "Search Console data could not be loaded. Try refreshing." });
+      })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
 
   const queryRows = data?.queries || [];
   const totalClicks = queryRows.reduce((sum, row) => sum + row.clicks, 0);
