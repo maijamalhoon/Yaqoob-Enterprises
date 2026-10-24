@@ -4,7 +4,6 @@ import { requireAdmin } from "@/lib/admin";
 export const dynamic = "force-dynamic";
 
 type JsonRecord = Record<string, unknown>;
-type DailyPoint = { date: string; value: number };
 
 function asRecord(value: unknown): JsonRecord {
   return value && typeof value === "object" ? value as JsonRecord : {};
