@@ -55,6 +55,11 @@ export function AdminWorldMap({ countries }: { countries: AdminCountryMetric[] }
           `}</style>
           <g dangerouslySetInnerHTML={{ __html: ADMIN_WORLD_MAP_PATHS }} />
         </svg>
+        <div className="admin-map-legend" aria-label="Map colour scale: fewer to more page views">
+          <span>Fewer views</span>
+          <span className="admin-map-legend__gradient" aria-hidden="true" />
+          <span>More views</span>
+        </div>
       </div>
       <div className="admin-country-panel">
         <div className="admin-country-panel__heading">
