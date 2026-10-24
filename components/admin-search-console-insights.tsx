@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ExternalLink, MonitorSmartphone, MousePointerClick, RefreshCw, Search } from "lucide-react";
+import { BarChart3, ExternalLink, MonitorSmartphone, MousePointerClick, RefreshCw, Search } from "lucide-react";
 
 type Row = { key: string; clicks: number; impressions: number; ctr: number; position: number };
 type Payload = {
@@ -29,10 +29,11 @@ function RankingTable({ title, rows, emptyLabel, metric }: {
     <section className="admin-gbp-subpanel">
       <div className="admin-gbp-subheading"><h3>{title}</h3><span>{metric === "clicks" ? "Clicks" : "Impressions"}</span></div>
       {rows?.length ? (
-        <ol className="admin-gbp-keywords">
+        <ol className="admin-gbp-keywords admin-search-ranking">
           {rows.slice(0, 10).map((row, index) => (
             <li key={`${row.key}-${index}`}>
-              <span>{row.key}</span>
+              <span className="admin-search-ranking__rank" aria-label={`Rank ${index + 1}`}>{String(index + 1).padStart(2, "0")}</span>
+              <span className="admin-search-ranking__query" title={row.key}>{row.key}</span>
               <strong>{number(row[metric])}</strong>
             </li>
           ))}
@@ -75,6 +76,10 @@ export function AdminSearchConsoleInsights() {
   const queryRows = data?.queries || [];
   const totalClicks = queryRows.reduce((sum, row) => sum + row.clicks, 0);
   const totalImpressions = queryRows.reduce((sum, row) => sum + row.impressions, 0);
+  const clickThroughRate = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : null;
+  const averagePosition = totalImpressions > 0
+    ? queryRows.reduce((sum, row) => sum + row.position * row.impressions, 0) / totalImpressions
+    : null;
 
   return (
     <section className="admin-panel admin-panel--control admin-gbp-panel" aria-labelledby="admin-search-console-title">
@@ -99,9 +104,10 @@ export function AdminSearchConsoleInsights() {
       {!loading && data?.configured && !data.error && (
         <>
           <div className="admin-gbp-metrics admin-search-console-metrics">
-            <article><span><MousePointerClick size={16} /></span><strong>{number(totalClicks)}</strong><small>Clicks in top query rows</small></article>
-            <article><span><Search size={16} /></span><strong>{number(totalImpressions)}</strong><small>Impressions in top query rows</small></article>
-            <article><span><MonitorSmartphone size={16} /></span><strong>{number(queryRows.length)}</strong><small>Queries returned</small></article>
+            <article><span><MousePointerClick size={16} /></span><strong>{number(totalClicks)}</strong><small>Clicks · displayed queries</small></article>
+            <article><span><Search size={16} /></span><strong>{number(totalImpressions)}</strong><small>Impressions · displayed queries</small></article>
+            <article><span><BarChart3 size={16} /></span><strong>{clickThroughRate === null ? "—" : clickThroughRate.toFixed(1) + "%"}</strong><small>Click-through rate</small></article>
+            <article><span><MonitorSmartphone size={16} /></span><strong>{averagePosition === null ? "—" : averagePosition.toFixed(1)}</strong><small>Average position</small></article>
           </div>
           {data.warning && <p className="admin-gbp-notice">{data.warning}</p>}
           <div className="admin-gbp-columns">
