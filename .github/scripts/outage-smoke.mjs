@@ -62,15 +62,15 @@ try {
   assert((await page.locator('[role="status"]').count()) === 1, "Category outage notice missing");
   await page.getByText("Confirm availability", { exact: true }).first().waitFor({ state: "visible", timeout: 15_000 });
   const categoryText = await page.locator("main:not([aria-busy='true'])").last().innerText();
-  assert(categoryText.includes("Confirm availability"),
+  assert(/confirm availability/i.test(categoryText),
     "Category lacks availability confirmation: " + categoryText.slice(0, 600));
 
   await open("/services/biometric/general-biometric-esahulat");
   await page.getByText("Live availability could not be checked", { exact: false }).first().waitFor({ state: "visible", timeout: 15_000 });
   await page.getByText("Confirm availability", { exact: true }).first().waitFor({ state: "visible", timeout: 15_000 });
   const serviceText = await page.locator("main:not([aria-busy='true'])").last().innerText();
-  assert(serviceText.includes("Confirm availability"), "Detail page claims live availability");
-  assert(serviceText.includes("Live availability could not be checked"), "Service safety note missing");
+  assert(/confirm availability/i.test(serviceText), "Detail page claims live availability");
+  assert(/live availability could not be checked/i.test(serviceText), "Service safety note missing");
   assert(!(await readJsonLd(page)).some((item) => item["@type"] === "Service"),
     "Unverified Service schema emitted during outage");
   assert((await page.locator('a[href^="https://wa.me/"]').count()) >= 1,
