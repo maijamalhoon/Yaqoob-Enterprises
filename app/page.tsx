@@ -5,6 +5,7 @@ import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchHero } from "@/components/stitch-hero";
 import { StitchQuickRequest } from "@/components/stitch-quick-request";
+import { RatesPreview } from "@/components/rates-preview";
 import { StitchServices } from "@/components/stitch-services";
 import { StitchVisitShop } from "@/components/stitch-visit-shop";
 import { businessLocationLabel } from "@/lib/business-display";
@@ -70,6 +71,7 @@ export default async function HomePage() {
           gallery={gallery}
         />
         <StitchServices categories={categories} />
+        <RatesPreview />
         <StitchQuickRequest settings={settings} services={services} />
         <StitchVisitShop settings={settings} statusText={hoursText} hours={hours} />
       </main>

@@ -68,6 +68,12 @@ export function StitchHeader({ settings }: StitchHeaderProps) {
             </div>
           </Link>
 
+          <nav aria-label="Primary navigation" className="hidden items-center gap-6 text-sm font-semibold text-slate-700 xl:flex">
+            <Link href="/services" className="hover:text-[#0E7490]">Services</Link>
+            <Link href="/rates" className="hover:text-[#0E7490]">Rates</Link>
+            <Link href="/contact" className="hover:text-[#0E7490]">Contact</Link>
+          </nav>
+
           {/* Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Call Button */}
@@ -100,7 +106,7 @@ export function StitchHeader({ settings }: StitchHeaderProps) {
               aria-label={drawerOpen ? "Close navigation" : "Open navigation"}
               aria-expanded={drawerOpen}
               aria-controls="mobileDrawer"
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 active:scale-95 transition"
+              className="flex xl:hidden items-center justify-center w-10 h-10 rounded-xl bg-slate-100 text-slate-800 hover:bg-slate-200 active:scale-95 transition"
               onClick={() => setDrawerOpen(!drawerOpen)}
             >
               {drawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -118,6 +124,7 @@ export function StitchHeader({ settings }: StitchHeaderProps) {
             <div className="grid grid-cols-2 gap-2 font-semibold text-slate-800 text-xs sm:text-sm">
               <Link className="rounded-lg bg-slate-50 px-3 py-2.5 font-bold hover:bg-slate-100" href="/" onClick={() => setDrawerOpen(false)}>Home</Link>
               <Link className="rounded-lg bg-slate-50 px-3 py-2.5 font-bold text-[#0E7490] hover:bg-slate-100" href="/services" onClick={() => setDrawerOpen(false)}>All services</Link>
+              <Link className="rounded-lg bg-slate-50 px-3 py-2.5 font-bold hover:bg-slate-100" href="/rates" onClick={() => setDrawerOpen(false)}>Rates</Link>
               <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/printing" onClick={() => setDrawerOpen(false)}>Printing</Link>
               <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/photocopying" onClick={() => setDrawerOpen(false)}>Photocopying</Link>
               <Link className="rounded-lg bg-slate-50 px-3 py-2.5 hover:bg-slate-100" href="/nadra-esahulat" onClick={() => setDrawerOpen(false)}>NADRA e-Sahulat</Link>

@@ -29,6 +29,7 @@ export function StitchFooter({ settings, statusText }: StitchFooterProps) {
 
         <nav className="public-footer__links" aria-label="Footer">
           <Link href="/services">All services</Link>
+          <Link href="/rates">Rate list</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/privacy">Privacy</Link>
