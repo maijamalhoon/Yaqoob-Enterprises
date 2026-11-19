@@ -228,7 +228,16 @@ html { scroll-padding-top: 5.5rem; }
 .public-site #hero-section .max-w-4xl { width: 100%; min-width: 0; }
 .public-site #hero-section { padding-block: clamp(3.25rem, 7vw, 5.75rem); }
 .public-site #hero-section .max-w-4xl { gap: clamp(1.5rem, 3.5vw, 2.5rem); }
-.public-site #hero-section h1 { max-width: 15ch; font-size: clamp(2.6rem, 5.2vw, 4.15rem); line-height: 1.08; }
+/* Clamp flex-item width to its column even with longer translated or fallback headings. */
+.public-site #hero-section .flex-col { min-width: 0; max-width: 100%; }
+.public-site #hero-section h1 {
+  width: 100%;
+  max-width: min(15ch, 100%);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(2.6rem, 5.2vw, 4.15rem);
+  line-height: 1.08;
+}
 .public-site #hero-location-pill { max-width: 100%; }
 .public-site .mobile-hero-actions { width: 100%; max-width: 42rem; min-width: 0; flex-wrap: wrap; gap: .8rem; }
 .public-site .mobile-hero-actions > a { min-height: 3.25rem; max-width: 100%; box-sizing: border-box; padding-inline: 1.25rem; border-radius: .65rem; }
@@ -255,7 +264,7 @@ html { scroll-padding-top: 5.5rem; }
 @media (max-width: 767px) {
   .public-site #hero-section { padding-block: 3rem 3.5rem; }
   .public-site #hero-section .max-w-4xl { gap: 1.7rem; }
-  .public-site #hero-section h1 { max-width: 16ch; font-size: clamp(2.15rem, 8vw, 2.75rem); line-height: 1.1; }
+  .public-site #hero-section h1 { max-width: min(16ch, 100%); font-size: clamp(2.15rem, 8vw, 2.75rem); line-height: 1.1; }
   .public-site .mobile-hero-actions { max-width: 32rem; gap: .65rem; }
   .public-site .mobile-hero-actions > a { width: 100%; justify-content: center; }
   .home-service-list { grid-template-columns: 1fr; }
