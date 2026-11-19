@@ -4,7 +4,7 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
 import { TrackedLink } from "@/components/tracked-link";
-import { getCurrentBusinessStatus, getSiteData, whatsappUrl } from "@/lib/data";
+import { getCurrentBusinessStatus, getContactSiteData, whatsappUrl } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { rateGroups } from "@/lib/rate-list";
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RatesPage() {
-  const { settings, hours } = await getSiteData();
+  const { settings, hours } = await getContactSiteData();
   const statusText = getCurrentBusinessStatus(hours);
   const quoteLink = whatsappUrl(
     settings.whatsapp_e164 || "+923492568864",

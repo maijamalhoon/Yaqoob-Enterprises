@@ -20,7 +20,6 @@ import "./public-site.css";
 import "./minimal-redesign.css";
 import "./typography.css";
 import { PageTracker } from "@/components/page-tracker";
-import { getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 
 const bodyFont = Inter({
@@ -35,17 +34,15 @@ const headingFont = Manrope({
   variable: "--font-heading",
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { settings } = await getSiteData();
-  const homeTitle = `Yaqoob Enterprises | Printing & Photocopy, Karachi`;
-  const description = `Printing, photocopying, notes, passport photos and NADRA e-Sahulat at ${settings.business_name} in Akhtar Colony, Karachi.`;
+const homeTitle = "Yaqoob Enterprises | Printing & Photocopy, Karachi";
+const description = "Printing, photocopying, notes, passport photos and NADRA e-Sahulat at Yaqoob Enterprises in Akhtar Colony, Karachi.";
 
-  return {
+export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
-    applicationName: settings.business_name,
+    applicationName: "Yaqoob Enterprises",
     title: {
       default: homeTitle,
-      template: `%s | ${settings.business_name}`,
+      template: "%s | Yaqoob Enterprises",
     },
     description,
     keywords: [
@@ -83,7 +80,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: "en_PK",
-      siteName: settings.business_name,
+      siteName: "Yaqoob Enterprises",
       url: "/",
       title: homeTitle,
       description,
@@ -95,8 +92,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     manifest: "/manifest.webmanifest",
     icons: { icon: "/icon.svg" },
-  };
-}
+};
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

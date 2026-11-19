@@ -166,6 +166,41 @@ async function loadSiteData() {
   };
 }
 
+/**
+ * Keep customer-facing contact and price pages reachable if the catalogue
+ * is unavailable. Do not claim the shop is open when hours cannot be read.
+ * Admin updates invalidate this cache alongside the full public catalogue.
+ */
+async function loadContactSiteData(): Promise<{ settings: BusinessSettings; hours: BusinessHour[] }> {
+  try {
+    const supabase = createPublicSupabaseClient();
+    const [settingsResult, hoursResult] = await Promise.all([
+      supabase.from("business_settings").select(businessSettingsColumns).eq("id", true).maybeSingle(),
+      supabase.from("business_hours").select(businessHoursColumns).order("display_order"),
+    ]);
+
+    if (settingsResult.error) logOptionalDataError("contact settings", settingsResult.error);
+    if (hoursResult.error) logOptionalDataError("contact hours", hoursResult.error);
+
+    return {
+      settings: settingsResult.error
+        ? fallbackSettings
+        : ((settingsResult.data as unknown as BusinessSettings | null) || fallbackSettings),
+      hours: hoursResult.error
+        ? []
+        : ((hoursResult.data || []) as unknown as BusinessHour[]),
+    };
+  } catch (error) {
+    console.error("[contact-data] Using published fallback contact details", error instanceof Error ? error.message : "Unknown error");
+    return { settings: fallbackSettings, hours: [] };
+  }
+}
+
+export const getContactSiteData = unstable_cache(loadContactSiteData, ["public-contact-data-v1"], {
+  revalidate: 300,
+  tags: ["site-data"],
+});
+
 export const getSiteData = unstable_cache(loadSiteData, ["public-site-data-v7"], {
   revalidate: 300,
   tags: ["site-data"],
