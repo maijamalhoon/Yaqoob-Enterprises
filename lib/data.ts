@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { createPublicSupabaseClient } from "@/lib/supabase/public";
-import { buildPublicFallbackData } from "@/lib/public-site-fallback";
+import { withPublicSiteFallback } from "@/lib/public-site-fallback";
 import type {
   Announcement,
   BusinessHour,
@@ -212,16 +212,13 @@ const getCachedSiteData = unstable_cache(loadSiteData, ["public-site-data-v7"], 
  * cache the fallback as live CMS data, so recovery is picked up immediately
  * on a subsequent request.
  */
-export async function getSiteData() {
-  try {
-    return { ...(await getCachedSiteData()), isFallback: false as const };
-  } catch (error) {
+export function getSiteData() {
+  return withPublicSiteFallback(getCachedSiteData, fallbackSettings, (error) => {
     console.error(
       "[site-data] Live catalogue unavailable; serving published reference information",
       error instanceof Error ? error.message : "Unknown error",
     );
-    return buildPublicFallbackData(fallbackSettings);
-  }
+  });
 }
 
 export async function getCategoryBySlug(slug: string) {

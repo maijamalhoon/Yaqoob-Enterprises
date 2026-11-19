@@ -92,6 +92,23 @@ const publicBaseline = [
   },
 ] as const;
 
+/**
+ * Injected loader keeps the successful CMS path unchanged and makes recovery
+ * testable without network access. Error handler reports without logging data.
+ */
+export async function withPublicSiteFallback<T extends object>(
+  load: () => Promise<T>,
+  settings: BusinessSettings,
+  reportError: (error: unknown) => void = () => {},
+): Promise<(T & { isFallback: false }) | ReturnType<typeof buildPublicFallbackData>> {
+  try {
+    return { ...(await load()), isFallback: false };
+  } catch (error) {
+    reportError(error);
+    return buildPublicFallbackData(settings);
+  }
+}
+
 export function buildPublicFallbackData(settings: BusinessSettings) {
   const services: Service[] = [];
   const categories: ServiceCategory[] = publicBaseline.map((item, categoryIndex) => {

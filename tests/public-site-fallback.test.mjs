@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildPublicFallbackData } from "../lib/public-site-fallback.ts";
+import { buildPublicFallbackData, withPublicSiteFallback } from "../lib/public-site-fallback.ts";
 
 const fallback = buildPublicFallbackData({ business_name: "Yaqoob Enterprises" });
 
@@ -31,4 +31,25 @@ test("no fabricated hours, coverage, gallery or announcements", () => {
   assert.deepEqual(fallback.gallery, []);
   assert.deepEqual(fallback.announcements, []);
   assert.ok(fallback.settings.business_name);
+});
+
+test("successful CMS reads remain authoritative", async () => {
+  const liveData = { categories: [{ slug: "published-live" }], settings: { business_name: "Live Shop" } };
+  const result = await withPublicSiteFallback(async () => liveData, { business_name: "Fallback Shop" });
+  assert.equal(result.isFallback, false);
+  assert.deepEqual(result.categories, liveData.categories);
+  assert.equal(result.settings.business_name, "Live Shop");
+});
+
+test("failed CMS read returns a conservative fallback without leaking errors", async () => {
+  let logged = 0;
+  const result = await withPublicSiteFallback(
+    async () => { throw new Error("simulated Supabase outage"); },
+    { business_name: "Fallback Shop" },
+    () => { logged += 1; },
+  );
+  assert.equal(result.isFallback, true);
+  assert.equal(logged, 1);
+  assert.equal(result.services.length, 10);
+  assert.equal(result.hours.length, 0);
 });
