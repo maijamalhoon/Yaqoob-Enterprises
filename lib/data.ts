@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { createPublicSupabaseClient } from "@/lib/supabase/public";
 import { withPublicSiteFallback } from "@/lib/public-site-fallback";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import type {
   Announcement,
   BusinessHour,
@@ -18,8 +19,8 @@ const fallbackSettings: BusinessSettings = {
   phone_e164: "+923492568864",
   whatsapp_e164: "+923492568864",
   address: "Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi, Pakistan",
-  map_url: "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A",
-  google_business_profile_url: "",
+  map_url: SHOP_DIRECTIONS_URL,
+  google_business_profile_url: GOOGLE_BUSINESS_PROFILE_URL,
   pricing_message:
     "Service charges vary by work type, quantity, urgency, delivery location and any applicable official fees. We confirm the exact quotation before work begins, either on WhatsApp or at the shop.",
   concept_image_notice: "Storefront concept preview — actual shop photos coming soon.",

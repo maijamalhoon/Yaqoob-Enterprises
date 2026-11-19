@@ -2,6 +2,7 @@ import { MapPin, Phone, Navigation } from "lucide-react";
 import type { BusinessSettings, GalleryImage } from "@/lib/types";
 import { StitchShopLoop } from "./stitch-shop-loop";
 import { TrackedLink } from "@/components/tracked-link";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 
 interface StitchHeroProps {
   settings: BusinessSettings;
@@ -17,9 +18,7 @@ export function StitchHero({ settings, statusText, locationLabel, gallery }: Sti
   const whatsappLink = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     `Hello ${settings.business_name}, I want to send a document or inquire about a service. My requirement is: `
   )}`;
-  const directionsUrl =
-    settings.map_url ||
-    "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const directionsUrl = SHOP_DIRECTIONS_URL;
   const isOpen = statusText.startsWith("Open now");
 
   return (
