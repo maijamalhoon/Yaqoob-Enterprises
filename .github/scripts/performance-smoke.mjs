@@ -54,7 +54,7 @@ try {
       timeout: 30_000,
     });
     assert(response?.status() === 200, config.name + ": HTTP " + (response?.status() ?? "no response"));
-    await page.locator("main h1").first().waitFor({ state: "visible", timeout: 15_000 });
+    await page.locator("h1").first().waitFor({ state: "visible", timeout: 15_000 });
     await page.waitForTimeout(1_300);
 
     const metrics = await page.evaluate(() => {

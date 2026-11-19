@@ -27,7 +27,7 @@ try {
   async function open(path) {
     const response = await page.goto(baseUrl + path, { waitUntil: "domcontentloaded", timeout: 25_000 });
     assert(response?.status() === 200, path + " returned " + (response?.status() ?? "no response"));
-    await page.locator("main h1").first().waitFor({ state: "visible", timeout: 15_000 });
+    await page.locator("h1").first().waitFor({ state: "visible", timeout: 15_000 });
     const bounds = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       body: document.documentElement.scrollWidth,
