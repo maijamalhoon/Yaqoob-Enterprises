@@ -14,7 +14,7 @@ export function StitchHero({ settings, statusText, locationLabel, gallery }: Sti
   const phone = settings.phone_e164 || "+923492568864";
   const hasGallery = gallery.some((image) => image.is_active);
   const callUrl = `tel:${phone}`;
-  const whatsappLink = `https://wa.me/${phone.replace(/\+/g, "")}?text=${encodeURIComponent(
+  const whatsappLink = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     `Hello ${settings.business_name}, I want to send a document or inquire about a service. My requirement is: `
   )}`;
   const directionsUrl =

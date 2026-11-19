@@ -72,7 +72,7 @@ export default async function NotesPrintingPage() {
   const statusText = getCurrentBusinessStatus(hours);
   const phone = settings.phone_e164 || "+923492568864";
   const callUrl = `tel:${phone}`;
-  const whatsappUrl = `https://wa.me/${phone.replace(/\+/g, "")}?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     "Hello Yaqoob Enterprises, I want student notes / assignment printing. Here are my file details: "
   )}`;
   const directionsUrl =

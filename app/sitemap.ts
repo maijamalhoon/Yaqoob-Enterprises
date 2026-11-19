@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const corePages: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "weekly", priority: 1.0 },
     { url: `${SITE_URL}/printing`, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${SITE_URL}/rates`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/photocopying`, changeFrequency: "weekly", priority: 0.95 },
     { url: `${SITE_URL}/color-printing`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/notes-printing`, changeFrequency: "monthly", priority: 0.9 },

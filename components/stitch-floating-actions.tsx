@@ -10,7 +10,7 @@ interface StitchFloatingActionsProps {
 
 export function StitchFloatingActions({ settings, whatsappMessage }: StitchFloatingActionsProps) {
   const phone = settings.phone_e164 || "+923492568864";
-  const whatsappUrl = `https://wa.me/${phone.replace(/\+/g, "")}?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     whatsappMessage || `Hello ${settings.business_name}, I need assistance with a service.`,
   )}`;
   const directionsUrl = settings.map_url || "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
