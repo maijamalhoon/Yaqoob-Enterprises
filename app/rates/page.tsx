@@ -36,6 +36,11 @@ export const metadata: Metadata = {
     url: SITE_URL + "/rates",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "2026 Printing & Photocopy Rates | Yaqoob Enterprises",
+    description: "Published rates for printing, photocopying, photos, lamination, binding and scanning in Akhtar Colony, Karachi.",
+  },
 };
 
 export default async function RatesPage() {

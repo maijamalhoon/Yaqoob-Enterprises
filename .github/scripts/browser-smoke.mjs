@@ -146,6 +146,7 @@ try {
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Rate list quote CTA is missing.");
   const ratesCanonical = await page.locator('link[rel="canonical"]').getAttribute("href");
   assert(Boolean(ratesCanonical?.endsWith("/rates")), "Rate list canonical URL is incorrect.");
+  assert((await page.title()).includes("Printing & Photocopy Rates 2026"), "Rate list search title should describe published rates.");
 
   await openHealthy(page, "/contact");
   await page.waitForLoadState("networkidle", { timeout: 10_000 });
