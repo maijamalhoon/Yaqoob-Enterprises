@@ -1,6 +1,6 @@
 export default function ServiceCategoryLoading() {
   return (
-    <main id="main-content" aria-busy="true" aria-label="Loading service category">
+    <div aria-busy="true" aria-label="Loading service category">
       {/* Hero Skeleton */}
       <section className="page-hero page-hero--service">
         <div className="page-hero__pattern" aria-hidden="true" />
@@ -14,12 +14,12 @@ export default function ServiceCategoryLoading() {
               className="page-hero__icon skeleton-block"
               style={{ width: "3.75rem", height: "3.75rem", borderRadius: "0.85rem" }}
             />
-            <h1>
+            <div aria-hidden="true">
               <span
                 className="skeleton-block skeleton-title"
                 style={{ width: "22rem", maxWidth: "85%", height: "2.8rem" }}
               />
-            </h1>
+            </div>
           </div>
         </div>
       </section>
@@ -59,6 +59,6 @@ export default function ServiceCategoryLoading() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

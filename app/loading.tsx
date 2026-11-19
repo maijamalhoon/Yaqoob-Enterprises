@@ -7,7 +7,7 @@ export default function RootLoading() {
           <span className="motion-safe:animate-pulse h-10 w-20 rounded-xl bg-slate-100" aria-hidden="true" />
         </div>
       </div>
-      <main id="main-content" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div aria-hidden="true" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div aria-hidden="true" className="max-w-3xl space-y-5">
           <div className="motion-safe:animate-pulse h-5 w-48 rounded-md bg-slate-100" />
           <div className="motion-safe:animate-pulse h-12 w-full rounded-lg bg-slate-100 sm:w-2/3" />
@@ -18,7 +18,7 @@ export default function RootLoading() {
             <div key={index} className="motion-safe:animate-pulse h-16 rounded-xl border border-slate-100 bg-slate-50" />
           ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
