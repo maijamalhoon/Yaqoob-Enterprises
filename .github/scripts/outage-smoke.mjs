@@ -43,7 +43,7 @@ try {
   assert((await page.locator("#services .home-service-list li").count()) === 8, "Home services missing during outage");
   assert((await page.locator("#quick-request form").count()) === 1, "WhatsApp form unavailable during outage");
   assert((await page.locator('#rates-preview a[href="/rates"]').count()) === 1, "Price navigation unavailable during outage");
-  const homeText = await page.locator("main").innerText();
+  const homeText = await page.locator("main:not([aria-busy='true'])").last().innerText();
   assert(!homeText.includes("Open now"), "Homepage falsely claims the shop is open");
   const homeData = await readJsonLd(page);
   const businessData = homeData.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
@@ -60,10 +60,10 @@ try {
 
   await open("/services/biometric");
   assert((await page.locator('[role="status"]').count()) === 1, "Category outage notice missing");
-  assert((await page.locator("main").innerText()).includes("Confirm availability"), "Category claims live service availability");
+  assert((await page.locator("main:not([aria-busy='true'])").last().innerText()).includes("Confirm availability"), "Category claims live service availability");
 
   await open("/services/biometric/general-biometric-esahulat");
-  const serviceText = await page.locator("main").innerText();
+  const serviceText = await page.locator("main:not([aria-busy='true'])").last().innerText();
   assert(serviceText.includes("Confirm availability"), "Detail page claims live availability");
   assert(serviceText.includes("Live availability could not be checked"), "Service safety note missing");
   assert(!(await readJsonLd(page)).some((item) => item["@type"] === "Service"),
@@ -72,14 +72,14 @@ try {
     "Customer cannot reach WhatsApp during outage");
 
   await open("/rates");
-  const rateText = await page.locator("main").innerText();
+  const rateText = await page.locator("main:not([aria-busy='true'])").last().innerText();
   assert(rateText.includes("A4 Photocopy") && rateText.includes("Rs. 10"), "Published offline rates missing");
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) === 1, "Rates quotation CTA missing");
 
   await open("/contact");
   assert((await page.locator('main a[href^="tel:"]').count()) >= 1, "Contact phone missing");
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) >= 1, "Contact WhatsApp missing");
-  assert(!(await page.locator("main").innerText()).includes("Open now"), "Unknown hours presented as live");
+  assert(!(await page.locator("main:not([aria-busy='true'])").last().innerText()).includes("Open now"), "Unknown hours presented as live");
 
   const sitemap = await page.request.get(baseUrl + "/sitemap.xml");
   assert(sitemap.status() === 200, "Sitemap failed with Supabase offline");
