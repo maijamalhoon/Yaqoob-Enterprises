@@ -83,9 +83,10 @@ try {
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) === 1, "Rates quotation CTA missing");
 
   await open("/contact");
-  await page.locator('main a[href^="tel:"]').first().waitFor({ state: "visible", timeout: 15_000 });
-  assert((await page.locator('main a[href^="tel:"]').count()) >= 1, "Contact phone missing");
-  assert((await page.locator('main a[href^="https://wa.me/"]').count()) >= 1, "Contact WhatsApp missing");
+  await page.locator('a[href^="tel:"]:visible').first().waitFor({ state: "visible", timeout: 15_000 });
+  await page.locator('a[href^="https://wa.me/"]:visible').first().waitFor({ state: "visible", timeout: 15_000 });
+  assert((await page.locator('a[href^="tel:"]:visible').count()) >= 1, "No visible phone action for mobile customer");
+  assert((await page.locator('a[href^="https://wa.me/"]:visible').count()) >= 1, "No visible WhatsApp action for mobile customer");
   assert(!(await page.locator("main:not([aria-busy='true'])").last().innerText()).includes("Open now"), "Unknown hours presented as live");
 
   const sitemap = await page.request.get(baseUrl + "/sitemap.xml");
