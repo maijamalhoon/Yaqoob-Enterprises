@@ -46,6 +46,8 @@ async function assertHomepage(page, label, { mobileNav }) {
 
   assert((await page.locator("#quick-request form, #get-in-touch form").count()) >= 1, `${label}: homepage quick-request form is missing.`);
   assert((await page.locator("footer").count()) === 1, `${label}: homepage footer is missing.`);
+  assert((await page.locator("#rates-preview dl > div").count()) === 6, `${label}: popular prices are missing.`);
+  assert((await page.locator('#rates-preview a[href="/rates"]').count()) === 1, `${label}: full rate list link is missing.`);
 
   if (mobileNav) {
     const mobileToggle = page.locator("#mobileMenuBtn");
@@ -126,6 +128,17 @@ try {
     const location = response.headers().location || "";
     assert(location.endsWith(destination), `${source} redirects to the wrong destination: ${location}`);
   }
+
+  await openHealthy(page, "/rates");
+  await assertNoHorizontalOverflow(page, "Desktop rate list");
+  assert((await page.locator("main section[aria-labelledby$='-title']").count()) === 5, "Rate list must contain five service groups.");
+  assert((await page.locator("main dl > div").count()) === 20, "2026 rate list must include all 20 published prices.");
+  assert((await page.locator("#black-and-white dt").first().innerText()) === "A4 Photocopy", "Rate list photocopy label is incorrect.");
+  assert((await page.locator("#black-and-white dd").first().innerText()) === "Rs. 10", "2026 A4 photocopy rate is incorrect.");
+  assert((await page.locator("#colour-printing dd").last().innerText()) === "Rs. 150–300*", "2026 A3 colour range is incorrect.");
+  assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Rate list quote CTA is missing.");
+  const ratesCanonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+  assert(Boolean(ratesCanonical?.endsWith("/rates")), "Rate list canonical URL is incorrect.");
 
   await openHealthy(page, "/contact");
   await page.waitForLoadState("networkidle", { timeout: 10_000 });
@@ -270,6 +283,8 @@ try {
         `${viewport.label}: mobile form controls must stay at 16px to avoid browser zoom (actual: ${mobileFormFontSizes.map((control) => `${control.id}=${control.size}px`).join(", ")}).`,
       );
 
+      await openHealthy(viewportPage, "/rates");
+      await assertNoHorizontalOverflow(viewportPage, `${viewport.label} rate list`);
       await openHealthy(viewportPage, "/services/biometric/general-biometric-esahulat");
       await assertNoHorizontalOverflow(viewportPage, `${viewport.label} biometric SEO page`);
       assert((await viewportPage.locator("h1").first().innerText()).includes("Biometric"), `${viewport.label}: biometric SEO heading is missing.`);
