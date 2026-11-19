@@ -132,6 +132,13 @@ try {
   await openHealthy(page, "/rates");
   await assertNoHorizontalOverflow(page, "Desktop rate list");
   assert((await page.locator("main section[aria-labelledby$='-title']").count()) === 5, "Rate list must contain five service groups.");
+  assert((await page.locator("h1").first().innerText()).includes("Printing & photocopy rates"), "Rate list heading should clearly name printing and photocopy.");
+  assert((await page.locator('nav[aria-label="Browse rate categories"] a').count()) === 5, "Rate list category navigation is missing.");
+  const rateStructuredData = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) => nodes.map((node) => {
+    try { return JSON.parse(node.textContent || "{}"); } catch { return null; }
+  }).filter(Boolean));
+  const rateBreadcrumbs = rateStructuredData.find((item) => item?.["@type"] === "BreadcrumbList");
+  assert(rateBreadcrumbs?.itemListElement?.length === 2, "Rate list breadcrumb structured data is missing.");
   assert((await page.locator("main dl > div").count()) === 20, "2026 rate list must include all 20 published prices.");
   assert((await page.locator("#black-and-white dt").first().innerText()) === "A4 Photocopy", "Rate list photocopy label is incorrect.");
   assert((await page.locator("#black-and-white dd").first().innerText()) === "Rs. 10", "2026 A4 photocopy rate is incorrect.");
@@ -225,6 +232,10 @@ try {
   assert(Boolean(serviceData), "Service detail page is missing Service structured data.");
   assert(Array.isArray(serviceData?.areaServed) && serviceData.areaServed.length > 1, "Service schema should expose city and configured service areas.");
   assert(serviceStructuredData.some((item) => item?.["@type"] === "BreadcrumbList"), "Service detail page is missing Breadcrumb structured data.");
+
+  const missingResponse = await page.goto(baseUrl + "/unlisted-service-check-404", { waitUntil: "domcontentloaded" });
+  assert(missingResponse?.status() === 404, "Missing public routes should return 404.");
+  assert((await page.locator('a[href="/rates"]').count()) > 0, "404 page should link to the rate list.");
 
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
