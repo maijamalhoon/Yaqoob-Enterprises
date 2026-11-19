@@ -3,6 +3,7 @@ import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { ServicesCatalogView } from "@/components/services-catalog-view";
+import { PublicDataNotice } from "@/components/public-data-notice";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const { settings, hours, categories, services } = await getSiteData();
+  const { settings, hours, categories, services, isFallback } = await getSiteData();
   const statusText = getCurrentBusinessStatus(hours);
 
   // Structured data: ItemList of services
@@ -52,11 +53,12 @@ export default async function ServicesPage() {
 
   return (
     <div className="public-site min-h-screen bg-white text-slate-900 selection:bg-[#0E7490] selection:text-white flex flex-col">
-      <script
+      {!isFallback && <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
-      />
+      />}
       <StitchHeader settings={settings} statusText={statusText} />
+      {isFallback && <PublicDataNotice />}
       <div className="flex-1">
         <ServicesCatalogView
           categories={categories}

@@ -17,12 +17,14 @@ export function LocalBusinessSchema({
   coverage,
   categories,
   imageUrl,
+  isFallback = false,
 }: {
   settings: BusinessSettings;
   hours: BusinessHour[];
   coverage: CoverageArea[];
   categories: ServiceCategory[];
   imageUrl: string;
+  isFallback?: boolean;
 }) {
   const openingHoursSpecification = hours.flatMap((hour) =>
     getHourPeriods(hour).map((period) => ({
@@ -45,7 +47,7 @@ export function LocalBusinessSchema({
     }))
     .filter((category) => category.services.length > 0);
 
-  const serviceCatalog = publicCategories.length > 0
+  const serviceCatalog = !isFallback && publicCategories.length > 0
     ? {
         "@type": "OfferCatalog",
         name: `${settings.business_name} services`,
@@ -133,7 +135,7 @@ export function LocalBusinessSchema({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(businessData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />
+      {!isFallback && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />}
     </>
   );
 }
