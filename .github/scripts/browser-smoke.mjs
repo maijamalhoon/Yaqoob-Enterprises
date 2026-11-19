@@ -58,16 +58,18 @@ async function assertHomepage(page, label, { mobileNav }) {
     assert((await whatsapp.innerText()).includes("WhatsApp"), `${label}: desktop WhatsApp action lost its visible label.`);
   }
 
-  const heroHeading = await page.locator("h1").first().boundingBox();
-  const heroMetrics = await page.locator("h1").first().evaluate((element) => ({
+  // Wait for the *visible* home hero, not a transient/hidden heading during streaming.
+  const hero = page.locator("#hero-section h1");
+  await hero.waitFor({ state: "visible", timeout: 15_000 });
+  const heroHeading = await hero.boundingBox();
+  const heroMetrics = await hero.evaluate((element) => ({
     width: element.getBoundingClientRect().width,
     parentWidth: element.parentElement?.getBoundingClientRect().width,
     viewport: window.innerWidth,
     scrollWidth: document.documentElement.scrollWidth,
-    maxWidth: getComputedStyle(element).maxWidth,
-    fontSize: getComputedStyle(element).fontSize,
   }));
-  assert(heroHeading && heroHeading.width <= page.viewportSize().width, `${label}: hero heading exceeds viewport width: ${JSON.stringify(heroMetrics)}.`);
+  assert(heroHeading && heroHeading.width > 0 && heroHeading.width <= page.viewportSize().width,
+    `${label}: visible hero heading exceeds viewport width: ${JSON.stringify(heroMetrics)}.`);
 }
 
 const browser = await chromium.launch({ headless: true });
