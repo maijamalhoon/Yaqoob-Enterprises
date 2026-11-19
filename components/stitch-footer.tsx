@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, ExternalLink, Navigation, Phone } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { TrackedLink } from "@/components/tracked-link";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import type { BusinessSettings } from "@/lib/types";
 
 interface StitchFooterProps {
@@ -11,8 +12,8 @@ interface StitchFooterProps {
 
 export function StitchFooter({ settings, statusText }: StitchFooterProps) {
   const phone = settings.phone_e164 || "+923492568864";
-  const mapUrl = settings.map_url || "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
-  const googleProfileUrl = settings.google_business_profile_url;
+  const mapUrl = SHOP_DIRECTIONS_URL;
+  const googleProfileUrl = GOOGLE_BUSINESS_PROFILE_URL;
 
   return (
     <footer id="site-footer" className="public-footer" data-purpose="footer">

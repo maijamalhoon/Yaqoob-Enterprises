@@ -1,6 +1,7 @@
 import { Navigation, Phone } from "lucide-react";
 import { TrackedLink } from "@/components/tracked-link";
 import { BrandIcon } from "@/components/brand-icon";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import type { BusinessSettings } from "@/lib/types";
 
 interface StitchFloatingActionsProps {
@@ -13,7 +14,7 @@ export function StitchFloatingActions({ settings, whatsappMessage }: StitchFloat
   const whatsappUrl = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     whatsappMessage || `Hello ${settings.business_name}, I need assistance with a service.`,
   )}`;
-  const directionsUrl = settings.map_url || "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const directionsUrl = SHOP_DIRECTIONS_URL;
 
   return (
     <nav className="mobile-action-bar" aria-label="Quick contact actions">

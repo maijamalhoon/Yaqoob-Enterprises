@@ -3,6 +3,7 @@ import { businessCity, businessLocationLabel } from "@/lib/business-display";
 import { getHourPeriods } from "@/lib/data";
 import { FAQ_ITEMS } from "@/lib/faq-data";
 import { serializeJsonLd } from "@/lib/structured-data";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import type { BusinessHour, BusinessSettings, CoverageArea, ServiceCategory } from "@/lib/types";
 
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -38,7 +39,7 @@ export function LocalBusinessSchema({
   const locationLabel = businessLocationLabel(settings.address);
   const city = businessCity(settings.address);
   const businessId = `${SITE_URL}/#business`;
-  const sameAs = [settings.google_business_profile_url, ...socialProfiles].filter(Boolean);
+  const sameAs = [GOOGLE_BUSINESS_PROFILE_URL, ...socialProfiles];
   const publicCategories = categories
     .filter((category) => category.is_active)
     .map((category) => ({
@@ -82,7 +83,7 @@ export function LocalBusinessSchema({
     description: `Printing, Photocopying & NADRA e-Sahulat Services in Akhtar Colony, Karachi. Color & B&W Printing, Notes Printing, Photo Printing, Bulk Printing, and Biometric Services in ${locationLabel}.`,
     priceRange: "PKR",
     currenciesAccepted: "PKR",
-    hasMap: settings.map_url,
+    hasMap: SHOP_DIRECTIONS_URL,
     hasOfferCatalog: serviceCatalog,
     geo: {
       "@type": "GeoCoordinates",

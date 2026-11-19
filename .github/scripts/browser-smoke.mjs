@@ -106,6 +106,10 @@ try {
   assert(Array.isArray(businessData?.sameAs), "Business entity is missing sameAs identity links.");
   assert(businessData.sameAs.some((url) => String(url).includes("facebook.com/yaqoobenterprises1")), "Facebook profile is missing from business schema.");
   assert(businessData.sameAs.some((url) => String(url).includes("instagram.com/yaqoobenterprises1")), "Instagram profile is missing from business schema.");
+  assert(businessData.sameAs.includes("https://maps.app.goo.gl/fxKpDcfcnYVKojGv6"), "Official Google Business Profile identity is missing.");
+  assert(businessData.hasMap === "https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5", "LocalBusiness hasMap must point to shop directions.");
+  assert((await page.locator('#hero-directions-cta').getAttribute("href")) === "https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5", "Homepage directions point to a stale map.");
+  assert((await page.locator('footer a[href="https://maps.app.goo.gl/fxKpDcfcnYVKojGv6"]').count()) === 1, "Footer business profile link is missing.");
 
   const catalogCategories = businessData?.hasOfferCatalog?.itemListElement || [];
   const catalogServices = catalogCategories.flatMap((category) => category?.itemListElement || []);
@@ -165,7 +169,9 @@ try {
   assert(contactHeading.toLowerCase().includes("contact"), "Contact page heading is missing: " + contactHeading + " at " + page.url());
   assert((await page.locator('main a[href^="tel:"]').count()) > 0, "Contact page is missing its phone link.");
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Contact page is missing its WhatsApp link.");
-  assert((await page.locator('main a[href*="maps.app.goo.gl"]').count()) > 0, "Contact page is missing its directions link.");
+  assert((await page.locator('main a[href="https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5"]').count()) > 0, "Contact page points to a stale directions link.");
+  const contactBusinessSchema = (await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) => nodes.flatMap((node) => { try { return [JSON.parse(node.textContent || "{}")]; } catch { return []; } }))).find((item) => item?.["@type"] === "LocalBusiness");
+  assert(contactBusinessSchema?.hasMap === "https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5", "Contact schema points to wrong map.");
 
   await openHealthy(page, "/");
   await page.locator("#quick-request").scrollIntoViewIfNeeded();

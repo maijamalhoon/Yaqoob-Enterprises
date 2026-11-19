@@ -13,6 +13,7 @@ import { BrandIcon } from "@/components/brand-icon";
 import { formatBusinessHours, getCurrentBusinessStatus, getHourPeriods, getContactSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 
 export const metadata: Metadata = {
   title: "Contact & Location in Karachi",
@@ -44,9 +45,7 @@ export default async function ContactPage() {
   const whatsappUrl = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     "Hello Yaqoob Enterprises, I need help with: "
   )}`;
-  const directionsUrl =
-    settings.map_url ||
-    "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const directionsUrl = SHOP_DIRECTIONS_URL;
 
   const exactAddress = settings.address || "Plot No. 7, Street No. 1, Sector B, Akhtar Colony, Karachi, Pakistan";
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -71,6 +70,8 @@ export default async function ContactPage() {
   const contactSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${SITE_URL}/#business`,
+    sameAs: [GOOGLE_BUSINESS_PROFILE_URL],
     name: settings.business_name,
     telephone: phone,
     url: `${SITE_URL}/contact`,

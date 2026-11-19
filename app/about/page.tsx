@@ -14,6 +14,7 @@ import { BrandIcon } from "@/components/brand-icon";
 import { formatGroupedHours, getCurrentBusinessStatus, getHourPeriods, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
+import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 
 export const metadata: Metadata = {
   title: "About the Shop | Printing & Biometrics",
@@ -45,10 +46,8 @@ export default async function AboutPage() {
   const whatsappUrl = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     "Hello Yaqoob Enterprises, I would like to inquire about your services."
   )}`;
-  const directionsUrl =
-    settings.map_url ||
-    "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
-  const gbpUrl = settings.google_business_profile_url;
+  const directionsUrl = SHOP_DIRECTIONS_URL;
+  const gbpUrl = GOOGLE_BUSINESS_PROFILE_URL;
   const pageUrl = `${SITE_URL}/about`;
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const groupedHours = hours.length > 0 ? formatGroupedHours(hours) : [];
@@ -73,6 +72,9 @@ export default async function AboutPage() {
   const aboutSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${SITE_URL}/#business`,
+    sameAs: [GOOGLE_BUSINESS_PROFILE_URL],
+    hasMap: SHOP_DIRECTIONS_URL,
     name: settings.business_name,
     telephone: phone,
     url: pageUrl,
