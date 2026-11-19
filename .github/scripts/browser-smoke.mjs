@@ -59,7 +59,15 @@ async function assertHomepage(page, label, { mobileNav }) {
   }
 
   const heroHeading = await page.locator("h1").first().boundingBox();
-  assert(heroHeading && heroHeading.width <= page.viewportSize().width, `${label}: hero heading exceeds viewport width.`);
+  const heroMetrics = await page.locator("h1").first().evaluate((element) => ({
+    width: element.getBoundingClientRect().width,
+    parentWidth: element.parentElement?.getBoundingClientRect().width,
+    viewport: window.innerWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    maxWidth: getComputedStyle(element).maxWidth,
+    fontSize: getComputedStyle(element).fontSize,
+  }));
+  assert(heroHeading && heroHeading.width <= page.viewportSize().width, `${label}: hero heading exceeds viewport width: ${JSON.stringify(heroMetrics)}.`);
 }
 
 const browser = await chromium.launch({ headless: true });
