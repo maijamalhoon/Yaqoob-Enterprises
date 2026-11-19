@@ -66,6 +66,8 @@ try {
     "Category lacks availability confirmation: " + categoryText.slice(0, 600));
 
   await open("/services/biometric/general-biometric-esahulat");
+  await page.getByText("Live availability could not be checked", { exact: false }).first().waitFor({ state: "visible", timeout: 15_000 });
+  await page.getByText("Confirm availability", { exact: true }).first().waitFor({ state: "visible", timeout: 15_000 });
   const serviceText = await page.locator("main:not([aria-busy='true'])").last().innerText();
   assert(serviceText.includes("Confirm availability"), "Detail page claims live availability");
   assert(serviceText.includes("Live availability could not be checked"), "Service safety note missing");
@@ -75,11 +77,13 @@ try {
     "Customer cannot reach WhatsApp during outage");
 
   await open("/rates");
+  await page.getByText("A4 Photocopy", { exact: true }).first().waitFor({ state: "visible", timeout: 15_000 });
   const rateText = await page.locator("main:not([aria-busy='true'])").last().innerText();
   assert(rateText.includes("A4 Photocopy") && rateText.includes("Rs. 10"), "Published offline rates missing");
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) === 1, "Rates quotation CTA missing");
 
   await open("/contact");
+  await page.locator('main a[href^="tel:"]').first().waitFor({ state: "visible", timeout: 15_000 });
   assert((await page.locator('main a[href^="tel:"]').count()) >= 1, "Contact phone missing");
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) >= 1, "Contact WhatsApp missing");
   assert(!(await page.locator("main:not([aria-busy='true'])").last().innerText()).includes("Open now"), "Unknown hours presented as live");
