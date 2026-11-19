@@ -60,7 +60,10 @@ try {
 
   await open("/services/biometric");
   assert((await page.locator('[role="status"]').count()) === 1, "Category outage notice missing");
-  assert((await page.locator("main:not([aria-busy='true'])").last().innerText()).includes("Confirm availability"), "Category claims live service availability");
+  await page.getByText("Confirm availability", { exact: true }).first().waitFor({ state: "visible", timeout: 15_000 });
+  const categoryText = await page.locator("main:not([aria-busy='true'])").last().innerText();
+  assert(categoryText.includes("Confirm availability"),
+    "Category lacks availability confirmation: " + categoryText.slice(0, 600));
 
   await open("/services/biometric/general-biometric-esahulat");
   const serviceText = await page.locator("main:not([aria-busy='true'])").last().innerText();
