@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ServiceIcon } from "@/components/service-icon";
+import { PublicDataNotice } from "@/components/public-data-notice";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
@@ -98,11 +99,12 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }}
       />
-      <script
+      {!site.isFallback && <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListData) }}
-      />
+      />}
       <StitchHeader settings={site.settings} statusText={statusText} />
+      {site.isFallback && <PublicDataNotice />}
       <main id="main-content">
         <section className="page-hero page-hero--service">
           <div className="page-hero__pattern" aria-hidden="true" />
@@ -130,7 +132,7 @@ export default async function ServiceCategoryPage({ params }: { params: Promise<
                   <article className="service-detail-card service-detail-card--premium" key={service.id}>
                     <div className="service-detail-card__head service-detail-card__head--premium">
                       <div>
-                        {service.status !== "active" && <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>}
+                        {service.status !== "active" && <span className={`status status--${service.status}`}>{site.isFallback ? "Confirm availability" : statusLabel(service.status)}</span>}
                         <h2>{service.title}</h2>
                       </div>
                     </div>

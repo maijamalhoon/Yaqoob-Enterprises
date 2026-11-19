@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LocalBusinessSchema } from "@/components/local-business-schema";
+import { PublicDataNotice } from "@/components/public-data-notice";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
@@ -42,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const { settings, hours, categories, coverage, gallery, services } = await getSiteData();
+  const { settings, hours, categories, coverage, gallery, services, isFallback } = await getSiteData();
   const featuredImage = gallery.find((image) => image.is_featured && image.media_kind === "real");
   const imageUrl = featuredImage
     ? `${SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/shop-media/${featuredImage.storage_path}`
@@ -59,9 +60,11 @@ export default async function HomePage() {
         coverage={coverage}
         categories={categories}
         imageUrl={schemaImageUrl}
+        isFallback={isFallback}
       />
 
       <StitchHeader settings={settings} statusText={hoursText} />
+      {isFallback && <PublicDataNotice />}
 
       <main id="main-content">
         <StitchHero

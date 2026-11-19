@@ -13,6 +13,7 @@ import {
   Truck,
 } from "lucide-react";
 import { ServiceIcon } from "@/components/service-icon";
+import { PublicDataNotice } from "@/components/public-data-notice";
 import { StitchFooter } from "@/components/stitch-footer";
 import { StitchHeader } from "@/components/stitch-header";
 import { StitchFloatingActions } from "@/components/stitch-floating-actions";
@@ -125,7 +126,9 @@ export default async function PublicServicePage({
   const seo = getServiceSeo(category, service, site.settings);
   const statusText = getCurrentBusinessStatus(site.hours);
   const modes = getCustomerServiceModes(service);
-  const action = serviceAction(service.status, service.title, site.settings.business_name);
+  const action = site.isFallback
+    ? { message: `Hello ${site.settings.business_name}, please confirm current availability for ${service.title}.` }
+    : serviceAction(service.status, service.title, site.settings.business_name);
   const relatedServices = (category.services || []).filter((item) => item.id !== service.id).slice(0, 4);
   const pageUrl = `${SITE_URL.replace(/\/$/, "")}${seo.canonicalPath}`;
   const city = businessCity(site.settings.address);
@@ -187,9 +190,10 @@ export default async function PublicServicePage({
   return (
     <div className="public-site public-site--cms-service">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceData) }} />
-      {faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />}
+      {!site.isFallback && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(serviceData) }} />}
+      {!site.isFallback && faqData && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqData) }} />}
       <StitchHeader settings={site.settings} statusText={statusText} />
+      {site.isFallback && <PublicDataNotice />}
       <main id="main-content">
         <section className="seo-service-hero">
           <div className="container">
@@ -201,7 +205,7 @@ export default async function PublicServicePage({
                 <p>{service.short_description || seo.description}</p>
               </div>
               <aside className="seo-service-hero__summary" aria-label="Service summary">
-                {service.status !== "active" && <span className={`status status--${service.status}`}>{statusLabel(service.status)}</span>}
+                {service.status !== "active" && <span className={`status status--${service.status}`}>{site.isFallback ? "Confirm availability" : statusLabel(service.status)}</span>}
                 <strong>{seo.location}</strong>
               </aside>
             </div>
