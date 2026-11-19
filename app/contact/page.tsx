@@ -10,7 +10,7 @@ import { StitchFloatingActions } from "@/components/stitch-floating-actions";
 import { CopyableAddress } from "@/components/copyable-address";
 import { TrackedLink } from "@/components/tracked-link";
 import { BrandIcon } from "@/components/brand-icon";
-import { formatBusinessHours, getCurrentBusinessStatus, getHourPeriods, getSiteData } from "@/lib/data";
+import { formatBusinessHours, getCurrentBusinessStatus, getHourPeriods, getContactSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
 import { serializeJsonLd } from "@/lib/structured-data";
 
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const { settings, hours } = await getSiteData();
+  const { settings, hours } = await getContactSiteData();
   const statusText = getCurrentBusinessStatus(hours);
   const phone = settings.phone_e164 || "+923492568864";
   const callUrl = `tel:${phone}`;

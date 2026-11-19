@@ -58,8 +58,18 @@ async function assertHomepage(page, label, { mobileNav }) {
     assert((await whatsapp.innerText()).includes("WhatsApp"), `${label}: desktop WhatsApp action lost its visible label.`);
   }
 
-  const heroHeading = await page.locator("h1").first().boundingBox();
-  assert(heroHeading && heroHeading.width <= page.viewportSize().width, `${label}: hero heading exceeds viewport width.`);
+  // Wait for the *visible* home hero, not a transient/hidden heading during streaming.
+  const hero = page.locator("#hero-section h1");
+  await hero.waitFor({ state: "visible", timeout: 15_000 });
+  const heroHeading = await hero.boundingBox();
+  const heroMetrics = await hero.evaluate((element) => ({
+    width: element.getBoundingClientRect().width,
+    parentWidth: element.parentElement?.getBoundingClientRect().width,
+    viewport: window.innerWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+  assert(heroHeading && heroHeading.width > 0 && heroHeading.width <= page.viewportSize().width,
+    `${label}: visible hero heading exceeds viewport width: ${JSON.stringify(heroMetrics)}.`);
 }
 
 const browser = await chromium.launch({ headless: true });
@@ -132,6 +142,13 @@ try {
   await openHealthy(page, "/rates");
   await assertNoHorizontalOverflow(page, "Desktop rate list");
   assert((await page.locator("main section[aria-labelledby$='-title']").count()) === 5, "Rate list must contain five service groups.");
+  assert((await page.locator("h1").first().innerText()).includes("Printing & photocopy rates"), "Rate list heading should clearly name printing and photocopy.");
+  assert((await page.locator('nav[aria-label="Browse rate categories"] a').count()) === 5, "Rate list category navigation is missing.");
+  const rateStructuredData = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) => nodes.map((node) => {
+    try { return JSON.parse(node.textContent || "{}"); } catch { return null; }
+  }).filter(Boolean));
+  const rateBreadcrumbs = rateStructuredData.find((item) => item?.["@type"] === "BreadcrumbList");
+  assert(rateBreadcrumbs?.itemListElement?.length === 2, "Rate list breadcrumb structured data is missing.");
   assert((await page.locator("main dl > div").count()) === 20, "2026 rate list must include all 20 published prices.");
   assert((await page.locator("#black-and-white dt").first().innerText()) === "A4 Photocopy", "Rate list photocopy label is incorrect.");
   assert((await page.locator("#black-and-white dd").first().innerText()) === "Rs. 10", "2026 A4 photocopy rate is incorrect.");
@@ -139,6 +156,7 @@ try {
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Rate list quote CTA is missing.");
   const ratesCanonical = await page.locator('link[rel="canonical"]').getAttribute("href");
   assert(Boolean(ratesCanonical?.endsWith("/rates")), "Rate list canonical URL is incorrect.");
+  assert((await page.title()).includes("Printing & Photocopy Rates 2026"), "Rate list search title should describe published rates.");
 
   await openHealthy(page, "/contact");
   await page.waitForLoadState("networkidle", { timeout: 10_000 });
@@ -225,6 +243,10 @@ try {
   assert(Boolean(serviceData), "Service detail page is missing Service structured data.");
   assert(Array.isArray(serviceData?.areaServed) && serviceData.areaServed.length > 1, "Service schema should expose city and configured service areas.");
   assert(serviceStructuredData.some((item) => item?.["@type"] === "BreadcrumbList"), "Service detail page is missing Breadcrumb structured data.");
+
+  const missingResponse = await page.goto(baseUrl + "/unlisted-service-check-404", { waitUntil: "domcontentloaded" });
+  assert(missingResponse?.status() === 404, "Missing public routes should return 404.");
+  assert((await page.locator('a[href="/rates"]').count()) > 0, "404 page should link to the rate list.");
 
   await openHealthy(page, "/privacy");
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
