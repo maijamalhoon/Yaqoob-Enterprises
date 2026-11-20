@@ -1,8 +1,11 @@
-import { Eye, EyeOff, Plus, Wrench } from "lucide-react";
+import Link from "next/link";
+import { Eye, EyeOff, Plus, Search, Wrench } from "lucide-react";
+import { AdminActionForm } from "@/components/admin-action-form";
+import { filterAdminServices, normalizeAdminServiceFilters } from "@/lib/admin-service-filters";
 import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { ServiceIcon } from "@/components/service-icon";
 import { requireAdmin } from "@/lib/admin";
-import { createCategory, createService, deleteService, updateCategory, updateService } from "./actions";
+import { createCategoryWithFeedback, createServiceWithFeedback, deleteServiceWithFeedback, updateCategoryWithFeedback, updateServiceWithFeedback } from "./actions";
 
 const statuses = [
   ["active", "Available"],
@@ -42,14 +45,18 @@ function serviceModes(service: {
   ].filter(Boolean);
 }
 
-export default async function AdminServicesPage() {
+export default async function AdminServicesPage({ searchParams }: { searchParams: Promise<{ q?: string; status?: string }> }) {
+  const filters = await searchParams;
+  const { query, status, active: hasFilters } = normalizeAdminServiceFilters(filters.q, filters.status);
   const { supabase } = await requireAdmin();
-  const [{ data: categories }, { data: services }] = await Promise.all([
+  const [{ data: categories, error: categoryError }, { data: services, error: serviceError }] = await Promise.all([
     supabase.from("service_categories").select("*").order("display_order"),
     supabase.from("services").select("*").order("display_order"),
   ]);
+  if (categoryError || serviceError) throw new Error("The service catalogue could not be loaded. Please retry.");
   const categoryList = categories || [];
   const serviceList = services || [];
+  const filteredServices = filterAdminServices(serviceList, query, status);
   const publicServices = serviceList.filter((service) => service.status !== "hidden");
   const websiteServices = publicServices.filter((service) => service.is_featured);
   const activeCategories = categoryList.filter((category) => category.is_active);
@@ -69,10 +76,32 @@ export default async function AdminServicesPage() {
         </div>
       </div>
 
+      <section className="admin-panel admin-panel--control admin-service-filter" aria-labelledby="admin-service-filter-title">
+        <div className="admin-service-filter__intro">
+          <div>
+            <h2 id="admin-service-filter-title"><Search size={17} aria-hidden="true" /> Find a service</h2>
+            <p>Search by title, URL slug or description. Filter without changing your public website.</p>
+          </div>
+          <span role="status"><strong>{filteredServices.length}</strong> of {serviceList.length} services</span>
+        </div>
+        <form className="admin-service-filter__form" method="get" action="/admin/services">
+          <label htmlFor="admin-service-query">Search services</label>
+          <div className="admin-service-filter__controls">
+            <input id="admin-service-query" type="search" name="q" maxLength={80} defaultValue={query} placeholder="e.g. biometric, printing, tickets" />
+            <select name="status" aria-label="Filter by service status" defaultValue={status}>
+              <option value="all">All statuses</option>
+              {statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+            <button className="button button--primary" type="submit">Apply filters</button>
+            {hasFilters && <Link className="button button--secondary" href="/admin/services">Clear</Link>}
+          </div>
+        </form>
+      </section>
+
       <section className="admin-create-row">
         <details className="admin-panel admin-create-panel">
           <summary><span><Plus size={17} /> Add service</span><small>Create a new customer service</small></summary>
-          <form className="admin-form-grid admin-form-grid--focused" action={createService}>
+          <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={createServiceWithFeedback} resetOnSuccess>
             <label>Category<select name="category_id" required>{categoryList.map((category) => <option key={category.id} value={category.id}>{category.title}</option>)}</select></label>
             <label>Status<select name="status" defaultValue="active">{statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             <label>Title<input name="title" maxLength={120} required /></label>
@@ -93,25 +122,33 @@ export default async function AdminServicesPage() {
               <label><input type="checkbox" name="appointment_required" /> Appointment</label>
             </div>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add service</AdminSubmitButton><AdminCancelButton /></div>
-          </form>
+          </AdminActionForm>
         </details>
 
         <details className="admin-panel admin-create-panel">
           <summary><span><Plus size={17} /> Add category</span><small>Create a new service group</small></summary>
-          <form className="admin-form-grid admin-form-grid--focused" action={createCategory}>
+          <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={createCategoryWithFeedback} resetOnSuccess>
             <label>Category name<input name="title" maxLength={100} required /></label>
             <label>URL slug<input name="slug" placeholder="category-name" required pattern="[a-zA-Z0-9-]+" /></label>
             <label>Icon<select name="icon_key" defaultValue="briefcase">{iconOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
             <label>Order<input type="number" min="0" name="display_order" defaultValue={categoryList.length} /></label>
             <label className="admin-span-2">Description<textarea name="description" rows={2} required /></label>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add category</AdminSubmitButton><AdminCancelButton /></div>
-          </form>
+          </AdminActionForm>
         </details>
       </section>
 
       <div className="admin-service-groups">
-        {categoryList.map((category) => {
-          const categoryServices = serviceList.filter((service) => service.category_id === category.id);
+        {hasFilters && filteredServices.length === 0 && (
+          <div className="admin-empty-state admin-service-no-results" role="status">
+            <Search size={24} aria-hidden="true" />
+            <h2>No matching services</h2>
+            <p>Try another search or status, or clear filters to see the full catalogue.</p>
+            <Link href="/admin/services" className="button button--secondary">Show all services</Link>
+          </div>
+        )}
+        {categoryList.filter((category) => !hasFilters || filteredServices.some((service) => service.category_id === category.id)).map((category) => {
+          const categoryServices = filteredServices.filter((service) => service.category_id === category.id);
           return (
             <section className="admin-panel admin-service-group" key={category.id}>
               <div className="admin-service-group__head">
@@ -122,7 +159,7 @@ export default async function AdminServicesPage() {
                 </div>
                 <details className="admin-inline-editor">
                   <summary>Category settings</summary>
-                  <form className="admin-form-grid admin-form-grid--focused" action={updateCategory}>
+                  <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={updateCategoryWithFeedback}>
                     <input type="hidden" name="id" value={category.id} />
                     <label>Category name<input name="title" defaultValue={category.title} required /></label>
                     <label>Icon<select name="icon_key" defaultValue={category.icon_key}>{iconOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
@@ -130,7 +167,7 @@ export default async function AdminServicesPage() {
                     <label className="admin-span-2">Description<textarea name="description" rows={2} defaultValue={category.description} /></label>
                     <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_active" defaultChecked={category.is_active} /> Enable this category when it has public services</label>
                     <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save category</AdminSubmitButton><AdminCancelButton /></div>
-                  </form>
+                  </AdminActionForm>
                 </details>
               </div>
 
@@ -152,7 +189,10 @@ export default async function AdminServicesPage() {
                         <span className="admin-edit-label">Edit</span>
                       </summary>
                       <div className="admin-edit-card__body">
-                        <form className="admin-form-grid admin-form-grid--focused" action={updateService}>
+                        {category.is_active && service.status !== "hidden" && (
+                          <div className="admin-service-preview"><Link href={`/services/${category.slug}/${service.slug}`} target="_blank" rel="noopener noreferrer">Preview live service page</Link></div>
+                        )}
+                        <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={updateServiceWithFeedback}>
                           <input type="hidden" name="id" value={service.id} />
                           <label>Title<input name="title" defaultValue={service.title} required /></label>
                           <label>Category<select name="category_id" defaultValue={service.category_id}>{categoryList.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
@@ -173,11 +213,11 @@ export default async function AdminServicesPage() {
                             <label><input type="checkbox" name="appointment_required" defaultChecked={service.appointment_required} /> Appointment</label>
                           </div>
                           <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save service</AdminSubmitButton><AdminCancelButton /></div>
-                        </form>
-                        <form className="admin-destructive-row" action={deleteService}>
+                        </AdminActionForm>
+                        <AdminActionForm className="admin-destructive-row" action={deleteServiceWithFeedback}>
                           <input type="hidden" name="id" value={service.id} />
                           <AdminDeleteButton label="Delete service" confirmMessage={`Delete “${service.title}”? This permanently removes the service record and cannot be undone.`} />
-                        </form>
+                        </AdminActionForm>
                       </div>
                     </details>
                   );
