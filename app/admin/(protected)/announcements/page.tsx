@@ -51,14 +51,8 @@ export default async function AdminAnnouncementsPage() {
         </div>
       </div>
 
-      <section className="admin-panel admin-panel--control" aria-labelledby="announcement-create-title">
-        <div className="admin-panel__heading">
-          <div>
-            <span className="admin-panel-kicker"><Plus size={15} aria-hidden="true" /> New notice</span>
-            <h2 id="announcement-create-title">Create an announcement</h2>
-            <p>Keep it clear. Turn off “Publish now” to save it as a hidden notice.</p>
-          </div>
-        </div>
+      <details className="admin-panel admin-create-panel admin-announcement-create">
+        <summary><span><Plus size={17} aria-hidden="true" /> New announcement</span></summary>
         <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={createAnnouncementWithFeedback} resetOnSuccess>
           <label className="admin-span-2">
             Title
@@ -88,7 +82,7 @@ export default async function AdminAnnouncementsPage() {
             <AdminCancelButton />
           </div>
         </AdminActionForm>
-      </section>
+      </details>
 
       <section className="admin-panel admin-panel--control" aria-labelledby="announcement-list-title">
         <div className="admin-panel__heading">
