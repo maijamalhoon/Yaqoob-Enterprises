@@ -306,6 +306,15 @@ try {
     assert((await page.locator('input[type="password"]').count()) > 0, "Protected route did not show the admin password input for " + protectedPath + ".");
   }
 
+  // A signed-out visitor must never receive website records or Storage bytes.
+  const anonymousBackup = await page.request.get(baseUrl + "/admin/history/export", { maxRedirects: 0 });
+  assert([302, 303, 307, 308, 401, 403].includes(anonymousBackup.status()), "Portable backup is exposed to anonymous visitors.");
+  if ([302, 303, 307, 308].includes(anonymousBackup.status())) {
+    const destination = anonymousBackup.headers().location || "";
+    assert(destination.includes("/admin/login"), "Anonymous backup request did not redirect to the admin login.");
+  }
+  assert(!((anonymousBackup.headers()["content-disposition"] || "").includes("attachment")), "Anonymous backup request offered an export.");
+
   assert(pageErrors.length === 0, `Browser page errors detected: ${pageErrors.join(" | ")}`);
   await desktop.close();
 
