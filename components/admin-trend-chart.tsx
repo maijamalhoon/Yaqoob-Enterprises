@@ -15,7 +15,7 @@ export function AdminTrendChart({ points, partial = false }: Props) {
   const average = values.length ? Math.round(total / values.length) : 0;
   const lastWeek = points.slice(-7).reduce((sum, p) => sum + p.count, 0);
   const previousWeek = points.length >= 14 ? points.slice(-14, -7).reduce((sum, p) => sum + p.count, 0) : 0;
-  const change = previousWeek > 0 ? Math.round((lastWeek - previousWeek) / previousWeek * 100) : null;
+  const change = !partial && previousWeek > 0 ? Math.round((lastWeek - previousWeek) / previousWeek * 100) : null;
   const plotWidth = WIDTH - LEFT - RIGHT, plotHeight = HEIGHT - TOP - BOTTOM;
   const chart = values.map((p, i) => ({
     ...p, x: LEFT + (values.length <= 1 ? plotWidth / 2 : i * plotWidth / (values.length - 1)),
