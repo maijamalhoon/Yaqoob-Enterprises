@@ -66,18 +66,23 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="admin-content admin-control-page">
-      <div className="admin-page-heading admin-page-heading--control">
-        <div>
-          <span className="eyebrow">Control centre</span>
-          <h1>Overview</h1>
-          <p>Manage the information {settingsData?.business_name || "your business"} shows on the public website.</p>
+      <header className="admin-premium-hero">
+        <div className="admin-premium-hero__copy">
+          <span className="admin-premium-hero__eyebrow"><span aria-hidden="true" /> YAQOOB ENTERPRISES / CONTROL ROOM</span>
+          <h1>Website overview</h1>
+          <p>Content, performance and what needs your attention.</p>
+          <div className="admin-premium-hero__meta">
+            <span><CheckCircle2 size={15} aria-hidden="true" /> {healthyCount} of {healthChecks.length} checks ready</span>
+            <span><History size={15} aria-hidden="true" /> {latestBackup.error ? "Backup status unavailable" : latestBackup.data?.id ? "Backup available" : "Backup needed"}</span>
+          </div>
         </div>
-        <div className="admin-heading-metrics">
-          <span className={healthyCount === healthChecks.length ? "is-good" : "is-warning"}>
-            <strong>{healthyCount}/{healthChecks.length}</strong> checks ready
-          </span>
+        <div className="admin-premium-hero__focus">
+          <div className="admin-premium-hero__focus-top"><span>PRIORITY</span><ArrowRight size={16} aria-hidden="true" /></div>
+          <strong>{nextPriority ? "Review " + nextPriority[0].toLowerCase() : "Website essentials ready"}</strong>
+          <p>{nextPriority ? nextPriority[1] === null ? "Check unavailable status" : reviewCount + " item" + (reviewCount === 1 ? "" : "s") + " to review" : "Keep an eye on website engagement."}</p>
+          <Link href={nextPriority?.[2] || "/admin/analytics"}>{nextPriority ? "Open section" : "View analytics"} <ArrowRight size={15} aria-hidden="true" /></Link>
         </div>
-      </div>
+      </header>
 
       <section className="admin-stats admin-stats--control" aria-label="Website summary">
         <article>
@@ -100,22 +105,6 @@ export default async function AdminDashboardPage() {
           <strong>{events.error ? "—" : (events.count || 0).toLocaleString("en-PK")}</strong>
           <p>Tracked events · 30 days</p>
         </article>
-      </section>
-
-      <section className="admin-dashboard-spotlight" aria-label="Recommended admin action">
-        <span className="admin-dashboard-spotlight__icon"><ShieldCheck size={20} aria-hidden="true" /></span>
-        <div className="admin-dashboard-spotlight__copy">
-          <span>Next step</span>
-          <strong>{nextPriority ? "Review " + nextPriority[0].toLowerCase() : "Website essentials are ready"}</strong>
-          <p>{nextPriority
-            ? nextPriority[1] === null
-              ? "The status could not be verified. Open this section and check its data."
-              : `${reviewCount} website check${reviewCount === 1 ? "" : "s"} need${reviewCount === 1 ? "s" : ""} attention.`
-            : "Core setup is complete. Explore visitors and contact activity."}</p>
-        </div>
-        <Link href={nextPriority?.[2] || "/admin/analytics"}>
-          {nextPriority ? "Open section" : "View insights"} <ArrowRight size={16} aria-hidden="true" />
-        </Link>
       </section>
 
       <details className="admin-readiness-disclosure">
