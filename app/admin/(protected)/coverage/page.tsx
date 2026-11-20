@@ -1,11 +1,13 @@
 import { MapPinned, Plus } from "lucide-react";
+import { AdminActionForm } from "@/components/admin-action-form";
 import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
-import { createCoverageArea, deleteCoverageArea, updateCoverageArea } from "../actions";
+import { createCoverageAreaWithFeedback, deleteCoverageAreaWithFeedback, updateCoverageAreaWithFeedback } from "./actions";
 
 export default async function AdminCoveragePage() {
   const { supabase } = await requireAdmin();
-  const { data: areas } = await supabase.from("coverage_areas").select("*").order("display_order");
+  const { data: areas, error } = await supabase.from("coverage_areas").select("*").order("display_order");
+  if (error) throw new Error("Coverage areas could not be loaded. Please retry.");
   const areaList = areas || [];
   const activeCount = areaList.filter((area) => area.is_active).length;
 
@@ -17,22 +19,23 @@ export default async function AdminCoveragePage() {
           <h1>Coverage</h1>
           <p>Areas used for delivery, pickup and home-visit availability.</p>
         </div>
-        <div className="admin-heading-metrics"><span><strong>{activeCount}</strong> active areas</span></div>
+        <div className="admin-heading-metrics"><span><strong>{activeCount}</strong> active areas</span><span><strong>{areaList.length}</strong> total areas</span></div>
       </div>
 
       <details className="admin-panel admin-create-panel">
         <summary><span><Plus size={17} /> Add area</span><small>Create a new service area</small></summary>
-        <form className="admin-form-grid admin-form-grid--focused" action={createCoverageArea}>
-          <label>Area name<input name="name" maxLength={100} required /></label>
-          <label>Order<input type="number" min="0" name="display_order" defaultValue={areaList.length} /></label>
-          <label className="admin-span-2">Notes<textarea name="notes" rows={2} /></label>
+        <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={createCoverageAreaWithFeedback} resetOnSuccess>
+          <label>Area name<input name="name" minLength={2} maxLength={100} required /></label>
+          <label>Order<input type="number" min="0" name="display_order" max="10000" step="1" defaultValue={areaList.length} /></label>
+          <label className="admin-span-2">Notes<textarea name="notes" rows={2} maxLength={2000} /></label>
           <div className="admin-checks admin-span-2">
             <label><input type="checkbox" name="delivery_available" defaultChecked /> Delivery</label>
+            <label><input type="checkbox" name="pickup_available" /> Pickup</label>
             <label><input type="checkbox" name="doorstep_biometric_available" defaultChecked /> Home biometric</label>
             <label><input type="checkbox" name="extra_charge_may_apply" defaultChecked /> Extra charge may apply</label>
           </div>
           <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Add area</AdminSubmitButton><AdminCancelButton /></div>
-        </form>
+        </AdminActionForm>
       </details>
 
       <section className="admin-panel admin-panel--control admin-coverage-panel">
@@ -47,11 +50,11 @@ export default async function AdminCoveragePage() {
                 <span>Edit</span>
               </summary>
               <div className="admin-edit-card__body">
-                <form className="admin-form-grid admin-form-grid--focused" action={updateCoverageArea}>
+                <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={updateCoverageAreaWithFeedback}>
                   <input type="hidden" name="id" value={area.id} />
-                  <label>Area name<input name="name" defaultValue={area.name} required /></label>
-                  <label>Order<input type="number" min="0" name="display_order" defaultValue={area.display_order} /></label>
-                  <label className="admin-span-2">Notes<textarea name="notes" rows={2} defaultValue={area.notes} /></label>
+                  <label>Area name<input name="name" defaultValue={area.name} minLength={2} maxLength={100} required /></label>
+                  <label>Order<input type="number" min="0" name="display_order" max="10000" step="1" defaultValue={area.display_order} /></label>
+                  <label className="admin-span-2">Notes<textarea name="notes" rows={2} maxLength={2000} defaultValue={area.notes} /></label>
                   <div className="admin-checks admin-span-2">
                     <label><input type="checkbox" name="delivery_available" defaultChecked={area.delivery_available} /> Delivery</label>
                     <label><input type="checkbox" name="doorstep_biometric_available" defaultChecked={area.doorstep_biometric_available} /> Home biometric</label>
@@ -60,11 +63,11 @@ export default async function AdminCoveragePage() {
                     <label><input type="checkbox" name="is_active" defaultChecked={area.is_active} /> Active</label>
                   </div>
                   <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save area</AdminSubmitButton><AdminCancelButton /></div>
-                </form>
-                <form className="admin-destructive-row" action={deleteCoverageArea}>
+                </AdminActionForm>
+                <AdminActionForm className="admin-destructive-row" action={deleteCoverageAreaWithFeedback}>
                   <input type="hidden" name="id" value={area.id} />
-                  <AdminDeleteButton label="Delete area" confirmMessage={`Delete “${area.name}” from coverage?`} />
-                </form>
+                  <AdminDeleteButton label="Delete area" confirmMessage={`Delete “${area.name}” from coverage? This removes its delivery, pickup and home-visit availability from the website.`} />
+                </AdminActionForm>
               </div>
             </details>
           ))}
