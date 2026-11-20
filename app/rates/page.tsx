@@ -27,7 +27,7 @@ const breadcrumbSchema = {
 };
 
 export const metadata: Metadata = {
-  title: "Printing & Photocopy Rates 2026 in Karachi",
+  title: "Printing & Photocopy Rates Karachi",
   description: "View 2026 prices for photocopy, printing, photos, lamination, binding and scanning at Yaqoob Enterprises, Akhtar Colony.",
   alternates: { canonical: SITE_URL + "/rates" },
   openGraph: {

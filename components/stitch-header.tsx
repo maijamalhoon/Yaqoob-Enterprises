@@ -43,7 +43,6 @@ export function StitchHeader({ settings }: StitchHeaderProps) {
           {/* Brand Logo */}
           <Link
             id="brand-logo-link"
-            aria-label={`${settings.business_name} home`}
             className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none"
             href="/"
           >

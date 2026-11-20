@@ -18,7 +18,7 @@ import { GOOGLE_BUSINESS_PROFILE_URL, SHOP_DIRECTIONS_URL } from "@/lib/business
 export const metadata: Metadata = {
   title: "Contact & Location in Karachi",
   description:
-    "Visit Yaqoob Enterprises at Plot No. 7, Street No. 1, Sector B, Near Jamia Masjid Muhammadi, Akhtar Colony, Karachi. Phone: +92 349 2568864. Call, WhatsApp, or get directions.",
+    "Find Yaqoob Enterprises near Jamia Masjid Muhammadi, Sector B, Akhtar Colony, Karachi. Call, WhatsApp or get shop directions.",
   alternates: {
     canonical: `${SITE_URL}/contact`,
   },

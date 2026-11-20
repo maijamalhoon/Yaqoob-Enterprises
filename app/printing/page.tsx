@@ -18,7 +18,7 @@ import { SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Printing Services in Akhtar Colony, Karachi",
+  title: "Printing in Akhtar Colony Karachi",
   description:
     "Black-and-white and color printing in Akhtar Colony, Karachi. Bulk school, college, and university notes and assignments at discounted rates.",
   alternates: {

@@ -12,8 +12,6 @@ import "./service-page-polish.css";
 import "./seo-service-pages.css";
 import "./quick-request-polish.css";
 import "./guided-request-polish.css";
-import "./admin-control-center.css";
-import "./admin-safety-analytics.css";
 import "./skeleton.css";
 import "./stitch.css";
 import "./public-site.css";

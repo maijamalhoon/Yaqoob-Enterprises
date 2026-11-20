@@ -270,6 +270,28 @@ try {
   await assertNoHorizontalOverflow(page, "Desktop privacy page");
   assert((await page.locator("main").innerText()).toLowerCase().includes("campaign"), "Privacy page must disclose campaign attribution cookies.");
 
+  // Search snippets must be concise and the category/detail intent distinct.
+  const seoPaths = [
+    "/photo-printing", "/services/printing-photos/passport-size-photos",
+    "/services/retail", "/services/retail/stationery-mobile-accessories",
+    "/printing", "/office-printing", "/color-printing", "/rates",
+    "/contact", "/nadra-esahulat",
+    "/services/printing-photos/colour-black-white-printing",
+  ];
+  const seoTitles = new Map();
+  for (const path of seoPaths) {
+    const response = await page.request.get(`${baseUrl}${path}`);
+    assert(response.ok(), `SEO page ${path} returned ${response.status()}.`);
+    const html = await response.text();
+    const title = (html.match(/<title[^>]*>([^<]*)<\/title>/)?.[1] || "").replaceAll("&amp;", "&");
+    const description = (html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/)?.[1] || "").replaceAll("&amp;", "&");
+    assert(title.length > 0 && title.length <= 60, `${path}: title length ${title.length} must stay <= 60.`);
+    assert(description.length > 0 && description.length <= 160, `${path}: meta description length ${description.length} must stay <= 160.`);
+    seoTitles.set(path, title);
+  }
+  assert(seoTitles.get("/photo-printing") !== seoTitles.get("/services/printing-photos/passport-size-photos"), "Passport photo landing and service detail titles must differ.");
+  assert(seoTitles.get("/services/retail") !== seoTitles.get("/services/retail/stationery-mobile-accessories"), "Retail category and service detail titles must differ.");
+
   const adminLoginResponse = await openHealthy(page, "/admin/login");
   await assertNoHorizontalOverflow(page, "Desktop admin login");
   assert(adminLoginResponse.status() < 400, "Admin login route is unavailable.");
