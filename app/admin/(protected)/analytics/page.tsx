@@ -210,6 +210,10 @@ export default async function AdminAnalyticsPage() {
     ["Contact rate", `${conversionRate}%`, Globe2],
   ] as const;
 
+  const lastSevenViews = dailyPageViews.slice(-7).reduce((sum, day) => sum + day.count, 0);
+  const topService = serviceInterest[0];
+  const topSource = sources[0];
+
   const trackingUrl = `${SITE_URL.replace(/\/$/, "")}/?utm_source=google&utm_medium=organic&utm_campaign=gbp`;
 
   return (
@@ -236,6 +240,24 @@ export default async function AdminAnalyticsPage() {
           </p>
         )}
         {truncated && <p className="admin-traffic-note">Partial sample: only the latest 5,000 tracked events are included.</p>}
+      </section>
+
+      <section className="admin-analytics-highlights" aria-label="Traffic highlights">
+        <article>
+          <span>LAST 7 DAYS</span>
+          <strong>{lastSevenViews.toLocaleString("en-PK")}</strong>
+          <small>{truncated ? "Sampled page views" : "Recorded page views"}</small>
+        </article>
+        <article>
+          <span>MOST-VIEWED SERVICE</span>
+          <strong title={topService?.[0]}>{topService?.[0] || "No service visits"}</strong>
+          <small>{topService ? topService[1].toLocaleString("en-PK") + " page views" : "No data in this period"}</small>
+        </article>
+        <article>
+          <span>TOP TRAFFIC SOURCE</span>
+          <strong title={topSource?.[0]}>{topSource?.[0] || "No traffic source"}</strong>
+          <small>{topSource ? topSource[1].toLocaleString("en-PK") + " page views" : "No data in this period"}</small>
+        </article>
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
