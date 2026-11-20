@@ -123,3 +123,56 @@ export function assemblePortableBackup(
     restore_mode: "manual-recovery-only",
   };
 }
+
+
+/**
+ * Offline recovery check. This never connects to or changes a database.
+ * A successful check verifies structure, references, file sizes and SHA-256.
+ * It does NOT certify that a full database restore has been rehearsed.
+ */
+export function verifyPortableBackup(input: unknown) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    throw new Error("Invalid portable backup document.");
+  }
+  const file = input as Record<string, unknown>;
+  if (file.format !== "yaqoob-website-portable-backup" || file.version !== 1 || file.restore_mode !== "manual-recovery-only") {
+    throw new Error("Unsupported portable backup format or version.");
+  }
+  if (typeof file.exported_at !== "string" || !Number.isFinite(Date.parse(file.exported_at))) {
+    throw new Error("Portable backup timestamp is invalid.");
+  }
+  if (!file.contents || typeof file.contents !== "object" || Array.isArray(file.contents)) {
+    throw new Error("Portable content is missing.");
+  }
+  if (!Array.isArray(file.media)) {
+    throw new Error("Portable media list is missing.");
+  }
+  const contents = file.contents as PortableContent;
+  const media = file.media as PortableMedia[];
+  const reconstructed = assemblePortableBackup(contents, media, file.exported_at);
+  if (file.media_count !== reconstructed.media_count || file.media_total_bytes !== reconstructed.media_total_bytes) {
+    throw new Error("Portable backup media totals do not match.");
+  }
+  for (const item of media) {
+    if (!item || typeof item !== "object"
+      || typeof item.mime_type !== "string"
+      || typeof item.sha256 !== "string"
+      || !/^[0-9a-f]{64}$/.test(item.sha256)
+      || typeof item.data_base64 !== "string"
+      || item.data_base64.length > Math.ceil(MAX_PORTABLE_SINGLE_FILE_BYTES / 3) * 4
+      || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(item.data_base64)
+    ) {
+      throw new Error("Portable media encoding or checksum field is invalid.");
+    }
+    const bytes = Buffer.from(item.data_base64, "base64");
+    if (
+      bytes.length !== item.size_bytes
+      || bytes.toString("base64") !== item.data_base64
+      || createHash("sha256").update(bytes).digest("hex") !== item.sha256
+    ) {
+      throw new Error("Portable media integrity verification failed.");
+    }
+  }
+  const tableCounts = Object.fromEntries(PORTABLE_BACKUP_TABLES.map((table) => [table, contents[table].length]));
+  return { exportedAt: file.exported_at, tables: tableCounts, mediaCount: media.length, mediaBytes: reconstructed.media_total_bytes };
+}
