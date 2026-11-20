@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:fallback": "node --experimental-strip-types --test tests/public-site-fallback.test.mjs",
-    "test:admin": "node --experimental-strip-types --test tests/admin-service-filters.test.mjs tests/admin-hours.test.mjs tests/admin-gallery-fields.test.mjs tests/admin-coverage-fields.test.mjs tests/admin-announcement-fields.test.mjs",
+    "test:admin": "node --experimental-strip-types --test tests/admin-service-filters.test.mjs tests/admin-hours.test.mjs tests/admin-gallery-fields.test.mjs tests/admin-coverage-fields.test.mjs tests/admin-announcement-fields.test.mjs tests/admin-history-fields.test.mjs",
     "stitch:download": "node scripts/download-stitch-assets.mjs"
   },
   "dependencies": {
