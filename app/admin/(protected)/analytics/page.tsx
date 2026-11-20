@@ -3,6 +3,7 @@ import { BarChart3, Building2, ExternalLink, Globe2, MousePointerClick, Users } 
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminTrendChart } from "@/components/admin-trend-chart";
 import { AdminMixDonut } from "@/components/admin-mix-donut";
+import { AdminMetricCard } from "@/components/admin-metric-card";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 import { karachiAnalyticsWindow, karachiDayKey } from "@/lib/admin-analytics-window";
@@ -213,12 +214,17 @@ export default async function AdminAnalyticsPage({ searchParams }: { searchParam
     return acc;
   }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
-  const cards = [
-    ["Tracked browsers", visitors, Users],
-    ["Page views", pageViews, BarChart3],
-    ["Contact visitors", contactVisitors, MousePointerClick],
-    ["Contact rate", `${conversionRate}%`, Globe2],
-  ] as const;
+  // Daily distinct browser counts are used for sparklines; overall counts remain
+  // distinct across the entire selected range (not the sum of daily counts).
+  const browserSeries = selectedDays.map((day) =>
+    new Set(rows.filter((event) => karachiDayKey(new Date(event.created_at)) === day)
+      .map((event) => event.session_hash).filter(Boolean)).size,
+  );
+  const contactSeries = selectedDays.map((day) =>
+    new Set(contactRows.filter((event) => karachiDayKey(new Date(event.created_at)) === day)
+      .map((event) => event.session_hash).filter(Boolean)).size,
+  );
+  const pageViewSeries = selectedDailyPageViews.map((day) => day.count);
 
   const topService = serviceInterest[0];
   const topSource = sources[0];
@@ -235,7 +241,12 @@ export default async function AdminAnalyticsPage({ searchParams }: { searchParam
       <div className="admin-analytics-period" role="status"><span>{selectedDays[0]} — {selectedDays.at(-1)} · PKT · {selectedRange} days</span><strong>{truncated ? "Partial data · latest 5,000 events" : "All recorded events loaded"}</strong></div>
       <details className="admin-data-quality"><summary>How accurate is this data?</summary><p>Visits are tracked browser estimates, not verified people. Historical data may contain automated or test traffic; previews are now excluded. Counts are not a sales total.</p></details>
 
-      <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
+      <section className="admin-metric-grid" aria-label="Analytics KPIs for selected period">
+        <AdminMetricCard label="Tracked browsers" value={visitors} icon={Users} series={browserSeries} note="Unique tracked browser IDs" tone="teal" />
+        <AdminMetricCard label="Page views" value={pageViews} icon={BarChart3} series={pageViewSeries} note="Recorded page loads" tone="blue" />
+        <AdminMetricCard label="Contact visitors" value={contactVisitors} icon={MousePointerClick} series={contactSeries} note="Browsers that used a contact action" tone="violet" />
+        <AdminMetricCard label="Contact rate" value={conversionRate + "%"} icon={Globe2} note="Contact browsers / tracked browsers" tone="amber" />
+      </section>
 
       <section className="admin-panel admin-panel--control admin-traffic-panel" aria-labelledby="admin-traffic-trend-title">
         <div className="admin-panel__heading">
