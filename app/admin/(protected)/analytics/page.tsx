@@ -6,6 +6,7 @@ import { AdminMixDonut } from "@/components/admin-mix-donut";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 import { karachiAnalyticsWindow, karachiDayKey } from "@/lib/admin-analytics-window";
+import { normalizeAdminAnalyticsRange, analyticsSelectedDays, filterEventsForDays, contactConversionRate } from "@/lib/admin-analytics-range";
 
 const contactEvents = new Set(["whatsapp_click", "call_click", "directions_click"]);
 const contactLabels: Record<string, string> = {
@@ -115,12 +116,15 @@ async function loadTrackedEvents(
   return { events, truncated: total !== null && events.length < total };
 }
 
-export default async function AdminAnalyticsPage() {
+export default async function AdminAnalyticsPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
+  const { range } = await searchParams;
+  const selectedRange = normalizeAdminAnalyticsRange(range);
   const { supabase } = await requireAdmin();
   // Server-only admin page: request-time wall clock defines the reporting period.
   // eslint-disable-next-line react-hooks/purity
   const now = new Date();
   const { since, until, days } = karachiAnalyticsWindow(now);
+  const selectedDays = analyticsSelectedDays(days, selectedRange);
   const [{ events, truncated }, { data: settings, error: settingsError }, { data: categories, error: categoryError }] = await Promise.all([
     loadTrackedEvents(supabase, since, until),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
@@ -129,30 +133,36 @@ export default async function AdminAnalyticsPage() {
   if (settingsError || categoryError) throw new Error("Analytics settings could not be loaded. Please retry.");
 
   const categoryTitles = new Map((categories || []).map((category) => [category.slug, category.title]));
-  const rows = events.filter((event) => {
+  const publicRows = events.filter((event) => {
     const path = String(event.page_path || "/");
     return path !== "/admin" && !path.startsWith("/admin/");
   });
+  // Important: every KPI, source, device and contact panel shares one selected date range.
+  const rows = filterEventsForDays(publicRows, selectedDays);
   const pageViewRows = rows.filter((event) => event.event_name === "page_view");
+  // A complete 30-day series allows the chart to compare the two latest weeks
+  // while the rest of the page uses the selected 7- or 30-day window.
+  const allPageViewRows = publicRows.filter((event) => event.event_name === "page_view");
   const dailyPageViews = days.map((key) => ({
     key,
     label: analyticsTickFormatter.format(new Date(key + "T12:00:00Z")),
     count: 0,
   }));
   const dailyPageViewsByDay = new Map(dailyPageViews.map((entry) => [entry.key, entry]));
-  for (const event of pageViewRows) {
+  for (const event of allPageViewRows) {
     const entry = dailyPageViewsByDay.get(karachiDayKey(new Date(event.created_at)));
     if (entry) entry.count += 1;
   }
-  const totalDailyPageViews = dailyPageViews.reduce((total, day) => total + day.count, 0);
-  const busiestDay = dailyPageViews.reduce((highest, day) => day.count > highest.count ? day : highest);
+  const selectedDailyPageViews = dailyPageViews.slice(-selectedRange);
+  const totalDailyPageViews = selectedDailyPageViews.reduce((total, day) => total + day.count, 0);
+  const busiestDay = selectedDailyPageViews.reduce((highest, day) => day.count > highest.count ? day : highest);
   const busiestShare = totalDailyPageViews > 0 ? Math.round(busiestDay.count / totalDailyPageViews * 100) : 0;
 
   const contactRows = rows.filter((event) => contactEvents.has(event.event_name));
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
   const pageViews = pageViewRows.length;
   const contactVisitors = new Set(contactRows.map((event) => event.session_hash).filter(Boolean)).size;
-  const conversionRate = visitors > 0 ? Number(((contactVisitors / visitors) * 100).toFixed(1)) : 0;
+  const conversionRate = contactConversionRate(contactVisitors, visitors);
 
   const googleRows = rows.filter((event) =>
     event.utm_source?.toLowerCase() === "google" && event.utm_campaign?.toLowerCase() === "gbp",
@@ -162,7 +172,7 @@ export default async function AdminAnalyticsPage() {
   const googleContactVisitors = new Set(
     googleRows.filter((event) => contactEvents.has(event.event_name)).map((event) => event.session_hash).filter(Boolean),
   ).size;
-  const googleConversion = googleVisitors > 0 ? Number(((googleContactVisitors / googleVisitors) * 100).toFixed(1)) : 0;
+  const googleConversion = contactConversionRate(googleContactVisitors, googleVisitors);
 
   const contactActions = Object.entries(contactRows.reduce<Record<string, number>>((acc, event) => {
     const label = contactLabels[event.event_name] || event.event_name.replaceAll("_", " ");
@@ -210,7 +220,6 @@ export default async function AdminAnalyticsPage() {
     ["Contact rate", `${conversionRate}%`, Globe2],
   ] as const;
 
-  const lastSevenViews = dailyPageViews.slice(-7).reduce((sum, day) => sum + day.count, 0);
   const topService = serviceInterest[0];
   const topSource = sources[0];
 
@@ -219,20 +228,20 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Traffic and customer actions · Pakistan time</p></div>
+        <div><span className="eyebrow">Website intelligence</span><h1>Analytics</h1><p>Real event data · consistent reporting period · Pakistan time</p></div>
         <AnalyticsRefreshButton />
       </div>
 
-      <div className="admin-analytics-period" role="status"><span>{days[0]} — {days[29]} · PKT</span><strong>{truncated ? "Partial data: latest 5,000 events" : "All recorded events loaded"}</strong></div>
+      <div className="admin-analytics-period" role="status"><span>{selectedDays[0]} — {selectedDays.at(-1)} · PKT · {selectedRange} days</span><strong>{truncated ? "Partial data · latest 5,000 events" : "All recorded events loaded"}</strong></div>
       <details className="admin-data-quality"><summary>How accurate is this data?</summary><p>Visits are tracked browser estimates, not verified people. Historical data may contain automated or test traffic; previews are now excluded. Counts are not a sales total.</p></details>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
 
       <section className="admin-panel admin-panel--control admin-traffic-panel" aria-labelledby="admin-traffic-trend-title">
         <div className="admin-panel__heading">
-          <div><h2 id="admin-traffic-trend-title">Traffic trend</h2><p>Page views · grouped by Pakistan calendar day</p></div>
+          <div><h2 id="admin-traffic-trend-title">Traffic trend</h2><p>Page views · all dashboard metrics follow the 7/30-day selection</p></div>
         </div>
-        <AdminTrendChart points={dailyPageViews.map((day) => ({ key: day.key, label: day.label, count: day.count }))} partial={truncated} />
+        <AdminTrendChart points={dailyPageViews.map((day) => ({ key: day.key, label: day.label, count: day.count }))} range={selectedRange} partial={truncated} />
         {busiestShare >= 35 && totalDailyPageViews >= 20 && (
           <p className="admin-traffic-outlier" role="note">
             <strong>Traffic concentration</strong>
@@ -244,9 +253,9 @@ export default async function AdminAnalyticsPage() {
 
       <section className="admin-analytics-highlights" aria-label="Traffic highlights">
         <article>
-          <span>LAST 7 DAYS</span>
-          <strong>{lastSevenViews.toLocaleString("en-PK")}</strong>
-          <small>{truncated ? "Sampled page views" : "Recorded page views"}</small>
+          <span>BUSIEST DAY</span>
+          <strong>{busiestDay.count.toLocaleString("en-PK")}</strong>
+          <small>{busiestDay.label} · {truncated ? "sampled page views" : "recorded page views"}</small>
         </article>
         <article>
           <span>MOST-VIEWED SERVICE</span>
