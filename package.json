@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:fallback": "node --experimental-strip-types --test tests/public-site-fallback.test.mjs",
-    "test:admin": "node --experimental-strip-types --test tests/admin-service-filters.test.mjs tests/admin-hours.test.mjs tests/admin-gallery-fields.test.mjs tests/admin-coverage-fields.test.mjs tests/admin-announcement-fields.test.mjs tests/admin-history-fields.test.mjs tests/admin-analytics-window.test.mjs tests/admin-portable-backup.test.mjs tests/analytics-ingest-guard.test.mjs tests/admin-activity-groups.test.mjs",
+    "test:admin": "node --experimental-strip-types --test tests/admin-service-filters.test.mjs tests/admin-hours.test.mjs tests/admin-gallery-fields.test.mjs tests/admin-coverage-fields.test.mjs tests/admin-announcement-fields.test.mjs tests/admin-history-fields.test.mjs tests/admin-analytics-window.test.mjs tests/admin-portable-backup.test.mjs tests/analytics-ingest-guard.test.mjs tests/admin-activity-groups.test.mjs tests/admin-analytics-range.test.mjs",
     "stitch:download": "node scripts/download-stitch-assets.mjs"
   },
   "dependencies": {
