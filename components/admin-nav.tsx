@@ -19,49 +19,20 @@ import {
   X,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { AdminCommandMenu } from "@/components/admin-command-menu";
+import { adminNavigationGroups, getAdminPage, isActiveAdminPath } from "@/lib/admin-navigation";
+import type { LucideIcon } from "lucide-react";
 
-const navigationGroups = [
-  {
-    label: "Workspace",
-    links: [
-      ["Overview", "/admin", House],
-      ["Analytics", "/admin/analytics", BarChart3],
-    ],
-  },
-  {
-    label: "Website",
-    links: [
-      ["Services", "/admin/services", Wrench],
-      ["Coverage", "/admin/coverage", MapPinned],
-      ["Gallery", "/admin/gallery", Images],
-      ["Announcements", "/admin/announcements", Megaphone],
-    ],
-  },
-  {
-    label: "System",
-    links: [
-      ["Settings", "/admin/settings", Settings2],
-      ["History", "/admin/history", History],
-    ],
-  },
-] as const;
-
-const pageTitles = [
-  ["/admin", "Overview"],
-  ["/admin/services", "Services"],
-  ["/admin/coverage", "Coverage"],
-  ["/admin/gallery", "Gallery"],
-  ["/admin/announcements", "Announcements"],
-  ["/admin/settings", "Settings"],
-  ["/admin/analytics", "Analytics"],
-  ["/admin/history", "History"],
-] as const;
-
-function isActivePath(pathname: string, href: string) {
-  return href === "/admin"
-    ? pathname === href
-    : pathname === href || pathname.startsWith(href + "/");
-}
+const navigationIcons: Record<string, LucideIcon> = {
+  "/admin": House,
+  "/admin/analytics": BarChart3,
+  "/admin/services": Wrench,
+  "/admin/coverage": MapPinned,
+  "/admin/gallery": Images,
+  "/admin/announcements": Megaphone,
+  "/admin/settings": Settings2,
+  "/admin/history": History,
+};
 
 function NavigationLinks({
   pathname,
@@ -72,12 +43,13 @@ function NavigationLinks({
 }) {
   return (
     <>
-      {navigationGroups.map((group) => (
+      {adminNavigationGroups.map((group) => (
         <div className="admin-nav__group" key={group.label}>
           <span className="admin-nav__group-label">{group.label}</span>
           <nav aria-label={group.label + " navigation"}>
-            {group.links.map(([label, href, Icon]) => {
-              const active = isActivePath(pathname, href);
+            {group.links.map(({ label, href }) => {
+              const Icon = navigationIcons[href] || House;
+              const active = isActiveAdminPath(pathname, href);
               return (
                 <Link
                   key={href}
@@ -108,7 +80,9 @@ export function AdminNav({
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const currentTitle = pageTitles.find(([href]) => isActivePath(pathname, href))?.[1] || "Admin Centre";
+  const currentPage = getAdminPage(pathname);
+  const currentTitle = currentPage?.label || "Admin Centre";
+  const currentSection = currentPage?.section || "Workspace";
 
   function openMenu() {
     if (!dialogRef.current?.open) {
@@ -144,11 +118,12 @@ export function AdminNav({
           <Menu size={20} strokeWidth={1.9} aria-hidden="true" />
         </button>
         <div className="admin-topbar__location" aria-label="Current section" aria-live="polite">
-          <span>Workspace</span>
+          <span>{currentSection}</span>
           <ChevronRight size={14} aria-hidden="true" />
           <strong>{currentTitle}</strong>
         </div>
         <div className="admin-topbar__actions">
+          <AdminCommandMenu />
           <span className="admin-user-chip" title={displayName} aria-label={"Signed in as " + displayName}>
             {displayName.trim().charAt(0).toUpperCase() || "A"}
           </span>

@@ -47,6 +47,14 @@ jobs:
       - name: Start DISPOSABLE local Supabase stack and apply migrations
         run: |
           # No --project-ref or linked credentials are used anywhere in this workflow.
+          # Hosted runners can have other local Supabase stacks using 54321/54322.
+          # Allocate loopback ports per workflow run, without editing the committed config.
+          QA_PORT_OFFSET=$((GITHUB_RUN_ID % 10000))
+          QA_API_PORT=$((24000 + QA_PORT_OFFSET))
+          QA_DB_PORT=$((40000 + QA_PORT_OFFSET))
+          sed -i "s/^port = 54321$/port = ${QA_API_PORT}/" supabase/config.toml
+          sed -i "s/^port = 54322$/port = ${QA_DB_PORT}/" supabase/config.toml
+          echo "Local Supabase ports: API ${QA_API_PORT}, DB ${QA_DB_PORT}"
           supabase start -x realtime,imgproxy,edge-runtime,logflare,vector,supavisor,studio,postgres-meta
           supabase db reset
           supabase status -o env > "$RUNNER_TEMP/local-supabase.env"
@@ -67,7 +75,9 @@ jobs:
           for (const name of ["API_URL", "ANON_KEY", "SERVICE_ROLE_KEY"]) {
             if (!entries[name]) throw new Error("Missing locally-generated " + name);
           }
-          if (!["http://127.0.0.1:54321", "http://localhost:54321"].includes(entries.API_URL)) {
+          const local = new URL(entries.API_URL);
+          if (local.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(local.hostname)
+              || !Number.isInteger(Number(local.port)) || Number(local.port) < 1024) {
             throw new Error("Refusing non-local Supabase endpoint");
           }
           for (const key of ["ANON_KEY", "SERVICE_ROLE_KEY"]) process.stdout.write("::add-mask::" + entries[key] + "\n");

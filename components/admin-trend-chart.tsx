@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowUpRight, ArrowDownRight, Minus, MoveHorizontal } from "lucide-react";
 
 export type TrafficPoint = { key: string; label: string; count: number };
-type Props = { points: TrafficPoint[]; partial?: boolean };
+type Props = { points: TrafficPoint[]; partial?: boolean; range?: 7 | 30 };
 const WIDTH = 840, HEIGHT = 260, LEFT = 44, RIGHT = 20, TOP = 32, BOTTOM = 39;
 
-export function AdminTrendChart({ points, partial = false }: Props) {
-  const [range, setRange] = useState<7 | 30>(30);
+export function AdminTrendChart({ points, partial = false, range = 30 }: Props) {
+  const router = useRouter();
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
   const values = points.slice(-range);
   const total = values.reduce((sum, point) => sum + point.count, 0);
@@ -40,7 +41,7 @@ export function AdminTrendChart({ points, partial = false }: Props) {
         <div className="admin-trend__summary"><strong>{total.toLocaleString("en-PK")}</strong><span>Recorded page views · {range} days{partial ? " · partial" : ""}</span></div>
         <div className="admin-segmented-control" role="group" aria-label="Chart time range">
           {([7, 30] as const).map((days) => (
-            <button key={days} type="button" onClick={() => { setRange(days); setFocusIndex(null); }}
+            <button key={days} type="button" onClick={() => { if (days !== range) { router.push("/admin/analytics?range=" + days); setFocusIndex(null); } }}
               aria-pressed={range === days} className={range === days ? "is-selected" : ""}>{days} days</button>
           ))}
         </div>
