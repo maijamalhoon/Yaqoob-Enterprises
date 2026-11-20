@@ -298,7 +298,7 @@ try {
   assert((await page.locator('input[type="email"]').count()) === 1, "Admin email input is missing.");
   assert((await page.locator('input[type="password"]').count()) === 1, "Admin must use password authentication, not a magic link.");
   assert(!(await page.locator("main").innerText()).toLowerCase().includes("login link"), "Admin login must not offer magic-link sign-in.");
-  for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history", "/admin/settings"]) {
+  for (const protectedPath of ["/admin", "/admin/analytics", "/admin/history", "/admin/settings", "/admin/services", "/admin/gallery", "/admin/coverage", "/admin/announcements"]) {
     await page.goto(baseUrl + protectedPath, { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => window.location.pathname === "/admin/login", null, { timeout: 15_000 });
     await page.locator('input[type="email"]').waitFor({ state: "visible", timeout: 10_000 });
