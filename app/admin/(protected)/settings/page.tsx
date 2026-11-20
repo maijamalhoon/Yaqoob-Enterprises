@@ -53,7 +53,10 @@ export default async function AdminSettingsPage() {
             <label>WhatsApp<input name="whatsapp_number" inputMode="tel" defaultValue={settings?.whatsapp_e164} placeholder="+923492568864" required /></label>
             <label className="admin-span-2">Address<textarea name="address" defaultValue={settings?.address} rows={3} required /></label>
             <label className="admin-span-2">Google Maps URL<input name="map_url" type="url" defaultValue={settings?.map_url} required /></label>
-            <label className="admin-span-2">Google Business Profile <small>Used for admin analysis</small><input name="google_business_profile_url" type="url" defaultValue={settings?.google_business_profile_url || ""} placeholder="https://share.google/..." /></label>
+            <details className="admin-google-optional">
+              <summary>Google Business Profile link · optional</summary>
+              <label>Profile URL<input name="google_business_profile_url" type="url" defaultValue={settings?.google_business_profile_url || ""} placeholder="https://share.google/..." /></label>
+            </details>
             <div className="admin-form-actions admin-form-actions--split admin-span-2">
               <AdminSubmitButton>Save contact & location</AdminSubmitButton>
               <AdminCancelButton />
@@ -65,16 +68,14 @@ export default async function AdminSettingsPage() {
           </AdminActionForm>
         </section>
 
-        <section id="admin-settings-notices" className="admin-panel admin-panel--control admin-span-2">
-          <div className="admin-panel__heading admin-panel__heading--compact">
-            <div><span className="admin-panel-kicker"><Info size={15} /> Policy & Notices</span><h2>Customer notices</h2></div>
-          </div>
+        <details id="admin-settings-notices" className="admin-panel admin-panel--control admin-span-2 admin-settings-optional">
+          <summary><span>Customer notices</span><small>Pricing and image disclosure</small></summary>
           <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={saveNoticesWithFeedback}>
             <label className="admin-span-2">Pricing notice <small>e.g., government fee confirmation</small><textarea name="pricing_message" defaultValue={settings?.pricing_message || ""} rows={2} placeholder="Prices and government fees depend on the exact service, document type and requirements." /></label>
             <label className="admin-span-2">Concept image notice <small>shown when illustration placeholder is active</small><textarea name="concept_image_notice" defaultValue={settings?.concept_image_notice || ""} rows={2} placeholder="Representative visualization. Actual shop facilities and service counters are located in Akhtar Colony, Karachi." /></label>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save customer notices</AdminSubmitButton><AdminCancelButton /></div>
           </AdminActionForm>
-        </section>
+        </details>
       </div>
 
       <section id="admin-settings-hours" className="admin-panel admin-panel--control admin-hours-panel">
