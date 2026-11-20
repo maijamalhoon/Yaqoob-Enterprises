@@ -144,6 +144,10 @@ export default async function AdminAnalyticsPage() {
     const entry = dailyPageViewsByDay.get(karachiDayKey(new Date(event.created_at)));
     if (entry) entry.count += 1;
   }
+  const totalDailyPageViews = dailyPageViews.reduce((total, day) => total + day.count, 0);
+  const busiestDay = dailyPageViews.reduce((highest, day) => day.count > highest.count ? day : highest);
+  const busiestShare = totalDailyPageViews > 0 ? Math.round(busiestDay.count / totalDailyPageViews * 100) : 0;
+
   const contactRows = rows.filter((event) => contactEvents.has(event.event_name));
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
   const pageViews = pageViewRows.length;
@@ -225,6 +229,12 @@ export default async function AdminAnalyticsPage() {
           <div><h2 id="admin-traffic-trend-title">Traffic trend</h2><p>Page views · grouped by Pakistan calendar day</p></div>
         </div>
         <AdminTrendChart points={dailyPageViews.map((day) => ({ key: day.key, label: day.label, count: day.count }))} partial={truncated} />
+        {busiestShare >= 35 && totalDailyPageViews >= 20 && (
+          <p className="admin-traffic-outlier" role="note">
+            <strong>Traffic concentration</strong>
+            {busiestShare}% of {truncated ? "sampled" : "recorded"} page views came on {busiestDay.label} ({busiestDay.count.toLocaleString("en-PK")} views). Large spikes can include repeated or automated requests.
+          </p>
+        )}
         {truncated && <p className="admin-traffic-note">Partial sample: only the latest 5,000 tracked events are included.</p>}
       </section>
 
