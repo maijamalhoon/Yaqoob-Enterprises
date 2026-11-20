@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BarChart3,
+  ChevronRight,
   ExternalLink,
   History,
   House,
@@ -24,6 +25,12 @@ const navigationGroups = [
     label: "Workspace",
     links: [
       ["Overview", "/admin", House],
+      ["Analytics", "/admin/analytics", BarChart3],
+    ],
+  },
+  {
+    label: "Website",
+    links: [
       ["Services", "/admin/services", Wrench],
       ["Coverage", "/admin/coverage", MapPinned],
       ["Gallery", "/admin/gallery", Images],
@@ -31,10 +38,9 @@ const navigationGroups = [
     ],
   },
   {
-    label: "Manage",
+    label: "System",
     links: [
       ["Settings", "/admin/settings", Settings2],
-      ["Analytics", "/admin/analytics", BarChart3],
       ["History", "/admin/history", History],
     ],
   },
@@ -121,6 +127,7 @@ export function AdminNav({
       <aside className="admin-sidebar" aria-label="Admin sidebar">
         <div className="admin-sidebar__brand">
           <Logo compact inverse href="/admin" />
+          <span className="admin-sidebar__brand-tag">Admin</span>
         </div>
         <NavigationLinks pathname={pathname} />
       </aside>
@@ -136,12 +143,15 @@ export function AdminNav({
         >
           <Menu size={20} strokeWidth={1.9} aria-hidden="true" />
         </button>
-        <div className="admin-topbar__title" aria-live="polite">
-          <span>{businessName}</span>
-          <p>{currentTitle}</p>
+        <div className="admin-topbar__location" aria-label="Current section" aria-live="polite">
+          <span>Workspace</span>
+          <ChevronRight size={14} aria-hidden="true" />
+          <strong>{currentTitle}</strong>
         </div>
         <div className="admin-topbar__actions">
-          <span className="admin-account-name">{displayName}</span>
+          <span className="admin-user-chip" title={displayName} aria-label={"Signed in as " + displayName}>
+            {displayName.trim().charAt(0).toUpperCase() || "A"}
+          </span>
           <Link href="/" target="_blank" rel="noopener noreferrer" aria-label="View website in a new tab">
             <ExternalLink size={17} strokeWidth={1.9} aria-hidden="true" />
             <span>View site</span>

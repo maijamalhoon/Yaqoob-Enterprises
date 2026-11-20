@@ -92,6 +92,46 @@ export default async function AdminHistoryPage() {
   const backupRows = snapshots || [];
   const liveChanges = historyRows.filter((entry) => !entry.reverted_at).length;
 
+  const renderHistoryRow = (entry: (typeof historyRows)[number]) => {
+    const fields = changedFields(
+      entry.old_data as Record<string, unknown> | null,
+      entry.new_data as Record<string, unknown> | null,
+    );
+    const reverted = Boolean(entry.reverted_at);
+    const label = entry.record_label || entry.record_id;
+    return (
+      <article className={`admin-history-row ${reverted ? "is-reverted" : ""}`} key={entry.id}>
+        <span className="admin-history-row__icon"><History size={16} /></span>
+        <div className="admin-history-row__copy">
+          <strong>{operationLabel(entry.operation)} {label}</strong>
+          <small>{tableLabels[entry.table_name] || entry.table_name} · {entry.operation === "UPDATE" ? formatChangedFields(fields) : "record"}</small>
+        </div>
+        <div className="admin-history-row__meta">
+          <span>{new Date(entry.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</span>
+          <small>{entry.actor_email || "System"}</small>
+        </div>
+        <div className="admin-history-row__action">
+          {reverted ? (
+            <span className="admin-state is-hidden">Undone</span>
+          ) : !canUndoAdminAudit(entry.table_name, entry.operation) ? (
+            <span className="admin-state is-hidden" title="This record is read-only in the history tool.">View only</span>
+          ) : (
+            <AdminActionForm action={rollbackEntryWithFeedback}>
+              <input type="hidden" name="id" value={entry.id} />
+              <AdminSubmitButton
+                variant="secondary"
+                pendingLabel="Undoing…"
+                confirmMessage={`Undo this ${entry.operation.toLowerCase()} change to “${label}”?`}
+              >
+                <RotateCcw size={14} /> Undo
+              </AdminSubmitButton>
+            </AdminActionForm>
+          )}
+        </div>
+      </article>
+    );
+  };
+
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
@@ -110,15 +150,18 @@ export default async function AdminHistoryPage() {
         <div className="admin-panel__heading">
           <div>
             <span className="admin-panel-kicker"><Download size={15} aria-hidden="true" /> Offline protection</span>
-            <h2 id="admin-offline-backup-title">Download a portable backup</h2>
+            <h2 id="admin-offline-backup-title">Offline backup</h2>
             <p>Keep an independent copy outside the website.</p>
           </div>
           <ShieldCheck size={20} aria-hidden="true" />
         </div>
         <div className="admin-offline-backup-panel__body">
           <div>
-            <p>Includes current website content, announcements, section settings, and original files from the two site media buckets, including images retained after Gallery deletion.</p>
-            <p><strong>Important:</strong> This is a private JSON recovery file with image bytes. It does not restore automatically; authentication users, analytics, audit history and old snapshots are excluded. Download is limited to 120 files / 32 MB of raw media; large sites need a dedicated Storage export.</p>
+            <p>Content + original images · keep a copy off-site.</p>
+            <details className="admin-backup-details">
+              <summary>What is included?</summary>
+              <p>Includes current website content, announcements, section settings, and both media buckets, including retained gallery images. Private JSON recovery file; manual restore only. Accounts, analytics, audit history and previous snapshots are excluded. Limit: 120 files / 32 MB raw media.</p>
+            </details>
           </div>
           <a className="button button--primary admin-offline-backup-download" href="/admin/history/export" rel="nofollow">
             <Download size={17} aria-hidden="true" /> Download offline backup
@@ -132,7 +175,7 @@ export default async function AdminHistoryPage() {
           <ShieldCheck size={20} aria-hidden="true" />
         </div>
 
-        <p className="admin-backup-scope" role="note">In-app snapshots save and restore six content tables only. <strong>Announcements, section settings and original image files are excluded from in-app restore.</strong> Use the separate offline download above to preserve those records and files.</p>
+        <details className="admin-backup-scope"><summary>Snapshot scope · 6 content tables</summary><p>In-app snapshots exclude announcements, section settings and original image files. Download a separate offline backup for complete manual recovery.</p></details>
 
         <AdminActionForm className="admin-backup-create" action={createSnapshotWithFeedback}>
           <label>Backup name<input name="label" maxLength={100} placeholder="Before major changes" /></label>
@@ -171,47 +214,17 @@ export default async function AdminHistoryPage() {
         </div>
 
         <div className="admin-history-list">
-          {historyRows.map((entry) => {
-            const fields = changedFields(
-              entry.old_data as Record<string, unknown> | null,
-              entry.new_data as Record<string, unknown> | null,
-            );
-            const reverted = Boolean(entry.reverted_at);
-            const label = entry.record_label || entry.record_id;
-            return (
-              <article className={`admin-history-row ${reverted ? "is-reverted" : ""}`} key={entry.id}>
-                <span className="admin-history-row__icon"><History size={16} /></span>
-                <div className="admin-history-row__copy">
-                  <strong>{operationLabel(entry.operation)} {label}</strong>
-                  <small>{tableLabels[entry.table_name] || entry.table_name} · {entry.operation === "UPDATE" ? formatChangedFields(fields) : "record"}</small>
-                </div>
-                <div className="admin-history-row__meta">
-                  <span>{new Date(entry.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</span>
-                  <small>{entry.actor_email || "System"}</small>
-                </div>
-                <div className="admin-history-row__action">
-                  {reverted ? (
-                    <span className="admin-state is-hidden">Undone</span>
-                  ) : !canUndoAdminAudit(entry.table_name, entry.operation) ? (
-                    <span className="admin-state is-hidden" title="This record is read-only in the history tool.">View only</span>
-                  ) : (
-                    <AdminActionForm action={rollbackEntryWithFeedback}>
-                      <input type="hidden" name="id" value={entry.id} />
-                      <AdminSubmitButton
-                        variant="secondary"
-                        pendingLabel="Undoing…"
-                        confirmMessage={`Undo this ${entry.operation.toLowerCase()} change to “${label}”?`}
-                      >
-                        <RotateCcw size={14} /> Undo
-                      </AdminSubmitButton>
-                    </AdminActionForm>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+          {historyRows.slice(0, 8).map(renderHistoryRow)}
           {historyRows.length === 0 && <div className="admin-empty-state admin-empty-state--compact"><History size={21} /><p>No admin changes recorded yet.</p></div>}
         </div>
+        {historyRows.length > 8 && (
+          <details className="admin-history-more">
+            <summary>Show {historyRows.length - 8} older changes</summary>
+            <div className="admin-history-list">
+              {historyRows.slice(8).map(renderHistoryRow)}
+            </div>
+          </details>
+        )}
       </section>
     </div>
   );

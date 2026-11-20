@@ -29,8 +29,8 @@ export default async function AdminGalleryPage() {
         </div>
       </div>
 
-      <details className="admin-panel admin-create-panel admin-upload-panel">
-        <summary><span><ImagePlus size={17} /> Upload shop image</span><small>JPG, PNG, WebP · auto-optimized</small></summary>
+      <details className="admin-panel admin-create-panel admin-upload-panel" open={imageList.length === 0}>
+        <summary><span><ImagePlus size={17} /> Upload image</span><small>JPG, PNG, WebP</small></summary>
         <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={uploadGalleryImageWithFeedback} resetOnSuccess>
           <label className="admin-span-2">Image<OptimizedImageInput /></label>
           <label>Type<select name="media_kind" defaultValue="real"><option value="real">Real shop photo</option><option value="concept">Concept image</option></select></label>
@@ -89,7 +89,7 @@ export default async function AdminGalleryPage() {
             </article>
           );
         })}
-        {imageList.length === 0 && <div className="admin-empty-state"><ImagePlus size={28} /><h2>No shop images yet</h2><p>Upload one image and mark it as the homepage image.</p></div>}
+        {imageList.length === 0 && <p className="admin-gallery-empty-note">No images yet. Upload a real shop photo above.</p>}
       </section>
     </div>
   );

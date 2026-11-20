@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   Activity,
@@ -115,6 +116,7 @@ export default async function AdminDashboardPage() {
         </Link>
       </section>
 
+      <div className="admin-dashboard-columns">
       <section className="admin-panel admin-panel--control admin-health-panel" aria-labelledby="admin-health-title">
         <div className="admin-panel__heading">
           <div>
@@ -123,6 +125,11 @@ export default async function AdminDashboardPage() {
             {unavailableCount > 0 && <p>{unavailableCount} status check{unavailableCount === 1 ? "" : "s"} currently unavailable.</p>}
           </div>
         </div>
+        <div className="admin-readiness-wrap">
+          <div className="admin-readiness-gauge" role="img" aria-label={healthyCount + " of " + healthChecks.length + " website readiness checks passed"}
+            style={{ "--readiness": (healthyCount / healthChecks.length * 100) + "%" } as CSSProperties}>
+            <span><strong>{healthyCount}/{healthChecks.length}</strong><small>ready</small></span>
+          </div>
         <div className="admin-health-grid">
           {healthChecks.map(([label, ready, href]) => (
             <Link className={ready ? "is-ready" : "is-warning"} href={href} key={label}>
@@ -134,13 +141,14 @@ export default async function AdminDashboardPage() {
             </Link>
           ))}
         </div>
+        </div>
       </section>
 
       <section className="admin-panel admin-panel--control" aria-labelledby="admin-controls-title">
         <div className="admin-panel__heading">
           <div>
             <span className="admin-panel-kicker"><Settings2 size={15} aria-hidden="true" /> Manage</span>
-            <h2 id="admin-controls-title">Website content</h2>
+            <h2 id="admin-controls-title">Quick access</h2>
           </div>
         </div>
         <div className="admin-control-links">
@@ -181,6 +189,7 @@ export default async function AdminDashboardPage() {
           </Link>
         </div>
       </section>
+      </div>
 
       <section className="admin-panel admin-panel--control admin-activity-panel" aria-labelledby="admin-activity-title">
         <div className="admin-panel__heading">
