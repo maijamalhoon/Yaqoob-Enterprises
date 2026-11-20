@@ -157,9 +157,14 @@ try {
   const firstJump = await categoryJumpLinks.first().getAttribute("href");
   assert(firstJump?.startsWith("#admin-category-"), "Category jump target malformed");
   assert(await page.locator(firstJump).count() === 1, "Category target section missing");
-  await page.goto(appUrl + "/admin", { waitUntil: "domcontentloaded" });
-  await page.keyboard.press("Control+k");
+  await page.goto(appUrl + "/admin", { waitUntil: "networkidle" });
+  // Verify both entry points after hydration, without racing Next.js client startup.
+  await page.getByRole("button", { name: "Search admin pages" }).click();
   const commandInput = page.getByRole("combobox", { name: "Find an admin section" });
+  await commandInput.waitFor({ state: "visible" });
+  await page.keyboard.press("Escape");
+  await commandInput.waitFor({ state: "hidden" });
+  await page.keyboard.press("Control+k");
   await commandInput.waitFor({ state: "visible" });
   await commandInput.fill("history");
   await page.getByRole("option", { name: /History/ }).click();
