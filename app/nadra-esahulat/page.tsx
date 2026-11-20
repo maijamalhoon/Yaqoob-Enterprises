@@ -16,6 +16,7 @@ import { TrackedLink } from "@/components/tracked-link";
 import { BrandIcon } from "@/components/brand-icon";
 import { getCurrentBusinessStatus, getSiteData } from "@/lib/data";
 import { SITE_URL } from "@/lib/env";
+import { SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
@@ -67,9 +68,7 @@ export default async function NadraEsahulatPage() {
   const whatsappUrl = `https://wa.me/${(settings.whatsapp_e164 || phone).replace(/\+/g, "")}?text=${encodeURIComponent(
     "Hello Yaqoob Enterprises, I want to confirm biometric verification / e-Sahulat server status. My case is: "
   )}`;
-  const directionsUrl =
-    settings.map_url ||
-    "https://maps.app.goo.gl/uvWeMqEFYYPrEzw9A";
+  const directionsUrl = SHOP_DIRECTIONS_URL;
   const pageUrl = `${SITE_URL}/nadra-esahulat`;
 
   const breadcrumbsSchema = {

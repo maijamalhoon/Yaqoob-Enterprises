@@ -170,6 +170,18 @@ try {
   assert((await page.locator('main a[href^="tel:"]').count()) > 0, "Contact page is missing its phone link.");
   assert((await page.locator('main a[href^="https://wa.me/"]').count()) > 0, "Contact page is missing its WhatsApp link.");
   assert((await page.locator('main a[href="https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5"]').count()) > 0, "Contact page points to a stale directions link.");
+
+  // All service-specific landing pages must use the customer-confirmed destination,
+  // even if CMS settings are stale or the data service is temporarily unavailable.
+  for (const path of [
+    "/printing", "/photocopying", "/color-printing", "/notes-printing",
+    "/bulk-printing", "/office-printing", "/photo-printing", "/nadra-esahulat",
+  ]) {
+    const response = await page.request.get(`${baseUrl}${path}`);
+    assert(response.ok(), `Service landing page ${path} returned ${response.status()}.`);
+    const html = await response.text();
+    assert(html.includes('href="https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5"'), `${path} has stale customer directions.`);
+  }
   const contactBusinessSchema = (await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) => nodes.flatMap((node) => { try { return [JSON.parse(node.textContent || "{}")]; } catch { return []; } }))).find((item) => item?.["@type"] === "LocalBusiness");
   assert(contactBusinessSchema?.hasMap === "https://maps.app.goo.gl/9ymSnvsS2GdAvEEw5", "Contact schema points to wrong map.");
 
