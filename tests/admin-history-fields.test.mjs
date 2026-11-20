@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   BACKUP_TABLES,
+  canUndoAdminAudit,
   assertRestorableBackup,
   completeBackupRows,
   parseAuditId,
@@ -47,4 +48,16 @@ test("restore refuses invalid, incomplete and incompatible snapshots before any 
   assert.throws(() => assertRestorableBackup({ version: 2, ...valid }), /unsupported or incomplete/);
   assert.throws(() => assertRestorableBackup({ version: 1, ...valid, services: undefined }), /unsupported or incomplete/);
   assert.throws(() => assertRestorableBackup({ version: 1, ...valid, business_settings: [] }), /missing the business settings/);
+});
+
+
+test("only CMS audit changes may offer Undo; account authorization is never revertible here", () => {
+  for (const table of BACKUP_TABLES) {
+    for (const action of ["INSERT", "UPDATE", "DELETE"]) {
+      assert.equal(canUndoAdminAudit(table, action), true, table + "/" + action);
+    }
+  }
+  assert.equal(canUndoAdminAudit("admin_profiles", "INSERT"), false);
+  assert.equal(canUndoAdminAudit("announcements", "UPDATE"), false);
+  assert.equal(canUndoAdminAudit("services", "TRUNCATE"), false);
 });
