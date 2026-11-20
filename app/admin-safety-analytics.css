@@ -526,3 +526,36 @@
   .admin-dashboard-spotlight > a { grid-column: 1 / -1; width: 100%; }
   .admin-analytics-period { align-items: flex-start; flex-direction: column; }
 }
+
+
+/* Offline backup: compact, distinct from destructive database restore controls. */
+.admin-offline-backup-panel__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.2rem;
+}
+.admin-offline-backup-panel__body p {
+  max-width: 62rem;
+  margin: 0 0 0.42rem;
+  color: #52657c;
+  font-size: 0.73rem;
+  line-height: 1.6;
+}
+.admin-offline-backup-panel__body p:last-child { margin-bottom: 0; }
+.admin-offline-backup-panel__body p strong { color: #223951; }
+.admin-offline-backup-download {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.85rem;
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+@media (max-width: 46rem) {
+  .admin-offline-backup-panel__body { grid-template-columns: 1fr; gap: 0.8rem; }
+  .admin-offline-backup-download { width: 100%; white-space: normal; text-align: center; }
+}
