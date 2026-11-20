@@ -32,7 +32,7 @@ export default async function AdminGalleryPage() {
       <details className="admin-panel admin-create-panel admin-upload-panel" open={imageList.length === 0}>
         <summary><span><ImagePlus size={17} /> Upload image</span><small>JPG, PNG, WebP</small></summary>
         <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={uploadGalleryImageWithFeedback} resetOnSuccess>
-          <label className="admin-span-2">Image<OptimizedImageInput /></label>
+          <label className="admin-span-2 admin-premium-upload-zone"><span>Choose a shop image</span><OptimizedImageInput /></label>
           <label>Type<select name="media_kind" defaultValue="real"><option value="real">Real shop photo</option><option value="concept">Concept image</option></select></label>
           <label>Order<input type="number" min="0" name="display_order" max="10000" step="1" defaultValue={imageList.length} /></label>
           <label className="admin-span-2">Alt text<input name="alt_text" required minLength={3} maxLength={180} placeholder="Describe what customers see" /></label>
