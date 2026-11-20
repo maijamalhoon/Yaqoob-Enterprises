@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react";
 import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
+import { AdminTrendChart } from "@/components/admin-trend-chart";
+import { AdminMixDonut } from "@/components/admin-mix-donut";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 import { karachiAnalyticsWindow, karachiDayKey } from "@/lib/admin-analytics-window";
@@ -142,9 +144,6 @@ export default async function AdminAnalyticsPage() {
     const entry = dailyPageViewsByDay.get(karachiDayKey(new Date(event.created_at)));
     if (entry) entry.count += 1;
   }
-  const dailyViewsTotal = dailyPageViews.reduce((total, entry) => total + entry.count, 0);
-  const busiestDay = dailyPageViews.reduce((busiest, entry) => entry.count > busiest.count ? entry : busiest);
-  const dailyViewsMax = Math.max(1, ...dailyPageViews.map((entry) => entry.count));
   const contactRows = rows.filter((event) => contactEvents.has(event.event_name));
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
   const pageViews = pageViewRows.length;
@@ -212,29 +211,21 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Last 30 calendar days · Pakistan time. Visits are estimates, not verified people.</p></div>
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Traffic and customer actions · Pakistan time</p></div>
         <AnalyticsRefreshButton />
       </div>
 
       <div className="admin-analytics-period" role="status"><span>{days[0]} — {days[29]} · PKT</span><strong>{truncated ? "Partial data: latest 5,000 events" : "All recorded events loaded"}</strong></div>
-      <p className="admin-analytics-caveat">Historical figures may include automated visits and preview/test traffic. New preview deployments are excluded from ingestion; earlier events are preserved for auditability.</p>
+      <details className="admin-data-quality"><summary>How accurate is this data?</summary><p>Visits are tracked browser estimates, not verified people. Historical data may contain automated or test traffic; previews are now excluded. Counts are not a sales total.</p></details>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
 
-      <section className="admin-panel admin-panel--control admin-traffic-panel">
+      <section className="admin-panel admin-panel--control admin-traffic-panel" aria-labelledby="admin-traffic-trend-title">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the last 30 days, grouped by Pakistan time.</p></div>
-          <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
+          <div><h2 id="admin-traffic-trend-title">Traffic trend</h2><p>Page views · grouped by Pakistan calendar day</p></div>
         </div>
-        <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views in the last 30 calendar days${truncated ? " (latest 5,000 events only)" : ""}. ${dailyViewsTotal.toLocaleString("en-PK")} shown; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
-          <div className="admin-traffic-chart__scale" aria-hidden="true"><span>{dailyViewsMax.toLocaleString("en-PK")}</span><span>{(dailyViewsMax / 2).toLocaleString("en-PK", { maximumFractionDigits: 1 })}</span><span>0</span></div>
-          <div className="admin-traffic-chart__plot">
-            {dailyPageViews.map((entry) => <span key={entry.key} title={`${entry.label}: ${entry.count.toLocaleString("en-PK")} page views`} style={{ height: `${entry.count ? Math.max(4, (entry.count / dailyViewsMax) * 100) : 0}%` }} />)}
-            {dailyViewsTotal === 0 && <p>No page views recorded during this period.</p>}
-          </div>
-        </div>
-        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[29].label}</span></div>
-        {truncated && <p className="admin-traffic-note">More than 5,000 events were tracked. These counts show a partial sample, not full-period totals.</p>}
+        <AdminTrendChart points={dailyPageViews.map((day) => ({ key: day.key, label: day.label, count: day.count }))} partial={truncated} />
+        {truncated && <p className="admin-traffic-note">Partial sample: only the latest 5,000 tracked events are included.</p>}
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
@@ -255,14 +246,32 @@ export default async function AdminAnalyticsPage() {
         </div>
       </section>
 
-      <div className="admin-two-column admin-insights-grid">
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MessageCircle size={15} /> Conversion</span><h2>Contact actions</h2></div></div><InsightBars rows={contactActions} emptyMessage="No contact actions yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Services</span><h2>Service interest</h2></div></div><InsightBars rows={serviceInterest} emptyMessage="No service-page views yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Sources</span><h2>Traffic sources</h2></div></div><InsightBars rows={sources} emptyMessage="No source data yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><BarChart3 size={15} /> Pages</span><h2>Popular pages</h2></div></div><InsightBars rows={pages} emptyMessage="No public data yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><Globe2 size={15} /> Location</span><h2>Approximate cities</h2></div></div><InsightBars rows={cities} emptyMessage="No location data yet." /></section>
-        <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><div><span className="admin-panel-kicker"><MonitorSmartphone size={15} /> Devices</span><h2>Device mix</h2></div></div><InsightBars rows={devices} emptyMessage="No device data yet." /></section>
+      <div className="admin-analytics-overview-grid">
+        <section className="admin-panel admin-panel--control">
+          <div className="admin-panel__heading"><h2>Contact actions</h2></div>
+          <InsightBars rows={contactActions} emptyMessage="No contact clicks yet." />
+        </section>
+        <section className="admin-panel admin-panel--control">
+          <div className="admin-panel__heading"><h2>Device mix</h2></div>
+          <AdminMixDonut rows={devices} label="Page views by device" />
+        </section>
+        <section className="admin-panel admin-panel--control">
+          <div className="admin-panel__heading"><h2>Top services</h2></div>
+          <InsightBars rows={serviceInterest.slice(0, 6)} emptyMessage="No service visits yet." />
+        </section>
+        <section className="admin-panel admin-panel--control">
+          <div className="admin-panel__heading"><h2>Traffic sources</h2></div>
+          <InsightBars rows={sources.slice(0, 6)} emptyMessage="No source data yet." />
+        </section>
       </div>
+      <details className="admin-analytics-deep-dive">
+        <summary>More insights <span>Pages & locations</span></summary>
+        <div className="admin-two-column admin-insights-grid">
+          <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><h2>Popular pages</h2></div><InsightBars rows={pages} emptyMessage="No public data yet." /></section>
+          <section className="admin-panel admin-panel--control"><div className="admin-panel__heading"><h2>Approximate cities</h2></div><InsightBars rows={cities} emptyMessage="No location data yet." /></section>
+        </div>
+      </details>
+
     </div>
   );
 }
