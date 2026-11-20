@@ -170,8 +170,9 @@ try {
   await page.getByRole("option", { name: /History/ }).click();
   await page.waitForURL("**/admin/history");
   await page.getByRole("heading", { name: "History & backups" }).waitFor();
-  assert(await page.locator(".admin-topbar__location").innerText().then((s) => s.includes("System")),
-    "History breadcrumb must belong to System");
+  // RSC route content may render before client-side usePathname updates the breadcrumb.
+  await page.locator(".admin-topbar__location").getByText("System", { exact: true })
+    .waitFor({ state: "visible", timeout: 15_000 });
   console.log("PASS: report-wide 7/30 filters, exact KPI/chart agreement, command search and breadcrumbs");
 
   await page.setViewportSize({ width: 1280, height: 800 });
