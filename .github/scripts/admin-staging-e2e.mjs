@@ -132,6 +132,8 @@ try {
     }
   }
 
+  // Review desktop-only breadcrumb semantics at desktop width after 3 responsive viewport snapshots.
+  await page.setViewportSize({ width: 1280, height: 800 });
   // Dashboard decisions stay usable after the visual overhaul.
   await page.goto(appUrl + "/admin", { waitUntil: "domcontentloaded" });
   await page.getByRole("heading", { name: "Website overview", exact: true }).waitFor();
