@@ -132,10 +132,11 @@ try {
 
   // Exercise actual Next.js Server Actions for announcement create/edit.
   await page.goto(appUrl + "/admin/announcements", { waitUntil: "domcontentloaded" });
-  await page.locator("section[aria-labelledby='announcement-create-title'] input[name='title']").fill(noticeTitle);
-  await page.locator("section[aria-labelledby='announcement-create-title'] textarea[name='message']")
+  await page.locator("details.admin-announcement-create > summary").click();
+  await page.locator("details.admin-announcement-create input[name='title']").fill(noticeTitle);
+  await page.locator("details.admin-announcement-create textarea[name='message']")
     .fill("Created with the real isolated admin form");
-  await page.locator("section[aria-labelledby='announcement-create-title'] input[name='is_active']").uncheck();
+  await page.locator("details.admin-announcement-create input[name='is_active']").uncheck();
   await page.getByRole("button", { name: "Save announcement" }).click();
   await page.getByText("Announcement created.", { exact: true }).waitFor({ timeout: 20_000 });
   const notice = dataOrFail(await owner.from("announcements")
