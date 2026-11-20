@@ -20,7 +20,11 @@ function requireLoopback(url, allowedPort) {
 }
 assert.equal(process.env.LOCAL_ADMIN_QA_ONLY, "1", "Explicit local-only E2E guard missing");
 assert.notEqual(process.env.VERCEL_ENV, "production", "Never run E2E under a production environment");
-requireLoopback(supabaseUrl, 54321);
+const githubRun = process.env.GITHUB_RUN_ID;
+const expectedLocalApiPort = githubRun && /^\\d+$/.test(githubRun)
+  ? 24000 + Number(githubRun) % 10000
+  : 54321;
+requireLoopback(supabaseUrl, expectedLocalApiPort);
 requireLoopback(appUrl, 3000);
 assert(anonKey?.length > 20 && serviceKey?.length > 20, "Local-only Supabase credentials required");
 
