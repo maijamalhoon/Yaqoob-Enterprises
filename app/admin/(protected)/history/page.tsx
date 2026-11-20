@@ -92,6 +92,46 @@ export default async function AdminHistoryPage() {
   const backupRows = snapshots || [];
   const liveChanges = historyRows.filter((entry) => !entry.reverted_at).length;
 
+  const renderHistoryRow = (entry: (typeof historyRows)[number]) => {
+    const fields = changedFields(
+      entry.old_data as Record<string, unknown> | null,
+      entry.new_data as Record<string, unknown> | null,
+    );
+    const reverted = Boolean(entry.reverted_at);
+    const label = entry.record_label || entry.record_id;
+    return (
+      <article className={`admin-history-row ${reverted ? "is-reverted" : ""}`} key={entry.id}>
+        <span className="admin-history-row__icon"><History size={16} /></span>
+        <div className="admin-history-row__copy">
+          <strong>{operationLabel(entry.operation)} {label}</strong>
+          <small>{tableLabels[entry.table_name] || entry.table_name} · {entry.operation === "UPDATE" ? formatChangedFields(fields) : "record"}</small>
+        </div>
+        <div className="admin-history-row__meta">
+          <span>{new Date(entry.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</span>
+          <small>{entry.actor_email || "System"}</small>
+        </div>
+        <div className="admin-history-row__action">
+          {reverted ? (
+            <span className="admin-state is-hidden">Undone</span>
+          ) : !canUndoAdminAudit(entry.table_name, entry.operation) ? (
+            <span className="admin-state is-hidden" title="This record is read-only in the history tool.">View only</span>
+          ) : (
+            <AdminActionForm action={rollbackEntryWithFeedback}>
+              <input type="hidden" name="id" value={entry.id} />
+              <AdminSubmitButton
+                variant="secondary"
+                pendingLabel="Undoing…"
+                confirmMessage={`Undo this ${entry.operation.toLowerCase()} change to “${label}”?`}
+              >
+                <RotateCcw size={14} /> Undo
+              </AdminSubmitButton>
+            </AdminActionForm>
+          )}
+        </div>
+      </article>
+    );
+  };
+
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
@@ -174,47 +214,17 @@ export default async function AdminHistoryPage() {
         </div>
 
         <div className="admin-history-list">
-          {historyRows.map((entry) => {
-            const fields = changedFields(
-              entry.old_data as Record<string, unknown> | null,
-              entry.new_data as Record<string, unknown> | null,
-            );
-            const reverted = Boolean(entry.reverted_at);
-            const label = entry.record_label || entry.record_id;
-            return (
-              <article className={`admin-history-row ${reverted ? "is-reverted" : ""}`} key={entry.id}>
-                <span className="admin-history-row__icon"><History size={16} /></span>
-                <div className="admin-history-row__copy">
-                  <strong>{operationLabel(entry.operation)} {label}</strong>
-                  <small>{tableLabels[entry.table_name] || entry.table_name} · {entry.operation === "UPDATE" ? formatChangedFields(fields) : "record"}</small>
-                </div>
-                <div className="admin-history-row__meta">
-                  <span>{new Date(entry.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</span>
-                  <small>{entry.actor_email || "System"}</small>
-                </div>
-                <div className="admin-history-row__action">
-                  {reverted ? (
-                    <span className="admin-state is-hidden">Undone</span>
-                  ) : !canUndoAdminAudit(entry.table_name, entry.operation) ? (
-                    <span className="admin-state is-hidden" title="This record is read-only in the history tool.">View only</span>
-                  ) : (
-                    <AdminActionForm action={rollbackEntryWithFeedback}>
-                      <input type="hidden" name="id" value={entry.id} />
-                      <AdminSubmitButton
-                        variant="secondary"
-                        pendingLabel="Undoing…"
-                        confirmMessage={`Undo this ${entry.operation.toLowerCase()} change to “${label}”?`}
-                      >
-                        <RotateCcw size={14} /> Undo
-                      </AdminSubmitButton>
-                    </AdminActionForm>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+          {historyRows.slice(0, 8).map(renderHistoryRow)}
           {historyRows.length === 0 && <div className="admin-empty-state admin-empty-state--compact"><History size={21} /><p>No admin changes recorded yet.</p></div>}
         </div>
+        {historyRows.length > 8 && (
+          <details className="admin-history-more">
+            <summary>Show {historyRows.length - 8} older changes</summary>
+            <div className="admin-history-list">
+              {historyRows.slice(8).map(renderHistoryRow)}
+            </div>
+          </details>
+        )}
       </section>
     </div>
   );
