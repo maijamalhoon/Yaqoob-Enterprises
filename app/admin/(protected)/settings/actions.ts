@@ -2,6 +2,8 @@
 
 import { revalidatePath, updateTag } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
+import { parseAdminOpeningHours } from "@/lib/admin-hours";
+import type { AdminFormState } from "@/components/admin-action-form";
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
@@ -63,11 +65,12 @@ export async function updateBusinessIdentity(formData: FormData) {
   const businessName = text(formData, "business_name");
   if (businessName.length < 2) throw new Error("Business name is required.");
 
-  const { error } = await supabase.from("business_settings").update({
+  const { data, error } = await supabase.from("business_settings").update({
     business_name: businessName,
-  }).eq("id", true);
+  }).eq("id", true).select("id").maybeSingle();
 
   if (error) throw new Error(error.message);
+  if (!data) throw new Error("Business settings are unavailable. Refresh the page.");
   refreshSettings();
 }
 
@@ -83,74 +86,81 @@ export async function updateContactDetails(formData: FormData) {
   secureUrl(mapUrl, "Google Maps");
   validateGoogleBusinessProfileUrl(googleBusinessProfileUrl);
 
-  const { error } = await supabase.from("business_settings").update({
+  const { data, error } = await supabase.from("business_settings").update({
     phone_display: displayPhone(phone),
     phone_e164: phone,
     whatsapp_e164: whatsapp,
     address,
     map_url: mapUrl,
     google_business_profile_url: googleBusinessProfileUrl,
-  }).eq("id", true);
+  }).eq("id", true).select("id").maybeSingle();
 
   if (error) throw new Error(error.message);
+  if (!data) throw new Error("Business settings are unavailable. Refresh the page.");
   refreshSettings();
-}
-
-function minutes(time: string) {
-  const [hours, mins] = time.split(":").map(Number);
-  return hours * 60 + mins;
-}
-
-function readPeriod(formData: FormData, prefix: string) {
-  const opensAt = text(formData, `${prefix}_opens_at`);
-  const closesAt = text(formData, `${prefix}_closes_at`);
-  if (!opensAt && !closesAt) return null;
-  if (!opensAt || !closesAt) throw new Error("Both opening and closing time are required for each interval.");
-  return {
-    opens_at: opensAt,
-    closes_at: closesAt,
-    closes_next_day: minutes(closesAt) <= minutes(opensAt),
-  };
 }
 
 export async function updateBusinessHour(formData: FormData) {
   const { supabase } = await requireAdmin();
-  const isClosed = bool(formData, "is_closed");
-  const periods = [readPeriod(formData, "first"), readPeriod(formData, "second")].filter(Boolean) as Array<{
-    opens_at: string;
-    closes_at: string;
-    closes_next_day: boolean;
-  }>;
-
-  periods.sort((a, b) => minutes(a.opens_at) - minutes(b.opens_at));
-  if (!isClosed && periods.length === 0) throw new Error("Add at least one opening interval or mark the day closed.");
-  if (periods.length > 1) {
-    const first = periods[0];
-    const second = periods[1];
-    if (first.closes_next_day || minutes(second.opens_at) < minutes(first.closes_at)) {
-      throw new Error("Opening intervals cannot overlap, and an overnight interval must be the final interval.");
-    }
-  }
-
-  const { error } = await supabase.from("business_hours").update({
-    periods: isClosed ? [] : periods,
+  const { isClosed, periods } = parseAdminOpeningHours(formData);
+  const { data, error } = await supabase.from("business_hours").update({
+    periods,
     opens_at: isClosed ? null : periods[0]?.opens_at || null,
     closes_at: isClosed ? null : periods.at(-1)?.closes_at || null,
     is_closed: isClosed,
-  }).eq("id", text(formData, "id"));
+  }).eq("id", text(formData, "id")).select("id").maybeSingle();
 
   if (error) throw new Error(error.message);
+  if (!data) throw new Error("This day no longer exists. Refresh the page.");
   refreshSettings();
 }
 
 export async function updateNoticesAndPolicies(formData: FormData) {
   const { supabase } = await requireAdmin();
-  const { error } = await supabase.from("business_settings").update({
+  const { data, error } = await supabase.from("business_settings").update({
     pricing_message: text(formData, "pricing_message"),
     concept_image_notice: text(formData, "concept_image_notice"),
-  }).eq("id", true);
+  }).eq("id", true).select("id").maybeSingle();
 
   if (error) throw new Error(error.message);
+  if (!data) throw new Error("Business settings are unavailable. Refresh the page.");
   refreshSettings();
 }
 
+
+
+function safeSettingsFailure(error: unknown): string {
+  const message = error instanceof Error ? error.message : "";
+  if (/Business name is required|Address is required|Enter a valid|Use valid 24-hour|Enter both opening|Enter the first period|Add an opening period|Opening periods cannot overlap|This day no longer exists|Business settings are unavailable/.test(message)) {
+    return message;
+  }
+  return "The change could not be confirmed. Check your inputs and try again.";
+}
+
+async function settingsFeedback(
+  formData: FormData,
+  action: (input: FormData) => Promise<void>,
+  successMessage: string,
+): Promise<AdminFormState> {
+  // Auth redirects must remain redirects; do not turn them into form errors.
+  await requireAdmin();
+  try {
+    await action(formData);
+    return { status: "success", message: successMessage };
+  } catch (error) {
+    return { status: "error", message: safeSettingsFailure(error) };
+  }
+}
+
+export async function saveIdentityWithFeedback(_previous: AdminFormState, formData: FormData): Promise<AdminFormState> {
+  return settingsFeedback(formData, updateBusinessIdentity, "Business name saved.");
+}
+export async function saveContactWithFeedback(_previous: AdminFormState, formData: FormData): Promise<AdminFormState> {
+  return settingsFeedback(formData, updateContactDetails, "Contact details saved.");
+}
+export async function saveOpeningHoursWithFeedback(_previous: AdminFormState, formData: FormData): Promise<AdminFormState> {
+  return settingsFeedback(formData, updateBusinessHour, "Opening hours saved.");
+}
+export async function saveNoticesWithFeedback(_previous: AdminFormState, formData: FormData): Promise<AdminFormState> {
+  return settingsFeedback(formData, updateNoticesAndPolicies, "Customer notices saved.");
+}
