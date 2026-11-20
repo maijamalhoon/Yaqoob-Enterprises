@@ -16,12 +16,13 @@ import {
 } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
+import { karachiAnalyticsWindow } from "@/lib/admin-analytics-window";
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireAdmin();
-  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day activity window.
+  // Server-only: use the same 30 Pakistan calendar days as the Analytics page.
   // eslint-disable-next-line react-hooks/purity
-  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const since = karachiAnalyticsWindow(new Date()).since;
   const [services, categories, featured, settings, hours, events, recent, latestBackup] = await Promise.all([
     supabase.from("services").select("id,category_id,status"),
     supabase.from("service_categories").select("id,is_active"),
