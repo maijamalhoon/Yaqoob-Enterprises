@@ -17,6 +17,11 @@ export function PageTracker() {
   useEffect(() => {
     if (!pathname) return;
 
+    // Do not dispatch page-view telemetry from Vercel previews or CI hosts.
+    // The ingestion route independently enforces the production boundary.
+    const canonicalOrigin = new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://yaqoob-enterprises.vercel.app").origin;
+    if (window.location.origin !== canonicalOrigin) return;
+
     const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
     if (isAdmin) return;
 

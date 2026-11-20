@@ -3,7 +3,8 @@ import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/env";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL, SITE_URL } from "@/lib/env";
+import { canIngestPublicAnalytics } from "@/lib/analytics-ingest-guard";
 
 const allowedEvents = new Set(["page_view", "whatsapp_click", "call_click", "directions_click", "service_view"]);
 const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|uptimerobot/i;
@@ -79,6 +80,18 @@ function isRateLimited(key: string) {
 }
 
 export async function POST(request: Request) {
+  // Preview deployments share infrastructure, but must never write live analytics.
+  // Ignore before parsing or calling Supabase; never leak server credentials.
+  if (!canIngestPublicAnalytics({
+    requestUrl: request.url,
+    canonicalSiteUrl: SITE_URL,
+    nodeEnv: process.env.NODE_ENV,
+    vercel: process.env.VERCEL,
+    vercelEnv: process.env.VERCEL_ENV,
+    deploymentEnv: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
+  })) {
+    return NextResponse.json({ ok: true, ignored: true }, { headers: { "Cache-Control": "no-store" } });
+  }
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > 2_048) {
     return NextResponse.json({ ok: false }, { status: 413 });

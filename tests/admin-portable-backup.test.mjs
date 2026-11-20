@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import {
   PORTABLE_BACKUP_TABLES, assemblePortableBackup, encodePortableMedia,
-  safePortablePath, validateMediaBudget, MAX_PORTABLE_FILES,
+  safePortablePath, validateMediaBudget, verifyPortableBackup, MAX_PORTABLE_FILES,
 } from "../lib/admin-portable-backup.ts";
 
 function content(extra = {}) {
@@ -46,4 +46,31 @@ test("size and content limits fail closed, without delivering a partial file", a
   assert.throws(() => assemblePortableBackup(content({ services: Array.from({ length: 5001 }, () => ({})) }), [], new Date().toISOString()), /incomplete/);
   await assert.rejects(() => encodePortableMedia("shop-media", "too-big.jpg", { size: 11 * 1024 * 1024 }), /single-file limit/);
   assert.throws(() => assemblePortableBackup({ ...content(), business_settings: [] }, [], new Date().toISOString()), /Business details/);
+});
+
+
+test("offline verifier validates a backup without access to production", async () => {
+  const media = await encodePortableMedia("shop-media", "images/shop.webp", new Blob(["real image bytes"], { type: "image/webp" }));
+  const exported = assemblePortableBackup(content({
+    announcements: [{ title: "Holiday" }],
+    gallery_images: [{ storage_path: "images/shop.webp" }],
+  }), [media], "2026-11-20T06:00:00.000Z");
+  assert.deepEqual(verifyPortableBackup(exported), {
+    exportedAt: "2026-11-20T06:00:00.000Z",
+    tables: Object.fromEntries(PORTABLE_BACKUP_TABLES.map((table) => [table, exported.contents[table].length])),
+    mediaCount: 1,
+    mediaBytes: 16,
+  });
+});
+
+test("offline verifier fails on tampering, missing media and incorrect counts", async () => {
+  const media = await encodePortableMedia("shop-media", "image.jpg", new Blob(["hello"], { type: "image/jpeg" }));
+  const original = assemblePortableBackup(content({ gallery_images: [{ storage_path: "image.jpg" }] }), [media], "2026-11-20T06:00:00.000Z");
+  const tamper = (change) => { const copy = structuredClone(original); change(copy); return copy; };
+  assert.throws(() => verifyPortableBackup(tamper((doc) => { doc.media[0].data_base64 = Buffer.from("hullo").toString("base64"); })), /integrity verification failed/);
+  assert.throws(() => verifyPortableBackup(tamper((doc) => { doc.media[0].sha256 = "0".repeat(64); })), /integrity verification failed/);
+  assert.throws(() => verifyPortableBackup(tamper((doc) => { doc.media_count = 0; })), /totals do not match/);
+  assert.throws(() => verifyPortableBackup(tamper((doc) => { doc.media = []; doc.media_count = 0; doc.media_total_bytes = 0; })), /missing from Storage/);
+  assert.throws(() => verifyPortableBackup(tamper((doc) => { doc.version = 100; })), /Unsupported portable backup format/);
+  assert.throws(() => verifyPortableBackup(tamper((doc) => { doc.media[0].data_base64 = "%"; })), /encoding or checksum/);
 });

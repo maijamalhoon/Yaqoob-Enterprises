@@ -559,3 +559,13 @@
   .admin-offline-backup-panel__body { grid-template-columns: 1fr; gap: 0.8rem; }
   .admin-offline-backup-download { width: 100%; white-space: normal; text-align: center; }
 }
+
+
+/* Phase 8: separate measured events from verified human traffic. */
+.admin-analytics-caveat {
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: #566d80;
+  margin: -0.2rem 0 1.15rem;
+  max-width: 67rem;
+}

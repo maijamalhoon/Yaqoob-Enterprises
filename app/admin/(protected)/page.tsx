@@ -57,6 +57,7 @@ export default async function AdminDashboardPage() {
   ] as const;
   const healthyCount = healthChecks.filter(([, ready]) => ready).length;
   const unavailableCount = healthChecks.filter(([, ready]) => ready === null).length;
+  const reviewCount = healthChecks.filter(([, ready]) => ready === false).length;
   const nextPriority = healthChecks.find(([, ready]) => ready === false) || healthChecks.find(([, ready]) => ready === null);
   const activityRows = recent.data || [];
 
@@ -94,7 +95,7 @@ export default async function AdminDashboardPage() {
         <article>
           <span><Activity size={18} aria-hidden="true" /></span>
           <strong>{events.error ? "—" : (events.count || 0).toLocaleString("en-PK")}</strong>
-          <p>Events · last 30 days</p>
+          <p>Tracked events · 30 days</p>
         </article>
       </section>
 
@@ -106,7 +107,7 @@ export default async function AdminDashboardPage() {
           <p>{nextPriority
             ? nextPriority[1] === null
               ? "The status could not be verified. Open this section and check its data."
-              : "One website check still needs attention."
+              : `${reviewCount} website check${reviewCount === 1 ? "" : "s"} need${reviewCount === 1 ? "s" : ""} attention.`
             : "Core setup is complete. Explore visitors and contact activity."}</p>
         </div>
         <Link href={nextPriority?.[2] || "/admin/analytics"}>

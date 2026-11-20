@@ -2,6 +2,7 @@ import { DatabaseBackup, Download, History, RotateCcw, ShieldCheck } from "lucid
 import { AdminActionForm } from "@/components/admin-action-form";
 import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
+import { canUndoAdminAudit } from "@/lib/admin-history-fields";
 import { createSnapshotWithFeedback, deleteSnapshotWithFeedback, restoreSnapshotWithFeedback, rollbackEntryWithFeedback } from "./actions";
 
 const tableLabels: Record<string, string> = {
@@ -191,6 +192,8 @@ export default async function AdminHistoryPage() {
                 <div className="admin-history-row__action">
                   {reverted ? (
                     <span className="admin-state is-hidden">Undone</span>
+                  ) : !canUndoAdminAudit(entry.table_name, entry.operation) ? (
+                    <span className="admin-state is-hidden" title="This record is read-only in the history tool.">View only</span>
                   ) : (
                     <AdminActionForm action={rollbackEntryWithFeedback}>
                       <input type="hidden" name="id" value={entry.id} />

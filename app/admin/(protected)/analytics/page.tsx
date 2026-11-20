@@ -201,7 +201,7 @@ export default async function AdminAnalyticsPage() {
   }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
   const cards = [
-    ["Visitors", visitors, Users],
+    ["Tracked browsers", visitors, Users],
     ["Page views", pageViews, BarChart3],
     ["Contact visitors", contactVisitors, MousePointerClick],
     ["Contact rate", `${conversionRate}%`, Globe2],
@@ -212,11 +212,12 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Last 30 calendar days · Pakistan time.</p></div>
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Last 30 calendar days · Pakistan time. Visits are estimates, not verified people.</p></div>
         <AnalyticsRefreshButton />
       </div>
 
-      <div className="admin-analytics-period" role="status"><span>{days[0]} — {days[29]} · PKT</span><strong>{truncated ? "Partial data: latest 5,000 events" : "All tracked events loaded"}</strong></div>
+      <div className="admin-analytics-period" role="status"><span>{days[0]} — {days[29]} · PKT</span><strong>{truncated ? "Partial data: latest 5,000 events" : "All recorded events loaded"}</strong></div>
+      <p className="admin-analytics-caveat">Historical figures may include automated visits and preview/test traffic. New preview deployments are excluded from ingestion; earlier events are preserved for auditability.</p>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
 
@@ -242,7 +243,7 @@ export default async function AdminAnalyticsPage() {
           {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Open profile <ExternalLink size={13} /></a>}
         </div>
         <div className="admin-google-metrics">
-          <span><strong>{googleVisitors}</strong><small>Visitors</small></span>
+          <span><strong>{googleVisitors}</strong><small>Tracked browsers</small></span>
           <span><strong>{googlePageViews}</strong><small>Page views</small></span>
           <span><strong>{googleContactVisitors}</strong><small>Contact visitors</small></span>
           <span><strong>{googleConversion}%</strong><small>Contact rate</small></span>
