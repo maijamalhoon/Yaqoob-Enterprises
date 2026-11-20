@@ -108,6 +108,7 @@ try {
   await mkdir("test-results/admin-ui", { recursive: true });
   for (const viewport of [
     { name: "desktop", width: 1440, height: 900 },
+    { name: "tablet", width: 820, height: 1024 },
     { name: "mobile", width: 390, height: 844 },
   ]) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -134,17 +135,39 @@ try {
   await page.goto(appUrl + "/admin/analytics", { waitUntil: "domcontentloaded" });
   const lastWeekTab = page.getByRole("button", { name: "7 days", exact: true });
   await lastWeekTab.click();
-  assert.equal(await lastWeekTab.getAttribute("aria-pressed"), "true", "7-day chart selection did not update");
+  await page.waitForURL(/\/admin\/analytics\?range=7$/);
+  assert.equal(await page.getByRole("button", { name: "7 days", exact: true }).getAttribute("aria-pressed"), "true",
+    "7-day report selection did not update");
+  assert.match(await page.locator(".admin-analytics-period").innerText(), /7 days/, "7-day reporting period was not updated");
+  assert.equal(await page.locator(".admin-metric-card__body strong").nth(1).innerText(),
+    await page.locator(".admin-trend__summary strong").innerText(),
+    "7-day KPI and chart totals must agree");
   const monthTab = page.getByRole("button", { name: "30 days", exact: true });
   await monthTab.click();
-  assert.equal(await monthTab.getAttribute("aria-pressed"), "true", "30-day chart selection did not update");
+  await page.waitForURL(/\/admin\/analytics\?range=30$/);
+  assert.equal(await page.getByRole("button", { name: "30 days", exact: true }).getAttribute("aria-pressed"), "true",
+    "30-day report selection did not update");
+  assert.match(await page.locator(".admin-analytics-period").innerText(), /30 days/, "30-day reporting period was not updated");
+  assert.equal(await page.locator(".admin-metric-card__body strong").nth(1).innerText(),
+    await page.locator(".admin-trend__summary strong").innerText(),
+    "30-day KPI and chart totals must agree");
   await page.goto(appUrl + "/admin/services", { waitUntil: "domcontentloaded" });
   const categoryJumpLinks = page.locator(".admin-service-jump a");
   assert((await categoryJumpLinks.count()) > 0, "Category jump shortcuts are missing");
   const firstJump = await categoryJumpLinks.first().getAttribute("href");
   assert(firstJump?.startsWith("#admin-category-"), "Category jump target malformed");
   assert(await page.locator(firstJump).count() === 1, "Category target section missing");
-  console.log("PASS: premium overview action, chart range interaction and service category navigation");
+  await page.goto(appUrl + "/admin", { waitUntil: "domcontentloaded" });
+  await page.keyboard.press("Control+k");
+  const commandInput = page.getByRole("combobox", { name: "Find an admin section" });
+  await commandInput.waitFor({ state: "visible" });
+  await commandInput.fill("history");
+  await page.getByRole("option", { name: /History/ }).click();
+  await page.waitForURL("**/admin/history");
+  await page.getByRole("heading", { name: "History & backups" }).waitFor();
+  assert(await page.locator(".admin-topbar__location").innerText().then((s) => s.includes("System")),
+    "History breadcrumb must belong to System");
+  console.log("PASS: report-wide 7/30 filters, exact KPI/chart agreement, command search and breadcrumbs");
 
   await page.setViewportSize({ width: 1280, height: 800 });
   console.log("PASS: authenticated desktop/mobile screenshots for all eight admin routes, no horizontal overflow");
