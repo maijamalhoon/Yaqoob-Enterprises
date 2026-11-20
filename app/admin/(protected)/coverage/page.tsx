@@ -47,7 +47,13 @@ export default async function AdminCoveragePage() {
             <details className="admin-edit-card admin-coverage-card" key={area.id}>
               <summary>
                 <span><strong>{area.name}</strong><small>{area.is_active ? "Public" : "Hidden"} · Order {area.display_order}</small></span>
-                <span>Edit</span>
+                <span className="admin-coverage-tags" aria-label="Available services">
+                  {area.delivery_available && <em>Delivery</em>}
+                  {area.pickup_available && <em>Pickup</em>}
+                  {area.doorstep_biometric_available && <em>Biometric</em>}
+                  {!area.delivery_available && !area.pickup_available && !area.doorstep_biometric_available && <em>Not configured</em>}
+                </span>
+                <span className="admin-coverage-edit">Edit</span>
               </summary>
               <div className="admin-edit-card__body">
                 <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={updateCoverageAreaWithFeedback}>

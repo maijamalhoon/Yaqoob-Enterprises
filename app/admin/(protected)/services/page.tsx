@@ -98,6 +98,17 @@ export default async function AdminServicesPage({ searchParams }: { searchParams
         </form>
       </section>
 
+      <nav className="admin-service-jump" aria-label="Jump to service category">
+        {categoryList
+          .filter((category) => !hasFilters || filteredServices.some((service) => service.category_id === category.id))
+          .map((category) => (
+            <a key={category.id} href={"#admin-category-" + category.id}>
+              {category.title}
+              <span>{filteredServices.filter((service) => service.category_id === category.id).length}</span>
+            </a>
+          ))}
+      </nav>
+
       <section className="admin-create-row">
         <details className="admin-panel admin-create-panel">
           <summary><span><Plus size={17} /> Add service</span><small>Create a new customer service</small></summary>
@@ -152,7 +163,7 @@ export default async function AdminServicesPage({ searchParams }: { searchParams
         {categoryList.filter((category) => !hasFilters || filteredServices.some((service) => service.category_id === category.id)).map((category) => {
           const categoryServices = filteredServices.filter((service) => service.category_id === category.id);
           return (
-            <section className="admin-panel admin-service-group" key={category.id}>
+            <section className="admin-panel admin-service-group" id={"admin-category-" + category.id} key={category.id}>
               <div className="admin-service-group__head">
                 <span className="admin-service-group__icon"><ServiceIcon iconKey={category.icon_key} size={21} /></span>
                 <div className="admin-service-group__title">
