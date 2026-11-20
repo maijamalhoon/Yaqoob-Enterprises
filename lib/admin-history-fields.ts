@@ -52,3 +52,12 @@ export function assertRestorableBackup(value: unknown): void {
     throw new Error("This backup is missing the business settings record. Nothing was restored.");
   }
 }
+
+
+// The private rollback RPC supports only the six CMS tables.
+// Other audit entries (e.g. account authorization changes) remain visible,
+// but must never offer a button that will always fail.
+export function canUndoAdminAudit(table: string, operation: string): boolean {
+  return (BACKUP_TABLES as readonly string[]).includes(table)
+    && (operation === "INSERT" || operation === "UPDATE" || operation === "DELETE");
+}
