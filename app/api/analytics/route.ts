@@ -2,6 +2,8 @@ import { createHash, randomUUID } from "node:crypto";
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/env";
 
 const allowedEvents = new Set(["page_view", "whatsapp_click", "call_click", "directions_click", "service_view"]);
 const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|uptimerobot/i;
@@ -164,21 +166,37 @@ export async function POST(request: Request) {
       );
     }
 
-    const { error } = await supabase.from("analytics_events").insert({
-      event_name: body.eventName,
-      page_path: pagePath,
-      referrer_host: safeReferrerHost(requestHeaders.get("referer")),
-      country_code: requestHeaders.get("x-vercel-ip-country")?.slice(0, 8) || null,
-      city_name: safeDecode(requestHeaders.get("x-vercel-ip-city"))?.slice(0, 120) || null,
-      device_type: deviceType(userAgent),
-      session_hash: sessionHash,
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
+    // The dedicated server-only token only authorizes this one narrow RPC.
+    // Never put it in NEXT_PUBLIC_* variables, client components or logs.
+    const ingestSecret = process.env.ANALYTICS_INGEST_SECRET;
+    if (!ingestSecret || ingestSecret.length < 64) {
+      console.error("Analytics ingestion credential is not configured");
+      return NextResponse.json({ ok: false }, { status: 503 });
+    }
+
+    // Separate anon client intentionally ignores visitors' auth cookies.
+    // Direct INSERT access will be revoked after the RPC is verified live.
+    const ingestClient = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { error } = await ingestClient.rpc("record_public_analytics_event", {
+      p_secret: ingestSecret,
+      p_event: {
+        event_name: body.eventName,
+        page_path: pagePath,
+        referrer_host: safeReferrerHost(requestHeaders.get("referer")),
+        country_code: requestHeaders.get("x-vercel-ip-country")?.slice(0, 8) || null,
+        city_name: safeDecode(requestHeaders.get("x-vercel-ip-city"))?.slice(0, 120) || null,
+        device_type: deviceType(userAgent),
+        session_hash: sessionHash,
+        utm_source: utmSource,
+        utm_medium: utmMedium,
+        utm_campaign: utmCampaign,
+      },
     });
 
     if (error) {
-      console.error("Analytics insert failed", { code: error.code });
+      console.error("Analytics ingestion RPC failed", { code: error.code });
       return NextResponse.json({ ok: false }, { status: 503 });
     }
 
