@@ -1,4 +1,4 @@
-import { karachiDayKey } from "./admin-analytics-window";
+import { karachiDayKey } from "./admin-analytics-window.ts";
 
 /**
  * The selected period is shared by every KPI, chart and breakdown.
