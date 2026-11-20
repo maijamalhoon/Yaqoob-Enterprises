@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "../admin-control-center.css";
+import "../admin-safety-analytics.css";
 import "./admin-ui.css";
 
 export const metadata: Metadata = { manifest: "/admin/manifest.webmanifest" };

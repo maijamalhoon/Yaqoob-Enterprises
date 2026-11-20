@@ -21,9 +21,9 @@ import { SHOP_DIRECTIONS_URL } from "@/lib/business-links";
 import { serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Color Printing & Photocopying in Karachi",
+  title: "Color Printing & Copies Karachi",
   description:
-    "Color printing and photocopying in Akhtar Colony, Karachi. Print school, college, and university assignments, notes, and documents. Ask about discounted bulk rates.",
+    "Color printing and photocopies for notes, assignments and office documents in Akhtar Colony, Karachi. Ask for bulk-printing rates.",
   alternates: {
     canonical: `${SITE_URL}/color-printing`,
   },

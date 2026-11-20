@@ -112,9 +112,9 @@ const categoryOverrides: Record<string, CategoryOverride> = {
   },
   retail: {
     heading: () => "Stationery & Mobile Accessories",
-    title: (businessName) => `Stationery & Mobile Accessories Karachi | ${businessName}`,
+    title: (businessName) => `Stationery & Accessories Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Everyday office and school stationery, registers, files, plus mobile phone chargers, data cables, and handsfree accessories at ${businessName} in ${location}.`,
+      `School and office stationery, files, registers, chargers and cables at ${businessName} in ${location}. Ask about availability.`,
     keywords: [
       "stationery shop akhtar colony",
       "mobile charger cable shop akhtar colony",
@@ -153,7 +153,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
     heading: () => "Printing, Copies & Scanning",
     title: (businessName) => `Color & B&W Printing, Karachi | ${businessName}`,
     description: (location, businessName) =>
-      `Color and black-and-white printing, photocopying, bulk notes and assignments at discounted rates, and document scanning at ${businessName} in ${location}.`,
+      `Color and B&W printing, photocopying, bulk notes and document scanning at ${businessName} in ${location}.`,
     commonRequests: [
       "A4 and Legal black-and-white & high-resolution color laser prints",
       "Bulk notes and assignments for schools, colleges, and universities",
@@ -215,7 +215,7 @@ const serviceOverrides: Record<string, ServiceOverride> = {
   },
   "passport-size-photos": {
     heading: () => "Passport-Size Photos",
-    title: (businessName) => `Passport Photos in Karachi | ${businessName}`,
+    title: (businessName) => `Passport & ID Photos Karachi | ${businessName}`,
     description: (location, businessName) =>
       `Passport-size photos with white or blue backgrounds for CNICs, passports, visas and applications at ${businessName} in ${location}.`,
     commonRequests: [

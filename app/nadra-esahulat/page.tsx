@@ -22,7 +22,7 @@ import { serializeJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = {
   title: "NADRA Biometrics in Akhtar Colony",
   description:
-    "Authorized local NADRA e-Sahulat franchise in Akhtar Colony, Karachi. Biometric verification for Vehicle / ETO transfers, FBR Sales Tax biometric, Pakistan Single Window (PSW), and general biometric verification.",
+    "NADRA e-Sahulat biometrics in Akhtar Colony, Karachi for vehicle transfers, FBR Sales Tax and PSW. Call to confirm requirements.",
   alternates: {
     canonical: `${SITE_URL}/nadra-esahulat`,
   },
