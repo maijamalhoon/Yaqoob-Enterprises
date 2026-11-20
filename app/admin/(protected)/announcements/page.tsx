@@ -2,6 +2,7 @@ import { Megaphone, Plus } from "lucide-react";
 import { AdminActionForm } from "@/components/admin-action-form";
 import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
+import { currentServerTimeMs } from "@/lib/server-clock";
 import {
   createAnnouncementWithFeedback,
   deleteAnnouncementWithFeedback,
@@ -33,7 +34,7 @@ export default async function AdminAnnouncementsPage() {
   if (error) throw new Error("Announcements could not be loaded. Please retry.");
 
   const announcementList = announcements || [];
-  const now = Date.now();
+  const now = await currentServerTimeMs();
   const liveCount = announcementList.filter((announcement) => noticeStatus(announcement, now).live).length;
 
   return (
