@@ -164,6 +164,31 @@ try {
     .eq("label", snapshotLabel).single(), "Create real in-app snapshot");
   assert.equal(snapshot.snapshot.version, 1);
 
+  // A malformed backup must fail before any data loss.
+  const invalidBackup = dataOrFail(await owner.from("admin_snapshots").insert({
+    label: "QA invalid snapshot " + unique,
+    snapshot: { version: 1, business_settings: [] },
+    created_by: adminUser.id,
+  }).select("id").single(), "Stage malformed snapshot");
+  const invalidRestore = await owner.rpc("restore_admin_snapshot", { target_snapshot_id: invalidBackup.id });
+  assert(invalidRestore.error, "Malformed snapshot unexpectedly restored");
+
+  // A structurally valid backup with an invalid FK must fail atomically.
+  const brokenSnapshot = structuredClone(snapshot.snapshot);
+  assert(brokenSnapshot.services.length > 0, "Seeded services required for FK rollback test");
+  brokenSnapshot.services[0].category_id = randomUUID();
+  const corruptedBackup = dataOrFail(await owner.from("admin_snapshots").insert({
+    label: "QA broken FK snapshot " + unique,
+    snapshot: brokenSnapshot,
+    created_by: adminUser.id,
+  }).select("id").single(), "Stage intentionally broken FK snapshot");
+  const failedRestore = await owner.rpc("restore_admin_snapshot", { target_snapshot_id: corruptedBackup.id });
+  assert(failedRestore.error, "Broken FK backup unexpectedly restored");
+  const unchanged = dataOrFail(await owner.from("services")
+    .select("title").eq("id", createdService.id).single(), "Verify rollback is atomic");
+  assert.equal(unchanged.title, "QA Edited Service", "Failed restore destroyed existing data");
+  console.log("PASS: malformed snapshots are blocked; failed FK restoration is atomic");
+
   // Modify a record and run the actual owner-only restore RPC. 
   dataOrFail(await owner.from("services").update({ title: "MUTATED AFTER BACKUP" })
     .eq("id", createdService.id).select("id").single(), "Mutate before restoring");
