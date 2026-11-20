@@ -129,6 +129,21 @@ try {
   await page.setViewportSize({ width: 1280, height: 800 });
   console.log("PASS: authenticated desktop/mobile screenshots for all eight admin routes, no horizontal overflow");
 
+  // Overview focuses on actionable content; detailed checks are still available on demand.
+  await page.goto(appUrl + "/admin", { waitUntil: "domcontentloaded" });
+  const readiness = page.locator("details.admin-readiness-disclosure");
+  assert.equal(await readiness.getAttribute("open"), null, "Readiness should be collapsed by default");
+  await readiness.locator("summary").click();
+  assert.equal(await readiness.locator("nav a").count(), 7, "All seven website checks must remain accessible");
+  await readiness.locator("summary").click();
+
+  await page.goto(appUrl + "/admin/settings", { waitUntil: "domcontentloaded" });
+  const notices = page.locator("details.admin-settings-optional");
+  await notices.locator("summary").click();
+  assert(await notices.locator('textarea[name="pricing_message"]').isVisible(), "Optional notice editor must be usable");
+  console.log("PASS: condensed Overview and progressive Settings keep complete accessible actions");
+
+
 
   // Exercise actual Next.js Server Actions for announcement create/edit.
   await page.goto(appUrl + "/admin/announcements", { waitUntil: "domcontentloaded" });
