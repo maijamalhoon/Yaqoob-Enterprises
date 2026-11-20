@@ -1001,3 +1001,20 @@
   .admin-root .admin-readiness-gauge small { font-size: 0.62rem; }
   .admin-root .admin-advanced-fields > .admin-advanced-fields__grid { grid-template-columns: 1fr; }
 }
+
+
+/* Keep attribution setup accessible without showing a full URL by default. */
+.admin-root .admin-tracking-details {
+  margin-top: 12px;
+  border-top: 1px solid #e8edf2;
+  color: #536c7e;
+}
+.admin-root .admin-tracking-details > summary {
+  width: fit-content;
+  padding: 11px 0 2px;
+  cursor: pointer;
+  color: #087d72;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.admin-root .admin-tracking-details > .admin-tracking-link { margin-top: 8px; }
