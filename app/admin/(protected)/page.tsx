@@ -19,6 +19,7 @@ import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 import { karachiAnalyticsWindow } from "@/lib/admin-analytics-window";
 import { groupRecentAdminActivity } from "@/lib/admin-activity-groups";
+import { AdminMetricCard } from "@/components/admin-metric-card";
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireAdmin();
@@ -84,27 +85,11 @@ export default async function AdminDashboardPage() {
         </div>
       </header>
 
-      <section className="admin-stats admin-stats--control" aria-label="Website summary">
-        <article>
-          <span><Wrench size={18} aria-hidden="true" /></span>
-          <strong>{publicServiceCount?.toLocaleString("en-PK") ?? "—"}</strong>
-          <p>Public services</p>
-        </article>
-        <article>
-          <span><Settings2 size={18} aria-hidden="true" /></span>
-          <strong>{categoryCount?.toLocaleString("en-PK") ?? "—"}</strong>
-          <p>Active categories</p>
-        </article>
-        <article className={featuredReady === null ? "is-warning" : featuredReady ? "is-ready" : "is-warning"}>
-          <span><ImageIcon size={18} aria-hidden="true" /></span>
-          <strong>{featuredReady === null ? "—" : featuredReady ? "Ready" : "Missing"}</strong>
-          <p>Homepage image</p>
-        </article>
-        <article>
-          <span><Activity size={18} aria-hidden="true" /></span>
-          <strong>{events.error ? "—" : (events.count || 0).toLocaleString("en-PK")}</strong>
-          <p>Tracked events · 30 days</p>
-        </article>
+      <section className="admin-metric-grid" aria-label="Website summary">
+        <AdminMetricCard label="Public services" value={publicServiceCount ?? "—"} icon={Wrench} note="Visible website services" tone="teal" />
+        <AdminMetricCard label="Active categories" value={categoryCount ?? "—"} icon={Settings2} note="Published service groups" tone="blue" />
+        <AdminMetricCard label="Homepage image" value={featuredReady === null ? "—" : featuredReady ? "Ready" : "Missing"} icon={ImageIcon} note={featuredReady ? "Real shop photo featured" : "Choose a real shop photo"} tone="amber" />
+        <AdminMetricCard label="Tracked events · 30 days" value={events.error ? "—" : (events.count || 0)} icon={Activity} note="Recorded website interactions" tone="violet" />
       </section>
 
       <details className="admin-readiness-disclosure">
