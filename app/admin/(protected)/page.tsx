@@ -16,12 +16,13 @@ import {
 } from "lucide-react";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
+import { karachiAnalyticsWindow } from "@/lib/admin-analytics-window";
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireAdmin();
-  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day activity window.
+  // Server-only: use the same 30 Pakistan calendar days as the Analytics page.
   // eslint-disable-next-line react-hooks/purity
-  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const since = karachiAnalyticsWindow(new Date()).since;
   const [services, categories, featured, settings, hours, events, recent, latestBackup] = await Promise.all([
     supabase.from("services").select("id,category_id,status"),
     supabase.from("service_categories").select("id,is_active"),
@@ -55,7 +56,8 @@ export default async function AdminDashboardPage() {
     ["Backup", latestBackup.error ? null : Boolean(latestBackup.data?.id), "/admin/history"],
   ] as const;
   const healthyCount = healthChecks.filter(([, ready]) => ready).length;
-  const checkedCount = healthChecks.filter(([, ready]) => ready !== null).length;
+  const unavailableCount = healthChecks.filter(([, ready]) => ready === null).length;
+  const nextPriority = healthChecks.find(([, ready]) => ready === false) || healthChecks.find(([, ready]) => ready === null);
   const activityRows = recent.data || [];
 
   return (
@@ -68,7 +70,7 @@ export default async function AdminDashboardPage() {
         </div>
         <div className="admin-heading-metrics">
           <span className={healthyCount === healthChecks.length ? "is-good" : "is-warning"}>
-            <strong>{healthyCount}/{checkedCount}</strong> checks ready
+            <strong>{healthyCount}/{healthChecks.length}</strong> checks ready
           </span>
         </div>
       </div>
@@ -96,11 +98,28 @@ export default async function AdminDashboardPage() {
         </article>
       </section>
 
+      <section className="admin-dashboard-spotlight" aria-label="Recommended admin action">
+        <span className="admin-dashboard-spotlight__icon"><ShieldCheck size={20} aria-hidden="true" /></span>
+        <div className="admin-dashboard-spotlight__copy">
+          <span>Next step</span>
+          <strong>{nextPriority ? "Review " + nextPriority[0].toLowerCase() : "Website essentials are ready"}</strong>
+          <p>{nextPriority
+            ? nextPriority[1] === null
+              ? "The status could not be verified. Open this section and check its data."
+              : "One website check still needs attention."
+            : "Core setup is complete. Explore visitors and contact activity."}</p>
+        </div>
+        <Link href={nextPriority?.[2] || "/admin/analytics"}>
+          {nextPriority ? "Open section" : "View insights"} <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </section>
+
       <section className="admin-panel admin-panel--control admin-health-panel" aria-labelledby="admin-health-title">
         <div className="admin-panel__heading">
           <div>
             <span className="admin-panel-kicker"><ShieldCheck size={15} aria-hidden="true" /> Readiness</span>
             <h2 id="admin-health-title">Website checks</h2>
+            {unavailableCount > 0 && <p>{unavailableCount} status check{unavailableCount === 1 ? "" : "s"} currently unavailable.</p>}
           </div>
         </div>
         <div className="admin-health-grid">

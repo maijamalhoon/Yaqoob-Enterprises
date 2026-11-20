@@ -3,6 +3,7 @@ import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmart
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
+import { karachiAnalyticsWindow, karachiDayKey } from "@/lib/admin-analytics-window";
 
 const contactEvents = new Set(["whatsapp_click", "call_click", "directions_click"]);
 const contactLabels: Record<string, string> = {
@@ -10,23 +11,11 @@ const contactLabels: Record<string, string> = {
   call_click: "Calls",
   directions_click: "Directions",
 };
-const analyticsDayFormatter = new Intl.DateTimeFormat("en-US", {
-  calendar: "gregory",
-  day: "2-digit",
-  month: "2-digit",
-  timeZone: "Asia/Karachi",
-  year: "numeric",
-});
 const analyticsTickFormatter = new Intl.DateTimeFormat("en-PK", {
   day: "numeric",
   month: "short",
   timeZone: "UTC",
 });
-
-function analyticsDayKey(date: Date) {
-  const parts = Object.fromEntries(analyticsDayFormatter.formatToParts(date).map(({ type, value }) => [type, value]));
-  return `${parts.year}-${parts.month}-${parts.day}`;
-}
 
 function decodeLabel(value: string | null | undefined, fallback: string) {
   if (!value) return fallback;
@@ -73,37 +62,84 @@ function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMe
   );
 }
 
+const ANALYTICS_LIMIT = 5000;
+const ANALYTICS_PAGE_SIZE = 1000;
+const EVENT_COLUMNS = "id,event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at";
+
+type TrackedEvent = {
+  id: string;
+  event_name: string;
+  page_path: string | null;
+  referrer_host: string | null;
+  country_code: string | null;
+  city_name: string | null;
+  device_type: string | null;
+  session_hash: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  created_at: string;
+};
+
+async function loadTrackedEvents(
+  supabase: Awaited<ReturnType<typeof requireAdmin>>["supabase"],
+  since: string,
+  until: string,
+) {
+  const events: TrackedEvent[] = [];
+  let total: number | null = null;
+
+  // The Supabase Data API can cap results below the requested range size.
+  // Paginate against an exact count, rather than silently reporting the first 1,000 as the full month.
+  while (events.length < ANALYTICS_LIMIT) {
+    const { data, count, error } = await supabase.from("analytics_events")
+      .select(EVENT_COLUMNS, { count: "exact" })
+      .gte("created_at", since)
+      .lte("created_at", until)
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(events.length, Math.min(events.length + ANALYTICS_PAGE_SIZE - 1, ANALYTICS_LIMIT - 1));
+
+    if (error || count === null || !data) {
+      throw new Error("Analytics data could not be loaded. Please retry.");
+    }
+    total = count;
+    if (data.length === 0 && events.length < total) {
+      throw new Error("Analytics results were incomplete. Please retry.");
+    }
+    events.push(...(data as TrackedEvent[]));
+    if (events.length >= total) break;
+  }
+  return { events, truncated: total !== null && events.length < total };
+}
+
 export default async function AdminAnalyticsPage() {
   const { supabase } = await requireAdmin();
-  // Server-only admin page: request-time wall clock intentionally defines the rolling 30-day analytics window.
+  // Server-only admin page: request-time wall clock defines the reporting period.
   // eslint-disable-next-line react-hooks/purity
-  const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ data: events }, { data: settings }, { data: categories }] = await Promise.all([
-    supabase
-      .from("analytics_events")
-      .select("event_name,page_path,referrer_host,country_code,city_name,device_type,session_hash,utm_source,utm_medium,utm_campaign,created_at")
-      .gte("created_at", start)
-      .order("created_at", { ascending: false })
-      .limit(5000),
+  const now = new Date();
+  const { since, until, days } = karachiAnalyticsWindow(now);
+  const [{ events, truncated }, { data: settings, error: settingsError }, { data: categories, error: categoryError }] = await Promise.all([
+    loadTrackedEvents(supabase, since, until),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
     supabase.from("service_categories").select("slug,title"),
   ]);
+  if (settingsError || categoryError) throw new Error("Analytics settings could not be loaded. Please retry.");
 
   const categoryTitles = new Map((categories || []).map((category) => [category.slug, category.title]));
-  const rows = (events || []).filter((event) => {
+  const rows = events.filter((event) => {
     const path = String(event.page_path || "/");
     return path !== "/admin" && !path.startsWith("/admin/");
   });
   const pageViewRows = rows.filter((event) => event.event_name === "page_view");
-  const [year, month, day] = analyticsDayKey(new Date()).split("-").map(Number);
-  const dailyPageViews = Array.from({ length: 31 }, (_, index) => {
-    const date = new Date(Date.UTC(year, month - 1, day + index - 30));
-    const key = date.toISOString().slice(0, 10);
-    return { key, label: analyticsTickFormatter.format(date), count: 0 };
-  });
+  const dailyPageViews = days.map((key) => ({
+    key,
+    label: analyticsTickFormatter.format(new Date(key + "T12:00:00Z")),
+    count: 0,
+  }));
   const dailyPageViewsByDay = new Map(dailyPageViews.map((entry) => [entry.key, entry]));
   for (const event of pageViewRows) {
-    const entry = dailyPageViewsByDay.get(analyticsDayKey(new Date(event.created_at)));
+    const entry = dailyPageViewsByDay.get(karachiDayKey(new Date(event.created_at)));
     if (entry) entry.count += 1;
   }
   const dailyViewsTotal = dailyPageViews.reduce((total, entry) => total + entry.count, 0);
@@ -176,9 +212,11 @@ export default async function AdminAnalyticsPage() {
   return (
     <div className="admin-content admin-control-page">
       <div className="admin-page-heading admin-page-heading--control">
-        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Public website activity from the last 30 days.</p></div>
+        <div><span className="eyebrow">Insights</span><h1>Analytics</h1><p>Last 30 calendar days · Pakistan time.</p></div>
         <AnalyticsRefreshButton />
       </div>
+
+      <div className="admin-analytics-period" role="status"><span>{days[0]} — {days[29]} · PKT</span><strong>{truncated ? "Partial data: latest 5,000 events" : "All tracked events loaded"}</strong></div>
 
       <div className="admin-stats admin-stats--control">{cards.map(([label, value, Icon]) => <article key={label}><span><Icon size={19} /></span><strong>{value}</strong><p>{label}</p></article>)}</div>
 
@@ -187,15 +225,15 @@ export default async function AdminAnalyticsPage() {
           <div><span className="admin-panel-kicker"><BarChart3 size={15} /> Traffic trend</span><h2>Daily page views</h2><p>Public page views across the last 30 days, grouped by Pakistan time.</p></div>
           <span className="admin-traffic-total"><strong>{dailyViewsTotal.toLocaleString("en-PK")}</strong><small>page views</small></span>
         </div>
-        <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views over the last 30 days. ${dailyViewsTotal.toLocaleString("en-PK")} total; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
+        <div className="admin-traffic-chart" role="img" aria-label={dailyViewsTotal ? `Daily page views in the last 30 calendar days${truncated ? " (latest 5,000 events only)" : ""}. ${dailyViewsTotal.toLocaleString("en-PK")} shown; busiest day ${busiestDay.label} with ${busiestDay.count.toLocaleString("en-PK")} views.` : "No page views recorded during this period."}>
           <div className="admin-traffic-chart__scale" aria-hidden="true"><span>{dailyViewsMax.toLocaleString("en-PK")}</span><span>{(dailyViewsMax / 2).toLocaleString("en-PK", { maximumFractionDigits: 1 })}</span><span>0</span></div>
           <div className="admin-traffic-chart__plot">
             {dailyPageViews.map((entry) => <span key={entry.key} title={`${entry.label}: ${entry.count.toLocaleString("en-PK")} page views`} style={{ height: `${entry.count ? Math.max(4, (entry.count / dailyViewsMax) * 100) : 0}%` }} />)}
             {dailyViewsTotal === 0 && <p>No page views recorded during this period.</p>}
           </div>
         </div>
-        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[30].label}</span></div>
-        {(events || []).length >= 5000 && <p className="admin-traffic-note">This view uses the latest 5,000 tracked events.</p>}
+        <div className="admin-traffic-chart__dates" aria-hidden="true"><span>{dailyPageViews[0].label}</span><span>{dailyPageViews[15].label}</span><span>{dailyPageViews[29].label}</span></div>
+        {truncated && <p className="admin-traffic-note">More than 5,000 events were tracked. These counts show a partial sample, not full-period totals.</p>}
       </section>
 
       <section className="admin-panel admin-panel--control admin-google-panel">
