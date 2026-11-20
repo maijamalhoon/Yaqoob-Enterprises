@@ -1,18 +1,20 @@
 import Link from "next/link";
 import { Clock3, ExternalLink, ImageIcon, Info, MapPin, Phone, Store, Type } from "lucide-react";
 import { AdminCancelButton, AdminSubmitButton } from "@/components/admin-form-buttons";
+import { AdminActionForm } from "@/components/admin-action-form";
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 import { formatBusinessHours, getHourPeriods } from "@/lib/data";
-import { updateBusinessHour, updateBusinessIdentity, updateContactDetails, updateNoticesAndPolicies } from "./actions";
+import { saveContactWithFeedback, saveIdentityWithFeedback, saveNoticesWithFeedback, saveOpeningHoursWithFeedback } from "./actions";
 
 export default async function AdminSettingsPage() {
   const { supabase } = await requireAdmin();
-  const [{ data: settings }, { data: hours }] = await Promise.all([
+  const [{ data: settings, error: settingsError }, { data: hours, error: hoursError }] = await Promise.all([
     supabase.from("business_settings").select("*").eq("id", true).single(),
     supabase.from("business_hours").select("*").order("display_order"),
   ]);
-  const location = businessLocationLabel(settings?.address || "");
+  if (settingsError || hoursError || !settings) throw new Error("Business settings could not be loaded. Please retry.");
+  const location = businessLocationLabel(settings.address || "");
 
   return (
     <div className="admin-content admin-control-page">
@@ -25,22 +27,28 @@ export default async function AdminSettingsPage() {
         <Link className="button button--secondary admin-heading-action" href="/admin/gallery"><ImageIcon size={16} /> Homepage image</Link>
       </div>
 
+      <nav className="admin-settings-jump" aria-label="Jump to settings section">
+        <a href="#admin-settings-identity"><Type size={15} aria-hidden="true" /> Business name</a>
+        <a href="#admin-settings-contact"><Phone size={15} aria-hidden="true" /> Phone & location</a>
+        <a href="#admin-settings-notices"><Info size={15} aria-hidden="true" /> Notices</a>
+        <a href="#admin-settings-hours"><Clock3 size={15} aria-hidden="true" /> Opening hours</a>
+      </nav>
       <div className="admin-control-grid admin-control-grid--settings">
-        <section className="admin-panel admin-panel--control">
+        <section id="admin-settings-identity" className="admin-panel admin-panel--control">
           <div className="admin-panel__heading admin-panel__heading--compact">
             <div><span className="admin-panel-kicker"><Type size={15} /> Identity</span><h2>Business name</h2></div>
           </div>
-          <form className="admin-form-grid admin-form-grid--focused" action={updateBusinessIdentity}>
+          <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={saveIdentityWithFeedback}>
             <label>Business name<input name="business_name" defaultValue={settings?.business_name} maxLength={80} required /></label>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save identity</AdminSubmitButton><AdminCancelButton /></div>
-          </form>
+          </AdminActionForm>
         </section>
 
-        <section className="admin-panel admin-panel--control">
+        <section id="admin-settings-contact" className="admin-panel admin-panel--control">
           <div className="admin-panel__heading admin-panel__heading--compact">
             <div><span className="admin-panel-kicker"><Phone size={15} /> Contact</span><h2>Phone & location</h2></div>
           </div>
-          <form className="admin-form-grid admin-form-grid--focused" action={updateContactDetails}>
+          <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={saveContactWithFeedback}>
             <label>Phone<input name="phone_number" inputMode="tel" defaultValue={settings?.phone_e164} placeholder="+923492568864" required /></label>
             <label>WhatsApp<input name="whatsapp_number" inputMode="tel" defaultValue={settings?.whatsapp_e164} placeholder="+923492568864" required /></label>
             <label className="admin-span-2">Address<textarea name="address" defaultValue={settings?.address} rows={3} required /></label>
@@ -54,24 +62,24 @@ export default async function AdminSettingsPage() {
                 {settings?.google_business_profile_url && <a className="admin-inline-link" href={settings.google_business_profile_url} target="_blank" rel="noopener noreferrer">Google profile <ExternalLink size={13} /></a>}
               </div>
             </div>
-          </form>
+          </AdminActionForm>
         </section>
 
-        <section className="admin-panel admin-panel--control admin-span-2">
+        <section id="admin-settings-notices" className="admin-panel admin-panel--control admin-span-2">
           <div className="admin-panel__heading admin-panel__heading--compact">
             <div><span className="admin-panel-kicker"><Info size={15} /> Policy & Notices</span><h2>Customer notices</h2></div>
           </div>
-          <form className="admin-form-grid admin-form-grid--focused" action={updateNoticesAndPolicies}>
+          <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={saveNoticesWithFeedback}>
             <label className="admin-span-2">Pricing notice <small>e.g., government fee confirmation</small><textarea name="pricing_message" defaultValue={settings?.pricing_message || ""} rows={2} placeholder="Prices and government fees depend on the exact service, document type and requirements." /></label>
             <label className="admin-span-2">Concept image notice <small>shown when illustration placeholder is active</small><textarea name="concept_image_notice" defaultValue={settings?.concept_image_notice || ""} rows={2} placeholder="Representative visualization. Actual shop facilities and service counters are located in Akhtar Colony, Karachi." /></label>
             <div className="admin-form-actions admin-span-2"><AdminSubmitButton>Save customer notices</AdminSubmitButton><AdminCancelButton /></div>
-          </form>
+          </AdminActionForm>
         </section>
       </div>
 
-      <section className="admin-panel admin-panel--control admin-hours-panel">
+      <section id="admin-settings-hours" className="admin-panel admin-panel--control admin-hours-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><Clock3 size={15} /> Schedule</span><h2>Opening hours</h2><p>Set one or two opening periods for each day.</p></div>
+          <div><span className="admin-panel-kicker"><Clock3 size={15} /> Schedule</span><h2>Opening hours</h2><p>Set one or two opening periods for each day. Marking a day closed overrides its times.</p></div>
           <Store size={20} aria-hidden="true" />
         </div>
         <div className="admin-hours-grid">
@@ -83,7 +91,7 @@ export default async function AdminSettingsPage() {
                   <span><strong>{hour.label}</strong><small>{formatBusinessHours(hour)}</small></span>
                   <span>Edit</span>
                 </summary>
-                <form className="admin-form-grid admin-form-grid--focused" action={updateBusinessHour}>
+                <AdminActionForm className="admin-form-grid admin-form-grid--focused" action={saveOpeningHoursWithFeedback}>
                   <input type="hidden" name="id" value={hour.id} />
                   <label>Opens<input type="time" name="first_opens_at" defaultValue={periods[0]?.opens_at} /></label>
                   <label>Closes<input type="time" name="first_closes_at" defaultValue={periods[0]?.closes_at} /></label>
@@ -91,7 +99,7 @@ export default async function AdminSettingsPage() {
                   <label>Final close <small>optional</small><input type="time" name="second_closes_at" defaultValue={periods[1]?.closes_at} /></label>
                   <label className="checkbox-line admin-span-2"><input type="checkbox" name="is_closed" defaultChecked={hour.is_closed} /> Closed all day</label>
                   <div className="admin-form-actions admin-span-2"><AdminSubmitButton variant="secondary">Save {hour.label}</AdminSubmitButton><AdminCancelButton /></div>
-                </form>
+                </AdminActionForm>
               </details>
             );
           })}

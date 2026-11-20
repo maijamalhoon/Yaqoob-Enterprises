@@ -1278,3 +1278,49 @@
     font-size: 16px;
   }
 }
+
+
+/* Admin settings: clear landmarks for long forms and mobile touch targets. */
+.admin-root .admin-settings-jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+.admin-root .admin-settings-jump a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  min-height: 2.6rem;
+  padding: 0.57rem 0.82rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.7rem;
+  background: #fff;
+  color: var(--admin-text);
+  font-size: 0.79rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.admin-root .admin-settings-jump a:hover,
+.admin-root .admin-settings-jump a:focus-visible {
+  background: #eef7f7;
+  border-color: #9bccc8;
+  color: var(--admin-accent);
+}
+.admin-root #admin-settings-identity,
+.admin-root #admin-settings-contact,
+.admin-root #admin-settings-notices,
+.admin-root #admin-settings-hours {
+  scroll-margin-top: 5.5rem;
+}
+@media (max-width: 35rem) {
+  .admin-root .admin-settings-jump {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-root .admin-settings-jump a {
+    min-width: 0;
+    justify-content: center;
+    font-size: 0.74rem;
+  }
+}
