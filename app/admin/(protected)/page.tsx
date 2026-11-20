@@ -18,6 +18,7 @@ import {
 import { requireAdmin } from "@/lib/admin";
 import { businessLocationLabel } from "@/lib/business-display";
 import { karachiAnalyticsWindow } from "@/lib/admin-analytics-window";
+import { groupRecentAdminActivity } from "@/lib/admin-activity-groups";
 
 export default async function AdminDashboardPage() {
   const { supabase } = await requireAdmin();
@@ -31,7 +32,7 @@ export default async function AdminDashboardPage() {
     supabase.from("business_settings").select("business_name,phone_display,phone_e164,whatsapp_e164,address,map_url,google_business_profile_url").eq("id", true).single(),
     supabase.from("business_hours").select("id,is_closed,periods").order("display_order"),
     supabase.from("analytics_events").select("id", { count: "exact", head: true }).gte("created_at", since),
-    supabase.from("analytics_events").select("event_name,page_path,city_name,device_type,created_at").order("created_at", { ascending: false }).limit(8),
+    supabase.from("analytics_events").select("event_name,page_path,city_name,device_type,created_at").order("created_at", { ascending: false }).limit(80),
     supabase.from("admin_snapshots").select("id,created_at").order("created_at", { ascending: false }).limit(1).maybeSingle(),
   ]);
 
@@ -60,7 +61,8 @@ export default async function AdminDashboardPage() {
   const unavailableCount = healthChecks.filter(([, ready]) => ready === null).length;
   const reviewCount = healthChecks.filter(([, ready]) => ready === false).length;
   const nextPriority = healthChecks.find(([, ready]) => ready === false) || healthChecks.find(([, ready]) => ready === null);
-  const activityRows = recent.data || [];
+  // Display only: group identical events within five minutes; do not change stored analytics.
+  const activityRows = groupRecentAdminActivity(recent.data || [], 7);
 
   return (
     <div className="admin-content admin-control-page">
@@ -116,35 +118,28 @@ export default async function AdminDashboardPage() {
         </Link>
       </section>
 
-      <div className="admin-dashboard-columns">
-      <section className="admin-panel admin-panel--control admin-health-panel" aria-labelledby="admin-health-title">
-        <div className="admin-panel__heading">
-          <div>
-            <span className="admin-panel-kicker"><ShieldCheck size={15} aria-hidden="true" /> Readiness</span>
-            <h2 id="admin-health-title">Website checks</h2>
-            {unavailableCount > 0 && <p>{unavailableCount} status check{unavailableCount === 1 ? "" : "s"} currently unavailable.</p>}
-          </div>
-        </div>
-        <div className="admin-readiness-wrap">
-          <div className="admin-readiness-gauge" role="img" aria-label={healthyCount + " of " + healthChecks.length + " website readiness checks passed"}
+      <details className="admin-readiness-disclosure">
+        <summary>
+          <span className="admin-readiness-mini" aria-hidden="true"
             style={{ "--readiness": (healthyCount / healthChecks.length * 100) + "%" } as CSSProperties}>
-            <span><strong>{healthyCount}/{healthChecks.length}</strong><small>ready</small></span>
-          </div>
-        <div className="admin-health-grid">
+            <span><ShieldCheck size={17} /></span>
+          </span>
+          <span className="admin-readiness-title"><strong>Website readiness</strong><small>{reviewCount > 0 ? reviewCount + " item needs review" : unavailableCount > 0 ? unavailableCount + " checks unavailable" : "All essential checks passed"}</small></span>
+          <span className="admin-readiness-count">{healthyCount}/{healthChecks.length} ready</span>
+          <span className="admin-readiness-open">Details</span>
+        </summary>
+        <nav className="admin-readiness-list" aria-label="Website readiness checks">
           {healthChecks.map(([label, ready, href]) => (
             <Link className={ready ? "is-ready" : "is-warning"} href={href} key={label}>
-              {ready === true
-                ? <CheckCircle2 size={16} aria-hidden="true" />
-                : <TriangleAlert size={16} aria-hidden="true" />}
+              {ready === true ? <CheckCircle2 size={16} aria-hidden="true" /> : <TriangleAlert size={16} aria-hidden="true" />}
               <span>{label}</span>
               <small>{ready === null ? "Unavailable" : ready ? "Ready" : "Review"}</small>
             </Link>
           ))}
-        </div>
-        </div>
-      </section>
+        </nav>
+      </details>
 
-      <section className="admin-panel admin-panel--control" aria-labelledby="admin-controls-title">
+      <section className="admin-panel admin-panel--control admin-quick-panel" aria-labelledby="admin-controls-title">
         <div className="admin-panel__heading">
           <div>
             <span className="admin-panel-kicker"><Settings2 size={15} aria-hidden="true" /> Manage</span>
@@ -189,8 +184,6 @@ export default async function AdminDashboardPage() {
           </Link>
         </div>
       </section>
-      </div>
-
       <section className="admin-panel admin-panel--control admin-activity-panel" aria-labelledby="admin-activity-title">
         <div className="admin-panel__heading">
           <div>
@@ -199,25 +192,24 @@ export default async function AdminDashboardPage() {
           </div>
           <Link className="admin-inline-link" href="/admin/analytics">Full analytics <ArrowRight size={14} aria-hidden="true" /></Link>
         </div>
-        <div className="admin-table-wrap" role="region" aria-label="Recent website activity" tabIndex={0}>
-          <table>
-            <thead>
-              <tr><th scope="col">Event</th><th scope="col">Page</th><th scope="col">City</th><th scope="col">Device</th><th scope="col">Time</th></tr>
-            </thead>
-            <tbody>
-              {activityRows.map((event, index) => (
-                <tr key={event.created_at + "-" + index}>
-                  <td>{event.event_name.replaceAll("_", " ")}</td>
-                  <td>{event.page_path}</td>
-                  <td>{event.city_name || "Unknown"}</td>
-                  <td>{event.device_type || "Unknown"}</td>
-                  <td>{new Date(event.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</td>
-                </tr>
-              ))}
-              {activityRows.length === 0 && <tr><td colSpan={5}>{recent.error ? "Activity could not be loaded." : "No activity has been recorded yet."}</td></tr>}
-            </tbody>
-          </table>
+        <div className="admin-activity-feed" role="list" aria-label="Latest grouped website events">
+          {activityRows.map((event, index) => (
+            <div className="admin-activity-entry" role="listitem" key={event.created_at + ":" + event.page_path + ":" + index}>
+              <span className="admin-activity-entry__icon"><MousePointerClick size={17} aria-hidden="true" /></span>
+              <div className="admin-activity-entry__main">
+                <strong>{event.event_name.replaceAll("_", " ")}</strong>
+                <small title={event.page_path || "/"}>{event.page_path === "/" || !event.page_path ? "Homepage" : event.page_path}</small>
+              </div>
+              {event.count > 1 && <span className="admin-activity-entry__count" aria-label={event.count + " recorded events"}>{event.count} events</span>}
+              <span className="admin-activity-entry__source">{event.city_name || "Unknown city"} · {event.device_type || "Unknown device"}</span>
+              <time dateTime={event.created_at}>{new Date(event.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi", dateStyle: "medium", timeStyle: "short" })}</time>
+            </div>
+          ))}
+          {activityRows.length === 0 && (
+            <p className="admin-activity-empty">{recent.error ? "Activity could not be loaded." : "No activity recorded yet."}</p>
+          )}
         </div>
+        {activityRows.length > 0 && <p className="admin-activity-note">Repeated identical events within five minutes are grouped for readability. Counts are events, not unique people.</p>}
       </section>
     </div>
   );
