@@ -2,7 +2,7 @@
 // Disposable Supabase + Next.js E2E. NEVER run against hosted or production endpoints.
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { chromium } from "playwright";
 import { createClient } from "@supabase/supabase-js";
 import { verifyPortableBackup } from "../../lib/admin-portable-backup.ts";
@@ -96,6 +96,39 @@ try {
   await page.getByRole("heading", { name: "Overview", exact: true }).waitFor({ timeout: 20_000 });
   assert(page.url().includes("/admin"), "Browser sign-in did not open admin");
   console.log("PASS: real login, anonymous denial, outsider denial and owner authorization");
+
+  // Snapshot every authenticated Admin page at desktop and mobile widths.
+  // This validates the actual rendered layout, not a fake design mock.
+  const adminRoutes = [
+    ["overview", "/admin"], ["services", "/admin/services"],
+    ["coverage", "/admin/coverage"], ["gallery", "/admin/gallery"],
+    ["announcements", "/admin/announcements"], ["settings", "/admin/settings"],
+    ["analytics", "/admin/analytics"], ["history", "/admin/history"],
+  ];
+  await mkdir("test-results/admin-ui", { recursive: true });
+  for (const viewport of [
+    { name: "desktop", width: 1440, height: 900 },
+    { name: "mobile", width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    for (const [label, route] of adminRoutes) {
+      await page.goto(appUrl + route, { waitUntil: "domcontentloaded" });
+      await page.locator("#admin-main h1").first().waitFor({ timeout: 15_000 });
+      const widths = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+        body: document.body.scrollWidth,
+      }));
+      assert(
+        widths.document <= widths.viewport + 3 && widths.body <= widths.viewport + 3,
+        "Horizontal page overflow at " + viewport.name + " " + route + ": " + JSON.stringify(widths),
+      );
+      await page.screenshot({ path: "test-results/admin-ui/" + viewport.name + "-" + label + ".png", fullPage: true });
+    }
+  }
+  await page.setViewportSize({ width: 1280, height: 800 });
+  console.log("PASS: authenticated desktop/mobile screenshots for all eight admin routes, no horizontal overflow");
+
 
   // Exercise actual Next.js Server Actions for announcement create/edit.
   await page.goto(appUrl + "/admin/announcements", { waitUntil: "domcontentloaded" });
