@@ -1,7 +1,8 @@
 import { DatabaseBackup, History, RotateCcw, ShieldCheck } from "lucide-react";
+import { AdminActionForm } from "@/components/admin-action-form";
 import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
-import { createAdminSnapshot, deleteAdminSnapshot, restoreAdminSnapshot, rollbackAuditEntry } from "./actions";
+import { createSnapshotWithFeedback, deleteSnapshotWithFeedback, restoreSnapshotWithFeedback, rollbackEntryWithFeedback } from "./actions";
 
 const tableLabels: Record<string, string> = {
   business_settings: "Business details",
@@ -71,7 +72,7 @@ function formatChangedFields(fields: string[]) {
 
 export default async function AdminHistoryPage() {
   const { supabase } = await requireAdmin();
-  const [{ data: history }, { data: snapshots }] = await Promise.all([
+  const [{ data: history, error: historyError }, { data: snapshots, error: snapshotsError }] = await Promise.all([
     supabase
       .from("admin_audit_log")
       .select("id,table_name,record_id,record_label,operation,actor_email,old_data,new_data,created_at,reverted_at")
@@ -84,6 +85,8 @@ export default async function AdminHistoryPage() {
       .limit(20),
   ]);
 
+  if (historyError || snapshotsError) throw new Error("History and backups could not be loaded. Please retry.");
+
   const historyRows = history || [];
   const backupRows = snapshots || [];
   const liveChanges = historyRows.filter((entry) => !entry.reverted_at).length;
@@ -94,7 +97,7 @@ export default async function AdminHistoryPage() {
         <div>
           <span className="eyebrow">Safety</span>
           <h1>History & backups</h1>
-          <p>See important admin changes, undo the latest safe change, or restore a full website backup.</p>
+          <p>See tracked website changes, undo safe edits, or restore a saved content snapshot.</p>
         </div>
         <div className="admin-heading-metrics">
           <span><strong>{liveChanges}</strong> recent changes</span>
@@ -104,34 +107,36 @@ export default async function AdminHistoryPage() {
 
       <section className="admin-panel admin-panel--control admin-backup-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><DatabaseBackup size={15} /> Backups</span><h2>Website snapshot</h2><p>Business details, hours, services, images and coverage.</p></div>
+          <div><span className="admin-panel-kicker"><DatabaseBackup size={15} /> Backups</span><h2>Content snapshots</h2><p>Settings, hours, categories, services, gallery details and coverage.</p></div>
           <ShieldCheck size={20} aria-hidden="true" />
         </div>
 
-        <form className="admin-backup-create" action={createAdminSnapshot}>
+        <p className="admin-backup-scope" role="note">Snapshots contain database records only. <strong>Announcements and uploaded image files are not included.</strong> Keep separate copies of important images.</p>
+
+        <AdminActionForm className="admin-backup-create" action={createSnapshotWithFeedback}>
           <label>Backup name<input name="label" maxLength={100} placeholder="Before major changes" /></label>
           <div className="admin-form-actions"><AdminSubmitButton pendingLabel="Creating…">Create backup</AdminSubmitButton><AdminCancelButton /></div>
-        </form>
+        </AdminActionForm>
 
         <div className="admin-backup-list">
           {backupRows.map((backup) => (
             <article className="admin-backup-row" key={backup.id}>
               <div><strong>{backup.label}</strong><small>{new Date(backup.created_at).toLocaleString("en-PK", { timeZone: "Asia/Karachi" })}</small></div>
               <div className="admin-backup-actions">
-                <form action={restoreAdminSnapshot}>
+                <AdminActionForm action={restoreSnapshotWithFeedback}>
                   <input type="hidden" name="id" value={backup.id} />
                   <AdminSubmitButton
                     variant="secondary"
                     pendingLabel="Restoring…"
-                    confirmMessage="Restore this backup? A safety backup of the current website will be created first."
+                    confirmMessage="Restore these saved database records? Current settings, hours, categories, services, gallery details and coverage will be replaced. Announcements and image files are NOT part of this snapshot. A safety backup will be saved first."
                   >
                     <RotateCcw size={15} /> Restore
                   </AdminSubmitButton>
-                </form>
-                <form action={deleteAdminSnapshot}>
+                </AdminActionForm>
+                <AdminActionForm action={deleteSnapshotWithFeedback}>
                   <input type="hidden" name="id" value={backup.id} />
-                  <AdminDeleteButton label="Delete" confirmMessage={`Delete backup “${backup.label}”?`} />
-                </form>
+                  <AdminDeleteButton label="Delete" confirmMessage={`Permanently delete backup “${backup.label}”? This cannot be undone.`} />
+                </AdminActionForm>
               </div>
             </article>
           ))}
@@ -141,7 +146,7 @@ export default async function AdminHistoryPage() {
 
       <section className="admin-panel admin-panel--control admin-history-panel">
         <div className="admin-panel__heading">
-          <div><span className="admin-panel-kicker"><History size={15} /> Audit trail</span><h2>Recent admin changes</h2><p>Newest changes appear first. Undo is blocked if a newer change would be overwritten.</p></div>
+          <div><span className="admin-panel-kicker"><History size={15} /> Audit trail</span><h2>Recent admin changes</h2><p>Newest tracked changes appear first. Undo is blocked if a newer edit would be overwritten. Announcements are not included in this audit trail.</p></div>
         </div>
 
         <div className="admin-history-list">
@@ -167,7 +172,7 @@ export default async function AdminHistoryPage() {
                   {reverted ? (
                     <span className="admin-state is-hidden">Undone</span>
                   ) : (
-                    <form action={rollbackAuditEntry}>
+                    <AdminActionForm action={rollbackEntryWithFeedback}>
                       <input type="hidden" name="id" value={entry.id} />
                       <AdminSubmitButton
                         variant="secondary"
@@ -176,7 +181,7 @@ export default async function AdminHistoryPage() {
                       >
                         <RotateCcw size={14} /> Undo
                       </AdminSubmitButton>
-                    </form>
+                    </AdminActionForm>
                   )}
                 </div>
               </article>

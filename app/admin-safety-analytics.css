@@ -410,3 +410,34 @@
 @media (prefers-reduced-motion: reduce) {
   .admin-health-grid > a { transition: none; }
 }
+
+
+/* History & Backups: keep destructive-action feedback visible on all screen sizes. */
+.admin-backup-scope {
+  margin: 0 0 0.9rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #dce7ee;
+  border-radius: 0.62rem;
+  background: #f8fafc;
+  color: #52647b;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+.admin-backup-scope strong { color: #21384f; }
+.admin-backup-create > .admin-action-result { grid-column: 1 / -1; }
+.admin-backup-actions { flex-wrap: wrap; }
+.admin-backup-actions > form { min-width: 0; }
+.admin-backup-actions .admin-action-result {
+  max-width: 14rem;
+  margin: 0.35rem 0 0;
+  white-space: normal;
+}
+.admin-history-row__action .admin-action-result {
+  max-width: 14rem;
+  margin: 0.35rem 0 0;
+  white-space: normal;
+}
+@media (max-width: 46rem) {
+  .admin-backup-actions .admin-action-result { max-width: 100%; }
+  .admin-history-row__action .admin-action-result { max-width: 11rem; }
+}
