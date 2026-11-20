@@ -99,6 +99,15 @@ jobs:
       - name: Verify real admin login, RLS, CMS CRUD and disaster recovery
         run: node --experimental-strip-types .github/scripts/admin-staging-e2e.mjs
 
+      - name: Upload authenticated admin screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-ui-responsive-screenshots
+          path: test-results/admin-ui/*.png
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Show local server failures
         if: failure()
         run: tail -n 140 "$RUNNER_TEMP/admin-staging-next.log" || true
