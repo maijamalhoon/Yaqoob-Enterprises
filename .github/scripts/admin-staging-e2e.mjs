@@ -93,7 +93,7 @@ try {
   await page.locator("#admin-login-email").fill(email);
   await page.locator("#admin-login-password").fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await page.getByRole("heading", { name: "Overview", exact: true }).waitFor({ timeout: 20_000 });
+  await page.getByRole("heading", { name: "Website overview", exact: true }).waitFor({ timeout: 20_000 });
   assert(page.url().includes("/admin"), "Browser sign-in did not open admin");
   console.log("PASS: real login, anonymous denial, outsider denial and owner authorization");
 
@@ -126,6 +126,26 @@ try {
       await page.screenshot({ path: "test-results/admin-ui/" + viewport.name + "-" + label + ".png", fullPage: true });
     }
   }
+
+  // Dashboard decisions stay usable after the visual overhaul.
+  await page.goto(appUrl + "/admin", { waitUntil: "domcontentloaded" });
+  await page.getByRole("heading", { name: "Website overview", exact: true }).waitFor();
+  assert(await page.getByRole("link", { name: /Open section|View analytics/ }).isVisible(), "Priority action is missing");
+  await page.goto(appUrl + "/admin/analytics", { waitUntil: "domcontentloaded" });
+  const lastWeekTab = page.getByRole("button", { name: "7 days", exact: true });
+  await lastWeekTab.click();
+  assert.equal(await lastWeekTab.getAttribute("aria-pressed"), "true", "7-day chart selection did not update");
+  const monthTab = page.getByRole("button", { name: "30 days", exact: true });
+  await monthTab.click();
+  assert.equal(await monthTab.getAttribute("aria-pressed"), "true", "30-day chart selection did not update");
+  await page.goto(appUrl + "/admin/services", { waitUntil: "domcontentloaded" });
+  const categories = page.locator(".admin-service-jump a");
+  assert((await categories.count()) > 0, "Category jump shortcuts are missing");
+  const firstJump = await categories.first().getAttribute("href");
+  assert(firstJump?.startsWith("#admin-category-"), "Category jump target malformed");
+  assert(await page.locator(firstJump).count() === 1, "Category target section missing");
+  console.log("PASS: premium overview action, chart range interaction and service category navigation");
+
   await page.setViewportSize({ width: 1280, height: 800 });
   console.log("PASS: authenticated desktop/mobile screenshots for all eight admin routes, no horizontal overflow");
 
