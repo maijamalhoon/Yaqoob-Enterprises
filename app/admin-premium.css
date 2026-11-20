@@ -1,0 +1,479 @@
+/* Premium Admin v3 — operational focus, not decorative noise.
+ * Applies only within the Admin root; no public website styles change. */
+.admin-root {
+  --admin-premium-ink: #101f35;
+  --admin-premium-accent: #087f74;
+  --admin-premium-muted: #70859a;
+  --admin-premium-border: #dfe7ee;
+  --admin-premium-shadow: 0 9px 30px rgb(15 33 58 / 5%);
+}
+
+.admin-root .admin-main {
+  background: radial-gradient(ellipse 70% 35% at 55% 0%, #edf4f6 0%, transparent 76%), #f5f7fb;
+}
+
+.admin-root .admin-content.admin-content {
+  gap: 18px;
+}
+
+.admin-root .admin-premium-hero {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 290px);
+  align-items: center;
+  gap: 30px;
+  min-height: 208px;
+  padding: 28px 34px;
+  border: 1px solid #14394a;
+  border-radius: 18px;
+  background: linear-gradient(114deg, #0b1b30 0%, #102d3d 59%, #0a4b4b 118%);
+  box-shadow: 0 12px 28px rgb(12 35 52 / 11%);
+  color: #fff;
+}
+
+.admin-root .admin-premium-hero::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background:
+    radial-gradient(ellipse 50% 120% at 90% 40%, rgb(20 171 158 / 14%) 0%, transparent 72%),
+    linear-gradient(150deg, transparent 0 48%, rgb(255 255 255 / 2%) 48% 48.4%, transparent 48.4% 58%, rgb(255 255 255 / 2%) 58% 58.4%, transparent 58.4%);
+  pointer-events: none;
+}
+
+.admin-root .admin-premium-hero__copy {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.admin-root .admin-premium-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #a3c6cb;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  font-weight: 760;
+}
+
+.admin-root .admin-premium-hero__eyebrow > span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #54deba;
+  box-shadow: 0 0 0 4px rgb(84 222 186 / 12%);
+}
+
+.admin-root .admin-premium-hero h1 {
+  margin: 1px 0 0;
+  color: #fff;
+  font-size: clamp(1.8rem, 2.7vw, 2.65rem);
+  font-weight: 750;
+  letter-spacing: -0.052em;
+  line-height: 1.1;
+}
+
+.admin-root .admin-premium-hero__copy > p {
+  margin: 0;
+  color: #bad0d8;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.admin-root .admin-premium-hero__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 10px;
+}
+
+.admin-root .admin-premium-hero__meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #d0e3e7;
+  font-size: 0.71rem;
+  font-weight: 540;
+}
+
+.admin-root .admin-premium-hero__meta > span > svg {
+  color: #6cdfc4;
+}
+
+.admin-root .admin-premium-hero__focus {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgb(166 225 223 / 15%);
+  border-radius: 13px;
+  background: rgb(255 255 255 / 7%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 4%);
+}
+
+.admin-root .admin-premium-hero__focus-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #8ed6ca;
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  font-weight: 750;
+}
+
+.admin-root .admin-premium-hero__focus > strong {
+  overflow-wrap: anywhere;
+  color: #fff;
+  font-size: 1.03rem;
+  font-weight: 720;
+  letter-spacing: -0.027em;
+}
+
+.admin-root .admin-premium-hero__focus > p {
+  margin: -4px 0 0;
+  color: #afc9d0;
+  font-size: 0.73rem;
+}
+
+.admin-root .admin-premium-hero__focus > a {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  margin-top: 5px;
+  padding: 7px 12px;
+  border: 1px solid #91d6cf;
+  border-radius: 8px;
+  background: #d2f5ec;
+  color: #14574e;
+  text-decoration: none;
+  font-weight: 760;
+  font-size: 0.73rem;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.admin-root .admin-premium-hero__focus > a:hover {
+  transform: translateY(-1px);
+  background: #fff;
+}
+
+/* Metric tiles: consistent type scale, deliberate emphasis, no invented sparklines. */
+.admin-root .admin-stats article {
+  position: relative;
+  overflow: hidden;
+  min-height: 124px;
+  padding: 20px;
+  border-color: var(--admin-premium-border);
+  box-shadow: var(--admin-premium-shadow);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.admin-root .admin-stats article::after {
+  position: absolute;
+  top: 0;
+  left: 18px;
+  right: 18px;
+  height: 2px;
+  content: "";
+  background: linear-gradient(90deg, #0da292, transparent 74%);
+  opacity: 0.55;
+}
+
+.admin-root .admin-stats article:nth-child(2)::after { background: linear-gradient(90deg, #658cc6, transparent 74%); }
+.admin-root .admin-stats article:nth-child(3)::after { background: linear-gradient(90deg, #e2a75a, transparent 74%); }
+.admin-root .admin-stats article:nth-child(4)::after { background: linear-gradient(90deg, #8072bc, transparent 74%); }
+
+.admin-root .admin-stats article strong {
+  color: #142b42;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-root .admin-stats article:hover {
+  transform: translateY(-2px);
+  border-color: #ccdcd9;
+  box-shadow: 0 12px 25px rgb(12 34 53 / 7%);
+}
+
+.admin-root .admin-stats article.is-warning > span {
+  background: #fff3e3;
+  color: #b27c22;
+}
+
+.admin-root .admin-panel.admin-panel,
+.admin-root .admin-service-group.admin-service-group,
+.admin-root .admin-readiness-disclosure {
+  box-shadow: var(--admin-premium-shadow);
+}
+
+.admin-root .admin-quick-panel .admin-control-link {
+  border-color: #e3eaf0;
+  background: linear-gradient(145deg, #fff, #f9fbfc);
+  transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+.admin-root .admin-quick-panel .admin-control-link:hover {
+  transform: translateY(-2px);
+  border-color: #a7d6cc;
+  background: #f0faf6;
+}
+
+.admin-root .admin-activity-entry:hover { background: #f8fcfb; }
+
+/* The trend is a focused instrument: hover/touch and keyboard inspect exact values. */
+.admin-root .admin-traffic-panel.admin-panel {
+  padding: 23px 25px 17px;
+  border-radius: 16px;
+}
+
+.admin-root .admin-trend--premium .admin-trend__summary strong {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: -0.058em;
+}
+.admin-root .admin-trend--premium .admin-trend__summary span {
+  font-size: 0.73rem;
+}
+.admin-root .admin-trend__visual--premium { position: relative; padding: 0; }
+.admin-root .admin-trend__explorer {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+.admin-root .admin-trend__explorer:focus-visible {
+  outline: 3px solid #149d91;
+  outline-offset: 3px;
+}
+.admin-root .admin-trend__explorer > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 184px;
+}
+.admin-root .admin-trend__floating-value {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  gap: 2px;
+  min-width: 84px;
+  padding: 8px 10px;
+  border: 1px solid #dceae7;
+  border-radius: 9px;
+  background: rgb(255 255 255 / 95%);
+  box-shadow: 0 7px 20px rgb(12 42 56 / 12%);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.admin-root .admin-trend__floating-value strong {
+  color: #17625b;
+  font-size: 0.9rem;
+  font-weight: 790;
+  font-variant-numeric: tabular-nums;
+}
+.admin-root .admin-trend__floating-value small { color: #6a8092; font-size: 0.64rem; }
+.admin-root .admin-trend__facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.admin-root .admin-trend__change {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.admin-root .admin-trend__change.is-up { color: #087f74; }
+.admin-root .admin-trend__change.is-down { color: #aa7131; }
+.admin-root .admin-trend__details > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.admin-root .admin-trend__visual svg { max-height: 300px; }
+
+.admin-root .admin-analytics-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+.admin-root .admin-analytics-highlights article {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 100px;
+  min-width: 0;
+  padding: 17px 18px;
+  border: 1px solid #e1e8ef;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 15px rgb(20 45 65 / 3%);
+}
+.admin-root .admin-analytics-highlights article > span {
+  color: #758798;
+  font-size: 0.63rem;
+  font-weight: 730;
+  letter-spacing: 0.075em;
+}
+.admin-root .admin-analytics-highlights article > strong {
+  overflow: hidden;
+  color: #1a3046;
+  font-size: 1.13rem;
+  font-weight: 770;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.024em;
+}
+.admin-root .admin-analytics-highlights article:first-child > strong {
+  font-size: 1.57rem;
+  letter-spacing: -0.05em;
+}
+.admin-root .admin-analytics-highlights article > small {
+  color: #768799;
+  font-size: 0.7rem;
+}
+
+.admin-root .admin-analytics-overview-grid > .admin-panel,
+.admin-root .admin-google-panel {
+  min-height: 200px;
+}
+.admin-root .admin-bar-chart > div:hover { background: #edf7f5; }
+.admin-root .admin-mix__donut {
+  box-shadow: 0 0 0 1px rgb(18 54 79 / 5%), 0 8px 18px rgb(18 54 79 / 4%);
+}
+
+/* Services: find any category without scrolling across the entire catalogue. */
+.admin-root .admin-service-jump {
+  display: flex;
+  gap: 8px;
+  max-width: 100%;
+  padding: 2px 0 7px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+.admin-root .admin-service-jump > a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid #dbe6ed;
+  border-radius: 9px;
+  background: #fff;
+  color: #3b576e;
+  font-weight: 660;
+  font-size: 0.71rem;
+  text-decoration: none;
+  white-space: nowrap;
+  scroll-snap-align: start;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.admin-root .admin-service-jump > a:hover {
+  border-color: #91ccc4;
+  background: #eaf7f3;
+  color: #176c62;
+}
+.admin-root .admin-service-jump > a > span {
+  display: grid;
+  min-width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 7px;
+  background: #edf2f6;
+  color: #647b8d;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.65rem;
+}
+.admin-root .admin-service-group { scroll-margin-top: 84px; }
+.admin-root .admin-service-group:target {
+  border-color: #78bdb2;
+  box-shadow: 0 0 0 3px rgb(28 156 140 / 10%);
+}
+.admin-root .admin-service-group__title h2 { letter-spacing: -0.025em; }
+.admin-root .admin-service-card > summary { transition: background 130ms ease; }
+
+/* Gallery: make the first interaction feel intentional, not like a raw HTML form. */
+.admin-root .admin-premium-upload-zone {
+  display: grid;
+  gap: 9px;
+  padding: 18px;
+  border: 1.5px dashed #9fcfc5;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #f5fbf9, #f7fafc);
+}
+.admin-root .admin-premium-upload-zone > span {
+  color: #22675e;
+  font-weight: 760;
+  font-size: 0.83rem;
+}
+.admin-root .admin-premium-upload-zone input[type="file"] {
+  width: 100%;
+  min-height: 45px;
+  padding: 9px;
+  border: 1px solid #d5e7e2;
+  border-radius: 8px;
+  background: #fff;
+  color: #435a6b;
+}
+.admin-root .admin-premium-upload-zone small { display: block; margin-top: 7px; color: #66857e; }
+.admin-root .admin-media-card:hover {
+  border-color: #a9ccc6;
+  box-shadow: 0 12px 30px rgb(16 47 65 / 7%);
+}
+.admin-root .admin-coverage-card > summary:hover { background: #f4faf8; }
+
+/* Keyboard focus is visible on both light and dark surfaces. */
+.admin-root :where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 2px solid #14988b;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1120px) {
+  .admin-root .admin-premium-hero { grid-template-columns: 1fr; gap: 22px; padding: 24px; }
+  .admin-root .admin-premium-hero__focus { max-width: 100%; }
+  .admin-root .admin-analytics-highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-root .admin-analytics-highlights article:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .admin-root .admin-premium-hero { min-height: auto; padding: 21px 18px; gap: 19px; border-radius: 14px; }
+  .admin-root .admin-premium-hero h1 { font-size: 1.85rem; }
+  .admin-root .admin-premium-hero__copy > p { font-size: 0.76rem; }
+  .admin-root .admin-premium-hero__meta { gap: 8px 13px; margin-top: 5px; }
+  .admin-root .admin-premium-hero__focus { padding: 15px; }
+  .admin-root .admin-analytics-highlights { grid-template-columns: 1fr; gap: 9px; }
+  .admin-root .admin-analytics-highlights article,
+  .admin-root .admin-analytics-highlights article:last-child { min-height: 78px; grid-column: auto; padding: 13px 15px; gap: 4px; }
+  .admin-root .admin-traffic-panel.admin-panel { padding: 16px 12px; }
+  .admin-root .admin-trend__toolbar { flex-wrap: wrap; }
+  .admin-root .admin-trend__explorer > svg { min-height: 150px; }
+  .admin-root .admin-trend__floating-value { top: 3px; padding: 5px 7px; min-width: 66px; }
+  .admin-root .admin-trend__floating-value strong { font-size: 0.77rem; }
+  .admin-root .admin-trend__floating-value small { font-size: 0.59rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-root .admin-stats article,
+  .admin-root .admin-premium-hero__focus > a,
+  .admin-root .admin-quick-panel .admin-control-link,
+  .admin-root .admin-service-jump > a { transition: none !important; }
+  .admin-root .admin-stats article:hover,
+  .admin-root .admin-premium-hero__focus > a:hover,
+  .admin-root .admin-quick-panel .admin-control-link:hover { transform: none; }
+}
