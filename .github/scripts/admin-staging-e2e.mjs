@@ -139,9 +139,9 @@ try {
   await monthTab.click();
   assert.equal(await monthTab.getAttribute("aria-pressed"), "true", "30-day chart selection did not update");
   await page.goto(appUrl + "/admin/services", { waitUntil: "domcontentloaded" });
-  const categories = page.locator(".admin-service-jump a");
-  assert((await categories.count()) > 0, "Category jump shortcuts are missing");
-  const firstJump = await categories.first().getAttribute("href");
+  const categoryJumpLinks = page.locator(".admin-service-jump a");
+  assert((await categoryJumpLinks.count()) > 0, "Category jump shortcuts are missing");
+  const firstJump = await categoryJumpLinks.first().getAttribute("href");
   assert(firstJump?.startsWith("#admin-category-"), "Category jump target malformed");
   assert(await page.locator(firstJump).count() === 1, "Category target section missing");
   console.log("PASS: premium overview action, chart range interaction and service category navigation");
