@@ -1,26 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { LoaderCircle, Trash2 } from "lucide-react";
-
-function useActionFeedback(pending: boolean, message: string) {
-  const wasPending = useRef(false);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (pending) {
-      wasPending.current = true;
-    } else if (wasPending.current) {
-      wasPending.current = false;
-      const timeout = window.setTimeout(() => setSaved(true), 0);
-      return () => window.clearTimeout(timeout);
-    }
-  }, [pending]);
-
-  return saved && !pending ? <span className="admin-submit-feedback" role="status">{message}</span> : null;
-}
 
 export function AdminSubmitButton({
   children,
@@ -36,7 +18,6 @@ export function AdminSubmitButton({
   className?: string;
 }) {
   const { pending } = useFormStatus();
-  const feedback = useActionFeedback(pending, "Saved");
   const buttonClass = ("button button--" + variant + " admin-submit-button " + className).trim();
 
   return (
@@ -51,7 +32,6 @@ export function AdminSubmitButton({
         {pending && <LoaderCircle className="admin-spin" size={16} aria-hidden="true" />}
         {pending ? pendingLabel : children}
       </button>
-      {feedback}
     </>
   );
 }
@@ -64,7 +44,6 @@ export function AdminDeleteButton({
   confirmMessage: string;
 }) {
   const { pending } = useFormStatus();
-  const feedback = useActionFeedback(pending, "Deleted");
 
   return (
     <>
@@ -78,7 +57,6 @@ export function AdminDeleteButton({
         {pending ? <LoaderCircle className="admin-spin" size={16} aria-hidden="true" /> : <Trash2 size={16} aria-hidden="true" />}
         {pending ? "Deleting…" : label}
       </button>
-      {feedback}
     </>
   );
 }
