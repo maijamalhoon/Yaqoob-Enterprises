@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { BarChart3, Building2, ExternalLink, Globe2, MessageCircle, MonitorSmartphone, MousePointerClick, Users } from "lucide-react";
+import { BarChart3, Building2, ExternalLink, Globe2, MousePointerClick, Users } from "lucide-react";
 import { AnalyticsRefreshButton } from "@/components/analytics-refresh-button";
 import { AdminTrendChart } from "@/components/admin-trend-chart";
 import { AdminMixDonut } from "@/components/admin-mix-donut";
@@ -239,11 +239,14 @@ export default async function AdminAnalyticsPage() {
           <span><strong>{googleContactVisitors}</strong><small>Contact visitors</small></span>
           <span><strong>{googleConversion}%</strong><small>Contact rate</small></span>
         </div>
-        <div className="admin-tracking-link">
-          <div><strong>Tracked website link</strong><small>Use this as the Website link in Google Business Profile.</small></div>
-          <code>{trackingUrl}</code>
-          <a className="admin-inline-link" href={trackingUrl} target="_blank" rel="noopener noreferrer">Test <ExternalLink size={13} /></a>
-        </div>
+        <details className="admin-tracking-details">
+          <summary>Google tracking link</summary>
+          <div className="admin-tracking-link">
+            <div><strong>Tracked website link</strong><small>Use as your Google Business Profile website link.</small></div>
+            <code>{trackingUrl}</code>
+            <a className="admin-inline-link" href={trackingUrl} target="_blank" rel="noopener noreferrer">Test <ExternalLink size={13} /></a>
+          </div>
+        </details>
       </section>
 
       <div className="admin-analytics-overview-grid">
