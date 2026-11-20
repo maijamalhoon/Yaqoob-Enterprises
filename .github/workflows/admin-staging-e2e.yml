@@ -1,0 +1,108 @@
+name: Isolated Admin Recovery E2E
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: admin-recovery-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  isolated-admin-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SUPABASE_YES: "1"
+      VERCEL: "1"
+      VERCEL_ENV: preview
+      NEXT_PUBLIC_DEPLOYMENT_ENV: preview
+      NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+      LOCAL_ADMIN_QA_URL: http://127.0.0.1:3000
+      LOCAL_ADMIN_QA_ONLY: "1"
+    steps:
+      - name: Checkout isolated test revision
+        uses: actions/checkout@v7
+
+      - name: Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install app and test dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund --ignore-scripts playwright@1.62.0
+
+      - name: Install local Supabase CLI
+        uses: supabase/setup-cli@v3
+        with:
+          version: v2.stable
+
+      - name: Start DISPOSABLE local Supabase stack and apply migrations
+        run: |
+          # No --project-ref or linked credentials are used anywhere in this workflow.
+          supabase start -x realtime,imgproxy,edge-runtime,logflare,vector,supavisor,studio,postgres-meta
+          supabase db reset
+          supabase status -o env > "$RUNNER_TEMP/local-supabase.env"
+
+      - name: Export local-only credentials (never production keys)
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, appendFileSync } from "node:fs";
+          import { join } from "node:path";
+          const output = readFileSync(join(process.env.RUNNER_TEMP, "local-supabase.env"), "utf8");
+          const entries = Object.fromEntries(output.split(/\r?\n/).flatMap((line) => {
+            const found = /^([A-Z_]+)=(.*)$/.exec(line.trim());
+            if (!found) return [];
+            let value = found[2].trim();
+            if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+            return [[found[1], value]];
+          }));
+          for (const name of ["API_URL", "ANON_KEY", "SERVICE_ROLE_KEY"]) {
+            if (!entries[name]) throw new Error("Missing locally-generated " + name);
+          }
+          if (!["http://127.0.0.1:54321", "http://localhost:54321"].includes(entries.API_URL)) {
+            throw new Error("Refusing non-local Supabase endpoint");
+          }
+          for (const key of ["ANON_KEY", "SERVICE_ROLE_KEY"]) process.stdout.write("::add-mask::" + entries[key] + "\n");
+          appendFileSync(process.env.GITHUB_ENV, [
+            "NEXT_PUBLIC_SUPABASE_URL=" + entries.API_URL,
+            "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=" + entries.ANON_KEY,
+            "LOCAL_SUPABASE_SERVICE_ROLE_KEY=" + entries.SERVICE_ROLE_KEY,
+          ].join("\n") + "\n");
+          NODE
+
+      - name: Install headless Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build Next.js against isolated local Supabase
+        run: npm run build
+
+      - name: Run isolated production-mode Next.js
+        run: |
+          nohup npm start > "$RUNNER_TEMP/admin-staging-next.log" 2>&1 &
+          for attempt in {1..50}; do
+            if curl --fail --silent http://127.0.0.1:3000/admin/login >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          tail -n 100 "$RUNNER_TEMP/admin-staging-next.log"
+          exit 1
+
+      - name: Verify real admin login, RLS, CMS CRUD and disaster recovery
+        run: node --experimental-strip-types .github/scripts/admin-staging-e2e.mjs
+
+      - name: Show local server failures
+        if: failure()
+        run: tail -n 140 "$RUNNER_TEMP/admin-staging-next.log" || true
+
+      - name: Stop disposable local services
+        if: always()
+        run: supabase stop --no-backup || true
