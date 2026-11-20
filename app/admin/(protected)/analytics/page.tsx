@@ -8,6 +8,7 @@ import { requireAdmin } from "@/lib/admin";
 import { SITE_URL } from "@/lib/env";
 import { karachiAnalyticsWindow, karachiDayKey } from "@/lib/admin-analytics-window";
 import { normalizeAdminAnalyticsRange, analyticsSelectedDays, filterEventsForDays, contactConversionRate } from "@/lib/admin-analytics-range";
+import { rankServicePageViews } from "@/lib/admin-service-interest";
 
 const contactEvents = new Set(["whatsapp_click", "call_click", "directions_click"]);
 const contactLabels: Record<string, string> = {
@@ -40,12 +41,6 @@ function sourceLabel(event: {
   }
   if (event.referrer_host && !event.referrer_host.includes("yaqoob-enterprises")) return event.referrer_host;
   return "Direct / unknown";
-}
-
-function serviceLabel(path: string) {
-  const slug = path.split("/services/")[1]?.split("/")[0];
-  if (!slug) return path;
-  return slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 }
 
 function InsightBars({ rows, emptyMessage }: { rows: [string, number][]; emptyMessage: string }) {
@@ -126,14 +121,14 @@ export default async function AdminAnalyticsPage({ searchParams }: { searchParam
   const now = new Date();
   const { since, until, days } = karachiAnalyticsWindow(now);
   const selectedDays = analyticsSelectedDays(days, selectedRange);
-  const [{ events, truncated }, { data: settings, error: settingsError }, { data: categories, error: categoryError }] = await Promise.all([
+  const [{ events, truncated }, { data: settings, error: settingsError }, { data: categories, error: categoryError }, { data: services, error: servicesError }] = await Promise.all([
     loadTrackedEvents(supabase, since, until),
     supabase.from("business_settings").select("business_name,google_business_profile_url").eq("id", true).single(),
-    supabase.from("service_categories").select("slug,title"),
+    supabase.from("service_categories").select("id,slug,title"),
+    supabase.from("services").select("category_id,slug,title"),
   ]);
-  if (settingsError || categoryError) throw new Error("Analytics settings could not be loaded. Please retry.");
+  if (settingsError || categoryError || servicesError) throw new Error("Analytics content could not be loaded. Please retry.");
 
-  const categoryTitles = new Map((categories || []).map((category) => [category.slug, category.title]));
   const publicRows = events.filter((event) => {
     const path = String(event.page_path || "/");
     return path !== "/admin" && !path.startsWith("/admin/");
@@ -181,14 +176,7 @@ export default async function AdminAnalyticsPage({ searchParams }: { searchParam
     return acc;
   }, {})).sort((a, b) => b[1] - a[1]);
 
-  const serviceInterest = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
-    const path = String(event.page_path || "");
-    if (!path.startsWith("/services/")) return acc;
-    const slug = path.split("/services/")[1]?.split("/")[0] || "";
-    const label = categoryTitles.get(slug) || serviceLabel(path);
-    acc[label] = (acc[label] || 0) + 1;
-    return acc;
-  }, {})).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const serviceInterest = rankServicePageViews(pageViewRows, categories || [], services || []).slice(0, 10);
 
   const cities = Object.entries(pageViewRows.reduce<Record<string, number>>((acc, event) => {
     const city = decodeLabel(event.city_name, "Unknown");
