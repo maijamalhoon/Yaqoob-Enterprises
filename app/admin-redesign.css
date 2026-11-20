@@ -1018,3 +1018,62 @@
   font-weight: 700;
 }
 .admin-root .admin-tracking-details > .admin-tracking-link { margin-top: 8px; }
+
+
+/* Category action is a small control, not a second full-width column. */
+.admin-root .admin-service-group__head { flex-wrap: wrap; }
+.admin-root .admin-service-group__head > .admin-inline-editor {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
+  margin-left: auto;
+}
+.admin-root .admin-service-group__head > .admin-inline-editor > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 5px 11px;
+  border: 1px solid #dfe8eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #39546a;
+  font-size: 0.73rem;
+  font-weight: 670;
+}
+.admin-root .admin-service-group__head > .admin-inline-editor[open] {
+  flex: 1 0 100%;
+  width: 100%;
+  margin: 8px 0 0;
+}
+.admin-root .admin-service-group__head > .admin-inline-editor[open] > summary { margin-bottom: 10px; }
+
+.admin-root .admin-history-more {
+  margin-top: 12px;
+  border: 1px solid #e2e9ee;
+  border-radius: 9px;
+  background: #f9fbfc;
+}
+.admin-root .admin-history-more > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 43px;
+  padding: 10px 14px;
+  color: #087d72;
+  cursor: pointer;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+.admin-root .admin-history-more[open] > summary { border-bottom: 1px solid #e2e9ee; }
+.admin-root .admin-history-more > .admin-history-list {
+  padding: 8px;
+  background: #fff;
+}
+@media (max-width: 560px) {
+  .admin-root .admin-service-group__head > .admin-inline-editor:not([open]) {
+    flex: 0 0 auto;
+    width: auto;
+    margin-left: auto;
+  }
+}
