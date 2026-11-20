@@ -477,3 +477,97 @@
   .admin-root .admin-premium-hero__focus > a:hover,
   .admin-root .admin-quick-panel .admin-control-link:hover { transform: none; }
 }
+
+
+/* Coverage is scannable: real area capabilities, never a fabricated map. */
+.admin-root .admin-coverage-card > summary {
+  gap: 12px;
+  min-height: 65px;
+}
+.admin-root .admin-coverage-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-left: auto;
+}
+.admin-root .admin-coverage-tags > em {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border: 1px solid #d7ebe7;
+  border-radius: 6px;
+  background: #f1faf7;
+  color: #186e65;
+  font-style: normal;
+  font-size: 0.66rem;
+  font-weight: 670;
+}
+.admin-root .admin-coverage-edit {
+  color: #0a7a70;
+  font-size: 0.7rem;
+  font-weight: 710;
+}
+
+/* History resembles a real audit timeline, while retaining undo controls. */
+.admin-root .admin-history-row {
+  position: relative;
+  border-radius: 9px;
+  background: #fff;
+}
+.admin-root .admin-history-row__icon {
+  border-radius: 10px;
+  background: #eaf6f3;
+  color: #0a897d;
+}
+.admin-root .admin-history-row__copy strong {
+  color: #1a334a;
+  font-size: 0.8rem;
+}
+.admin-root .admin-history-row__copy small {
+  color: #738598;
+  line-height: 1.45;
+}
+.admin-root .admin-history-row__meta {
+  font-variant-numeric: tabular-nums;
+}
+.admin-root .admin-history-row:hover {
+  background: #f7fbfa;
+}
+.admin-root .admin-backup-panel,
+.admin-root .admin-offline-backup-panel {
+  border-color: #dbe7e9 !important;
+}
+.admin-root .admin-offline-backup-download {
+  background: #0b8278;
+  color: #fff;
+}
+.admin-root .admin-announcement-row {
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.admin-root .admin-announcement-row:hover {
+  border-color: #c3d9d6;
+  background: #fcfefd;
+}
+.admin-root .admin-announcement-row__heading strong {
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 950px) {
+  .admin-root .admin-coverage-card > summary {
+    flex-wrap: wrap;
+  }
+  .admin-root .admin-coverage-tags {
+    justify-content: flex-start;
+    flex: 1 1 100%;
+    order: 3;
+    margin: 0;
+  }
+}
+@media (max-width: 520px) {
+  .admin-root .admin-coverage-card > summary { gap: 8px; }
+  .admin-root .admin-coverage-tags { gap: 4px; }
+  .admin-root .admin-coverage-tags > em { font-size: 0.61rem; }
+}
