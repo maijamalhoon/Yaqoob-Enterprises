@@ -1,4 +1,4 @@
-import { DatabaseBackup, History, RotateCcw, ShieldCheck } from "lucide-react";
+import { DatabaseBackup, Download, History, RotateCcw, ShieldCheck } from "lucide-react";
 import { AdminActionForm } from "@/components/admin-action-form";
 import { AdminCancelButton, AdminDeleteButton, AdminSubmitButton } from "@/components/admin-form-buttons";
 import { requireAdmin } from "@/lib/admin";
@@ -105,13 +105,33 @@ export default async function AdminHistoryPage() {
         </div>
       </div>
 
+      <section className="admin-panel admin-panel--control admin-offline-backup-panel" aria-labelledby="admin-offline-backup-title">
+        <div className="admin-panel__heading">
+          <div>
+            <span className="admin-panel-kicker"><Download size={15} aria-hidden="true" /> Offline protection</span>
+            <h2 id="admin-offline-backup-title">Download a portable backup</h2>
+            <p>Keep an independent copy outside the website.</p>
+          </div>
+          <ShieldCheck size={20} aria-hidden="true" />
+        </div>
+        <div className="admin-offline-backup-panel__body">
+          <div>
+            <p>Includes current website content, announcements, section settings, and original files from the two site media buckets, including images retained after Gallery deletion.</p>
+            <p><strong>Important:</strong> This is a private JSON recovery file with image bytes. It does not restore automatically; authentication users, analytics, audit history and old snapshots are excluded. Download is limited to 120 files / 32 MB of raw media; large sites need a dedicated Storage export.</p>
+          </div>
+          <a className="button button--primary admin-offline-backup-download" href="/admin/history/export" rel="nofollow">
+            <Download size={17} aria-hidden="true" /> Download offline backup
+          </a>
+        </div>
+      </section>
+
       <section className="admin-panel admin-panel--control admin-backup-panel">
         <div className="admin-panel__heading">
           <div><span className="admin-panel-kicker"><DatabaseBackup size={15} /> Backups</span><h2>Content snapshots</h2><p>Settings, hours, categories, services, gallery details and coverage.</p></div>
           <ShieldCheck size={20} aria-hidden="true" />
         </div>
 
-        <p className="admin-backup-scope" role="note">Snapshots contain database records only. <strong>Announcements and uploaded image files are not included.</strong> Keep separate copies of important images.</p>
+        <p className="admin-backup-scope" role="note">In-app snapshots save and restore six content tables only. <strong>Announcements, section settings and original image files are excluded from in-app restore.</strong> Use the separate offline download above to preserve those records and files.</p>
 
         <AdminActionForm className="admin-backup-create" action={createSnapshotWithFeedback}>
           <label>Backup name<input name="label" maxLength={100} placeholder="Before major changes" /></label>
