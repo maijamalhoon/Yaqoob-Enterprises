@@ -148,7 +148,7 @@ export default async function AdminAnalyticsPage() {
   const visitors = new Set(rows.map((event) => event.session_hash).filter(Boolean)).size;
   const pageViews = pageViewRows.length;
   const contactVisitors = new Set(contactRows.map((event) => event.session_hash).filter(Boolean)).size;
-  const conversionRate = visitors > 0 ? Math.round((contactVisitors / visitors) * 100) : 0;
+  const conversionRate = visitors > 0 ? Number(((contactVisitors / visitors) * 100).toFixed(1)) : 0;
 
   const googleRows = rows.filter((event) =>
     event.utm_source?.toLowerCase() === "google" && event.utm_campaign?.toLowerCase() === "gbp",
@@ -158,7 +158,7 @@ export default async function AdminAnalyticsPage() {
   const googleContactVisitors = new Set(
     googleRows.filter((event) => contactEvents.has(event.event_name)).map((event) => event.session_hash).filter(Boolean),
   ).size;
-  const googleConversion = googleVisitors > 0 ? Math.round((googleContactVisitors / googleVisitors) * 100) : 0;
+  const googleConversion = googleVisitors > 0 ? Number(((googleContactVisitors / googleVisitors) * 100).toFixed(1)) : 0;
 
   const contactActions = Object.entries(contactRows.reduce<Record<string, number>>((acc, event) => {
     const label = contactLabels[event.event_name] || event.event_name.replaceAll("_", " ");
