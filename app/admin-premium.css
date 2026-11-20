@@ -571,3 +571,348 @@
   .admin-root .admin-coverage-tags { gap: 4px; }
   .admin-root .admin-coverage-tags > em { font-size: 0.61rem; }
 }
+
+
+/* Design foundation v4 — real-content metrics and keyboard navigation.
+ * Each component owns its styles; no global button or chart overrides. */
+.admin-root {
+  --ye-surface: #ffffff;
+  --ye-ink: #142a42;
+  --ye-subtext: #597287;
+  --ye-subtle: #778c9e;
+  --ye-line: #dee7ee;
+  --ye-focus: #087f74;
+  --ye-radius: 14px;
+}
+
+.admin-root .admin-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  min-width: 0;
+}
+
+.admin-root .admin-metric-card {
+  --metric-accent: #087f74;
+  --metric-tint: #eaf7f3;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 14px;
+  min-width: 0;
+  min-height: 164px;
+  padding: 18px 20px 16px;
+  border: 1px solid var(--ye-line);
+  border-radius: var(--ye-radius);
+  background: var(--ye-surface);
+  color: var(--ye-ink);
+  box-shadow: 0 4px 14px rgb(17 42 63 / 3%);
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.admin-root .admin-metric-card--blue {
+  --metric-accent: #4177ba;
+  --metric-tint: #ecf3fc;
+}
+.admin-root .admin-metric-card--violet {
+  --metric-accent: #8171b9;
+  --metric-tint: #f3effb;
+}
+.admin-root .admin-metric-card--amber {
+  --metric-accent: #b78331;
+  --metric-tint: #fcf5e8;
+}
+
+.admin-root .admin-metric-card:hover {
+  border-color: #c4d7e0;
+  box-shadow: 0 11px 26px rgb(17 42 63 / 7%);
+  transform: translateY(-2px);
+}
+
+.admin-root .admin-metric-card__head,
+.admin-root .admin-metric-card__body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-root .admin-metric-card__head > span:first-child {
+  color: #60768b;
+  font-weight: 680;
+  font-size: 0.79rem;
+  line-height: 1.35;
+}
+
+.admin-root .admin-metric-card__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 11px;
+  color: var(--metric-accent);
+  background: var(--metric-tint);
+}
+
+.admin-root .admin-metric-card__body strong {
+  color: #142d45;
+  font-size: clamp(1.48rem, 2.35vw, 2.04rem);
+  font-weight: 790;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-root .admin-metric-card__sparkline {
+  flex: 0 1 115px;
+  width: min(45%, 115px);
+  max-height: 44px;
+  color: var(--metric-accent);
+  overflow: visible;
+}
+
+.admin-root .admin-metric-card > p {
+  min-height: 1.2em;
+  margin: 0;
+  color: #7a8b9b;
+  font-size: 0.69rem;
+  line-height: 1.45;
+}
+
+/* Command search — a genuine, accessible navigation tool.
+ * Native dialog retains focus management and escape handling. */
+.admin-root .admin-command-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  min-width: 120px;
+  padding: 6px 9px 6px 12px;
+  border: 1px solid #dbe5ec;
+  border-radius: 9px;
+  background: #f7fafc;
+  color: #425b71;
+  cursor: pointer;
+  font-weight: 620;
+  font-size: 0.76rem;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.admin-root .admin-command-trigger:hover {
+  border-color: #a6d6cc;
+  background: #edf8f5;
+  color: #145d55;
+}
+
+.admin-root .admin-command-trigger kbd {
+  padding: 3px 5px;
+  border: 1px solid #dce5eb;
+  border-radius: 5px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.64rem;
+  color: #8a9ba8;
+  white-space: nowrap;
+}
+
+.admin-root .admin-command-dialog {
+  width: min(570px, calc(100vw - 28px));
+  max-width: none;
+  max-height: min(610px, calc(100dvh - 28px));
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e0e8ee;
+  border-radius: 16px;
+  background: #fff;
+  color: #182e45;
+  box-shadow: 0 28px 90px rgb(7 20 36 / 30%);
+}
+
+.admin-root .admin-command-dialog::backdrop {
+  background: rgb(7 20 37 / 56%);
+  backdrop-filter: blur(4px);
+}
+
+.admin-root .admin-command-dialog__content {
+  display: flex;
+  flex-direction: column;
+  max-height: min(610px, calc(100dvh - 28px));
+  overflow: hidden;
+}
+
+.admin-root .admin-command-dialog__header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 72px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e5ecf0;
+  color: #0e887c;
+}
+
+.admin-root .admin-command-dialog__header > input {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 2px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  color: #20384e;
+  font-size: 0.94rem;
+}
+
+.admin-root .admin-command-dialog__header > input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.admin-root .admin-command-dialog__header > input::placeholder {
+  color: #8a9ba9;
+}
+
+.admin-root .admin-command-dialog__close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #e5ebef;
+  border-radius: 9px;
+  background: #f7fafb;
+  color: #6f8497;
+  cursor: pointer;
+}
+
+.admin-root .admin-command-dialog__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 20px 8px;
+  color: #7d8fa0;
+  font-size: 0.65rem;
+  font-weight: 730;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-root .admin-command-dialog__list {
+  min-height: 60px;
+  overflow-y: auto;
+  padding: 5px 10px 15px;
+}
+
+.admin-root .admin-command-dialog__list > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #30485f;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-root .admin-command-dialog__list > button:hover,
+.admin-root .admin-command-dialog__list > button.is-selected {
+  border-color: #d2e7e2;
+  background: #f0f8f5;
+}
+
+.admin-root .admin-command-dialog__result {
+  flex: 1;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.admin-root .admin-command-dialog__result strong {
+  font-size: 0.81rem;
+  font-weight: 730;
+  color: #243c52;
+}
+
+.admin-root .admin-command-dialog__result small {
+  color: #748798;
+  font-size: 0.71rem;
+  line-height: 1.4;
+}
+
+.admin-root .admin-command-dialog__section {
+  padding: 5px 7px;
+  border-radius: 6px;
+  background: #edf2f6;
+  color: #697f90;
+  font-size: 0.66rem;
+  font-weight: 660;
+}
+
+.admin-root .admin-command-dialog__list > button > svg { color: #0d8d7f; }
+
+.admin-root .admin-command-dialog__empty {
+  padding: 32px 15px;
+  color: #718698;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.admin-root .admin-command-dialog__footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 11px 18px;
+  border-top: 1px solid #e9eef2;
+  background: #f8fafb;
+  color: #8394a2;
+  font-size: 0.66rem;
+}
+
+.admin-root .admin-command-dialog__footer > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.admin-root .admin-command-dialog__footer kbd {
+  padding: 2px 5px;
+  border: 1px solid #dce5eb;
+  border-radius: 5px;
+  background: #fff;
+  color: #5d7589;
+  font-family: inherit;
+}
+
+@media (max-width: 1180px) {
+  .admin-root .admin-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-root .admin-command-trigger { min-width: 40px; width: 40px; padding: 6px; }
+  .admin-root .admin-command-trigger span,
+  .admin-root .admin-command-trigger kbd { display: none; }
+}
+
+@media (max-width: 590px) {
+  .admin-root .admin-metric-grid { gap: 9px; }
+  .admin-root .admin-metric-card { min-height: 135px; padding: 13px; gap: 9px; border-radius: 11px; }
+  .admin-root .admin-metric-card__body strong { font-size: 1.45rem; }
+  .admin-root .admin-metric-card__sparkline { width: 40%; }
+  .admin-root .admin-metric-card > p { font-size: 0.64rem; }
+  .admin-root .admin-command-dialog__header { padding: 10px 13px; }
+  .admin-root .admin-command-dialog__section { display: none; }
+  .admin-root .admin-command-dialog__footer > span:first-child { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-root .admin-metric-card,
+  .admin-root .admin-command-trigger { transition: none; }
+  .admin-root .admin-metric-card:hover { transform: none; }
+}
